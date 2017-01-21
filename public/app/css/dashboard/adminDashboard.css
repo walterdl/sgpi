@@ -1,0 +1,26 @@
+.jumbotron-full-width{
+    margin-left: -10px;
+    margin-right: -10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.dark-background-color-template{
+    background-color:#222d32;
+}
+
+.text-white{
+    color:white !important;
+}
+
+.gray-secondary-text{
+    color:#D2D6DE !important;
+}
+
+.anchor-ucc{
+    line-height: 143px;
+}
+
+.row-no-margin{
+    margin:0;
+}

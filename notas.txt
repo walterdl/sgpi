@@ -1,0 +1,103 @@
+*********************************
+Enlace app
+********************************
+https://sgpi-walter-dl.c9users.io/
+
+
+*********************************
+Enlace phpmyadmin
+*********************************
+https://sgpi-walter-dl.c9users.io/phpmyadmin
+
+*********************************
+Correo sgpi
+*********************************
+sgpiucc@gmail.com
+Adminucc123456789
+SGPI123456789
+
+/*
+|--------------------------------------------------------------------------
+| Sitios interesantes
+|--------------------------------------------------------------------------
+*/
+https://select2.github.io/
+http://alxlit.name/bootstrap-chosen/
+
+
+/*
+|--------------------------------------------------------------------------
+| Imprimir con formato en archivo log que está en la raíz de la carpeta app
+|--------------------------------------------------------------------------
+*/
+$log_success = file_put_contents
+(
+    app_path().'/logs.log', 
+    "\r\n".print_r($tus_datos_aqui, true)
+    ,FILE_APPEND
+);
+
+/*
+|--------------------------------------------------------------------------
+| Imprimir con array con formato en respuesta http
+|--------------------------------------------------------------------------
+*/
+echo '<pre>'.print_r($tus_datos_aqui, true).'</pre>';
+
+/*
+|--------------------------------------------------------------------------
+| Spinner mas usado
+|--------------------------------------------------------------------------
+*/
+<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i>
+
+
+/*
+|--------------------------------------------------------------------------
+| Generar querys truncate para todas las tablas de la BD
+|--------------------------------------------------------------------------
+*/
+SELECT Concat('TRUNCATE TABLE ', table_schema,'.',TABLE_NAME, ';') 
+FROM INFORMATION_SCHEMA.TABLES where  table_schema in ('sgpi');
+
+
+/*
+|--------------------------------------------------------------------------
+| Secuencia de querys para truncar todas las tablas de la bd
+|--------------------------------------------------------------------------
+*/
+SET FOREIGN_KEY_CHECKS=0;
+Sentencias TRUNCATES aquí...
+SET FOREIGN_KEY_CHECKS=1;
+
+
+/*
+|--------------------------------------------------------------------------
+| Comentarios plantilla blade que no se muestran en el html
+|--------------------------------------------------------------------------
+*/
+{{-- This comment will not be in the rendered HTML --}}
+
+
+/*
+|--------------------------------------------------------------------------
+| Incluir varias sentencias AND en consulta de una tabla por array
+|--------------------------------------------------------------------------
+*/
+DB::table('usuarios')->where([
+                        'id_persona' => $persona->id,
+                        'id_rol' =>  3
+                        ])->get();
+
+
+/*
+|--------------------------------------------------------------------------
+| Interpretaciones sentencia if en resultados de consulta
+|--------------------------------------------------------------------------
+*/
+-Si se consulta con modelo, por ejemplo Modelo::find(), utilizar if($resultado)
+-Si se consulta con modelo, por ejemplo Modelo::where()->where()->get(), utilizar if(count($resultado))
+-Si se consulta con modelo, por ejemplo Modelo::where()->where()->first(), utilizar if($resultado)
+-Si se consulta con metodo table de clase DB como DB::table('mi_tabla')->where()->get(), utilizar if($resultado)
+-La diferencia entre consultar con el modelo y con consultar con metodo table de clase DB, es que el segundo de vuelve array de instancias StdClass
+-Si se consulta con raw como DB::select(DB::raw('...')), utilizar if($resulrado), esto retorna tambien array de instancias StdClass
