@@ -8,6 +8,10 @@
         
         protected $table = 'tipos_gastos';
         protected $dates = ['deleted_at'];
+        protected $fillable = [
+            'id',
+            'nombre',
+        ];
     
     }
 

@@ -8,6 +8,11 @@
         
         protected $table = 'entidades_fuente_presupuesto';
         protected $dates = ['deleted_at'];
+        protected $fillable = [
+            'id',
+            'nombre'
+        ];
+        
     
     }
 

@@ -146,11 +146,15 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr ng-repeat="participante in data.participantes_proyecto">
+                                                    <tr ng-repeat="participante in data.info_investigadores_usuario">
                                                         <td>{$ $index + 1 $}</td>
-                                                        <td>{$ participante.nombres + ' ' + participante.apellidos $}</td>
-                                                        <td>{$ participante.formacion $}</td>
-                                                        <td>{$ participante.rol $}</td>
+                                                        <td ng-show="participante.info_investigador.usuario == null">{$ participante.info_investigador.persona.nombres + ' ' + participante.info_investigador.persona.apellidos $}</td>
+                                                        <td ng-show="participante.info_investigador.usuario == null">{$ participante.info_investigador.persona.formacion $}</td>
+                                                        <td ng-show="participante.info_investigador.usuario == null">{$ participante.info_investigador.rol.nombre $}</td>
+                                                        
+                                                        <td ng-show="participante.info_investigador.usuario != null">{$ participante.info_investigador.usuario.persona.nombres + ' ' + participante.info_investigador.persona.apellidos $}</td>
+                                                        <td ng-show="participante.info_investigador.usuario != null">{$ participante.info_investigador.usuario.persona.formacion $}</td>
+                                                        <td ng-show="participante.info_investigador.usuario != null">{$ participante.info_investigador.rol.nombre $}</td>
                                                         <td>
                                                             <input type="number" name="gasto_personal_dedicacion_semanal_{$ participante.identificacion $}" min="0" 
                                                             ng-model="participante.dedicacion_semanal" ng-change="validar_dedicacion_semanal(participante)"
@@ -174,7 +178,8 @@
                                                             ng-model="participante.presupuesto_ucc" ng-change="suma_totales_personal(participante, 'ucc')"
                                                             class="form-control" ng-class="{'invalid_control': participante.presupuesto_ucc_invalido}"
                                                             uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.presupuesto_ucc_invalido"/>
-                                                        </td>                                                                                                                                                            
+                                                        </td>   
+                                                        
                                                         <td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                                                             <input type="number" name="gasto_personal_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ participante.identificacion $}" 
                                                             ng-model="participante.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_personal(participante, 'otro', entidad_presupuesto.id)"
@@ -980,18 +985,14 @@
                             
                             <hr />
                             <div class="row">
-                    	        <div class="col-xs-12 col-sm-6 col-md-4">
-                    	            <button type="button" class="btn btn-default btn-block" ng-click="regresar_productos()">
-                    	                <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;Regresar a productos
-                    	            </button>
-                    	        </div>                        	        
-                    	        <div class="col-xs-12">&nbsp;</div>                    		                                        
+                    	                         		                                        
                                 <div class="col-xs-12 col-sm-6 col-md-4">
                                     <button type="button" class="btn btn-primary btn-block" ng-click="continuar_a_cargar_documentos()">
-                                        Cargar documentos del proyecto&nbsp;<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
+                                        Guardar Cmabios
                                     </button>
                                 </div>
                             </div>
+                            
                         </div> {{--Contenido tab gastos--}}
                         
                     </div> {{--Contenedor del contenido de cada tab--}}
@@ -1021,6 +1022,7 @@
     <script type="text/javascript">
         sgpi_app.value('id_usuario', {{ Auth::user()->id }});
         id_proyecto="{{$proyecto_id}}";
+        pagina="{{$pagina}}";
     </script>
 @stop <!--Stop section 'post_scripts'-->
 

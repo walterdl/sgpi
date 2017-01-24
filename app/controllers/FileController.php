@@ -35,20 +35,38 @@
     	|--------------------------------------------------------------------------
     	| Retorna respuesta http para descargar formato de documento guía
     	*/            
-        public function get_formato_documento($nombre_formato){
+        public function get_formato_documento(){
+            
+            $nombre_formato = Input::get('nombre_formato');
+            
             if($nombre_formato == 'presupuesto'){
-                return Response::download(storage_path('archivos/formatos_documentos/FMI6-25-V2_Presupuesto.xlsx'), null, [], 'attachment');
+                $nombre_archivo = FormatoTipoDocumento::where('nombre', '=', 'Presupuesto')->first()->archivo;
+                return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');                
             }
             else if($nombre_formato == 'presentacion_proyecto'){
-                return Response::download(storage_path('archivos/formatos_documentos/FMI6-11-V3_Proyecto.docx'), null, [], 'attachment');
+                $nombre_archivo = FormatoTipoDocumento::where('nombre', '=', 'Presentacion proyecto')->first()->archivo;
+                return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');                                
             }
             else if($nombre_formato == 'acta_inicio'){
-                return Response::download(storage_path('archivos/formatos_documentos/FMI6-1 Acta de Inicio_V5.docx'), null, [], 'attachment');
+                $nombre_archivo = FormatoTipoDocumento::where('nombre', '=', 'Acta inicio')->first()->archivo;
+                return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');                                                
             }
             else if($nombre_formato == 'desembolso'){
                 $nombre_archivo = FormatoTipoDocumento::where('nombre', '=', 'Desembolso')->first()->archivo;
                 return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');
             }            
+            else if($nombre_formato == 'informe_avance'){
+                $nombre_archivo = FormatoTipoDocumento::where('nombre', '=', 'Informe de avance')->first()->archivo;
+                return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');                
+            }
+            else if($nombre_formato == 'acta_finalizacion'){
+                $nombre_archivo = FormatoTipoDocumento::where('nombre', '=', 'Acta finalizacion')->first()->archivo;
+                return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');                                
+            }
+            else if($nombre_formato == 'memoria_academica'){
+                $nombre_archivo = FormatoTipoDocumento::where('nombre', '=', 'Memoria academica')->first()->archivo;
+                return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');
+            }
         }
         
         /*
@@ -72,4 +90,55 @@
         public function get_archivo_fecha_publicacion($nombre_archivo){
             return Response::download(storage_path('archivos/productos/'.$nombre_archivo), null, [], 'attachment');
         }
+        
+        /*
+    	|--------------------------------------------------------------------------
+    	| get_desembolso()
+    	|--------------------------------------------------------------------------
+    	| Retorna respuesta http para descargar archivo de desembolso
+    	*/                  
+        public function get_desembolso($nombre_archivo){
+            return Response::download(storage_path('archivos/desembolsos/'.$nombre_archivo), null, [], 'attachment');
+        }
+        
+        /*
+    	|--------------------------------------------------------------------------
+    	| get_informe_avance()
+    	|--------------------------------------------------------------------------
+    	| Retorna respuesta http para descargar archivo de informe de avance
+    	*/          
+        public function get_informe_avance($nombre_archivo){
+            return Response::download(storage_path('archivos/informes_avance/'.$nombre_archivo), null, [], 'attachment');
+        }
+        
+        /*
+    	|--------------------------------------------------------------------------
+    	| get_acta_finalizacion()
+    	|--------------------------------------------------------------------------
+    	| Retorna respuesta http para descargar archivo de acta de finalización
+    	*/          
+        public function get_acta_finalizacion($nombre_archivo){
+            return Response::download(storage_path('archivos/actas_finalizacion/'.$nombre_archivo), null, [], 'attachment');
+        }
+        
+        /*
+    	|--------------------------------------------------------------------------
+    	| get_memoria_academica()
+    	|--------------------------------------------------------------------------
+    	| Retorna respuesta http para descargar archivo de memoria académica
+    	*/                  
+        public function get_memoria_academica($nombre_archivo){
+            return Response::download(storage_path('archivos/memorias_academicas/'.$nombre_archivo), null, [], 'attachment');
+        }
+
+        /*
+    	|--------------------------------------------------------------------------
+    	| get_prorroga()
+    	|--------------------------------------------------------------------------
+    	| Retorna respuesta http para descargar archivo de prorroga
+    	*/                          
+        public function get_prorroga($nombre_archivo){
+            return Response::download(storage_path('archivos/prorrogas/'.$nombre_archivo), null, [], 'attachment');
+        }
+        
     }

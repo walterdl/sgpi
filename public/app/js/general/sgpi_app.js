@@ -2,7 +2,7 @@
 Incialización de app angularjs y cambio de syntaxis '{{}}' por '{$$}' 
 para evitar el conflicto de la sintaxis que provee las plantillas blade
 */
-var sgpi_app = angular.module('sgpi_app', ['Alertify'])
+var sgpi_app = angular.module('sgpi_app', ['Alertify', 'angular-bind-html-compile'])
     .config(function($interpolateProvider){
         $interpolateProvider.startSymbol('{$').endSymbol('$}');
 });
@@ -50,5 +50,18 @@ sgpi_app.filter('capitalizeWords', function() {
             }
         }
         else return input;
+    };
+});
+
+sgpi_app.directive('compile', function($compile) {
+    return {
+        restrict: 'A',
+        replace: true,
+        link: function (scope, element, attrs) {
+            scope.$watch(attrs.dynamic, function(html) {
+                element[0].innerHTML = html;
+                $compile(element.contents())(scope);
+            });
+        }
     };
 });

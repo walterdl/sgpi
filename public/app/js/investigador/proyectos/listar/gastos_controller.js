@@ -33,7 +33,7 @@ sgpi_app.controller('gastos_controller', function ($scope, $http) {
         .error(function(data, status) {
             console.log(data);
             $('a[href="#contenido_tab_proyectos"]').tab('show');
-            alertify.error('Error al consultar los gastos del proyecto. Cósigo de estado: ' + status);            
+            alertify.error('Error al consultar los gastos del proyecto. Código de estado: ' + status);            
         });	    
 	});
 	

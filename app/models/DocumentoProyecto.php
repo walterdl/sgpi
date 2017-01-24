@@ -12,9 +12,10 @@
             'id',
             'id_proyecto',
             'id_tipo_documento_proyecto',
-            'nombre',
-            'ruta_archivo',
-            'detalle_revision'
+            'archivo',
+            'aprobado',
+            'comentario_investigador',
+            'comentario_revision',
             ];
     
     }

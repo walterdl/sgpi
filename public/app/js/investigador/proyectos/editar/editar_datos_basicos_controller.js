@@ -1,6 +1,7 @@
 var id_proyecto;
 var pagina;
 
+
 sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $window, $filter, id_usuario){
     
     // inicialización de variables
@@ -14,11 +15,16 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
     $scope.data.validacion_duracion_meses = null;
     $scope.data.validacion_objetivo_general = null;
     
- 
+    $scope.data.producto=[];
+    $scope.data.info_investigadores_usuario=[];
+
+
     $scope.data.objetivos_especificos = [{
             nombre: null,
             validacion: null
-        }];
+    }];
+    
+    
     $scope.data.validacion_objetivos_especificos = [];
     
     // configuración para los datepicker
@@ -47,7 +53,6 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
             $scope.data.proyecto=data.proyecto;
             
             if(pagina == 2){
-                
                 // data.info_investigadores_usuario.forEach(function(entry) {
                 //     console.log(entry);
                 //     //data.info_investigador_principal.sexo=='m' ? 'Hombre' : 'Mujer',
@@ -56,21 +61,68 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
                 //         entry.info_investigador.sexo==='m' ? 'Hombre' : 'Mujer';
                 //     }
                 // });
+                $scope.data.info_investigadores_usuario=data.info_investigadores_usuario;
+            }else if(pagina == 3){
+                
                 
                 $scope.data.info_investigadores_usuario=data.info_investigadores_usuario;
                 
+                // data.info_investigadores_usuario.forEach(function(entry) {
+                //     console.log(entry);
+                //     $scope.data.info_investigadores_usuario.push(
+                    
+                    
+                //     );
+                // });
                 
+                
+                data.info_productos.forEach(function(entry) {
+                    
+                    if(entry.producto){
+                        entry.producto.fecha_proyectada_radicacion=Date.parse(entry.producto.fecha_proyectada_radicacion);
+                        entry.producto.fecha_remision=Date.parse(entry.producto.fecha_remision);
+                        entry.producto.fecha_confirmacion_editorial=Date.parse(entry.producto.fecha_confirmacion_editorial);
+                        entry.producto.fecha_recepcion_evaluacion=Date.parse(entry.producto.fecha_recepcion_evaluacion);
+                        entry.producto.fecha_respuesta_evaluacion=Date.parse(entry.producto.fecha_respuesta_evaluacion);
+                        entry.producto.fecha_aprobacion_publicacion=Date.parse(entry.producto.fecha_aprobacion_publicacion);
+                        entry.producto.fecha_publicacion=Date.parse(entry.producto.fecha_publicacion);
+                        
+                        entry.producto.investigador.persona={
+                            info_investigador:entry.producto.investigador.persona,
+                            resgitrado:1,
+                        }
+                        //$scope.data.producto.push(entry);
+                        //console.log($scope.data.producto);
+                    }
+                });
+                
+                $scope.data.info_productos=data.info_productos;
+                // $scope.data.info_productos=data.info_productos;
+               
+            }else if(pagina == 4){
+                
+            
+                // data.info_productos.forEach(function(entry) {
+                
+                //     $scope.data.participantes_proyecto.push(
+                        
+                //     )
+                // });
+                $scope.data.info_investigadores_usuario=data.info_investigadores_usuario;
+                $scope.data.investigadores= data.info_investigadores_usuario;
+
             }
+            
             
             ///se necesita convertir el string a un entero
             if($scope.data.proyecto){
-              $scope.data.proyecto.anio_convocatoria=parseInt($scope.data.proyecto.anio_convocatoria);  
+               $scope.data.proyecto.anio_convocatoria=parseInt($scope.data.proyecto.anio_convocatoria);  
                $scope.data.proyecto.fecha_fin=Date.parse($scope.data.proyecto.fecha_fin);
                $scope.data.proyecto.fecha_inicio=Date.parse($scope.data.proyecto.fecha_inicio);
             }
             
             console.log(data.proyecto);
-            
+                 
             $scope.data.grupos_investigacion_y_sedes = data.grupos_investigacion_y_sedes;
             $scope.data.facultades_dependencias = data.facultades_dependencias;
             $scope.data.tipos_identificacion = data.tipos_identificacion;
@@ -161,6 +213,13 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
             validacion: null
         });
     };
+    
+    
+    $scope.iniciarPorducto = function(data){
+         $scope.data.info_productos=data.info_productos;
+         $scope.data.info_investigadores_usuario=data.info_investigadores_usuario;
+    }
+    
     
     /*
 	|--------------------------------------------------------------------------

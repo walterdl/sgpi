@@ -71,6 +71,9 @@
         <!--<link rel="stylesheet" href="{{ url() }}/vendor/alertify/ng-alertify.css">-->
         <script type="text/javascript" src="{{ url() }}/vendor/alertify/ng-alertify.js"></script>
         
+        <!--angular-bind-html-compile-->
+        <script type="text/javascript" src="{{ url() }}/vendor/angular-bind-html-compile/angular-bind-html-compile.min.js"></script>
+        
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>

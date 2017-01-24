@@ -385,6 +385,7 @@ INSERT INTO `entidades_fuente_presupuesto` (nombre, created_at) VALUES
 INSERT INTO `tipos_gastos` (nombre, created_at) VALUES 
 ('Personal', curdate()),
 ('Equipos', curdate()),
+('Software', curdate()),
 ('Salidas de campo', curdate()),
 ('Materiales y suministros', curdate()),
 ('Servicios técnicos', curdate()),
@@ -409,7 +410,9 @@ INSERT INTO `formatos_tipos_documentos` (nombre, archivo, created_at) VALUES
 ('Informe de avance', 'FMI6-21-V1_Informe de avance.dotx', curdate()),
 ('Desembolso', 'FAJ1-6-V3_Solicitud de insumos.xlsx', curdate()),
 ('Memoria academica', 'FMI6-10-V1 Formato Memoria Academica.dotx', curdate()),
-('Acta finalizacion', 'FMI6-2 Acta de Finalización.docx', curdate());
+('Acta finalizacion', 'FMI6-2 Acta de Finalización.docx', curdate()),
+('Prorroga', NULL, curdate()),
+('Aprobacion prorroga', NULL, curdate());
 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

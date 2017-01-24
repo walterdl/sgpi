@@ -1923,7 +1923,6 @@
                         <div id="contenido_adjuntos" class="tab-pane fade"
                         ng-controller="adjuntos_proyecto_controller">
                             <br />
-                            <!--FMI6-25-V2, FMI6-11-V3 y FMI6-1.-->
                             <div class="container-sgpi">
                                 
                                 {{--documento de presupuesto--}}
@@ -1939,16 +1938,17 @@
                                                 <div class="form-group">
                                                     <label for="documento_presupuesto">Cargar aquí el documento de presupuesto</label>
                                                     <input id="presupuesto" type="file" name="presupuesto"
-                                                    	ngf-select ngf-pattern=".xlsx,.xltm,.xlsm,.xls"
+                                                    	ngf-select ngf-pattern=".xlsx,.xltm,.xlsm,.xls" ngf-max-size="20MB"
                                                     	ng-model="data.documento_presupuesto"
                                                     	ngf-change="cambia_documento_presupuesto($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+                                                    	uib-tooltip="El archivo a cargar debe seguir el formato de presupuesto, formato Excel y máximo de 20MB" tooltip-enable="true"
                                                     	class="form-control" ng-class="{'invalid_control': data.documento_presupuesto_invalido}"/>
                                                 </div>
                                             </div>
                                             <div class="col-xs-12 col-md-6">
                                                 <div class="form-group">
                                                     <label for="formato_documento_presupuesto">Descargue el formato del documento de presupuesto</label>
-                                                    <a href="/file/formato/presupuesto" class="btn btn-primary btn-block text-center">Descargar formato&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
+                                                    <a href="/file/formato?nombre_formato=presupuesto" class="btn btn-primary btn-block text-center">Descargar formato&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
                                                 </div>
                                             </div>                                            
                                         </div>
@@ -1968,16 +1968,17 @@
                                                 <div class="form-group">
                                                     <label for="documento_presentacion_proyecto">Cargar aquí el documento de presentación</label>
                                                     <input id="presentacion_proyecto" type="file" name="presentacion_proyecto"
-                                                    	ngf-select ngf-pattern=".doc,.docx,.dotx,.DOC,.DOCX"
+                                                    	ngf-select ngf-pattern=".doc,.docx,.dotx,.DOC,.DOCX" ngf-max-size="20MB"
                                                     	ng-model="data.documento_presentacion_proyecto"
                                                     	ngf-change="cambia_documento_presentacion_proyecto($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+                                                    	uib-tooltip="El archivo a cargar debe seguir el formato de presentación de proyecto, formato Word y máximo de 20MB" tooltip-enable="true"
                                                     	class="form-control" ng-class="{'invalid_control': data.documento_presentacion_proyecto_invalido}"/>
                                                 </div>
                                             </div>
                                             <div class="col-xs-12 col-md-6">
                                                 <div class="form-group">
                                                     <label for="formato_documento_presentacion_proyecto">Descargue el formato del documento de presentación</label>
-                                                    <a href="/file/formato/presentacion_proyecto" class="btn btn-primary btn-block text-center">Descargar formato&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
+                                                    <a href="/file/formato?nombre_formato=presentacion_proyecto" class="btn btn-primary btn-block text-center">Descargar formato&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
                                                 </div>
                                             </div>                                            
                                         </div>
@@ -1997,16 +1998,17 @@
                                                 <div class="form-group">
                                                     <label for="documento_acta_inicio">Cargar aquí el documento de acta de inicio</label>
                                                     <input id="acta_inicio" type="file" name="acta_inicio"
-                                                    	ngf-select ngf-pattern=".doc,.docx,.dotx,.DOC,.DOCX,.w"
+                                                    	ngf-select ngf-pattern=".doc,.docx,.dotx,.DOC,.DOCX,.w" ngf-max-size="20MB"
                                                     	ng-model="data.documento_acta_inicio"
                                                     	ngf-change="cambia_documento_acta_inicio($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+                                                    	uib-tooltip="El archivo a cargar debe seguir el formato de acta de inicio, formato Excel y máximo de 20MB" tooltip-enable="true"
                                                     	class="form-control" ng-class="{'invalid_control': data.documento_acta_inicio_invalido}"/>
                                                 </div>
                                             </div>
                                             <div class="col-xs-12 col-md-6">
                                                 <div class="form-group">
                                                     <label for="formato_documento_acta_inicio">Descargue el formato del acta de inicio</label>
-                                                    <a href="/file/formato/acta_inicio" class="btn btn-primary btn-block text-center">Descargar formato&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
+                                                    <a href="/file/formato?nombre_formato=acta_inicio" class="btn btn-primary btn-block text-center">Descargar formato&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
                                                 </div>
                                             </div>                                            
                                         </div>

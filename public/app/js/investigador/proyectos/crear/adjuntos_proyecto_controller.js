@@ -20,7 +20,7 @@ sgpi_app.controller('adjuntos_proyecto_controller', function ($scope) {
         if(invalidFiles.length > 0) // se ha cargado archivo invalido
         {
             $scope.data.documento_presupuesto = null;
-            alertify.error('Archivo de presupuesto de proyecto inválido. Sólo se permite documentos Excel');
+            alertify.error('Archivo de presupuesto de proyecto inválido. Sólo se permite documentos Excel con tamaño máximo de 20 MB');
             $scope.data.documento_presupuesto_invalido = true;
         }
         else
@@ -39,7 +39,7 @@ sgpi_app.controller('adjuntos_proyecto_controller', function ($scope) {
         if(invalidFiles.length > 0) // se ha cargado archivo invalido
         {
             $scope.data.documento_presentacion_proyecto = null;
-            alertify.error('Archivo de presentación de proyecto inválido. Sólo se permite documentos Word');
+            alertify.error('Archivo de presentación de proyecto inválido. Sólo se permite documentos Word con tamaño máximo de 20 MB');
             $scope.data.documento_presentacion_proyecto_invalido = true;
         }        
         else
@@ -58,7 +58,7 @@ sgpi_app.controller('adjuntos_proyecto_controller', function ($scope) {
         if(invalidFiles.length > 0) // se ha cargado archivo invalido
         {
             $scope.data.documento_acta_inicio = null;
-            alertify.error('Archivo de acta de inicio de proyecto inválido. Sólo se permite documentos Word');
+            alertify.error('Archivo de acta de inicio de proyecto inválido. Sólo se permite documentos Word con tamaño máximo de 20 MB');
             $scope.data.documento_acta_inicio_invalido = true;
         }    
         else

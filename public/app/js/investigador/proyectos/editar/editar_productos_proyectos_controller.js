@@ -1,8 +1,18 @@
 sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $http) {
     
-    console.log("hola estas desde productos");
+
     // inicialización de variables
     $scope.data.productos = [];
+    $scope.producto = [{
+        participante_invalido:false,
+    }];
+    
+    $scope.data.info_productos2=$scope.data.info_productos;
+    //$scope.data.info_productos2=[];
+    
+    console.log("estas del controlador de productos ");
+    console.log($scope.data.participantes_proyecto);
+    
     $scope.dateOptions = {
         formatYear: 'yy',
         startingDay: 1
@@ -47,6 +57,7 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
             // agregar prodcuto a tabla de productos..
             var tipo_producto_especifico = null;
             try{
+                //console.log($scope.data.tipos_productos_especificos);
                 $scope.data.tipos_productos_especificos.forEach(function(item) {
                     if(item.id == $scope.data.tipo_producto_especifico){
                         tipo_producto_especifico = item;
@@ -68,7 +79,8 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
                 fecha_aprobacion_publicacion: null,
                 fecha_publicacion: null
             };
-            $scope.data.productos.push(obj);
+            $scope.data.info_productos2.push(obj);
+            console.log($scope.data.info_productos2);
         }
     };
     
@@ -146,16 +158,26 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
 	|--------------------------------------------------------------------------
 	| Valida que se halla seleccionado un participante ancargado para este producto
 	*/                        
-    $scope.validar_participante_producto = function(producto) {
-    
-        if(producto.participante){
-            producto.participante_invalido = false;
-            return false;
-        }
-        else{
-            producto.participante_invalido = true;
-            return true;
-        }
+    $scope.validar_participante_producto = function(selected,producto) {
+        
+        console.log('wwwwwww');
+        console.log(selected);
+        console.log(producto);
+        
+        // if(producto.investigador.persona){
+
+        //         console.log("hay persona este es la variable: "+$scope.brandon);
+        //         $scope.producto.participante_invalido = false;
+
+        //     return false;
+        // }
+        // else{
+            
+        //         console.log("no hay persona");
+        //         producto.participante_invalido = true;
+
+        //     return true;
+        // }
     };
     
     /*

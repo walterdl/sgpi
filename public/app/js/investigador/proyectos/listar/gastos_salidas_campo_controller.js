@@ -1,46 +1,61 @@
-sgpi_app.controller('gastos_personal_controller', function($scope, $uibModal){
-
+sgpi_app.controller('gastos_salidas_campo_controller', function ($scope, $uibModal) {
+    
 	/*
 	|--------------------------------------------------------------------------
-	| detalles_participante()
+	| detalles_salida_campo()
 	|--------------------------------------------------------------------------
-	| Ejecuta modal que presenta los detalles del participante
-	*/             
-    $scope.detalles_participante = function(gasto_personal){
+	| Presenta modal dque presenta los detalle de la salida de campo seleccionada. 
+	*/         
+    $scope.detalles_salida_campo = function(gasto_salida_campo){
         $uibModal.open({
             animation: true,
-            templateUrl: 'modal_mas_info_participante.html',
-            controller: 'modal_mas_info_participante_controller',
+            templateUrl: 'modal_mas_info_salida_campo.html',
+            controller: 'modal_mas_info_salida_campo_controller',
             size: 'lg',
             scope: $scope,
             keyboard: true,
             resolve:{
-                gasto_personal: function() {
-                    return gasto_personal;
+                gasto_salida_campo: function() {
+                    return gasto_salida_campo;
                 }
             }
-        });
+        });        
     };
-    
+   
+	/*
+	|--------------------------------------------------------------------------
+	| abre_cierra_acordion()
+	|--------------------------------------------------------------------------
+	| Simple controlador de evento para click de anchor que abre o cierra acordion. 
+	| Establece el icono glyphicon adecuado al acordion
+	*/     
+    $scope.abre_cierra_acordion = function(id_acordion) {
+        if($('#contenido_gastos_salidas_campo').hasClass('in')){
+            $('#contenido_gastos_salidas_campo').parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+        }
+        else{
+            $('#contenido_gastos_salidas_campo').parent().find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+        }
+    };       
+   
 	/*
 	|--------------------------------------------------------------------------
 	| desembolso()
 	|--------------------------------------------------------------------------
-	| Ejecuta modal de carga de desembolos y visualización de revisión
-	*/         
-    $scope.desembolso = function(gasto_personal) {
-        
+	| Presenta modal de carga de archivo de desembolso
+	*/    
+    $scope.desembolso = function(gasto_salida_campo){
         var modalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'modal_desembolso.html',
-            controller: 'modal_desembolso_personal_controller',
+            controller: 'modal_desembolso_salida_campo_controller',
             size: 'lg',
             scope: $scope,
             keyboard: false,
             backdrop: 'static',
             resolve:{
-                gasto_personal: function() {
-                    return gasto_personal;
+                gasto_salida_campo: function() {
+                    return gasto_salida_campo;
                 }
             }
         });        
@@ -61,77 +76,48 @@ sgpi_app.controller('gastos_personal_controller', function($scope, $uibModal){
                 if(resultado.carga_cancelada)
                     alertify.error('Carga cancelada');
             }
-        });         
+        });                
     };
-    
-	/*
-	|--------------------------------------------------------------------------
-	| abre_cierra_acordion()
-	|--------------------------------------------------------------------------
-	| Simple controlador de evento para click de anchor que abre o cierra acordion. 
-	| Establece el icono glyphicon adecuado al acordion
-	*/     
-    $scope.abre_cierra_acordion = function(id_acordion) {
-        if($('#contenido_gastos_personal').hasClass('in')){
-            $('#contenido_gastos_personal').parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
-        }
-        else{
-            $('#contenido_gastos_personal').parent().find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
-        }
-    };    
-    
 });
 
 /*
 |--------------------------------------------------------------------------
-| modal_fecha_proyectada_radicacion_controller
+| modal_mas_info_salida_campo_controller
 |--------------------------------------------------------------------------
-| Controlador para el modal que presenta los detalles de un gasto de personal
+| Controlador para el modal que presenta los detalles de un gasto de una salida de campo
 */              
-sgpi_app.controller('modal_mas_info_participante_controller', function ($scope, $uibModalInstance, gasto_personal) {
-    
-    $scope.gasto_personal = gasto_personal;
-    console.log(gasto_personal);
-    $('#contenedor_detalles_participante').mCustomScrollbar({
-		axis:"x",
-		theme: 'dark',
-		advanced:{
-			autoExpandHorizontalScroll: true
-		},
-		autoHideScrollbar: true
-	});
+sgpi_app.controller('modal_mas_info_salida_campo_controller', function ($scope, $uibModalInstance, gasto_salida_campo){
+    $scope.gasto_salida_campo = gasto_salida_campo;
 });
 
 /*
 |--------------------------------------------------------------------------
-| modal_desembolso_personal_controller
+| modal_desembolso_salida_campo_controller
 |--------------------------------------------------------------------------
-| Modal para la carga de desembolso de gasto de personal y vista de revisión
+| Modal para la carga de desembolso de gasto de una salida de campo y vista de revisión
 */              
-sgpi_app.controller('modal_desembolso_personal_controller', function ($scope, $http, $uibModalInstance, Upload, gasto_personal){
+sgpi_app.controller('modal_desembolso_salida_campo_controller', function ($scope, $http, $uibModalInstance, Upload, gasto_salida_campo){
     
-    $scope.gasto_personal = gasto_personal;
-    $scope.titulo_modal = 'Desembolso de gasto de personal';
-    $scope.gasto_html = '<h4>Participante: <strong>{$ gasto_personal.nombre_completo $}</strong> ({$ gasto_personal.acronimo_id $}. {$ gasto_personal.identificacion $})</h4>';
+    $scope.gasto_salida_campo = gasto_salida_campo;
+    $scope.titulo_modal = 'Desembolso de salida de campo';
+    $scope.gasto_html = '<h4>Justificación de la salida de campo: <strong>{$ gasto_salida_campo.justificacion $}</strong></h4>';
     $scope.msj_operacion = '<h4 class="text-center">Cargado estado de revisión de desembolso...<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i></h4>';
     $scope.show_velo = true;
     $scope.show_descargar_desembolso = false;
     $scope.codigo_aprobacion = null;
     $scope.show_datos_revision = false;
     $scope.show_barra_progreso = false;
-    $scope.cargando_doc = false;
+    $scope.cargando_doc = false;    
     
     // Realiza consulta por el estado de revisión del desembolso
     $http({
         url: '/proyectos/revision_desembolso',
         method: 'GET',
         params: {
-            id_detalle_gasto: gasto_personal.id_detalle_gasto
+            id_detalle_gasto: gasto_salida_campo.id_detalle_gasto,
         }
     })
     .success(function(data) {
-        console.log('success callback');
-        console.log(data);
         if(data.consultado == 1)
         {
             $scope.show_velo = false;
@@ -145,7 +131,6 @@ sgpi_app.controller('modal_desembolso_personal_controller', function ($scope, $h
                 $scope.comentario_revision = data.desembolso.comentario_revision;
                 
                 $scope.show_datos_revision = true;
-                
             }
             else
             {
@@ -159,11 +144,10 @@ sgpi_app.controller('modal_desembolso_personal_controller', function ($scope, $h
         }
     })
     .error(function(data, status) {
-        console.log('error callback');
         console.log(data);
         alertify.error('Error XHR o de servidor al consultar revisión. Código de estado: ' + status);
         $scope.$close();
-    });
+    });    
     
     // valida el archivo cargado. Retorna true si es inválido.
     $scope.validar_documento = function(files, file, newFiles, duplicateFiles, invalidFiles, event){
@@ -176,7 +160,7 @@ sgpi_app.controller('modal_desembolso_personal_controller', function ($scope, $h
         }
         $scope.documento_invalido = false;
         return false;
-    };
+    };    
     
     // carga archivo asincronamete validando antes que se halla cargado archivo válido
     $scope.cargar_desembolso = function() {
@@ -198,9 +182,9 @@ sgpi_app.controller('modal_desembolso_personal_controller', function ($scope, $h
             method: 'POST',
             data: {
                 archivo: $scope.documento_desembolso,
-                id_detalle_gasto: gasto_personal.id_detalle_gasto,
+                id_detalle_gasto: gasto_salida_campo.id_detalle_gasto,
                 comentario: $scope.comentario_investigador,
-                tipo_gasto: 'personal'
+                tipo_gasto: 'salidas'
             }
         });
 
@@ -236,7 +220,7 @@ sgpi_app.controller('modal_desembolso_personal_controller', function ($scope, $h
             if($scope.carga_actual >= $scope.total_archivo)
                 $scope.casi_terminado = true;
         });        
-    };        
+    };           
     
     // Retorna a llamador de modal cancelando la carga si hay una en progreso
     $scope.cancelar = function() {

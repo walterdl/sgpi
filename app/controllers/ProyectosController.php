@@ -92,6 +92,7 @@
         | registrar_participantes_proyecto()
         | registrar_productos_proyecto()
         | registrar_gastos_proyecto()
+        | registrar_documentos_iniciales_proyecto()
         |
         | A su vez, cada función utiliza otras funciones de soporte
     	*/                  
@@ -130,6 +131,10 @@
                     // se registran los gastos del proyecto
                     $this->registrar_gastos_proyecto($data, $proyecto->id);
                     
+                    // se registran los documentos iniciales del proyecto, esto es:
+                    // presupuesto, presentacion de proyecto, acta de inicio
+                    $this->registrar_documentos_iniciales_proyecto($proyecto->id);
+
                     Session::flash('notify_operacion_previa', 'success');
                     Session::flash('mensaje_operacion_previa', 'Proyecto de investigación registrado');
                     return Redirect::to('/proyectos/listar');                    
@@ -138,7 +143,7 @@
             }
             catch (\Exception $e){
                 // aquí redirigir a listar proyectos con mensaje flash de error
-                throw $e;
+                // throw $e;
                 Session::flash('notify_operacion_previa', 'error');
                 Session::flash('mensaje_operacion_previa', 'Error en el registro de nuevo proyecto. Detalles: '.$e->getMessage());
                 return Redirect::to('/proyectos/listar');
@@ -927,7 +932,7 @@
                     throw new Exception('Datos del software "'.$concepto.'" inválidos');
                     
                 $detalle_gasto = DetalleGasto::create(array(
-                    'id_tipo_gasto' => TipoGasto::where('nombre', '=', 'Equipos')->first()->id,
+                    'id_tipo_gasto' => TipoGasto::where('nombre', '=', 'Software')->first()->id,
                     'concepto' => $concepto,
                     'justificacion' => $justificacion,
                     'fecha_ejecucion' => $fecha_ejecucion
@@ -1374,7 +1379,7 @@
                     throw new Exception('Datos del gasto de servicio técnico "'.$concepto.'" inválidos');
                     
                 $detalle_gasto = DetalleGasto::create(array(
-                    'id_tipo_gasto' => TipoGasto::where('nombre', '=', 'Materiales y suministros')->first()->id,
+                    'id_tipo_gasto' => TipoGasto::where('nombre', '=', 'Servicios técnicos')->first()->id,
                     'concepto' => $concepto,
                     'justificacion' => $justificacion,
                     'fecha_ejecucion' => $fecha_ejecucion
@@ -1521,7 +1526,7 @@
                     throw new Exception('Datos del gasto bibliográfico "'.$concepto.'" inválidos');
                     
                 $detalle_gasto = DetalleGasto::create(array(
-                    'id_tipo_gasto' => TipoGasto::where('nombre', '=', 'Materiales y suministros')->first()->id,
+                    'id_tipo_gasto' => TipoGasto::where('nombre', '=', 'Recursos bibliográficos')->first()->id,
                     'concepto' => $concepto,
                     'justificacion' => $justificacion,
                     'fecha_ejecucion' => $fecha_ejecucion
@@ -1668,7 +1673,7 @@
                     throw new Exception('Datos del gasto de recurso digital "'.$concepto.'" inválidos');
                     
                 $detalle_gasto = DetalleGasto::create(array(
-                    'id_tipo_gasto' => TipoGasto::where('nombre', '=', 'Materiales y suministros')->first()->id,
+                    'id_tipo_gasto' => TipoGasto::where('nombre', '=', 'Recursos educativos digitales')->first()->id,
                     'concepto' => $concepto,
                     'justificacion' => $justificacion,
                     'fecha_ejecucion' => $fecha_ejecucion
@@ -1776,6 +1781,74 @@
                 }                    
             }
         }        
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| registrar_documentos_iniciales_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Función de soporte para el registro de los documentos iniciales del propyecto los cuales son:
+    	| presupuesto, presentacion de proyecto, acta de inicio
+    	| Específicamente se encarga de copiar al sistema de ficheros los documentos citados 
+    	| y crear los registros DocumentoProyecto asociandos con el id_proyecto pasado como parámetro
+    	| Obtiene los archivos de la fachada Input::file
+    	*/                  
+        private function registrar_documentos_iniciales_proyecto($id_proyecto){
+            
+            // primero se aplica validaciones a los archivos enviados. Esto es si existe y si no sobrepasa el tamaño permitido
+            if(!Input::hasFile('presupuesto'))
+                throw new Exception('Documento de presupuesto de proyecto inválido. No se cargo archivo');
+                
+            if(!Input::hasFile('presentacion_proyecto'))
+                throw new Exception('Documento de presentación de proyecto de proyecto inválido. No se cargo archivo');
+                
+            if(!Input::hasFile('acta_inicio'))
+                throw new Exception('Documento de acta de inicio de proyecto inválido. No se cargo archivo');   
+                
+            // crea registro DocumentoProyecto dedicado al documento de presupuesto
+            $presupuesto = new DocumentoProyecto();
+            $presupuesto->id_formato_tipo_documento = FormatoTipoDocumento::where('nombre', '=', 'Presupuesto')->first()->id;
+            $presupuesto->id_proyecto = $id_proyecto;
+            $presupuesto->save();
+            
+            // copia archivo de presupuesto al sistema de archivos
+            $archivo_copiado = Archivo::copiar_presupuesto(Input::file("presupuesto"), $presupuesto->id);
+            if($archivo_copiado){ // archivo copiado con éxito
+                $presupuesto->archivo = $archivo_copiado->getFilename(); // actualiza registro DocumentoProyecto con el nombre del archivo copiado
+                $presupuesto->save(); 
+            }
+            else
+                throw new Exception('Error al copiar archivo de presupuesto de proyecto');            
+
+            // crea registro DocumentoProyecto dedicado al documento de presentación de proyecto
+            $presentacion_proyecto = new DocumentoProyecto();
+            $presentacion_proyecto->id_formato_tipo_documento = FormatoTipoDocumento::where('nombre', '=', 'Presentacion proyecto')->first()->id;
+            $presentacion_proyecto->id_proyecto = $id_proyecto;
+            $presentacion_proyecto->save();
+            
+            // copia archivo de presentación de proyecto al sistema de archivos
+            $archivo_copiado = Archivo::copiar_presentacion_proyecto(Input::file("presentacion_proyecto"), $presentacion_proyecto->id);
+            if($archivo_copiado){ // archivo copiado con éxito
+                $presentacion_proyecto->archivo = $archivo_copiado->getFilename(); // actualiza registro DocumentoProyecto con el nombre del archivo copiado
+                $presentacion_proyecto->save(); 
+            }
+            else
+                throw new Exception('Error al copiar archivo de presentación de proyecto');        
+                
+            // crea registro DocumentoProyecto dedicado al documento de acta de inicio
+            $acta_inicio = new DocumentoProyecto();
+            $acta_inicio->id_formato_tipo_documento = FormatoTipoDocumento::where('nombre', '=', 'Acta inicio')->first()->id;
+            $acta_inicio->id_proyecto = $id_proyecto;
+            $acta_inicio->save();
+            
+            // copia archivo de presentación de proyecto al sistema de archivos
+            $archivo_copiado = Archivo::copiar_acta_inicio(Input::file("acta_inicio"), $acta_inicio->id);
+            if($archivo_copiado){ // archivo copiado con éxito
+                $acta_inicio->archivo = $archivo_copiado->getFilename(); // actualiza registro DocumentoProyecto con el nombre del archivo copiado
+                $acta_inicio->save(); 
+            }
+            else
+                throw new Exception('Error al copiar archivo de acta de inicio de proyecto'); 
+        }
         
         
         
@@ -1953,16 +2026,19 @@
     	            
     	            $pagina=Input::get('pagina');
     	            $mas_info_usuario=null;
+    	            $mas_info_productos=null;
+    	            $mas_info_gasto=null;
+    	            $temp=false;
 
     	            if(isset($pagina)){
+    	                
     	                $proyecto->estado;
                         $proyecto->grupo;
                         $proyecto->objetivosEspecificos;
-                        $proyecto->informeAvances;
                         $proyecto->documentosProyectos;
                         $proyecto->investigadores;
-                        $proyecto->gastos;
-                        $proyecto->productos;
+                        
+                        
                         
                         if($pagina == 2){
                             
@@ -1996,7 +2072,7 @@
                                      
                                     
                                      
-                                     $mas_info_usuario []=array(
+                                    $mas_info_usuario []=array(
                                     'info_investigador' =>  $persona,
                                     'datos_extras'=>$investigador,
                                     'resgitrado'=>1,
@@ -2007,7 +2083,168 @@
                                 }//fin else
                                 
                             }//fin for each
-                            // die();
+
+                        }else if($pagina == 3){
+                            
+                                // $proyecto->productos;
+                                foreach ($proyecto->productos as $producto) {
+                                    
+                                    $producto->tipoProductoE;
+                                    $producto->tipoProductoE->tipoProductoG;
+                                    $producto->investigador;
+                                    $producto->investigador->persona;
+                                    
+                                    $mas_info_productos[]= array(
+                                    'producto' => $producto,
+                                    'resgitrado'=>1,
+                                    );
+                                    
+                                } ////// fin del foreach 
+                                
+                            $temp=true;
+    
+                        }else if($pagina == 4){ ///// comineso de la pagina 4
+                            
+                            $gastos=$proyecto->gastos;
+                            
+                            foreach ($gastos as $item) {
+                            
+                                $item->entidadFuentePresupuesto;//llamar ala entidad fuente de presupuesto
+                                
+                                $item->detalleGasto;//llamar los detalle de gasto
+                                $item->detalleGasto->tipoGasto;//llamarel tipo de gasto  que es el detalle de gasto
+                                $item->detalleGasto->desembolso;//llamarel tipo de gasto  que es el detalle de gasto
+                                
+                                if($item->detalleGasto->investigador){
+                                    $item->detalleGasto->investigador->persona;//llamar los investigadores y la persona
+                                    $item->detalleGasto->investigador->rol;//llamar los investigadores y su rol
+                                }
+                                
+                            }//fin foreach para gastos
+                            
+                            
+                            $temp=Gasto::consultasDetalleGasto($proyecto->id);
+                            
+                            foreach ($temp as $item) {
+                                
+                                $aux=DetalleGasto::find($item->id_detalle_gasto);
+                                $aux->tipoGasto;//llamarel tipo de gasto  que es el detalle de gasto
+                                $aux->gasto;//llamar los gsatos de cada detalle de gasto
+                                $aux->desembolso;//llamarel tipo de gasto  que es el detalle de gasto
+                                
+                                if($aux->id_tipo_gasto == 1){ //Personal
+                                    $gasto_personal[]=$aux;
+                                    
+                                }else if($aux->id_tipo_gasto == 2){ //Equipos
+                                    $gasto_equipos[]=$aux;
+                                    
+                                }else if($aux->id_tipo_gasto == 3){ //Software
+                                    $gasto_software[]=$aux;
+                                    
+                                }else if($aux->id_tipo_gasto == 4){ //Salidas de campo
+                                    $gasto_salida[]=$aux;
+                                
+                                }else if($aux->id_tipo_gasto == 5){ //Materiales y suministros
+                                    $gasto_materiales_suministros[]=$aux;
+                                    
+                                }else if($aux->id_tipo_gasto == 6){ //Servicios técnicos
+                                    $gasto_servicios[]=$aux;
+                                    
+                                }else if($aux->id_tipo_gasto == 7){ //Recursos bibliográficos
+                                    $gasto_bibliografia[]=$aux;
+                                    
+                                }else if($aux->id_tipo_gasto == 8){ //Recursos educativos digitales
+                                    $gasto_digitales[]=$aux;
+                                    
+                                }
+
+                                if($aux->investigador){
+
+                                    if($aux->investigador->id_persona_coinvestigador == null){
+                                        $aux->investigador->rol;
+                                        $aux->investigador->usuario->persona;
+                                        
+                                    }else{
+                                        $aux->investigador->rol;
+                                        $aux->investigador->persona;
+                                    }
+                                    
+                                }
+                                
+                                
+                                $detalle_gasto[]=$aux;
+                            }
+                            
+
+                            $mas_info_gasto= array(
+                            'gastos' => $gastos,
+                            'detalle_gastos'=>$detalle_gasto,
+                            'gastos_royecto'=>Gasto::consultar_gastos_proyecto($proyecto->id),
+                            'resgitrado'=>1,
+                            );
+
+                            $temp=true;
+                        }
+                        
+                        
+                        /// esto es para la pagina 3 y 4
+                        if($temp){
+                            foreach ($proyecto->investigadores as $investigador) {
+                             
+                                //solo para la pagina 4
+                                //  if($pagina == 4){
+                                    
+                                //     if($investigador->id_persona_coinvestigador == null){
+                                        
+                                //         $investigador->rol;
+                                //         $investigador->usuario->persona;
+                                        
+                                //         $mas_info_usuario []=array(
+                                //         'info_investigador' =>  $investigador,
+                                //         'resgitrado'=>1,
+                                //         );
+                                //     }else{
+                                        
+                                //         $investigador->rol;
+                                //         $investigador->persona;
+                                    
+                                //         $mas_info_usuario []=array(
+                                //         'info_investigador' =>  $investigador,
+                                //         'resgitrado'=>1,
+                                //         );
+                                        
+                                //     }
+                                     
+                                //  }else 
+                                 if($pagina == 3){
+                                        if($investigador->id_persona_coinvestigador == null){
+                                            
+                                            //echo "///////////////////// ".$investigador->id_usuario_investigador_principal;
+                                            $usuario =Usuario::find($investigador->id_usuario_investigador_principal);
+                                            $persona=Persona::find($usuario->id_persona);
+                                            
+                                            $mas_info_usuario []=array(
+                                            'info_investigador' =>  $persona,
+                                            'resgitrado'=>1,
+                                            'investigador_principarl'=>1,
+                                            );
+                                            
+                                        }else{
+                                             //echo $investigador->id_persona_coinvestigador."<br>";
+                                            
+                                             $persona=Persona::find($investigador->id_persona_coinvestigador);
+     
+                                             $mas_info_usuario []=array(
+                                             'info_investigador' =>  $persona,
+                                             'resgitrado'=>1,
+                                             'investigador_principarl'=>0,
+                                             );
+            
+                
+                                }//fin else
+                                 }
+                                 
+                            }//fin for each
                         }
                         
     	            }
@@ -2028,6 +2265,8 @@
                     'consultado' => 1,
                     'proyecto'=> $proyecto,
                     'info_investigadores_usuario'=>$mas_info_usuario,
+                    'info_productos'=>$mas_info_productos,
+                    'info_gastos'=>$mas_info_gasto,
                     ));
             }
             catch(Exception $e){

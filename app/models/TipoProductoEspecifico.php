@@ -9,6 +9,15 @@
         protected $table = 'tipos_productos_especificos';
         protected $dates = ['deleted_at'];
         
+        protected $fillable = [
+            'id',
+            'id_tipo_producto_general',
+            'nombre'
+        ];
+        
+        public function tipoProductoG() { 
+            return $this->belongsTo('Estado', 'id_tipo_producto_general'); 
+        }
         
     	/*
     	|--------------------------------------------------------------------------

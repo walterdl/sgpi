@@ -9,11 +9,60 @@
         protected $table = 'gastos';
         protected $dates = ['deleted_at'];
         protected $fillable = [
+            'id',
             'id_proyecto',
             'id_entidad_fuente_presupuesto',
             'id_detalle_gasto',
             'valor'
-            ];
+        ];
+            
+            
+            
+        public function proyecto() { 
+            return $this->belongsTo('Proyecto', 'id_proyecto'); 
+        }
+            
+        
+        public function entidadFuentePresupuesto() { 
+            return $this->belongsTo('EntidadFuentePresupuesto', 'id_entidad_fuente_presupuesto'); 
+        }
+        
+        
+        public function detalleGasto() { 
+            return $this->belongsTo('DetalleGasto', 'id_detalle_gasto'); 
+        }
+        
+        
+        /*
+    	|--------------------------------------------------------------------------
+    	| consultasDetalleGasto()
+    	|--------------------------------------------------------------------------
+    	| Retorna todos las consltas agrupadas cpor detalle gasto o por entidad fuente_presupuesto
+    	*/                                 
+        public static function consultasDetalleGasto($id_proyecto){
+            $query = '
+                SELECT * 
+                FROM  gastos
+                WHERE id_proyecto = '.$id_proyecto.'
+                GROUP BY  id_detalle_gasto;';
+                
+                $gastos = DB::select(DB::raw($query));
+            return $gastos;
+            
+        }
+        
+        public static function consultasDetallePresupuesto($id_proyecto){
+            $query = '
+                SELECT * 
+                FROM  gastos
+                WHERE id_proyecto = '.$id_proyecto.'
+                GROUP BY  id_entidad_fuente_presupuesto;';
+                
+                $gastos = DB::select(DB::raw($query));
+            return $gastos;
+            
+        }
+        
             
     	/*
     	|--------------------------------------------------------------------------
@@ -23,18 +72,49 @@
     	| hace uso de funciones de soporte para dividir la consulta de los gastos por tipo de gasto
     	*/                                 
         public static function consultar_gastos_proyecto($id_proyecto){
+  
             
             $gastos_personal = Gasto::consultar_gastos_personal_proyecto($id_proyecto);
-            $totales_gastos_personal = Gasto::consultar_totales_gastos_personal_proyecto($id_proyecto);
+            $totales_gastos_personal = Gasto::consultar_totales_gastos_x_tipo_gasto($id_proyecto, 'Personal');
             
-            $gastos_equipos = Gasto::consultar_gastos_equipos_proyecto($id_proyecto);
-            $totales_gastos_equipos = Gasto::consultar_totales_gastos_equipos_proyecto($id_proyecto);
+            $gastos_equipos = Gasto::consultar_gastos_x_tipo_gasto($id_proyecto, 'Equipos');
+            $totales_gastos_equipos = Gasto::consultar_totales_gastos_x_tipo_gasto($id_proyecto, 'Equipos');
+            
+            $gastos_software = Gasto::consultar_gastos_x_tipo_gasto($id_proyecto, 'Software');
+            $totales_gastos_software = Gasto::consultar_totales_gastos_x_tipo_gasto($id_proyecto, 'Software');
+            
+            $gastos_salidas_campo = Gasto::consultar_gastos_x_tipo_gasto($id_proyecto, 'Salidas de campo');
+            $totales_gastos_salidas_campo = Gasto::consultar_totales_gastos_x_tipo_gasto($id_proyecto, 'Salidas de campo');            
+            
+            $gastos_materiales = Gasto::consultar_gastos_x_tipo_gasto($id_proyecto, 'Materiales y suministros');
+            $totales_gastos_materiales = Gasto::consultar_totales_gastos_x_tipo_gasto($id_proyecto, 'Materiales y suministros');
+            
+            $gastos_servicios = Gasto::consultar_gastos_x_tipo_gasto($id_proyecto, 'Servicios técnicos');
+            $totales_gastos_servicios = Gasto::consultar_totales_gastos_x_tipo_gasto($id_proyecto, 'Servicios técnicos');            
+             
+            $gastos_bibliograficos = Gasto::consultar_gastos_x_tipo_gasto($id_proyecto, 'Recursos bibliográficos');
+            $totales_gastos_bibliograficos = Gasto::consultar_totales_gastos_x_tipo_gasto($id_proyecto, 'Recursos bibliográficos');                         
+            
+            $gastos_digitales = Gasto::consultar_gastos_x_tipo_gasto($id_proyecto, 'Recursos educativos digitales');
+            $totales_gastos_digitales = Gasto::consultar_totales_gastos_x_tipo_gasto($id_proyecto, 'Recursos educativos digitales');                                     
             
             return [
                 'gastos_personal' => $gastos_personal,
                 'totales_gastos_personal' => $totales_gastos_personal,
                 'gastos_equipos' => $gastos_equipos,
-                'totales_gastos_equipos' => $totales_gastos_equipos
+                'totales_gastos_equipos' => $totales_gastos_equipos,
+                'gastos_software' => $gastos_software,
+                'totales_gastos_software' => $totales_gastos_software,
+                'gastos_salidas_campo' => $gastos_salidas_campo,
+                'totales_gastos_salidas_campo' => $totales_gastos_salidas_campo,
+                'gastos_materiales' => $gastos_materiales,
+                'totales_gastos_materiales' => $totales_gastos_materiales,
+                'gastos_servicios' => $gastos_servicios,
+                'totales_gastos_servicios' => $totales_gastos_servicios,
+                'gastos_bibliograficos' => $gastos_bibliograficos,
+                'totales_gastos_bibliograficos' => $totales_gastos_bibliograficos,
+                'gastos_digitales' => $gastos_digitales,
+                'totales_gastos_digitales' => $totales_gastos_digitales
                 ];
         }
         
@@ -145,48 +225,19 @@
         
     	/*
     	|--------------------------------------------------------------------------
-    	| consultar_totales_gastos_personal_proyecto()
+    	| consultar_gastos_x_tipo_gasto()
     	|--------------------------------------------------------------------------
-    	| Consulta los totales de los gastos de personal de un determinado proyecto
-    	*/                
-        private static function consultar_totales_gastos_personal_proyecto($id_proyecto){
-            // agrega los totales de los gastos personales para el proyecto
+    	| Función de soporte que consulta los gastos de un determinado tipo de gasto para un determinado proyecto
+    	*/                  
+        private static function consultar_gastos_x_tipo_gasto($id_proyecto, $tipo_gasto){
             $query = '
-                SELECT e.id, e.nombre as nombre_entidad, sum(g.valor) as total_entidad
-                FROM gastos g, entidades_fuente_presupuesto e, detalles_gastos dg, tipos_gastos tg
-                WHERE 
-                	g.id_proyecto = '.$id_proyecto.'
-                AND	g.id_entidad_fuente_presupuesto = e.id
-                AND g.id_detalle_gasto = dg.id
-                AND dg.id_tipo_gasto = tg.id
-				AND tg.id = '.TipoGasto::where('nombre', '=', 'Personal')->first()->id.'
-                GROUP BY e.id, e.nombre
-                ORDER BY e.id';
-                
-            $totales_x_entidad = DB::select(DB::raw($query));            
-            $gran_total = null;
-            foreach($totales_x_entidad as $total){
-                $gran_total += $total->total_entidad;
-            }
-            return [
-                'totales_por_entidad' => $totales_x_entidad,
-                'gran_total' => $gran_total
-                ];
-        }
-        
-    	/*
-    	|--------------------------------------------------------------------------
-    	| consultar_gastos_equipos_proyecto()
-    	|--------------------------------------------------------------------------
-    	| Función de soporte que consulta los gastos de equipos de un determinado proyecto
-    	*/          
-        private static function consultar_gastos_equipos_proyecto($id_proyecto){
-            
-            $query = '
-                SELECT dg.*
-                FROM detalles_gastos dg
-                INNER JOIN gastos g ON g.id_detalle_gasto = dg.id AND g.id_proyecto = '.$id_proyecto.'
-                INNER JOIN tipos_gastos tg ON dg.id_tipo_gasto = tg.id AND tg.nombre = \'Equipos\';';
+            SELECT DISTINCT dg.*
+            FROM detalles_gastos dg, gastos g, tipos_gastos tg
+            WHERE
+                dg.id_tipo_gasto = tg.id
+            AND tg.nombre = \''.$tipo_gasto.'\'
+            AND dg.id = g.id_detalle_gasto
+            AND g.id_proyecto = '.$id_proyecto.';';
                 
             $detalles_gastos = DB::select(DB::raw($query));
             
@@ -196,6 +247,7 @@
             for($i = 0; $i < count($detalles_gastos); $i++){
                 $detalle_gasto = $detalles_gastos[$i];
                 $detalle_gasto = (array)$detalle_gasto;
+                $detalle_gasto['id_detalle_gasto'] = $detalle_gasto['id'];
                 $gastos = Gasto::where('id_detalle_gasto', '=', $detalle_gasto['id'])->get();
                 $detalle_gasto['gastos'] = [];
                 foreach($gastos as $gasto){
@@ -206,17 +258,16 @@
                 }
                 $detalles_gastos[$i] = (object)$detalle_gasto;
             }
-            return $detalles_gastos;
+            return $detalles_gastos;                      
         }
-  
-      	/*
+        
+    	/*
     	|--------------------------------------------------------------------------
-    	| consultar_totales_gastos_equipos_proyecto()
+    	| consultar_totales_gastos_x_tipo_gasto()
     	|--------------------------------------------------------------------------
-    	| Consulta los totales de los gastos de equipos de un determinado proyecto
-    	*/        
-        private static function consultar_totales_gastos_equipos_proyecto($id_proyecto){
-            
+    	| Función de soporte que consulta los totales de los gastos de un determinado tipo de gasto para un determinado proyecto
+    	*/               
+        private static function consultar_totales_gastos_x_tipo_gasto($id_proyecto, $tipo_gasto){
             $query = '
                 SELECT e.id, e.nombre as nombre_entidad, sum(g.valor) as total_entidad
                 FROM gastos g, entidades_fuente_presupuesto e, detalles_gastos dg, tipos_gastos tg
@@ -225,7 +276,7 @@
                 AND	g.id_entidad_fuente_presupuesto = e.id
                 AND g.id_detalle_gasto = dg.id
                 AND dg.id_tipo_gasto = tg.id
-				AND tg.id = '.TipoGasto::where('nombre', '=', 'Equipos')->first()->id.'
+				AND tg.id = '.TipoGasto::where('nombre', '=', $tipo_gasto)->first()->id.'
                 GROUP BY e.id, e.nombre
                 ORDER BY e.id';            
                 
@@ -237,7 +288,7 @@
             return [
                 'totales_por_entidad' => $totales_x_entidad,
                 'gran_total' => $gran_total
-                ];                
+                ];                     
         }
     }
 

@@ -40,12 +40,7 @@
             return $this->hasMany('ObjetivoEspecifico','id_proyecto');
         }
         
-        public function informeAvances()
-        {
-            return $this->hasMany('InformeAvance','id_proyecto');
-        }
-        
-        
+
         public function documentosProyectos()
         {
             return $this->hasMany('DocumentoProyecto','id_proyecto');

@@ -131,7 +131,7 @@ Route::group(array('before' => 'auth'), function(){
 		Route::get('file/imagen_perfil/{nombre_foto?}', 'FileController@get_imagen_perfil');
 		
 		// Sirve los formatos guía de los documentos
-		Route::get('file/formato/{nombre_formato}', 'FileController@get_formato_documento');
+		Route::get('file/formato', 'FileController@get_formato_documento');
 
 		// Grupos de investigación
 		Route::get('grupos', 'GruposInvestigacionController@listar');
@@ -197,7 +197,7 @@ Route::group(array('before' => 'auth'), function(){
 		Route::get('file/imagen_perfil/{nombre_foto?}', 'FileController@get_imagen_perfil');
 		
 		// Sirve los formatos guía de los documentos
-		Route::get('file/formato/{nombre_formato}', 'FileController@get_formato_documento');		
+		Route::get('file/formato/', 'FileController@get_formato_documento');		
 		
 	    // Propio perfil
 		Route::get('usuarios/propio_perfil', 'UsuariosController@ver_propio_perfil');
@@ -222,11 +222,26 @@ Route::group(array('before' => 'auth'), function(){
 		Route::get('file/imagen_perfil/{nombre_foto?}', 'FileController@get_imagen_perfil');
 		
 		// Sirve los formatos guía de los documentos
-		Route::get('file/formato/{nombre_formato}', 'FileController@get_formato_documento');
+		Route::get('file/formato/', 'FileController@get_formato_documento');
 		
 		// Sirve archivos de los productos
 		Route::get('file/producto_fecha_proyectada_radicacion/{nombre_archivo}', 'FileController@get_archivo_fecha_proyectada_radicacion');
 		Route::get('file/producto_fecha_publicacion/{nombre_archivo}', 'FileController@get_archivo_fecha_publicacion');
+		
+		// sirve los archivos de desembolso
+		Route::get('file/desembolso/{nombre_archivo}', 'FileController@get_desembolso');
+		
+		// sirve los archivos de informes de avance
+		Route::get('file/informe_avance/{nombre_archivo}', 'FileController@get_informe_avance');
+		
+		// sirve los archivos de acta de finalización
+		Route::get('file/acta_finalizacion/{nombre_archivo}', 'FileController@get_acta_finalizacion');
+		
+		// sirve los archivos de memoria académica
+		Route::get('file/memoria_academica/{nombre_archivo}', 'FileController@get_memoria_academica');
+		
+		// sirve los archivos de prórroga
+		Route::get('file/prorroga/{nombre_archivo}', 'FileController@get_prorroga');
 		
 		// Propio perfil
 		Route::get('usuarios/propio_perfil', 'UsuariosController@ver_propio_perfil');
@@ -248,8 +263,15 @@ Route::group(array('before' => 'auth'), function(){
 		Route::get('proyectos/verificar_existencia_archivo_fecha_publicacion', 'GestionProyectosController@consultar_producto_fecha_publicacion');
 		Route::post('proyectos/cargar_producto_fecha_publicacion', 'GestionProyectosController@guardar_producto_fecha_publicacion');
 		Route::get('proyectos/gastos_de_proyecto', 'GestionProyectosController@gastos_de_proyecto');
-		Route::get('proyectos/revision_desembolso_personal', 'GestionProyectosController@revision_desembolso_personal');
-		Route::post('/proyectos/cargar_desembolso_gasto_personal', 'GestionProyectosController@guardar_desembolso_gasto_personal');
+		Route::get('proyectos/revision_desembolso', 'GestionProyectosController@revision_desembolso');
+		Route::post('/proyectos/cargar_desembolso', 'GestionProyectosController@guardar_desembolso');
+		Route::get('proyectos/informe_avance', 'GestionProyectosController@consultar_informe_avance');
+		Route::post('proyectos/cargar_informe_avance', 'GestionProyectosController@guardar_informe_avance');
+		Route::get('proyectos/final_proyecto', 'GestionProyectosController@consultar_final_proyecto');
+		Route::post('proyectos/cargar_final_proyecto', 'GestionProyectosController@guardar_final_proyecto');
+		Route::get('proyectos/prorroga', 'GestionProyectosController@consultar_prorroga');
+		Route::post('proyectos/cargar_prorroga', 'GestionProyectosController@guardar_prorroga');
+		Route::get('proyectos/mas_info_proyecto', 'GestionProyectosController@mas_info_proyecto');
 		
 		/*
 		---------------------------------------------------------------------------
@@ -328,12 +350,20 @@ Route::get('truncar_bd', 'BaseController@truncar_bd');
 |--------------------------------------------------------------------------
 | Prueba impresiones
 */
-Route::get('test', function(){
+Route::post('test', function(){
 	
-	$persona = Persona::find(1);
-	$persona = (array)$persona;
-	$persona = (object)$persona;
-	echo '<pre>'.print_r($persona, true).'</pre>';
+	function hello_function($data){
+		echo '<pre>'.print_r($data, true).'</pre>';
+		if(Input::hasFile('archivo'))
+			echo 'W';
+	}
 	
+	try{
+		$data = Input::all();
+		hello_function($data);
+	}
+	catch(\Exception $e){
+		throw $e;
+	}
 });
 
