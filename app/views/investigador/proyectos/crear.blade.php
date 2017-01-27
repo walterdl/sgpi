@@ -103,7 +103,7 @@
                                     <div class="row is-flex">
                                         
                                         {{--Cidigo FMI--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <div class="form-group">
                                                 <label for="codigo_fmi">Código FMI <span class="error-text" ng-show="data.validacion_codigo_fmi != null">{$ data.validacion_codigo_fmi $}</span></label>
                                                 <input type="text" name="codigo_fmi" id="codigo_fmi" ng-model="data.codigo_fmi" ng-change="validar_codigo_fmi()" class="form-control" ng-class="{'invalid_control': data.validacion_codigo_fmi != null}"/>
@@ -111,7 +111,7 @@
                                         </div> 
                                         
                                         {{--Subcentro de costo--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <div class="form-group">
                                                 <label for="subcentro_costo">Subcentro de costo <span class="error-text" ng-show="data.validacion_subcentro_costo != null">{$ data.validacion_subcentro_costo $}</span></label>
                                                 <input type="text" name="subcentro_costo" id="subcentro_costo" ng-model="data.subcentro_costo" ng-change="validar_subcentro_costo()" class="form-control" ng-class="{'invalid_control': data.validacion_subcentro_costo != null}"/>
@@ -119,7 +119,7 @@
                                         </div> 
                                         
                                         {{--Nombre del proyecto--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <div class="form-group">
                                                 <label for="nombre_proyecto">Nombre del proyecto <span class="error-text" ng-show="data.validacion_nombre_proyecto != null">{$ data.validacion_nombre_proyecto $}</span></label>
                                                 <input type="text" name="nombre_proyecto" id="nombre_proyecto" ng-model="data.nombre_proyecto" ng-change="validar_nombre_proyecto()" class="form-control" ng-class="{'invalid_control': data.validacion_nombre_proyecto != null}"/>
@@ -127,7 +127,7 @@
                                         </div> 
                                         
                                         {{--Fecha de inicio del proyecto--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <label for="fecha_inicio">Fecha de inicio del proyecto <span class="error-text" ng-show="data.validacion_fecha_inicio != null">{$ data.validacion_fecha_inicio $}</span></label>
                                             <div class="input-group">
                                                 <input type="text" name="fecha_inicio" id="fecha_inicio" 
@@ -145,7 +145,7 @@
                                         </div> 
                                         
                                         {{--Duración en meses del proyecto--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <div class="form-group">
                                                 <label for="duracion_meses">Duración en meses del proyecto <span class="error-text" ng-show="data.validacion_duracion_meses != null">{$ data.validacion_duracion_meses $}</span></label>
                                                 <input type="number" min="12" name="duracion_meses" id="duracion_meses" ng-model="data.duracion_meses" ng-change="calcular_fecha_final()" class="form-control" ng-class="{'invalid_control': data.validacion_duracion_meses != null}"/>
@@ -153,7 +153,7 @@
                                         </div> 
                                         
                                         {{--Fecha final del proyecto aproximada--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <label for="fecha_final">Fecha final del proyecto</label>
                                             <div class="input-group">
                                                 <input type="text" name="fecha_final" id="fecha_final" class="form-control white-readonly" 
@@ -169,7 +169,7 @@
                                         </div> 
                                         
                                         {{--Convocatoria--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <div class="form-group">
                                                 <label for="convocatoria">Convocatoria</label>
                                                 <input type="text" name="convocatoria" id="convocatoria" ng-model="data.convocatoria" class="form-control"/>
@@ -177,7 +177,7 @@
                                         </div> 
                                         
                                         {{--Año de la convocatoria--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <div class="form-group">
                                                 <label for="anio_convocatoria">Año de la convocatoria</label>
                                                 <input type="number" min="2000" name="anio_convocatoria" id="anio_convocatoria" ng-model="data.anio_convocatoria" class="form-control"/>

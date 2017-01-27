@@ -10,7 +10,6 @@
     	*/
         public function listar_proyectos_investigador_principal(){
             
- 
             // provee estilos personalizados para la vista a cargar
             $styles = [
                 'vendor/ngAnimate/ngAnimate.css',
@@ -48,6 +47,7 @@
                 'investigador/proyectos/listar/informe_avance_controller.js',
                 'investigador/proyectos/listar/final_proyecto_controller.js',
                 'investigador/proyectos/listar/prorroga_controller.js',
+                'investigador/proyectos/listar/mas_info_proyecto_controller.js',
                 ];
             
             $angular_sgpi_app_extra_dependencies = ['ngAnimate', 'ngTouch', 'ngSanitize', 'ngFileUpload', 'ui.bootstrap', 'datatables', 'datatables.bootstrap'];
@@ -101,7 +101,7 @@
                     ));
             }    
             catch(Exception $e){
-                // throw $e;
+                throw $e;
                 return json_encode(array(
                     'consultado' => 2,
                     'codigo' => $e->getCode(),
@@ -243,7 +243,9 @@
                         return json_encode([
                             'consultado' => 1,
                             'existe_archivo' => 1,
-                            'nombre_archivo' => $postulacion_publicacion->archivo
+                            'nombre_archivo' => $postulacion_publicacion->archivo,
+                            'descripcion' => $postulacion_publicacion->descripcion,
+                            'updated_at' => $postulacion_publicacion->updated_at->format('Y-m-d')
                             ]);
                     else
                         return json_encode([
@@ -297,7 +299,9 @@
                         return json_encode([
                             'consultado' => 1,
                             'existe_archivo' => 1,
-                            'nombre_archivo' => $postulacion_publicacion->archivo
+                            'nombre_archivo' => $postulacion_publicacion->archivo,
+                            'descripcion' => $postulacion_publicacion->descripcion,
+                            'updated_at' => $postulacion_publicacion->updated_at->format('Y-m-d')
                             ]);
                     else
                         return json_encode([
@@ -1162,8 +1166,15 @@
                     );
                 if($validacion->fails())
                     throw new Exception('Identificador de proyecto inválido; identificador de proyecto no encontrado');
+                    
+                $detalles_proyecto = Proyecto::detalles_proyecto(Input::get('id_proyecto'));
                 
+                $respuesta = ['consultado' => 1];
+                foreach($detalles_proyecto as $key => $value){
+                    $respuesta[$key] = $value;
+                }
                 
+                return json_encode($respuesta);
             }
             catch(\Exception $e){
                 throw $e;
@@ -1174,4 +1185,150 @@
                     ]);                      
             }            
         }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| listar_proyectos_administrador()
+    	|--------------------------------------------------------------------------
+    	| Presenta la vista de gestión de proyectos para el usuario investigador
+    	*/                  
+        public function listar_proyectos_administrador(){
+            
+            // provee estilos personalizados para la vista
+            $styles = [
+                'vendor/ngAnimate/ngAnimate.css',
+                'vendor/datatables/dataTables.bootstrap.css',
+                'vendor/angular-datatables/css/angular-datatables.min.css',
+                'vendor/angular-datatables/plugins/bootstrap/datatables.bootstrap.min.css',
+                'vendor/mCustomScrollbar/jquery.mCustomScrollbar.css',
+                ]; 
+            
+            // provee scripts extras o personalizados para la vista a cargar
+            $pre_scripts = [
+                'vendor/angular/sanitize/angular-sanitize.js',
+                'vendor/ng-file-upload/ng-file-upload-shim.js',
+                'vendor/ng-file-upload/ng-file-upload.min.js',
+                'vendor/angular-ui/ui-bootstrap-tpls-2.2.0.min.js',
+                'vendor/datatables/jquery.dataTables.min.js',
+                'vendor/angular-datatables/angular-datatables.min.js',
+                'vendor/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.min.js',
+                'vendor/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js',
+                ];
+                
+            $post_scripts = [
+                'administrador/proyectos/listar/listar_proyectos_controller.js',
+                'administrador/proyectos/listar/mas_info_proyecto_controller.js',
+                'administrador/proyectos/listar/productos_controller.js',
+                'administrador/proyectos/listar/gastos_controller.js',
+                'administrador/proyectos/listar/gastos_personal_controller.js',
+                'administrador/proyectos/listar/gastos_equipos_controller.js',
+                'administrador/proyectos/listar/gastos_software_controller.js',
+                'administrador/proyectos/listar/gastos_salidas_campo_controller.js',
+                'administrador/proyectos/listar/gastos_materiales_controller.js',
+                'administrador/proyectos/listar/gastos_servicios_controller.js',
+                'administrador/proyectos/listar/gastos_bibliograficos_controller.js',
+                'administrador/proyectos/listar/gastos_digitales_controller.js',
+                ];
+            
+            $angular_sgpi_app_extra_dependencies = ['ngAnimate', 'ngTouch', 'ngSanitize', 'ngFileUpload', 'ui.bootstrap', 'datatables', 'datatables.bootstrap'];
+            
+            return View::make('administrador.proyectos.listar.listar', array(
+                'styles' => $styles, 
+                'pre_scripts' => $pre_scripts,
+                'post_scripts' => $post_scripts,
+                'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies
+                ));            
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| proyectos_administrador()
+    	|--------------------------------------------------------------------------
+    	| Retorno json con todos los proyectos de investigación.
+    	*/          
+        public function proyectos_administrador(){
+            
+            try{
+                
+                // verifica que el actual usuario sea administrador
+                if(Auth::user()->id_rol != 1)
+                    throw new Exception('Acceso denegado a los proyectos por falta de privilegios de usuario');
+                    
+                $proyectos = Proyecto::proyectos_administrador();
+                return json_encode(array(
+                    'proyectos' => $proyectos,
+                    'consultado' => 1
+                    ));
+            }
+            catch(Exception $e){
+                return json_encode(array(
+                    'consultado' => 2,
+                    'mensaje' => $e->getMessage(),
+                    'codigo' => $e->getCode()
+                    ));
+            }            
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| guardar_revision_desembolso()
+    	|--------------------------------------------------------------------------
+    	| Guarda la revisión de desembolso de cualquier tipo de gasto de un determinado proyecto
+    	*/          
+        public function guardar_revision_desembolso(){
+            
+            try{               
+                
+                // se valida identificador de registro d edetalle gasto enviado
+                if(is_null(Input::get('id_detalle_gasto', null)))
+                    throw new Exception('Identificador de registro de gasto inválido. No se ha recibido tal registro');
+                $validacion = Validator::make(
+                    ['id_detalle_gasto' => Input::get('id_detalle_gasto')], 
+                    ['id_detalle_gasto' => 'required|exists:detalles_gastos,id']);
+                if($validacion->fails())
+                    throw new Exception('Identificador de registro de gasto inválido. No se encuentra tal registro');
+                
+                // consulta desembolso
+                $desembolso = Desembolso::where('id_detalle_gasto', '=', Input::get('id_detalle_gasto'))->first();
+                
+                $aprobado = null;
+                // formatea valor de aprobado enviado
+                if(Input::get('aprobado') == 'true')
+                    $aprobado = 1;
+                else if(Input::get('aprobado') == 'false')
+                    $aprobado = 0;
+                
+                // aplica cambios a la revisión del desembolso
+                $desembolso->aprobado = $aprobado;
+                
+                // agrega comentario de revision y codigo de aprobacion u orden de servicio si estan establecidos
+                if(!is_null(Input::get('comentario_revision', null)))
+                    $desembolso->comentario_revision = Input::get('comentario_revision');
+                if(!is_null(Input::get('codigo_aprobacion', null)))
+                    $desembolso->codigo_aprobacion = Input::get('codigo_aprobacion');
+                    
+                $desembolso->save(); // actualiza desembolso
+                
+                return json_encode([
+                    'consultado' => 1
+                    ]);
+            }
+            catch(\Exception $e){
+                return json_encode(array(
+                    'consultado' => 2,
+                    'mensaje' => $e->getMessage(),
+                    'codigo' => $e->getCode()
+                    ));                
+            }
+            
+            // aprobado: $scope.desembolso.aprobado,
+            // comentario_revision: $scope.desembolso.comentario_revision,
+            // codigo_aprobacion: $scope.desembolso.codigo_aprobacion,            
+        }
+        
     }
+    
+    
+    
+    
+    

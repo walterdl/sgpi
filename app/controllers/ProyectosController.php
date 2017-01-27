@@ -2105,22 +2105,22 @@
     
                         }else if($pagina == 4){ ///// comineso de la pagina 4
                             
-                            $gastos=$proyecto->gastos;
+                            // $gastos=$proyecto->gastos;
                             
-                            foreach ($gastos as $item) {
+                            // foreach ($gastos as $item) {
                             
-                                $item->entidadFuentePresupuesto;//llamar ala entidad fuente de presupuesto
+                            //     $item->entidadFuentePresupuesto;//llamar ala entidad fuente de presupuesto
                                 
-                                $item->detalleGasto;//llamar los detalle de gasto
-                                $item->detalleGasto->tipoGasto;//llamarel tipo de gasto  que es el detalle de gasto
-                                $item->detalleGasto->desembolso;//llamarel tipo de gasto  que es el detalle de gasto
+                            //     $item->detalleGasto;//llamar los detalle de gasto
+                            //     $item->detalleGasto->tipoGasto;//llamarel tipo de gasto  que es el detalle de gasto
+                            //     $item->detalleGasto->desembolso;//llamarel tipo de gasto  que es el detalle de gasto
                                 
-                                if($item->detalleGasto->investigador){
-                                    $item->detalleGasto->investigador->persona;//llamar los investigadores y la persona
-                                    $item->detalleGasto->investigador->rol;//llamar los investigadores y su rol
-                                }
+                            //     if($item->detalleGasto->investigador){
+                            //         $item->detalleGasto->investigador->persona;//llamar los investigadores y la persona
+                            //         $item->detalleGasto->investigador->rol;//llamar los investigadores y su rol
+                            //     }
                                 
-                            }//fin foreach para gastos
+                            // }//fin foreach para gastos
                             
                             
                             $temp=Gasto::consultasDetalleGasto($proyecto->id);
@@ -2129,8 +2129,14 @@
                                 
                                 $aux=DetalleGasto::find($item->id_detalle_gasto);
                                 $aux->tipoGasto;//llamarel tipo de gasto  que es el detalle de gasto
-                                $aux->gasto;//llamar los gsatos de cada detalle de gasto
                                 $aux->desembolso;//llamarel tipo de gasto  que es el detalle de gasto
+                                
+                                
+                                $aux->gasto;//llamar los gsatos de cada detalle de gasto
+                                foreach($aux->gasto as $temp){
+                                    $temp->entidadFuentePresupuesto;
+                                }
+                                
                                 
                                 if($aux->id_tipo_gasto == 1){ //Personal
                                     $gasto_personal[]=$aux;
@@ -2175,12 +2181,24 @@
                                 $detalle_gasto[]=$aux;
                             }
                             
+                            
+                            
 
                             $mas_info_gasto= array(
-                            'gastos' => $gastos,
+                            //'gastos' => $gastos,
                             'detalle_gastos'=>$detalle_gasto,
                             'gastos_royecto'=>Gasto::consultar_gastos_proyecto($proyecto->id),
                             'resgitrado'=>1,
+                            'todo'=> [
+                                    'gastos_personal' => $gasto_personal,
+                                    'gastos_equipos' => $gasto_equipos,
+                                    'gastos_software' => $gasto_software,
+                                    'gastos_salidas_campo' => $gasto_salida,
+                                    'gastos_materiales' => $gasto_materiales_suministros,
+                                    'gastos_servicios' => $gasto_servicios,
+                                    'gastos_bibliograficos' => $gasto_bibliografia,
+                                    'gastos_digitales' => $gasto_digitales,
+                                    ],
                             );
 
                             $temp=true;

@@ -1,7 +1,7 @@
 // aplica estilo a la barra de desplazamiento de datatable de proyecto
 $(document).ready(function(){
     
-	$(".custom-scrollbar").mCustomScrollbar({
+	$("#contenedor_proyectos").mCustomScrollbar({
 		axis:"x",
 		theme: 'dark',
 		advanced:{
@@ -80,7 +80,16 @@ sgpi_app.run(function(DTDefaultOptions) {
         });
 });
 
-sgpi_app.controller('listar_proyectos_controller', function($scope, $http, $log, id_usuario, DTOptionsBuilder){
+sgpi_app.controller('listar_proyectos_controller', function($scope, $http, $log) {
+	
+    $(document).ready(function() {
+        $('a[href="#contenido_tab_proyectos"]').on('shown.bs.tab', function (e) {
+            $scope.visibilidad.show_mas_info_proyecto = true;
+            $scope.$apply();
+        });
+    });    
+    
+    $scope.visibilidad.show_mas_info_proyecto = true;
     
     // configura datatable de proyectos
     $scope.dtOptions = {
@@ -88,29 +97,16 @@ sgpi_app.controller('listar_proyectos_controller', function($scope, $http, $log,
         displayLength: 5,
         hasBootstrap: true,
         lengthMenu: [[5, 10, 20], [5, 10, 20]]
-    };    
-    
-    $(document).ready(function() {
-        $('a[href="#contenido_tab_proyectos"]').on('shown.bs.tab', function (e) {
-            $scope.visibilidad.show_mas_info_proyecto = true;
-            $scope.$apply();
-        });
-    });
-    
-    // presenta box de mas info de usuario desde un inicio ya que inicialmente la pestaña de selecciónd eproyecto s eencuentra seleccionada
-    $scope.visibilidad.show_mas_info_proyecto = true;
+    };
     
     // presenta velo de aviso de cargando datos iniciales
     $scope.data.msj_operacion = '<h3 class="text-center">Cargando datos iniciales...<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i></h3>';
-    $scope.visibilidad.show_velo_msj_operacion = true;
+    $scope.visibilidad.show_velo_msj_operacion = true;    
     
     // consulta inicial por los proyectos del investigador principal
     $http({
-        url: '/proyectos/proyectos_investigador_principal',
+        url: '/proyectos/proyectos_administrador',
         method: 'GET',
-        params:{
-            id_usuario: id_usuario
-        }
     })
     .success(function (data) {
         $log.log(data);
@@ -125,7 +121,7 @@ sgpi_app.controller('listar_proyectos_controller', function($scope, $http, $log,
     .error(function (data, status) {
         $log.log(data);
         $scope.data.msj_operacion = '<h3 class="text-center">Error al consultar los datos iniciales. Código de estado: ' + status + '</h3>';
-    });
+    });    
     
 	/*
 	|--------------------------------------------------------------------------
@@ -200,7 +196,7 @@ sgpi_app.controller('listar_proyectos_controller', function($scope, $http, $log,
         $scope.$broadcast('prorroga_seleccionado');
         $('a[href="#contenido_tab_prorroga"]').tab('show');
         $scope.visibilidad.show_mas_info_proyecto = false;                        
-    };
+    };    
     
 	/*
 	|--------------------------------------------------------------------------
@@ -213,5 +209,6 @@ sgpi_app.controller('listar_proyectos_controller', function($scope, $http, $log,
     $scope.mas_info = function(id_proyecto) {
         $scope.data.id_proyecto = id_proyecto;
         $scope.$broadcast('mas_informacion_seleccionado');        
-    };
+    };    
+    
 });

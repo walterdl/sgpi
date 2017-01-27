@@ -74,6 +74,94 @@
             }
             
         }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| get_investigadores_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Obtiene los investigadrores de un determinado proyecto. 
+    	| Los campos que se agregan a cada registro de investigador son todos los campos de la tabla investigadores mas los campos de personas
+    	| Añade tambn el nombre del grupo de investigacion, su id, el nombre de la facultad y de la sede si es un investigador interno
+    	*/                          
+        public static function investigadores_proyecto($id_proyecto){
+            
+            $respuesta_investigaodres = [];
+            $investigadores = Investigador::where('id_proyecto', '=', $id_proyecto)->orderBy('id_rol', 'asc')->get();
+            foreach($investigadores as $investigador){
+                
+                if($investigador->id_rol == 3) // investigador principal
+                {
+                    // consulta los datos de persona
+                    $usuario = Usuario::find($investigador->id_usuario_investigador_principal);
+                    $persona = Persona::find($usuario->id_persona)->toArray();
+                    
+                    // consulta los datos del grupo de investigacion ucc que le corresponde
+                    $grupo_investigacion = GrupoInvestigacionUCC::find($usuario->id_grupo_investigacion_ucc);
+                    $facultad = FacultadDependenciaUCC::find($grupo_investigacion->id_facultad_dependencia_ucc);
+                    $sede = SedeUCC::find($facultad->id_sede_ucc);
+                    
+                    // agrega campos de persona a la estructura de datos del investigador a añadir
+                    $investigador = $investigador->toArray();
+                    foreach ($persona as $campo => $valor){
+                        $investigador[$campo] = $valor;
+                    }
+                    
+                    $investigador['email'] = $usuario->email;
+                    
+                    // agrega campos de grupo de investigacion, facultad y sede
+                    $investigador['id_grupo_investigacion_ucc'] = $grupo_investigacion->id;
+                    $investigador['nombre_grupo_investigacion_ucc'] = $grupo_investigacion->nombre;
+                    $investigador['nombre_facultad_dependencia_ucc'] = $facultad->nombre;
+                    $investigador['nombre_sede_ucc'] = $sede->nombre;
+                    
+                    $respuesta_investigaodres[] = $investigador;
+                }
+                else
+                {
+                    if($investigador->id_rol == 4)
+                    {
+                        // es investigador interno, se procede de manera similar al investigador principal coinsultando informacion del grupo de investigacion ucc
+                        // consulta los datos de persona
+                        $persona = Persona::find($investigador->id_persona_coinvestigador)->toArray();
+                        
+                        // consulta los datos del grupo de investigacion ucc que le corresponde
+                        $grupo_investigacion = GrupoInvestigacionUCC::find($investigador->id_grupo_investigacion_ucc);
+                        $facultad = FacultadDependenciaUCC::find($grupo_investigacion->id_facultad_dependencia_ucc);
+                        $sede = SedeUCC::find($facultad->id_sede_ucc);                        
+                        
+                        // agrega campos de persona a la estructura de datos del investigador a añadir
+                        $investigador = $investigador->toArray();
+                        foreach ($persona as $campo => $valor){
+                            $investigador[$campo] = $valor;
+                        }                        
+                        
+                        // agrega campos de grupo de investigacion, facultad y sede
+                        $investigador['id_grupo_investigacion_ucc'] = $grupo_investigacion->id;
+                        $investigador['nombre_grupo_investigacion_ucc'] = $grupo_investigacion->nombre;
+                        $investigador['nombre_facultad_dependencia_ucc'] = $facultad->nombre;
+                        $investigador['nombre_sede_ucc'] = $sede->nombre;
+                        
+                        $respuesta_investigaodres[] = $investigador;                        
+                    }
+                    else
+                    {
+                        // se trata de investigador externo o estudiante
+                        // consulta los datos de persona
+                        $persona = Persona::find($investigador->id_persona_coinvestigador)->toArray();                        
+                        
+                        // agrega campos de persona a la estructura de datos del investigador a añadir
+                        $investigador = $investigador->toArray();
+                        foreach ($persona as $campo => $valor){
+                            $investigador[$campo] = $valor;
+                        }                                                
+                        
+                        $respuesta_investigaodres[] = $investigador;
+                    }
+                }
+            }
+            
+            return $respuesta_investigaodres;
+        }
     
     }
 

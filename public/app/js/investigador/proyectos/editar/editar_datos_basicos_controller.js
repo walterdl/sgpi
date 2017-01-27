@@ -66,18 +66,10 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
                 
                 
                 $scope.data.info_investigadores_usuario=data.info_investigadores_usuario;
-                
-                // data.info_investigadores_usuario.forEach(function(entry) {
-                //     console.log(entry);
-                //     $scope.data.info_investigadores_usuario.push(
-                    
-                    
-                //     );
-                // });
-                
+     
                 
                 data.info_productos.forEach(function(entry) {
-                    
+
                     if(entry.producto){
                         entry.producto.fecha_proyectada_radicacion=Date.parse(entry.producto.fecha_proyectada_radicacion);
                         entry.producto.fecha_remision=Date.parse(entry.producto.fecha_remision);
@@ -101,13 +93,34 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
                
             }else if(pagina == 4){
                 
-            
-                // data.info_productos.forEach(function(entry) {
+                var cont=0;
                 
-                //     $scope.data.participantes_proyecto.push(
-                        
-                //     )
-                // });
+                data.info_gastos.todo.gastos_personal.forEach(function(entry) {
+                cont++;
+                     entry.investigador.dedicacion_horas_semanales=parseInt(entry.investigador.dedicacion_horas_semanales);   
+                     entry.investigador.total_semanas=parseInt(entry.investigador.total_semanas);   
+                     entry.investigador.valor_hora=parseInt(entry.investigador.valor_hora);   
+                     entry.fecha_ejecucion=Date.parse(entry.fecha_ejecucion);
+                     
+                     entry.gasto.forEach(function(item) {
+                        item.valor=parseInt(item.valor); //parseo el valor a numerico
+                     });
+                     
+                     if(cont == 1){
+                         $scope.data.fuente_presupuesto=entry.gasto;
+                     }    
+                     
+                });
+                
+                $scope.data.gasto_personal=data.info_gastos.todo.gastos_personal;
+                $scope.data.gastos_equipos=data.info_gastos.todo.gastos_equipos;
+                $scope.data.gastos_software=data.info_gastos.todo.gastos_software;
+                $scope.data.gastos_salidas_campo=data.info_gastos.todo.gastos_salidas_campo;
+                $scope.data.gastos_materiales=data.info_gastos.todo.gastos_materiales;
+                $scope.data.gastos_servicios=data.info_gastos.todo.gastos_servicios;
+                $scope.data.gastos_bibliograficos=data.info_gastos.todo.gastos_bibliograficos;
+                $scope.data.gastos_digitales=data.info_gastos.todo.gastos_digitales;
+                
                 $scope.data.info_investigadores_usuario=data.info_investigadores_usuario;
                 $scope.data.investigadores= data.info_investigadores_usuario;
 

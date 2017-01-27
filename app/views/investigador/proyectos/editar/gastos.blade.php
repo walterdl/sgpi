@@ -139,53 +139,55 @@
                                                         <th>Dedicación (horas semanales)</th>
                                                         <th>Total semanas</th>
                                                         <th>Valor hora</th>
-                                                        <th>UCC</th>
-                                                        <th ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">{$ entidad_presupuesto.nombre $}</th>
+                                                        <!--<th>UCC</th>-->
+                                                        <th ng-repeat="item in data.fuente_presupuesto">{$ item.entidad_fuente_presupuesto.nombre $}</th>
                                                         <th>Fecha de ejecución</th>
                                                         <th>Total</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr ng-repeat="participante in data.info_investigadores_usuario">
+                                                    <tr ng-repeat="participante in data.gasto_personal">
                                                         <td>{$ $index + 1 $}</td>
-                                                        <td ng-show="participante.info_investigador.usuario == null">{$ participante.info_investigador.persona.nombres + ' ' + participante.info_investigador.persona.apellidos $}</td>
-                                                        <td ng-show="participante.info_investigador.usuario == null">{$ participante.info_investigador.persona.formacion $}</td>
-                                                        <td ng-show="participante.info_investigador.usuario == null">{$ participante.info_investigador.rol.nombre $}</td>
+                                                        <td ng-show="participante.investigador.usuario == null">{$ participante.investigador.persona.nombres + ' ' + participante.info_investigador.persona.apellidos $}</td>
+                                                        <td ng-show="participante.investigador.usuario == null">{$ participante.investigador.persona.formacion $}</td>
+                                                        <td ng-show="participante.investigador.usuario == null">{$ participante.investigador.rol.nombre $}</td>
                                                         
-                                                        <td ng-show="participante.info_investigador.usuario != null">{$ participante.info_investigador.usuario.persona.nombres + ' ' + participante.info_investigador.persona.apellidos $}</td>
-                                                        <td ng-show="participante.info_investigador.usuario != null">{$ participante.info_investigador.usuario.persona.formacion $}</td>
-                                                        <td ng-show="participante.info_investigador.usuario != null">{$ participante.info_investigador.rol.nombre $}</td>
+                                                        <td ng-show="participante.investigador.usuario != null">{$ participante.investigador.usuario.persona.nombres + ' ' + participante.info_investigador.persona.apellidos $}</td>
+                                                        <td ng-show="participante.investigador.usuario != null">{$ participante.investigador.usuario.persona.formacion $}</td>
+                                                        <td ng-show="participante.investigador.usuario != null">{$ participante.investigador.rol.nombre $}</td>
                                                         <td>
                                                             <input type="number" name="gasto_personal_dedicacion_semanal_{$ participante.identificacion $}" min="0" 
-                                                            ng-model="participante.dedicacion_semanal" ng-change="validar_dedicacion_semanal(participante)"
+                                                            ng-model="participante.investigador.dedicacion_horas_semanales" ng-change="validar_dedicacion_semanal(participante)"
                                                             class="form-control" ng-class="{'invalid_control': participante.dedicacion_semanal_invalido}"
                                                             uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.dedicacion_semanal_invalido"/>
                                                         </td>
                                                         <td>
                                                             <input type="number" name="gasto_personal_total_semanas_{$ participante.identificacion $}" 
-                                                            ng-model="participante.total_semanas" ng-change="validar_total_semanas(participante)"
+                                                            ng-model="participante.investigador.total_semanas" ng-change="validar_total_semanas(participante)"
                                                             class="form-control" ng-class="{'invalid_control': participante.total_semanas_invalido}"
                                                             uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.total_semanas_invalido"/>
                                                         </td>
                                                         <td>
                                                             <input type="number" name="gasto_personal_valor_hora_{$ participante.identificacion $}" 
-                                                            ng-model="participante.valor_hora" ng-change="validar_valor_hora(participante)"
+                                                            ng-model="participante.investigador.valor_hora" ng-change="validar_valor_hora(participante)"
                                                             class="form-control" ng-class="{'invalid_control': participante.valor_hora_invalido}"
                                                             uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.valor_hora_invalido"/>
                                                         </td>                                                                                                        
-                                                        <td>
-                                                            <input type="number" name="gasto_personal_presupuesto_ucc_{$ participante.identificacion $}" 
-                                                            ng-model="participante.presupuesto_ucc" ng-change="suma_totales_personal(participante, 'ucc')"
-                                                            class="form-control" ng-class="{'invalid_control': participante.presupuesto_ucc_invalido}"
-                                                            uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.presupuesto_ucc_invalido"/>
-                                                        </td>   
+                                                        <!--<td>-->
+                                                        <!--    <input type="number" name="gasto_personal_presupuesto_ucc_{$ participante.identificacion $}" -->
+                                                        <!--    ng-model="participante.presupuesto_ucc" ng-change="suma_totales_personal(participante, 'ucc')"-->
+                                                        <!--    class="form-control" ng-class="{'invalid_control': participante.presupuesto_ucc_invalido}"-->
+                                                        <!--    uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.presupuesto_ucc_invalido"/>-->
+                                                        <!--</td>   -->
                                                         
-                                                        <td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
+                                                        <td ng-repeat="entidad in participante.gasto">
+                                                            <!--{$ entidad.valor $}-->
                                                             <input type="number" name="gasto_personal_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ participante.identificacion $}" 
-                                                            ng-model="participante.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_personal(participante, 'otro', entidad_presupuesto.id)"
+                                                            ng-model="entidad.valor" ng-change="suma_totales_personal(participante, 'otro', entidad_presupuesto.id)"
                                                             class="form-control" ng-class="{'invalid_control': participante.presupuesto_externo_invalido[entidad_presupuesto.id]}"
                                                             uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                                                         </td>
+                                                        
                                                         <td>
                                                             <div class="input-group">
                                                                 <input type="text" name="gasto_personal_fecha_ejecucion_{$ participante.identificacion $}" id="gasto_personal_fecha_ejecucion_{$ participante.identificacion $}" 

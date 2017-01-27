@@ -132,6 +132,35 @@ Route::group(array('before' => 'auth'), function(){
 		
 		// Sirve los formatos guía de los documentos
 		Route::get('file/formato', 'FileController@get_formato_documento');
+		
+		// sirve archivos de presupuesto
+		Route::get('file/presupuesto/{nombre_archivo}', 'FileController@get_presupuesto');
+		
+		// sirve archivos de presentación de proyecto
+		Route::get('file/presentacion_proyecto/{nombre_archivo}', 'FileController@get_presentacion_proyecto');		
+		
+		// sirve archivos de acta de inicio
+		Route::get('file/acta_inicio/{nombre_archivo}', 'FileController@get_acta_inicio');				
+		
+		// Sirve archivos de los productos
+		Route::get('file/producto_fecha_proyectada_radicacion/{nombre_archivo}', 'FileController@get_archivo_fecha_proyectada_radicacion');
+		Route::get('file/producto_fecha_publicacion/{nombre_archivo}', 'FileController@get_archivo_fecha_publicacion');
+		
+		// sirve los archivos de desembolso
+		Route::get('file/desembolso/{nombre_archivo}', 'FileController@get_desembolso');
+		
+		// sirve los archivos de informes de avance
+		Route::get('file/informe_avance/{nombre_archivo}', 'FileController@get_informe_avance');
+		
+		// sirve los archivos de acta de finalización
+		Route::get('file/acta_finalizacion/{nombre_archivo}', 'FileController@get_acta_finalizacion');
+		
+		// sirve los archivos de memoria académica
+		Route::get('file/memoria_academica/{nombre_archivo}', 'FileController@get_memoria_academica');
+		
+		// sirve los archivos de prórroga
+		Route::get('file/prorroga/{nombre_archivo}', 'FileController@get_prorroga');		
+		
 
 		// Grupos de investigación
 		Route::get('grupos', 'GruposInvestigacionController@listar');
@@ -163,7 +192,6 @@ Route::group(array('before' => 'auth'), function(){
 	    Route::get('/usuarios/editar/{id}', 'UsuariosController@editarVer');
 	    Route::get('/usuarios/datos/editar', 'UsuariosController@usuarioEditar');
 	    
-	    
 	    Route::get('usuarios/mas_info_usuario', 'UsuariosController@mas_info_usuario');
 	    Route::get('usuarios/registrar', 'UsuariosController@crear');
 	    Route::get('usuarios/data_inicial_vista_crear', 'UsuariosController@data_inicial_vista_crear');
@@ -180,6 +208,17 @@ Route::group(array('before' => 'auth'), function(){
 		Route::post('usuarios/guardar_edicion_propio_perfil', 'UsuariosController@guardar_edicion_propio_perfil');
 		Route::post('usuarios/cambiar_contrasenia', 'UsuariosController@cambiar_contrasenia');
 		Route::post('usuarios/validar_username_identificacion', 'UsuariosController@validar_username_identificacion');
+		
+		// Proyectos
+		Route::get('proyectos/listar', 'GestionProyectosController@listar_proyectos_administrador');
+		Route::get('proyectos/proyectos_administrador', 'GestionProyectosController@proyectos_administrador');
+		Route::get('proyectos/mas_info_proyecto', 'GestionProyectosController@mas_info_proyecto');
+		Route::get('proyectos/productos_de_proyecto', 'GestionProyectosController@productos_de_proyecto');		
+		Route::get('proyectos/verificar_existencia_archivo_fecha_proyectada_postular', 'GestionProyectosController@consultar_producto_fecha_proyectada_postular');
+		Route::get('proyectos/verificar_existencia_archivo_fecha_publicacion', 'GestionProyectosController@consultar_producto_fecha_publicacion');		
+		Route::get('proyectos/gastos_de_proyecto', 'GestionProyectosController@gastos_de_proyecto');		
+		Route::get('proyectos/revision_desembolso', 'GestionProyectosController@revision_desembolso');
+		Route::post('proyectos/guardar_revision_desembolso', 'GestionProyectosController@guardar_revision_desembolso');
 	    
 	    //Retorna 404 para ruta de administrador no encontrada
 		App::missing(function($e) 
@@ -223,6 +262,15 @@ Route::group(array('before' => 'auth'), function(){
 		
 		// Sirve los formatos guía de los documentos
 		Route::get('file/formato/', 'FileController@get_formato_documento');
+		
+		// sirve archivos de presupuesto
+		Route::get('file/presupuesto/{nombre_archivo}', 'FileController@get_presupuesto');
+		
+		// sirve archivos de presentación de proyecto
+		Route::get('file/presentacion_proyecto/{nombre_archivo}', 'FileController@get_presentacion_proyecto');		
+		
+		// sirve archivos de acta de inicio
+		Route::get('file/acta_inicio/{nombre_archivo}', 'FileController@get_acta_inicio');				
 		
 		// Sirve archivos de los productos
 		Route::get('file/producto_fecha_proyectada_radicacion/{nombre_archivo}', 'FileController@get_archivo_fecha_proyectada_radicacion');
@@ -350,20 +398,9 @@ Route::get('truncar_bd', 'BaseController@truncar_bd');
 |--------------------------------------------------------------------------
 | Prueba impresiones
 */
-Route::post('test', function(){
+Route::get('test', function(){
 	
-	function hello_function($data){
-		echo '<pre>'.print_r($data, true).'</pre>';
-		if(Input::hasFile('archivo'))
-			echo 'W';
-	}
-	
-	try{
-		$data = Input::all();
-		hello_function($data);
-	}
-	catch(\Exception $e){
-		throw $e;
-	}
+	$proyecto = Proyecto::find(1);
+	echo $proyecto->updated_at->format('Y-m-d');
 });
 

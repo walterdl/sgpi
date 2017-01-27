@@ -218,13 +218,21 @@
                                 </ul>
                             </li>
                             <li class="treeview">
-                                <a href="">
+                                <a href="#">
                                     <i class="fa fa-linode" aria-hidden="true"></i> <span>Líneas de investigación</span> <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
                                     <li><a href="/lineas_investigacion/listar"><i class="fa fa-list"></i> Listar / registrar</a></li>
                                 </ul>
                             </li>
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-briefcase" aria-hidden="true"></i> <span>Proyectos</span> <i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li><a href="/proyectos/listar"><i class="fa fa-list"></i> Gestion de proyectos</a></li>
+                                </ul>                                
+                            </li>                            
                         </ul>
                     @elseif(Auth::user()->id_rol == 2)
                         {{--Menu de coordinador--}}
@@ -256,9 +264,7 @@
                                 </a>
                                 <ul class="treeview-menu">
                                     <li><a href="/proyectos/registrar"><i class="fa fa-plus"></i> Registrar</a></li>
-                                    <li><a href="/proyectos/listar"><i class="fa fa-list"></i> Gestion de Proyectos</a></li>
-                                    <!--<li><a href="/proyectos/listar"><i class="fa fa-list"></i> Gestion de Productos</a></li>-->
-                                    <!--<li><a href="/proyectos/listar"><i class="fa fa-list"></i> Gestion de Gastos</a></li>-->
+                                    <li><a href="/proyectos/listar"><i class="fa fa-list"></i> Gestion de proyectos</a></li>
                                 </ul>
                             </li>
                         </ul>

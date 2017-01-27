@@ -71,6 +71,36 @@
         
         /*
     	|--------------------------------------------------------------------------
+    	| get_presupuesto()
+    	|--------------------------------------------------------------------------
+    	| Retorna respuesta http para descargar presupuesto de proyecto
+    	*/          
+        public function get_presupuesto($nombre_archivo){
+            return Response::download(storage_path('archivos/presupuestos/'.$nombre_archivo), null, [], 'attachment');                
+        }
+        
+        /*
+    	|--------------------------------------------------------------------------
+    	| get_presentacion_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Retorna respuesta http para descargar presentacion de proyecto
+    	*/          
+        public function get_presentacion_proyecto($nombre_archivo){
+            return Response::download(storage_path('archivos/presentaciones_proyectos/'.$nombre_archivo), null, [], 'attachment');                
+        }        
+        
+        /*
+    	|--------------------------------------------------------------------------
+    	| get_acta_inicio()
+    	|--------------------------------------------------------------------------
+    	| Retorna respuesta http para descargar acta de inicio de proyecto
+    	*/          
+        public function get_acta_inicio($nombre_archivo){
+            return Response::download(storage_path('archivos/actas_inicio/'.$nombre_archivo), null, [], 'attachment');                
+        }                
+        
+        /*
+    	|--------------------------------------------------------------------------
     	| get_archivo_fecha_proyectada_radicacion()
     	|--------------------------------------------------------------------------
     	| Retorna respuesta http para descargar archivo de producto relacionado con

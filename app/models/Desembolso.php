@@ -46,7 +46,8 @@
                     'aprobado' => $desembolso->aprobado,
                     'comentario_investigador' =>  $desembolso->comentario_investigador,
                     'codigo_aprobacion' => $desembolso->codigo_aprobacion,
-                    'comentario_revision' => $desembolso->comentario_revision
+                    'comentario_revision' => $desembolso->comentario_revision,
+                    'updated_at' => $desembolso->updated_at->format('Y-m-d')
                     ];
             }
             else
