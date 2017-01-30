@@ -26,6 +26,15 @@
         .icono-calendario-producto{
             background-color: #F5F5F5;
         }
+        .icono-descripcion-producto{
+            background-color: #F5F5F5;
+            border-bottom: 1px solid #D2D6DE;
+        }
+        .row-descripcion-producto{
+            border: 1px solid #F5F5F5;
+            margin-left: 0;
+            margin-right: 0;
+        }        
         .row-fechas-producto{
             border: 1px solid #F5F5F5;
             margin-left: 0;
@@ -190,7 +199,9 @@
                                     </button>
                                 </div>
                             </div>
+                            
                             <hr />                            
+                            
                             {{--Acordiones de productos--}}
                             <div ng-repeat="producto in productos" class="nga-fast nga-stagger-fast nga-fade">
                                 <div class="panel panel-default">
@@ -207,8 +218,8 @@
                                 	</div>
                                 	<div id="producto_{$ $index $}" class="panel-collapse collapse" ng-class="{'in': $index == 0}" role="tabpanel">
                                 		<div class="panel-body panel-body-producto">
-                                			<div class="row is-flex row-fechas-producto">
-                                			    <div class="col-xs-12 col-md-2 icono-calendario-producto">
+                                			<div class="row is-flex row-descripcion-producto">
+                                			    <div class="col-xs-12 col-md-2 icono-descripcion-producto">
     			                                    <div style="display:table; width:100%; height:100%;">
                                                         <div style="display:table-cell; vertical-align: middle;">
                                                             <p class="text-center"><i style="font-size:60px;" class="fa fa-calendar" aria-hidden="true"></i></p>
@@ -241,6 +252,68 @@
                                 			        </div>
                                 			    </div>
                                 			</div>
+                                            <div class="row is-flex row-descripcion-producto">
+                                			    <div class="col-xs-12 col-md-2 icono-descripcion-producto">
+    			                                    <div style="display:table; width:100%; height:100%;">
+                                                        <div style="display:table-cell; vertical-align: middle;">
+                                                            <p class="text-center"><i style="font-size:60px;" class="fa fa-user" aria-hidden="true"></i></p>
+                                                        </div>
+                                                    </div>                                
+                                			    </div>
+                                			    <div class="col-xs-12 col-md-10">
+                                			        <h4><small>Participante encargado: </small>{$ producto.investigador.nombres + ' ' + producto.investigador.apellidos $}</h4>
+                                			        <div class="row is-flex">
+                                        			    <div class="col-xs-12 col-sm-6 col-md-4">
+                                        			        <label>Identificación</label>
+                                        			        {$ producto.investigador.acronimo_tipo_identificacion $}. {$ producto.investigador.identificacion $}
+                                        			    </div>               
+                                        			    <div class="col-xs-12 col-sm-6 col-md-4">
+                                        			        <label>Formación</label>
+                                        			        {$ producto.investigador.formacion $}
+                                        			    </div>         
+                                        			    <div class="col-xs-12 col-sm-6 col-md-4">
+                                        			        <label>Edad</label>
+                                        			        {$ producto.investigador.edad $}
+                                        			    </div>
+                                        			    <div class="col-xs-12 col-sm-6 col-md-4">
+                                        			        <label>Sexo</label>
+                                        			        <span ng-if="producto.investigador.sexo=='m'">Hombre</span>
+                                        			        <span ng-if="producto.investigador.sexo=='f'">Mujer</span>
+                                        			    </div>         
+                                        			    <div class="col-xs-12 col-sm-6 col-md-4">
+                                        			        <label>Email</label>
+                                        			        {$ producto.investigador.email $}
+                                        			    </div>    
+                                        			    <div class="col-xs-12 col-sm-6 col-md-4">
+                                        			        <label>Rol en el proyecto</label>
+                                        			        <span ng-if="producto.investigador.id_rol==3">Investigador principal</span>
+                                        			        <span ng-if="producto.investigador.id_rol==4">Investigador interno</span>
+                                        			        <span ng-if="producto.investigador.id_rol==5">Investigador externo</span>
+                                        			        <span ng-if="producto.investigador.id_rol==6">Estudiante</span>
+                                        			    </div>                                            			    
+                                        			    <div class="col-xs-12 col-sm-6 col-md-4" ng-if="producto.investigador.id_rol==3 || producto.investigador.id_rol==4">
+                                        			        <label>Grupo de investigación</label>
+                                        			        {$ producto.investigador.grupo_investigacion $}
+                                        			    </div>                                         
+                                        			    <div class="col-xs-12 col-sm-6 col-md-4" ng-if="producto.investigador.id_rol==3 || producto.investigador.id_rol==4">
+                                        			        <label>Facultad</label>
+                                        			        {$ producto.investigador.facultad $}
+                                        			    </div>                                 
+                                        			    <div class="col-xs-12 col-sm-6 col-md-4" ng-if="producto.investigador.id_rol==3 || producto.investigador.id_rol==4">
+                                        			        <label>Sede</label>
+                                        			        {$ producto.investigador.sede $}
+                                        			    </div>                          
+                                        			    <div class="col-xs-12 col-sm-6 col-md-4" ng-if="producto.investigador.id_rol==5 || producto.investigador.id_rol==6">
+                                        			        <label>Entidad / grupo de investigación</label>
+                                        			        {$ producto.investigador.entidad_grupo_investigacion $}
+                                        			    </div>                                                 
+                                        			    <div class="col-xs-12 col-sm-6 col-md-4" ng-if="producto.investigador.id_rol==6">
+                                        			        <label>Programa académico</label>
+                                        			        {$ producto.investigador.programa_academico $}
+                                        			    </div>                                                                                         			    
+                                        			</div>
+                                        	    </div>
+                                			</div>                                			
                                 			<table class="table table-hover table-bordered tabla-documentos-producto">
                                 			    <tbody>
                                 			        {{--tr carga fecha proyectada de radicación--}}
@@ -297,7 +370,7 @@
                                     <h4 class="panel-title">
                                         <a role="button" data-toggle="collapse" href="#contenido_gastos_personal" aria-expanded="true" aria-controls="contenido_gastos_personal" ng-click="abre_cierra_acordion()">
                                 		    <span class="glyphicon glyphicon-minus"></span>
-                                            <p>Gastos personal</p>
+                                            <p>Gastos de personal</p>
                                         </a>
                                     </h4>
                                 </div>
@@ -340,7 +413,7 @@
                                     <h4 class="panel-title">
                                         <a role="button" data-toggle="collapse" href="#contenido_gastos_equipos" aria-expanded="true" aria-controls="contenido_gastos_equipos" ng-click="abre_cierra_acordion()">
                                 		    <span class="glyphicon glyphicon-plus"></span>
-                                            <p>Gastos Equipos</p>
+                                            <p>Gastos de equipos</p>
                                         </a>
                                     </h4>
                                 </div>
@@ -387,7 +460,7 @@
                                     <h4 class="panel-title">
                                         <a role="button" data-toggle="collapse" href="#contenido_gastos_software" aria-expanded="true" aria-controls="contenido_gastos_software" ng-click="abre_cierra_acordion()">
                                 		    <span class="glyphicon glyphicon-plus"></span>
-                                            <p>Gastos software</p>
+                                            <p>Gastos de software</p>
                                         </a>
                                     </h4>
                                 </div>
@@ -434,7 +507,7 @@
                                     <h4 class="panel-title">
                                         <a role="button" data-toggle="collapse" href="#contenido_gastos_salidas_campo" aria-expanded="true" aria-controls="contenido_gastos_salidas_campo" ng-click="abre_cierra_acordion()">
                                 		    <span class="glyphicon glyphicon-plus"></span>
-                                            <p>Gastos salidas de campo</p>
+                                            <p>Gastos de las salidas de campo</p>
                                         </a>
                                     </h4>
                                 </div> 
@@ -700,7 +773,7 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="alert alert-warning" role="alert" ng-show="informe_avance!=null" class="nga-fast nga-stagger-fast nga-fade">
-                                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;<strong>Informe de avance cargado, </strong>si vuelve a cargar se sobrescribe el archivo cargado (solo se permite recarga si no se ha aprobado informe)
+                                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;<strong>Informe de avance cargado, </strong>si se vuelve a cargar se sobrescribe el archivo actual (solo se permite recarga si no se ha aprobado informe)
                                         <br />
                                         <a class="btn btn-primary wrap" href="/file/informe_avance/{$ nombre_archivo $}">Descargar informe de avance <i class="fa fa-cloud-download" aria-hidden="true"></i></a>
                                     </div> 
@@ -744,7 +817,7 @@
                                             <span ng-if="informe_avance!=null && informe_avance.aprobado==1">Aprobado</span>
                                         </strong>
                                     </h4>
-                                    <div ng-if="informe_avance.aprobado==1">
+                                    <div ng-if="informe_avance!=null">
                                         <label>Comentario de revisión:</label>
                                         <textarea rows="3" class="form-control white-readonly" ng-readonly="true" ng-model="comentario_revision"></textarea>
                                     </div>                                
@@ -780,19 +853,19 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
-                                        <p>Final de proyecto</p>
+                                        <p>Aprobación de final de proyecto</p>
                                         <p><em>Fecha proyectada para la carga de archivos de final de proyecto:</em> <strong>{$ fecha_final_proyecto $}</strong></p>
                                     </h4>
                                 </div>
                                 <div class="panel-body">
                                     <div class="alert alert-warning" role="alert" ng-show="final_proyecto!=null" class="nga-fast nga-stagger-fast nga-fade">
-                                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;<strong>Archivos de final de proyecto cargados, </strong>si vuelven a cargar se sobrescriben los archivos actuales (solo se permite recarga si no se ha aprobado)
+                                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;<strong>Archivos de final de proyecto cargados, </strong>si se vuelven a cargar se sobrescriben los archivos actuales (solo se permite recarga si no se ha aprobado)
                                         <br />
                                         <br />
-                                        <a class="btn btn-primary wrap" href="/file/acta_finalizacion/{$ archivo_acta_finalizacion $}">Descargar acta de finalizacion cargada&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
+                                        <a class="btn btn-primary wrap" href="/file/acta_finalizacion/{$ archivo_acta_finalizacion $}">Descargar acta de finalizacion&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
                                         <br />
                                         <br />
-                                        <a class="btn btn-primary wrap" href="/file/memoria_academica/{$ archivo_memoria_academica $}">Descargar memoria académica cargada&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
+                                        <a class="btn btn-primary wrap" href="/file/memoria_academica/{$ archivo_memoria_academica $}">Descargar memoria académica&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
                                     </div> 
                                     <br />
                                     <div class="row">
@@ -848,7 +921,7 @@
                                             <span ng-if="final_proyecto!=null && final_proyecto.aprobado==1">Aprobado</span>
                                         </strong>
                                     </h4>
-                                    <div ng-if="final_proyecto.aprobado==1">
+                                    <div ng-if="final_proyecto!=null">
                                         <label>Comentario de revisión:</label>
                                         <textarea rows="3" class="form-control white-readonly" ng-readonly="true" ng-model="comentario_revision"></textarea>
                                     </div>                                
@@ -921,7 +994,7 @@
                                             <span ng-if="prorroga!=null && prorroga.aprobado==1">Aprobado</span>
                                         </strong>
                                     </h4>
-                                    <div ng-if="prorroga.aprobado==1">
+                                    <div ng-if="prorroga!=null">
                                         <label>Comentario de revisión:</label>
                                         <textarea rows="3" class="form-control white-readonly" ng-readonly="true" ng-model="comentario_revision"></textarea>
                                     </div>                                        
@@ -962,10 +1035,13 @@
             </div>
             <div class="box-body">
                 <p class="text-center" ng-hide="mas_info_proyecto_consultada">Seleccionar más información de un proyecto</p>
-                <div ng-show="mas_info_proyecto_consultada">
+                <div ng-show="mas_info_proyecto_consultada" class="nga-fast nga-stagger-fast nga-fade">
                     <h4 class="text-left">{$ datos_generales_proyecto.nombre $}</h4>
                     <br />
                     <div class="row is-flex">
+                        <div class="col-xs-12">
+                            <div id="desembolsos_aprobados_mas_info" style="width: 100%; height:370px;"></div>
+                        </div>                                            
                         <div class="col-xs-12 col-sm-6 col-md-4">
                             <label>Inicio del proyecto</label>
                             <p>{$ datos_generales_proyecto.fecha_inicio $}</p>
@@ -975,7 +1051,12 @@
                             <p>{$ datos_generales_proyecto.duracion_meses $}</p>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4">
-                            <label>Fecha final calculada</label>
+                            <label for="progreso">Tiempo del proyecto transcurrido</label>
+                            <p>({$ dias_proyecto_transcurridos + ' / ' + total_dias_proyecto + ' días' $})</p>
+                            <uib-progressbar max="total_dias_proyecto" value="dias_proyecto_transcurridos" type="info"><i>{$ porcentaje_tiempo $}%</i></uib-progressbar>                            
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
+                            <label>Fecha final proyectada</label>
                             <p>{$ datos_generales_proyecto.fecha_fin $}</p>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4" ng-if="datos_generales_proyecto.convocatoria!=null">
@@ -1183,20 +1264,6 @@
             <script type="text/javascript" src="/app/js/{{ $script }}"></script>
         @endforeach
     @endif
-    
-    <?php $hay_notify_operacion_previa = Session::get('notify_operacion_previa') ?>
-        @if(isset($hay_notify_operacion_previa))
-            <script type="text/javascript">
-                sgpi_app.value('notify_operacion_previa', {{ json_encode(Session::get("notify_operacion_previa")) }});
-                sgpi_app.value('mensaje_operacion_previa', {{ json_encode(Session::get("mensaje_operacion_previa")) }});
-            </script>
-        @else
-            <script type="text/javascript">
-                sgpi_app.value('notify_operacion_previa', null);
-                sgpi_app.value('mensaje_operacion_previa', null);
-            </script>        
-        @endif
-        
     <script>
         sgpi_app.value('id_usuario', {{ Auth::user()->id }});
     </script>

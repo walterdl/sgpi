@@ -38,8 +38,7 @@
 
     <section class="content-header">
         <ol class="breadcrumb">
-            <!--<i class="fa fa-chevron-right" aria-hidden="true"></i>-->
-            <li><a href="/"><i class="fa fa-home" style="font-size:18px;"></i><b></b></a></li> <i class="fa fa-chevron-right" aria-hidden="true"></i> <li><a href="/usuarios"><b>Usuarios</b></a></li>
+            <li><a href="/"><i class="fa fa-home" style="font-size:18px;"></i><b></b></a></li> <i class="fa fa-chevron-right" aria-hidden="true"></i> <li><a href="/usuarios/listar"><b>Usuarios</b></a></li>
             <i class="fa fa-chevron-right" aria-hidden="true"></i> Registrar
         </ol>
         <br />
@@ -88,21 +87,21 @@
                     		<fieldset>
                     			<legend>Datos básicos</legend>
                     			<div class="row is-flex sin-margen">
-                    				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="nombre">Nombres <span ng-show="data.btn_guardar_seleccionado && visibilidad.show_nombres_invalido" class="error-text">{$ data.msj_error_nombres $}</span></label>
                     					<input type="text" name="nombres" ng-model="data.nombres" ng-change="validar_nombres()" 
                     					class="form-control"
                     					ng-class="{'invalid_control': data.btn_guardar_seleccionado && visibilidad.show_nombres_invalido}"
                     					ng-required="true"/>
                     				</div>
-                    				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="apellidos">Apellidos</label>
                     					<input type="text" name="apellidos" ng-model="data.apellidos" ng-change="validar_apellidos()" 
                     					class="form-control"
                     					ng-class="{'invalid_control': data.btn_guardar_seleccionado && visibilidad.show_apellidos_invalido}"
                     					ng-required="true"/>
                     				</div>
-                    				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="identificacion">Identificación</label>
                     					<input type="number" name="identificacion" 
                     					class="form-control"
@@ -111,7 +110,7 @@
                     					ng-required="true" min="0"
                     					ng-readonly="true"/>
                     				</div>
-                    				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="tipo_identificacion">Tipo de identificación</label>
                     					<ui-select theme="bootstrap"
                     					ng-model="data.tipo_identificacion" ng-change="validar_tipo_id()"
@@ -124,7 +123,7 @@
                     					</ui-select>
                     					<input type="hidden" name="tipo_identificacion" value="{$ data.tipo_identificacion.id $}"/>
                     				</div>    
-                    				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="sexo">Sexo</label>
                     					<ui-select theme="bootstrap"  
                     					ng-model="data.sexo" ng-change="validar_sexo()"
@@ -137,7 +136,7 @@
                     					</ui-select>
                     					<input type="hidden" name="sexo" value="{$ data.sexo.id $}"/>
                     				</div>
-                    				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="edad">Edad</label>
                     					<input type="number" name="edad" 
                     					class="form-control"
@@ -145,7 +144,7 @@
                     					ng-class="{'invalid_control': data.btn_guardar_seleccionado && visibilidad.show_edad_invalido}"
                     					ng-required="true" min="0"/>                				    
                     				</div>
-                    				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="formacion">Formación</label>
                     					<ui-select theme="bootstrap"  
                     					ng-model="data.formacion" ng-change="validar_formacion()"
@@ -164,7 +163,7 @@
                     		<fieldset>
                     			<legend>Datos del usuario</legend>
                     			<div class="row is-flex sin-margen">
-                    				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="username">Nombre de usuario</label>
                     					
                     					<input type="text" name="username" class="form-control" 
@@ -172,7 +171,7 @@
                     					ng-class="{'invalid_control': data.btn_guardar_seleccionado && visibilidad.show_username_invalido}"
                     					ng-required="true"/>
                     				</div>
-                    				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="password">Contraseña</label>
                     					
                     					<input type="password" name="password" class="form-control" 
@@ -185,15 +184,14 @@
                     					placeholder="Repetir contraseña"
                     					ng-class="{'invalid_control': data.btn_guardar_seleccionado && visibilidad.show_password_invalido}"/>
                     				</div>                			    
-                    			    
-                    				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="email">Email</label>
                     					<input type="email" name="email" ng-model="data.email" ng-change="validar_email()"
                     					class="form-control" 
                     					ng-class="{'invalid_control': data.btn_guardar_seleccionado && visibilidad.show_email_invalido}"
                     					ng-required="true"/>
                     				</div>       
-                    				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="rol">Tipo de usuario</label>
                     					<ui-select theme="bootstrap" 
                     					ng-model="data.rol" ng-change="cambia_tipo_usuario()"
@@ -206,7 +204,7 @@
                     					</ui-select>
                     					<input type="hidden" name="rol" value="{$ data.rol.id $}"/>
                     				</div>
-                    				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-show="visibilidad.show_categoria_inv">
+                    				<div class="form-group col-xs-12 col-sm-6 col-md-4" ng-show="visibilidad.show_categoria_inv">
                     					<label for="categoria_investigador">Categoría de investigador</label>
                     					<ui-select theme="bootstrap"  
                     					ng-model="data.categoria_investigador" ng-change="validar_categoria_inv()"
@@ -219,7 +217,7 @@
                     					</ui-select>
                     					<input type="hidden" name="categoria_investigador" value="{$ data.categoria_investigador.id $}"/>
                     				</div>                        
-                    				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-show="visibilidad.show_sede">
+                    				<div class="form-group col-xs-12 col-sm-6 col-md-4" ng-show="visibilidad.show_sede">
                     					<label for="sede">Sede de origen</label>
                     					<ui-select theme="bootstrap" 
                     					ng-model="data.sede" ng-change="cambia_sede()"

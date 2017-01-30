@@ -65,6 +65,7 @@ sgpi_app.controller('prorroga_controller', function($scope, $http, Upload) {
             	if(data.prorroga != null){
 	                $scope.prorroga = data.prorroga;
 	                $scope.comentario_investigador = data.prorroga.comentario_investigador;
+	                $scope.comentario_revision = data.prorroga.comentario_revision;
 	                $scope.nombre_archivo_prorroga = data.prorroga.archivo;
             	}
             	$scope.show_velo_msj_operacion = false;

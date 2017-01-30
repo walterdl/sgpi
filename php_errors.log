@@ -3836,3 +3836,240 @@
 [26-Jan-2017 22:15:47 UTC] PHP  19. spl_autoload_call() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:479
 [26-Jan-2017 22:15:47 UTC] PHP  20. Composer\Autoload\ClassLoader->loadClass() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:479
 [26-Jan-2017 22:15:47 UTC] PHP  21. Composer\Autoload\includeFile() /home/ubuntu/workspace/vendor/composer/ClassLoader.php:301
+[27-Jan-2017 16:34:39 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/ubuntu/workspace/app/routes.php on line 408
+[27-Jan-2017 16:34:39 UTC] PHP Stack trace:
+[27-Jan-2017 16:34:39 UTC] PHP   1. {main}() /home/ubuntu/workspace/public/index.php:0
+[27-Jan-2017 16:34:39 UTC] PHP   2. Illuminate\Foundation\Application->run() /home/ubuntu/workspace/public/index.php:49
+[27-Jan-2017 16:34:39 UTC] PHP   3. Stack\StackedHttpKernel->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:641
+[27-Jan-2017 16:34:39 UTC] PHP   4. Illuminate\Cookie\Guard->handle() /home/ubuntu/workspace/vendor/stack/builder/src/Stack/StackedHttpKernel.php:23
+[27-Jan-2017 16:34:39 UTC] PHP   5. Illuminate\Cookie\Queue->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Guard.php:51
+[27-Jan-2017 16:34:39 UTC] PHP   6. Illuminate\Session\Middleware->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Queue.php:47
+[27-Jan-2017 16:34:39 UTC] PHP   7. Illuminate\Foundation\Application->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Session/Middleware.php:72
+[27-Jan-2017 16:34:39 UTC] PHP   8. Illuminate\Foundation\Application->boot() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:743
+[27-Jan-2017 16:34:39 UTC] PHP   9. Illuminate\Foundation\Application->bootApplication() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:587
+[27-Jan-2017 16:34:39 UTC] PHP  10. Illuminate\Foundation\Application->fireAppCallbacks() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:604
+[27-Jan-2017 16:34:39 UTC] PHP  11. call_user_func:{/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:836}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:836
+[27-Jan-2017 16:34:39 UTC] PHP  12. {closure:/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/start.php:223-271}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:836
+[27-Jan-2017 16:34:41 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/ubuntu/workspace/app/routes.php on line 408
+[27-Jan-2017 16:34:41 UTC] PHP Stack trace:
+[27-Jan-2017 16:34:41 UTC] PHP   1. {main}() /home/ubuntu/workspace/public/index.php:0
+[27-Jan-2017 16:34:41 UTC] PHP   2. Illuminate\Foundation\Application->run() /home/ubuntu/workspace/public/index.php:49
+[27-Jan-2017 16:34:41 UTC] PHP   3. Stack\StackedHttpKernel->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:641
+[27-Jan-2017 16:34:41 UTC] PHP   4. Illuminate\Cookie\Guard->handle() /home/ubuntu/workspace/vendor/stack/builder/src/Stack/StackedHttpKernel.php:23
+[27-Jan-2017 16:34:41 UTC] PHP   5. Illuminate\Cookie\Queue->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Guard.php:51
+[27-Jan-2017 16:34:41 UTC] PHP   6. Illuminate\Session\Middleware->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Queue.php:47
+[27-Jan-2017 16:34:41 UTC] PHP   7. Illuminate\Foundation\Application->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Session/Middleware.php:72
+[27-Jan-2017 16:34:41 UTC] PHP   8. Illuminate\Foundation\Application->boot() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:743
+[27-Jan-2017 16:34:41 UTC] PHP   9. Illuminate\Foundation\Application->bootApplication() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:587
+[27-Jan-2017 16:34:41 UTC] PHP  10. Illuminate\Foundation\Application->fireAppCallbacks() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:604
+[27-Jan-2017 16:34:41 UTC] PHP  11. call_user_func:{/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:836}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:836
+[27-Jan-2017 16:34:41 UTC] PHP  12. {closure:/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/start.php:223-271}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:836
+[27-Jan-2017 16:34:41 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/ubuntu/workspace/app/routes.php on line 408
+[27-Jan-2017 16:34:41 UTC] PHP Stack trace:
+[27-Jan-2017 16:34:41 UTC] PHP   1. {main}() /home/ubuntu/workspace/public/index.php:0
+[27-Jan-2017 16:34:41 UTC] PHP   2. Illuminate\Foundation\Application->run() /home/ubuntu/workspace/public/index.php:49
+[27-Jan-2017 16:34:41 UTC] PHP   3. Stack\StackedHttpKernel->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:641
+[27-Jan-2017 16:34:41 UTC] PHP   4. Illuminate\Cookie\Guard->handle() /home/ubuntu/workspace/vendor/stack/builder/src/Stack/StackedHttpKernel.php:23
+[27-Jan-2017 16:34:41 UTC] PHP   5. Illuminate\Cookie\Queue->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Guard.php:51
+[27-Jan-2017 16:34:41 UTC] PHP   6. Illuminate\Session\Middleware->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Queue.php:47
+[27-Jan-2017 16:34:41 UTC] PHP   7. Illuminate\Foundation\Application->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Session/Middleware.php:72
+[27-Jan-2017 16:34:41 UTC] PHP   8. Illuminate\Foundation\Application->boot() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:743
+[27-Jan-2017 16:34:41 UTC] PHP   9. Illuminate\Foundation\Application->bootApplication() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:587
+[27-Jan-2017 16:34:41 UTC] PHP  10. Illuminate\Foundation\Application->fireAppCallbacks() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:604
+[27-Jan-2017 16:34:41 UTC] PHP  11. call_user_func:{/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:836}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:836
+[27-Jan-2017 16:34:41 UTC] PHP  12. {closure:/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/start.php:223-271}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:836
+[27-Jan-2017 16:35:01 UTC] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in /home/ubuntu/workspace/app/routes.php on line 408
+[27-Jan-2017 16:35:01 UTC] PHP Stack trace:
+[27-Jan-2017 16:35:01 UTC] PHP   1. {main}() /home/ubuntu/workspace/public/index.php:0
+[27-Jan-2017 16:35:01 UTC] PHP   2. Illuminate\Foundation\Application->run() /home/ubuntu/workspace/public/index.php:49
+[27-Jan-2017 16:35:01 UTC] PHP   3. Stack\StackedHttpKernel->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:641
+[27-Jan-2017 16:35:01 UTC] PHP   4. Illuminate\Cookie\Guard->handle() /home/ubuntu/workspace/vendor/stack/builder/src/Stack/StackedHttpKernel.php:23
+[27-Jan-2017 16:35:01 UTC] PHP   5. Illuminate\Cookie\Queue->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Guard.php:51
+[27-Jan-2017 16:35:01 UTC] PHP   6. Illuminate\Session\Middleware->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Queue.php:47
+[27-Jan-2017 16:35:01 UTC] PHP   7. Illuminate\Foundation\Application->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Session/Middleware.php:72
+[27-Jan-2017 16:35:01 UTC] PHP   8. Illuminate\Foundation\Application->boot() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:743
+[27-Jan-2017 16:35:01 UTC] PHP   9. Illuminate\Foundation\Application->bootApplication() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:587
+[27-Jan-2017 16:35:01 UTC] PHP  10. Illuminate\Foundation\Application->fireAppCallbacks() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:604
+[27-Jan-2017 16:35:01 UTC] PHP  11. call_user_func:{/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:836}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:836
+[27-Jan-2017 16:35:01 UTC] PHP  12. {closure:/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/start.php:223-271}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:836
+[27-Jan-2017 17:16:19 UTC] PHP Parse error:  syntax error, unexpected '{' in /home/ubuntu/workspace/app/controllers/GestionProyectosController.php on line 1466
+[27-Jan-2017 17:16:19 UTC] PHP Stack trace:
+[27-Jan-2017 17:16:19 UTC] PHP   1. {main}() /home/ubuntu/workspace/public/index.php:0
+[27-Jan-2017 17:16:19 UTC] PHP   2. Illuminate\Foundation\Application->run() /home/ubuntu/workspace/public/index.php:49
+[27-Jan-2017 17:16:19 UTC] PHP   3. Stack\StackedHttpKernel->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:641
+[27-Jan-2017 17:16:19 UTC] PHP   4. Illuminate\Cookie\Guard->handle() /home/ubuntu/workspace/vendor/stack/builder/src/Stack/StackedHttpKernel.php:23
+[27-Jan-2017 17:16:19 UTC] PHP   5. Illuminate\Cookie\Queue->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Guard.php:51
+[27-Jan-2017 17:16:19 UTC] PHP   6. Illuminate\Session\Middleware->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Queue.php:47
+[27-Jan-2017 17:16:19 UTC] PHP   7. Illuminate\Foundation\Application->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Session/Middleware.php:72
+[27-Jan-2017 17:16:19 UTC] PHP   8. Illuminate\Foundation\Application->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:745
+[27-Jan-2017 17:16:19 UTC] PHP   9. Illuminate\Routing\Router->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:781
+[27-Jan-2017 17:16:19 UTC] PHP  10. Illuminate\Routing\Router->dispatchToRoute() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1001
+[27-Jan-2017 17:16:19 UTC] PHP  11. Illuminate\Routing\Route->run() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1033
+[27-Jan-2017 17:16:19 UTC] PHP  12. call_user_func_array:{/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[27-Jan-2017 17:16:19 UTC] PHP  13. Illuminate\Routing\Router->Illuminate\Routing\{closure}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[27-Jan-2017 17:16:19 UTC] PHP  14. Illuminate\Routing\ControllerDispatcher->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:967
+[27-Jan-2017 17:16:19 UTC] PHP  15. Illuminate\Routing\ControllerDispatcher->makeController() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:51
+[27-Jan-2017 17:16:19 UTC] PHP  16. Illuminate\Foundation\Application->make() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:78
+[27-Jan-2017 17:16:19 UTC] PHP  17. Illuminate\Container\Container->make() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:462
+[27-Jan-2017 17:16:19 UTC] PHP  18. Illuminate\Container\Container->build() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:428
+[27-Jan-2017 17:16:19 UTC] PHP  19. ReflectionClass->__construct() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 17:16:19 UTC] PHP  20. spl_autoload_call() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 17:16:19 UTC] PHP  21. Illuminate\Support\ClassLoader::load() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 17:16:53 UTC] PHP Parse error:  syntax error, unexpected '{' in /home/ubuntu/workspace/app/controllers/GestionProyectosController.php on line 1477
+[27-Jan-2017 17:16:53 UTC] PHP Stack trace:
+[27-Jan-2017 17:16:53 UTC] PHP   1. {main}() /home/ubuntu/workspace/public/index.php:0
+[27-Jan-2017 17:16:53 UTC] PHP   2. Illuminate\Foundation\Application->run() /home/ubuntu/workspace/public/index.php:49
+[27-Jan-2017 17:16:53 UTC] PHP   3. Stack\StackedHttpKernel->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:641
+[27-Jan-2017 17:16:53 UTC] PHP   4. Illuminate\Cookie\Guard->handle() /home/ubuntu/workspace/vendor/stack/builder/src/Stack/StackedHttpKernel.php:23
+[27-Jan-2017 17:16:53 UTC] PHP   5. Illuminate\Cookie\Queue->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Guard.php:51
+[27-Jan-2017 17:16:53 UTC] PHP   6. Illuminate\Session\Middleware->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Queue.php:47
+[27-Jan-2017 17:16:53 UTC] PHP   7. Illuminate\Foundation\Application->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Session/Middleware.php:72
+[27-Jan-2017 17:16:53 UTC] PHP   8. Illuminate\Foundation\Application->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:745
+[27-Jan-2017 17:16:53 UTC] PHP   9. Illuminate\Routing\Router->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:781
+[27-Jan-2017 17:16:53 UTC] PHP  10. Illuminate\Routing\Router->dispatchToRoute() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1001
+[27-Jan-2017 17:16:53 UTC] PHP  11. Illuminate\Routing\Route->run() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1033
+[27-Jan-2017 17:16:53 UTC] PHP  12. call_user_func_array:{/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[27-Jan-2017 17:16:53 UTC] PHP  13. Illuminate\Routing\Router->Illuminate\Routing\{closure}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[27-Jan-2017 17:16:53 UTC] PHP  14. Illuminate\Routing\ControllerDispatcher->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:967
+[27-Jan-2017 17:16:53 UTC] PHP  15. Illuminate\Routing\ControllerDispatcher->makeController() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:51
+[27-Jan-2017 17:16:53 UTC] PHP  16. Illuminate\Foundation\Application->make() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:78
+[27-Jan-2017 17:16:53 UTC] PHP  17. Illuminate\Container\Container->make() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:462
+[27-Jan-2017 17:16:53 UTC] PHP  18. Illuminate\Container\Container->build() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:428
+[27-Jan-2017 17:16:53 UTC] PHP  19. ReflectionClass->__construct() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 17:16:53 UTC] PHP  20. spl_autoload_call() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 17:16:53 UTC] PHP  21. Illuminate\Support\ClassLoader::load() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 20:35:04 UTC] PHP Parse error:  syntax error, unexpected '(', expecting identifier (T_STRING) in /home/ubuntu/workspace/app/controllers/GestionProyectosController.php on line 1031
+[27-Jan-2017 20:35:04 UTC] PHP Stack trace:
+[27-Jan-2017 20:35:04 UTC] PHP   1. {main}() /home/ubuntu/workspace/public/index.php:0
+[27-Jan-2017 20:35:04 UTC] PHP   2. Illuminate\Foundation\Application->run() /home/ubuntu/workspace/public/index.php:49
+[27-Jan-2017 20:35:04 UTC] PHP   3. Stack\StackedHttpKernel->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:641
+[27-Jan-2017 20:35:04 UTC] PHP   4. Illuminate\Cookie\Guard->handle() /home/ubuntu/workspace/vendor/stack/builder/src/Stack/StackedHttpKernel.php:23
+[27-Jan-2017 20:35:04 UTC] PHP   5. Illuminate\Cookie\Queue->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Guard.php:51
+[27-Jan-2017 20:35:04 UTC] PHP   6. Illuminate\Session\Middleware->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Queue.php:47
+[27-Jan-2017 20:35:04 UTC] PHP   7. Illuminate\Foundation\Application->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Session/Middleware.php:72
+[27-Jan-2017 20:35:04 UTC] PHP   8. Illuminate\Foundation\Application->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:745
+[27-Jan-2017 20:35:04 UTC] PHP   9. Illuminate\Routing\Router->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:781
+[27-Jan-2017 20:35:04 UTC] PHP  10. Illuminate\Routing\Router->dispatchToRoute() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1001
+[27-Jan-2017 20:35:04 UTC] PHP  11. Illuminate\Routing\Route->run() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1033
+[27-Jan-2017 20:35:04 UTC] PHP  12. call_user_func_array:{/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[27-Jan-2017 20:35:04 UTC] PHP  13. Illuminate\Routing\Router->Illuminate\Routing\{closure}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[27-Jan-2017 20:35:04 UTC] PHP  14. Illuminate\Routing\ControllerDispatcher->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:967
+[27-Jan-2017 20:35:04 UTC] PHP  15. Illuminate\Routing\ControllerDispatcher->makeController() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:51
+[27-Jan-2017 20:35:04 UTC] PHP  16. Illuminate\Foundation\Application->make() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:78
+[27-Jan-2017 20:35:04 UTC] PHP  17. Illuminate\Container\Container->make() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:462
+[27-Jan-2017 20:35:04 UTC] PHP  18. Illuminate\Container\Container->build() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:428
+[27-Jan-2017 20:35:04 UTC] PHP  19. ReflectionClass->__construct() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 20:35:04 UTC] PHP  20. spl_autoload_call() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 20:35:04 UTC] PHP  21. Illuminate\Support\ClassLoader::load() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 20:35:59 UTC] PHP Parse error:  syntax error, unexpected ')', expecting ';' or '{' in /home/ubuntu/workspace/app/controllers/GestionProyectosController.php on line 1031
+[27-Jan-2017 20:35:59 UTC] PHP Stack trace:
+[27-Jan-2017 20:35:59 UTC] PHP   1. {main}() /home/ubuntu/workspace/public/index.php:0
+[27-Jan-2017 20:35:59 UTC] PHP   2. Illuminate\Foundation\Application->run() /home/ubuntu/workspace/public/index.php:49
+[27-Jan-2017 20:35:59 UTC] PHP   3. Stack\StackedHttpKernel->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:641
+[27-Jan-2017 20:35:59 UTC] PHP   4. Illuminate\Cookie\Guard->handle() /home/ubuntu/workspace/vendor/stack/builder/src/Stack/StackedHttpKernel.php:23
+[27-Jan-2017 20:35:59 UTC] PHP   5. Illuminate\Cookie\Queue->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Guard.php:51
+[27-Jan-2017 20:35:59 UTC] PHP   6. Illuminate\Session\Middleware->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Queue.php:47
+[27-Jan-2017 20:35:59 UTC] PHP   7. Illuminate\Foundation\Application->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Session/Middleware.php:72
+[27-Jan-2017 20:35:59 UTC] PHP   8. Illuminate\Foundation\Application->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:745
+[27-Jan-2017 20:35:59 UTC] PHP   9. Illuminate\Routing\Router->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:781
+[27-Jan-2017 20:35:59 UTC] PHP  10. Illuminate\Routing\Router->dispatchToRoute() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1001
+[27-Jan-2017 20:35:59 UTC] PHP  11. Illuminate\Routing\Route->run() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1033
+[27-Jan-2017 20:35:59 UTC] PHP  12. call_user_func_array:{/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[27-Jan-2017 20:35:59 UTC] PHP  13. Illuminate\Routing\Router->Illuminate\Routing\{closure}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[27-Jan-2017 20:35:59 UTC] PHP  14. Illuminate\Routing\ControllerDispatcher->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:967
+[27-Jan-2017 20:35:59 UTC] PHP  15. Illuminate\Routing\ControllerDispatcher->makeController() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:51
+[27-Jan-2017 20:35:59 UTC] PHP  16. Illuminate\Foundation\Application->make() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:78
+[27-Jan-2017 20:35:59 UTC] PHP  17. Illuminate\Container\Container->make() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:462
+[27-Jan-2017 20:35:59 UTC] PHP  18. Illuminate\Container\Container->build() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:428
+[27-Jan-2017 20:35:59 UTC] PHP  19. ReflectionClass->__construct() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 20:35:59 UTC] PHP  20. spl_autoload_call() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 20:35:59 UTC] PHP  21. Illuminate\Support\ClassLoader::load() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 20:36:08 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/ubuntu/workspace/app/controllers/GestionProyectosController.php on line 1061
+[27-Jan-2017 20:36:08 UTC] PHP Stack trace:
+[27-Jan-2017 20:36:08 UTC] PHP   1. {main}() /home/ubuntu/workspace/public/index.php:0
+[27-Jan-2017 20:36:08 UTC] PHP   2. Illuminate\Foundation\Application->run() /home/ubuntu/workspace/public/index.php:49
+[27-Jan-2017 20:36:08 UTC] PHP   3. Stack\StackedHttpKernel->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:641
+[27-Jan-2017 20:36:08 UTC] PHP   4. Illuminate\Cookie\Guard->handle() /home/ubuntu/workspace/vendor/stack/builder/src/Stack/StackedHttpKernel.php:23
+[27-Jan-2017 20:36:08 UTC] PHP   5. Illuminate\Cookie\Queue->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Guard.php:51
+[27-Jan-2017 20:36:08 UTC] PHP   6. Illuminate\Session\Middleware->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Queue.php:47
+[27-Jan-2017 20:36:08 UTC] PHP   7. Illuminate\Foundation\Application->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Session/Middleware.php:72
+[27-Jan-2017 20:36:08 UTC] PHP   8. Illuminate\Foundation\Application->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:745
+[27-Jan-2017 20:36:08 UTC] PHP   9. Illuminate\Routing\Router->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:781
+[27-Jan-2017 20:36:08 UTC] PHP  10. Illuminate\Routing\Router->dispatchToRoute() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1001
+[27-Jan-2017 20:36:08 UTC] PHP  11. Illuminate\Routing\Route->run() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1033
+[27-Jan-2017 20:36:08 UTC] PHP  12. call_user_func_array:{/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[27-Jan-2017 20:36:08 UTC] PHP  13. Illuminate\Routing\Router->Illuminate\Routing\{closure}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[27-Jan-2017 20:36:08 UTC] PHP  14. Illuminate\Routing\ControllerDispatcher->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:967
+[27-Jan-2017 20:36:08 UTC] PHP  15. Illuminate\Routing\ControllerDispatcher->makeController() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:51
+[27-Jan-2017 20:36:08 UTC] PHP  16. Illuminate\Foundation\Application->make() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:78
+[27-Jan-2017 20:36:08 UTC] PHP  17. Illuminate\Container\Container->make() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:462
+[27-Jan-2017 20:36:08 UTC] PHP  18. Illuminate\Container\Container->build() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:428
+[27-Jan-2017 20:36:08 UTC] PHP  19. ReflectionClass->__construct() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 20:36:08 UTC] PHP  20. spl_autoload_call() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 20:36:08 UTC] PHP  21. Illuminate\Support\ClassLoader::load() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 20:36:27 UTC] PHP Parse error:  syntax error, unexpected ',' in /home/ubuntu/workspace/app/controllers/GestionProyectosController.php on line 1061
+[27-Jan-2017 20:36:27 UTC] PHP Stack trace:
+[27-Jan-2017 20:36:27 UTC] PHP   1. {main}() /home/ubuntu/workspace/public/index.php:0
+[27-Jan-2017 20:36:27 UTC] PHP   2. Illuminate\Foundation\Application->run() /home/ubuntu/workspace/public/index.php:49
+[27-Jan-2017 20:36:27 UTC] PHP   3. Stack\StackedHttpKernel->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:641
+[27-Jan-2017 20:36:27 UTC] PHP   4. Illuminate\Cookie\Guard->handle() /home/ubuntu/workspace/vendor/stack/builder/src/Stack/StackedHttpKernel.php:23
+[27-Jan-2017 20:36:27 UTC] PHP   5. Illuminate\Cookie\Queue->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Guard.php:51
+[27-Jan-2017 20:36:27 UTC] PHP   6. Illuminate\Session\Middleware->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Queue.php:47
+[27-Jan-2017 20:36:27 UTC] PHP   7. Illuminate\Foundation\Application->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Session/Middleware.php:72
+[27-Jan-2017 20:36:27 UTC] PHP   8. Illuminate\Foundation\Application->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:745
+[27-Jan-2017 20:36:27 UTC] PHP   9. Illuminate\Routing\Router->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:781
+[27-Jan-2017 20:36:27 UTC] PHP  10. Illuminate\Routing\Router->dispatchToRoute() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1001
+[27-Jan-2017 20:36:27 UTC] PHP  11. Illuminate\Routing\Route->run() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1033
+[27-Jan-2017 20:36:27 UTC] PHP  12. call_user_func_array:{/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[27-Jan-2017 20:36:27 UTC] PHP  13. Illuminate\Routing\Router->Illuminate\Routing\{closure}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[27-Jan-2017 20:36:27 UTC] PHP  14. Illuminate\Routing\ControllerDispatcher->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:967
+[27-Jan-2017 20:36:27 UTC] PHP  15. Illuminate\Routing\ControllerDispatcher->makeController() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:51
+[27-Jan-2017 20:36:27 UTC] PHP  16. Illuminate\Foundation\Application->make() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:78
+[27-Jan-2017 20:36:27 UTC] PHP  17. Illuminate\Container\Container->make() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:462
+[27-Jan-2017 20:36:27 UTC] PHP  18. Illuminate\Container\Container->build() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:428
+[27-Jan-2017 20:36:27 UTC] PHP  19. ReflectionClass->__construct() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 20:36:27 UTC] PHP  20. spl_autoload_call() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 20:36:27 UTC] PHP  21. Illuminate\Support\ClassLoader::load() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 20:36:47 UTC] PHP Parse error:  syntax error, unexpected 'catch' (T_CATCH) in /home/ubuntu/workspace/app/controllers/GestionProyectosController.php on line 1656
+[27-Jan-2017 20:36:47 UTC] PHP Stack trace:
+[27-Jan-2017 20:36:47 UTC] PHP   1. {main}() /home/ubuntu/workspace/public/index.php:0
+[27-Jan-2017 20:36:47 UTC] PHP   2. Illuminate\Foundation\Application->run() /home/ubuntu/workspace/public/index.php:49
+[27-Jan-2017 20:36:47 UTC] PHP   3. Stack\StackedHttpKernel->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:641
+[27-Jan-2017 20:36:47 UTC] PHP   4. Illuminate\Cookie\Guard->handle() /home/ubuntu/workspace/vendor/stack/builder/src/Stack/StackedHttpKernel.php:23
+[27-Jan-2017 20:36:47 UTC] PHP   5. Illuminate\Cookie\Queue->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Guard.php:51
+[27-Jan-2017 20:36:47 UTC] PHP   6. Illuminate\Session\Middleware->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Queue.php:47
+[27-Jan-2017 20:36:47 UTC] PHP   7. Illuminate\Foundation\Application->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Session/Middleware.php:72
+[27-Jan-2017 20:36:47 UTC] PHP   8. Illuminate\Foundation\Application->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:745
+[27-Jan-2017 20:36:47 UTC] PHP   9. Illuminate\Routing\Router->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:781
+[27-Jan-2017 20:36:47 UTC] PHP  10. Illuminate\Routing\Router->dispatchToRoute() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1001
+[27-Jan-2017 20:36:47 UTC] PHP  11. Illuminate\Routing\Route->run() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1033
+[27-Jan-2017 20:36:47 UTC] PHP  12. call_user_func_array:{/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[27-Jan-2017 20:36:47 UTC] PHP  13. Illuminate\Routing\Router->Illuminate\Routing\{closure}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[27-Jan-2017 20:36:47 UTC] PHP  14. Illuminate\Routing\ControllerDispatcher->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:967
+[27-Jan-2017 20:36:47 UTC] PHP  15. Illuminate\Routing\ControllerDispatcher->makeController() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:51
+[27-Jan-2017 20:36:47 UTC] PHP  16. Illuminate\Foundation\Application->make() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:78
+[27-Jan-2017 20:36:47 UTC] PHP  17. Illuminate\Container\Container->make() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:462
+[27-Jan-2017 20:36:47 UTC] PHP  18. Illuminate\Container\Container->build() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:428
+[27-Jan-2017 20:36:47 UTC] PHP  19. ReflectionClass->__construct() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 20:36:47 UTC] PHP  20. spl_autoload_call() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[27-Jan-2017 20:36:47 UTC] PHP  21. Illuminate\Support\ClassLoader::load() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Container/Container.php:504
+[29-Jan-2017 18:12:44 UTC] PHP Fatal error:  Class 'LineaGrupoInvestigacionUCC' not found in /home/ubuntu/workspace/app/controllers/GruposInvestigacionController.php on line 207
+[29-Jan-2017 18:12:44 UTC] PHP Stack trace:
+[29-Jan-2017 18:12:44 UTC] PHP   1. {main}() /home/ubuntu/workspace/public/index.php:0
+[29-Jan-2017 18:12:44 UTC] PHP   2. Illuminate\Foundation\Application->run() /home/ubuntu/workspace/public/index.php:49
+[29-Jan-2017 18:12:44 UTC] PHP   3. Stack\StackedHttpKernel->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:641
+[29-Jan-2017 18:12:44 UTC] PHP   4. Illuminate\Cookie\Guard->handle() /home/ubuntu/workspace/vendor/stack/builder/src/Stack/StackedHttpKernel.php:23
+[29-Jan-2017 18:12:44 UTC] PHP   5. Illuminate\Cookie\Queue->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Guard.php:51
+[29-Jan-2017 18:12:44 UTC] PHP   6. Illuminate\Session\Middleware->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Cookie/Queue.php:47
+[29-Jan-2017 18:12:44 UTC] PHP   7. Illuminate\Foundation\Application->handle() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Session/Middleware.php:72
+[29-Jan-2017 18:12:44 UTC] PHP   8. Illuminate\Foundation\Application->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:745
+[29-Jan-2017 18:12:44 UTC] PHP   9. Illuminate\Routing\Router->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:781
+[29-Jan-2017 18:12:44 UTC] PHP  10. Illuminate\Routing\Router->dispatchToRoute() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1001
+[29-Jan-2017 18:12:44 UTC] PHP  11. Illuminate\Routing\Route->run() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:1033
+[29-Jan-2017 18:12:44 UTC] PHP  12. call_user_func_array:{/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[29-Jan-2017 18:12:44 UTC] PHP  13. Illuminate\Routing\Router->Illuminate\Routing\{closure}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Route.php:109
+[29-Jan-2017 18:12:44 UTC] PHP  14. Illuminate\Routing\ControllerDispatcher->dispatch() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Router.php:967
+[29-Jan-2017 18:12:44 UTC] PHP  15. Illuminate\Routing\ControllerDispatcher->call() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:62
+[29-Jan-2017 18:12:44 UTC] PHP  16. Illuminate\Routing\Controller->callAction() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:93
+[29-Jan-2017 18:12:44 UTC] PHP  17. call_user_func_array:{/home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:231}() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:231
+[29-Jan-2017 18:12:44 UTC] PHP  18. GruposInvestigacionController->guardar_nuevo_grupo_inv() /home/ubuntu/workspace/vendor/laravel/framework/src/Illuminate/Routing/Controller.php:231

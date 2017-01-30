@@ -163,7 +163,11 @@
                 $temp=$usuario->persona->tipoIdentificacion;
                 $temp2=$usuario->persona->categoria;
                 $temp3=$usuario->rol;
-                $temp4=$usuario->grupo->facultad->sede;
+                $temp4=$usuario->grupo;
+                
+                if($temp4){
+                    $temp4->facultad->sede;
+                }
                 
             }
 
@@ -455,7 +459,6 @@
             return Redirect::to('usuarios/listar');
         }
         
-        
         /*
     	|--------------------------------------------------------------------------
     	| actualizar_usuario()
@@ -513,8 +516,6 @@
             }   
             return Redirect::to('/usuarios/listar');
         }
-        
-        
         
     	/*
     	|--------------------------------------------------------------------------
@@ -790,7 +791,6 @@
                 return Redirect::to('/usuarios/propio_perfil');
             }
         }
-        
         
     	/*
     	|--------------------------------------------------------------------------

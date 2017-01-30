@@ -182,7 +182,9 @@
                                     </button>
                                 </div>
                             </div>
+                            
                             <hr />                            
+                            
                             {{--Acordiones de productos--}}
                             <div ng-repeat="producto in productos" class="nga-fast nga-stagger-fast nga-fade">
                                 <div class="panel panel-default">
@@ -428,7 +430,7 @@
                                         </div>
                                     </div>
                                 </div>                            
-                            </div>{{--Gastos equipos--}}                            
+                            </div>{{--Gastos equipos--}}
                             
                             {{--Gastos software--}}
                             <div class="panel panel-default" ng-controller="gastos_software_controller">
@@ -724,7 +726,257 @@
                         </div>                           
                     </div>
                     
+                    {{--Contenido tab informe avance--}}
+                    <div id="contenido_tab_informe_avance" class="tab-pane fade" ng-controller="informe_avance_controller">
+                        <br />
+                        <div class="container-sgpi">
+                            
+                            {{--btn regreso a tab de seleccion de proyecto--}}
+                            <div class="row">
+                                <div class="col-xs-12 col-md-4">
+                                    <button type="button" class="btn btn-default btn-block" ng-click="volver_a_proyectos()" ng-disabled="data.deshabilitar_btn_retorno_proyectos">
+                                        <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;Proyectos
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <hr />
+                            
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <p>Informe de avance</p>
+                                        <p><em>Fecha proyectada para la carga del informe de avance (fecha mitad de duración del proyecto):</em> <strong>{$ fecha_mitad_proyecto $}</strong></p>
+                                    </h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h4 class="text-center" ng-if="informe_avance==null" class="nga-fast nga-stagger-fast nga-fade">No se ha cargado informe de avance aún</h4>
+                                    <div class="row" ng-if="informe_avance!=null" class="nga-slow nga-stagger-fast nga-fade">
+                                        <div class="col-xs-12">
+                                            Informe de avance cargado en la fecha: {$ informe_avance.updated_at $}
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <a href="/file/informe_avance/{$ informe_avance.archivo $}" class="btn btn-primary">Descargar informe de avance <i class="fa fa-cloud-download" aria-hidden="true"></i></a>
+                                            <br />
+                                            <br />
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <label>Comentario del investigador</label>
+                                            <textarea rows="3" ng-model="informe_avance.comentario_investigador" class="form-control white-readonly" ng-readonly="true"></textarea>
+                                        </div>            
+                                        <div class="col-xs-12"><hr /></div>
+                                        <div class="col-xs-12">
+                                            <label>Seleccione para aprobar el informe de avance</label>
+                                            <br />
+                                            <label>
+                                                <input ng-model="informe_avance.aprobado" type="checkbox" class="big-checkbox"> Aprobado / no aprobado
+                                            </label>
+                                            <br />
+                                            <br />
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <label>Comentario de revisión (opcional)</label>
+                                            <textarea rows="3" ng-model="informe_avance.comentario_revision" class="form-control"
+                                            uib-tooltip="Ingresar un comentario de revisión" tooltip-enable="true"></textarea>
+                                            <br />
+                                        </div>                        
+                                        <div class="col-xs-12">
+                                            <br />
+                                            <button class="btn btn-primary btn-block" ng-click="cargar_revision()" ng-disabled="guardando_revision">Guardar revisión <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                        </div>            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {{--Overlay interno de tab informe avance--}}
+                        <div class="overlay-2" ng-show="show_velo_msj_operacion">
+                            <div style="display:table; width:100%; height:100%;">
+                                <div style="display:table-cell; vertical-align: middle;" ng-bind-html="msj_operacion">
+                                    <!--Contenido definido dinámicamente desde controlador-->
+                                </div>
+                            </div>                                
+                        </div>                        
+                    </div>{{--Contenido tab informe avance--}}                    
                     
+                    {{--Contenido tab final proyecto--}}
+                    <div id="contenido_tab_final_proyecto" class="tab-pane fade" ng-controller="final_proyecto_controller">
+                        <br />
+                        <div class="container-sgpi">
+                            
+                            {{--btn regreso a tab de seleccion de proyecto--}}
+                            <div class="row">
+                                <div class="col-xs-12 col-md-4">
+                                    <button type="button" class="btn btn-default btn-block" ng-click="volver_a_proyectos()" ng-disabled="cargando_revision">
+                                        <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;Proyectos
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <hr />
+                            
+                            {{--Panel contenido--}}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <p>Final de proyecto</p>
+                                        <p><em>Fecha relativa:</em> <strong>{$ fecha_final_proyecto $}</strong></p>
+                                    </h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h4 class="text-center" ng-if="final_proyecto==null" class="nga-fast nga-stagger-fast nga-fade">No se ha cargado final de proyecto aún</h4>
+                                    <div class="row" ng-show="final_proyecto!=null" class="nga-fast nga-stagger-fast nga-fade">
+                                        <div class="col-xs-12 col-sm-6">
+                                            <a class="btn btn-primary btn-block wrap" href="/file/memoria_academica/{$ final_proyecto.archivo_memoria_academica $}">Descargar memoria académica&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <a class="btn btn-primary btn-block wrap" href="/file/acta_finalizacion/{$ final_proyecto.archivo_acta_finalizacion $}">Descargar acta de finalizacion&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
+                                        </div>                 
+                                        <div class="col-xs-12">
+                                            <br />
+                                            <label>Comentario del investigador</label>
+                                            <textarea rows="3" class="form-control white-readonly" ng-model="final_proyecto.comentario_investigador" ng-readonly="true"></textarea>
+                                        </div>                                        
+                                        <div class="col-xs-12"><hr /></div>
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <label>Seleccionar para aprobar final de proyecto</label>
+                                                <br />
+                                                <label>
+                                                    <input ng-model="final_proyecto.aprobado" ng-change="cambia_estado_aprobado()" type="checkbox" class="big-checkbox"> Aprobado / no aprobado
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <label>Cargar archivo de aprobación de final de proyecto</label>
+                                            <span class="error-text" ng-show="documento_aprobacion_invalido">Archivo inválido. Cargar un archivo de máximo 20 MB</span>
+                                            <input type="file"
+                                            	ngf-select ng-model="documento_aprobacion" ngf-max-size="20MB"
+                                            	ngf-change="validar_documento($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+                                            	ng-disabled="cargando_revision"
+                                            	class="form-control" ng-class="{'invalid_control': documento_aprobacion_invalido}"
+                                            	uib-tooltip="El archivo a cargar debe tener un tamaño máximo de 20MB " tooltip-enable="true"/>
+                                        </div>
+                                        <div class="col-xs-12" ng-if="final_proyecto.archivo_aprobacion_final_proyecto!=null || final_proyecto.archivo_aprobacion_final_proyecto!=undefinded">
+                                            <br />
+                                            <a href="/file/aprobacion_final_proyecto/{$ final_proyecto.archivo_aprobacion_final_proyecto $}" class="btn btn-primary btn-block">Descargar archivo de aprobación de revisión <i class="fa fa-cloud-download" aria-hidden="true"></i></a>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <br />
+                                            <label>Comentario de revisión (opcional)</label>
+                                            <textarea rows="3" class="form-control" ng-model="final_proyecto.comentario_revision" ng-disabled="cargando_revision"
+                                            uib-tooltip="Ingresar un comentario de revisión" tooltip-enable="true"></textarea>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <br />
+                                            <button class="btn btn-primary btn-block" ng-click="cargar_revision()" ng-disabled="cargando_revision">Cargar revisión <i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
+                                        </div>            
+                                    </div>                                
+                                    <br />
+                                    <div ng-show="cargando_revision" class="nga-fast nga-stagger-fast nga-fade">
+                                        <label for="progreso">Progreso de carga</label>&nbsp;&nbsp;<span ng-show="casi_terminado">Casi terminado, por favor esperar</span>
+                                        <uib-progressbar class="progress-striped active" max="total_archivo" value="carga_actual" type="info"><i>{$ porcentaje_carga $}%</i></uib-progressbar>
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                        {{--Overlay interno de tab final proyecto--}}
+                        <div class="overlay-2" ng-show="show_velo_msj_operacion">
+                            <div style="display:table; width:100%; height:100%;">
+                                <div style="display:table-cell; vertical-align: middle;" ng-bind-html="msj_operacion">
+                                    <!--Contenido definido dinámicamente desde controlador-->
+                                </div>
+                            </div>                                
+                        </div>                                    
+                    </div>{{--Contenido tab final proyecto--}}
+                    
+                    {{--Contenido tab prórroga--}}
+                    <div id="contenido_tab_prorroga" class="tab-pane fade" ng-controller="prorroga_controller">
+                        <br />
+                        <div class="container-sgpi">
+                            
+                            {{--btn regreso a tab de seleccion de proyecto--}}
+                            <div class="row">
+                                <div class="col-xs-12 col-md-4">
+                                    <button type="button" class="btn btn-default btn-block" ng-click="volver_a_proyectos()" ng-disabled="cargando_revision">
+                                        <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;Proyectos
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <hr />
+                            
+                            {{--Panel contenido--}}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <p>Aprobación de solicitud de prórroga de proyecto</p>
+                                    </h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h4 class="text-center" ng-if="prorroga==null" class="nga-fast nga-stagger-fast nga-fade">No se ha cargado solicitud de prórroga de final de proyecto</h4>
+                                    <div class="row" ng-show="prorroga!=null" class="nga-fast nga-stagger-fast nga-fade">
+                                        <div class="col-xs-12 col-sm-6">
+                                            <a class="btn btn-primary btn-block wrap" href="/file/prorroga/{$ prorroga.archivo $}">Descargar archivo de solicitud de prórroga&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <br />
+                                            <label>Comentario del investigador</label>
+                                            <textarea rows="3" class="form-control white-readonly" ng-model="prorroga.comentario_investigador" ng-readonly="true"></textarea>
+                                        </div>                                        
+                                        <div class="col-xs-12"><hr /></div>
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <label>Seleccionar para aprobar prorroga</label>
+                                                <br />
+                                                <label>
+                                                    <input ng-model="prorroga.aprobado" ng-change="cambia_estado_aprobado()" type="checkbox" class="big-checkbox"> Aprobado / no aprobado
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <label>Cargar archivo de aprobación de prorroga</label>
+                                            <span class="error-text" ng-show="documento_aprobacion_invalido">Archivo inválido. Cargar un archivo de máximo 20 MB</span>
+                                            <input type="file"
+                                            	ngf-select ng-model="documento_aprobacion" ngf-max-size="20MB"
+                                            	ngf-change="validar_documento($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+                                            	ng-disabled="cargando_revision"
+                                            	class="form-control" ng-class="{'invalid_control': documento_aprobacion_invalido}"
+                                            	uib-tooltip="El archivo a cargar debe tener un tamaño máximo de 20MB " tooltip-enable="true"/>
+                                        </div>
+                                        <div class="col-xs-12" ng-if="prorroga.archivo_aprobacion!=null || prorroga.archivo_aprobacion!=undefinded">
+                                            <br />
+                                            <a href="/file/aprobacion_prorroga/{$ prorroga.archivo_aprobacion $}" class="btn btn-primary btn-block">Descargar archivo de aprobación de prorroga <i class="fa fa-cloud-download" aria-hidden="true"></i></a>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <br />
+                                            <label>Comentario de revisión (opcional)</label>
+                                            <textarea rows="3" class="form-control" ng-model="prorroga.comentario_revision" ng-disabled="cargando_revision"
+                                            uib-tooltip="Ingresar un comentario de revisión" tooltip-enable="true"></textarea>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <br />
+                                            <button class="btn btn-primary btn-block" ng-click="cargar_revision()" ng-disabled="cargando_revision">Cargar revisión <i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
+                                        </div>            
+                                    </div>                                
+                                    <br />
+                                    <div ng-show="cargando_revision" class="nga-fast nga-stagger-fast nga-fade">
+                                        <label for="progreso">Progreso de carga</label>&nbsp;&nbsp;<span ng-show="casi_terminado">Casi terminado, por favor esperar</span>
+                                        <uib-progressbar class="progress-striped active" max="total_archivo" value="carga_actual" type="info"><i>{$ porcentaje_carga $}%</i></uib-progressbar>
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                        {{--Overlay interno de tab final proyecto--}}
+                        <div class="overlay-2" ng-show="show_velo_msj_operacion">
+                            <div style="display:table; width:100%; height:100%;">
+                                <div style="display:table-cell; vertical-align: middle;" ng-bind-html="msj_operacion">
+                                    <!--Contenido definido dinámicamente desde controlador-->
+                                </div>
+                            </div>                                
+                        </div>                                    
+                    </div>{{--Contenido tab prórroga--}}                    
+
                 </div> {{--Contenedor del contenido de cada tab--}}
                 
             </div>
@@ -754,6 +1006,9 @@
                     <h4 class="text-left">{$ datos_generales_proyecto.nombre $}</h4>
                     <br />
                     <div class="row is-flex">
+                        <div class="col-xs-12">
+                            <div id="desembolsos_aprobados_mas_info" style="width: 100%; height:370px;"></div>
+                        </div>                                             
                         <div class="col-xs-12 col-sm-6 col-md-4">
                             <label>Inicio del proyecto</label>
                             <p>{$ datos_generales_proyecto.fecha_inicio $}</p>
@@ -762,6 +1017,11 @@
                             <label>Duración del proyecto (meses)</label>
                             <p>{$ datos_generales_proyecto.duracion_meses $}</p>
                         </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
+                            <label for="progreso">Tiempo del proyecto transcurrido</label>
+                            <p>({$ dias_proyecto_transcurridos + ' / ' + total_dias_proyecto + ' días' $})</p>
+                            <uib-progressbar max="total_dias_proyecto" value="dias_proyecto_transcurridos" type="info"><i>{$ porcentaje_tiempo $}%</i></uib-progressbar>                            
+                        </div>                                                
                         <div class="col-xs-12 col-sm-6 col-md-4">
                             <label>Fecha final calculada</label>
                             <p>{$ datos_generales_proyecto.fecha_fin $}</p>
@@ -971,20 +1231,6 @@
             <script type="text/javascript" src="/app/js/{{ $script }}"></script>
         @endforeach
     @endif
-    
-    <?php $hay_notify_operacion_previa = Session::get('notify_operacion_previa') ?>
-        @if(isset($hay_notify_operacion_previa))
-            <script type="text/javascript">
-                sgpi_app.value('notify_operacion_previa', {{ json_encode(Session::get("notify_operacion_previa")) }});
-                sgpi_app.value('mensaje_operacion_previa', {{ json_encode(Session::get("mensaje_operacion_previa")) }});
-            </script>
-        @else
-            <script type="text/javascript">
-                sgpi_app.value('notify_operacion_previa', null);
-                sgpi_app.value('mensaje_operacion_previa', null);
-            </script>        
-        @endif
-        
     <script>
         sgpi_app.value('id_usuario', {{ Auth::user()->id }});
     </script>

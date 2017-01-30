@@ -29,8 +29,10 @@
                 'vendor/angular-datatables/angular-datatables.min.js',
                 'vendor/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.min.js',
                 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js',
+                'vendor/amcharts/amcharts.js', 
+                'vendor/amcharts/pie.js',
+                'vendor/amcharts/plugins/responsive/responsive.min.js'                
                 ];
-
                 
             $post_scripts = [
                 'investigador/proyectos/listar/listar_proyectos_controller.js',
@@ -798,6 +800,7 @@
         public function consultar_final_proyecto(){
             
             try{
+                
                 // valida identificador de proyecto enviado
                 if(is_null(Input::get('id_proyecto', null)))
                     throw new Exception('Identificador de proyecto inválido; identificador de proyecto no enviado');
@@ -824,6 +827,19 @@
                         ]);
                 }
                 else{
+                    
+                    // se envia ultima fecha de edición de final de proyecto, comparando las fechas de edición de registros de acta de finalizacion y memoria académica
+                    // como sea, ambas fechas deben ser iguales ya que tales registros se manejan al mismo tiempo. De todos modos se procede por seguridad
+                    if($acta_finalizacion->updated_at > $memoria_academica->updated_at)
+                        $ultima_edicion = $acta_finalizacion->updated_at->format('Y-m-d');
+                    else
+                        $ultima_edicion = $memoria_academica->updated_at->format('Y-m-d');
+                    
+                    // si se ha aprobado alguno de los registros, quierede decir que existe un registro de final de proyecto. Se consulta tal registro enviando el archivo de aprobación que le corresponde
+                    // teniendo en cuenta que se carga un archivo de aprobación solo si se ha aprobado el final de proyecto
+                    $aprobacion_final_proyecto = DocumentoProyecto::where('id_proyecto', '=', Input::get('id_proyecto'))
+                        ->where('id_formato_tipo_documento', '=', FormatoTipoDocumento::where('nombre', '=', 'Aprobacion final proyecto')->first()->id)->first();
+                    
                     return json_encode([
                         'consultado' => 1,
                         'fecha_final_proyecto' => Proyecto::find(Input::get('id_proyecto'))->fecha_fin,
@@ -831,8 +847,10 @@
                             'comentario_investigador' => $acta_finalizacion->comentario_investigador,
                             'archivo_acta_finalizacion' => $acta_finalizacion->archivo,
                             'archivo_memoria_academica' => $memoria_academica->archivo,
+                            'archivo_aprobacion_final_proyecto' => $aprobacion_final_proyecto ? $aprobacion_final_proyecto->archivo : null,
                             'aprobado' => $acta_finalizacion->aprobado,
-                            'comentario_revision' => $acta_finalizacion->comentario_revision
+                            'comentario_revision' => $acta_finalizacion->comentario_revision,
+                            'updated_at' => $ultima_edicion
                             ],
                         ]);         
                 }
@@ -1008,7 +1026,7 @@
         
     	/*
     	|--------------------------------------------------------------------------
-    	| consultar_prorroga()
+    	| ()
     	|--------------------------------------------------------------------------
     	| Consulta los registros de prórroga y el estado de revisión del mismo de un determinado proyecto
     	*/          
@@ -1037,6 +1055,14 @@
                         ]);
                 }
                 else{
+                    // agrega a la respuesta el archivo de aprobación de prórorga
+                    $aprobacion_prorroga = DocumentoProyecto::where('id_formato_tipo_documento', '=', FormatoTipoDocumento::where('nombre', '=', 'Aprobacion prorroga')->first()->id)
+                        ->where('id_proyecto', '=', Input::get('id_proyecto'))->first();
+                        
+                    $prorroga = $prorroga->toArray();
+                    $prorroga['archivo_aprobacion'] = $aprobacion_prorroga ? $aprobacion_prorroga->archivo : null;
+                    $prorroga = (object)$prorroga;
+                    
                     return json_encode([
                         'consultado' => 1,
                         'prorroga' => $prorroga
@@ -1079,8 +1105,8 @@
                     throw new Exception('Archivo de prórroga inválido. No se ha cargado ningún archivo');
                 }
                 $validacion = Validator::make(
-                    array('archivo' => Input::file("archivo_acta_finalizacion")),
-                    array('archivo' => 'max:20000') // unidad de medida predeterminada en Kylobytes. Aquí es 20MB
+                    array('archivo' => Input::file("archivo")),
+                    array('archivo' => 'required|max:20000') // unidad de medida predeterminada en Kylobytes. Aquí es 20MB
                 );                
                 if($validacion->fails()){
                     throw new Exception('Archivo de acta de prórroga inválido. Tamaño maximo 20 MB');
@@ -1167,12 +1193,25 @@
                 if($validacion->fails())
                     throw new Exception('Identificador de proyecto inválido; identificador de proyecto no encontrado');
                     
-                $detalles_proyecto = Proyecto::detalles_proyecto(Input::get('id_proyecto'));
-                
                 $respuesta = ['consultado' => 1];
+                
+                $detalles_proyecto = Proyecto::detalles_proyecto(Input::get('id_proyecto'));
                 foreach($detalles_proyecto as $key => $value){
                     $respuesta[$key] = $value;
                 }
+                $desembolsos_aprobados = Desembolso::desembolsos_aprobados_x_proyecto(Input::get('id_proyecto'));
+                $respuesta['desembolsos_aprobados'] = $desembolsos_aprobados;
+                
+                
+                $fecha_inicio = strtotime($detalles_proyecto['datos_generales_proyecto']['fecha_inicio']);
+                $fecha_final = strtotime($detalles_proyecto['datos_generales_proyecto']['fecha_fin']);
+                $diferencia_fechas = $fecha_final - $fecha_inicio;
+                $respuesta['total_dias_proyecto'] = floor($diferencia_fechas / (60 * 60 * 24));
+                
+                $fecha_inicio = strtotime($detalles_proyecto['datos_generales_proyecto']['fecha_inicio']);
+                $fecha_actual = time();
+                $diferencia_fechas = $fecha_actual - $fecha_inicio;
+                $respuesta['dias_proyecto_transcurridos'] = floor($diferencia_fechas / (60 * 60 * 24));                      
                 
                 return json_encode($respuesta);
             }
@@ -1213,6 +1252,9 @@
                 'vendor/angular-datatables/angular-datatables.min.js',
                 'vendor/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.min.js',
                 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js',
+                'vendor/amcharts/amcharts.js', 
+                'vendor/amcharts/pie.js',
+                'vendor/amcharts/plugins/responsive/responsive.min.js'                                                
                 ];
                 
             $post_scripts = [
@@ -1228,6 +1270,9 @@
                 'administrador/proyectos/listar/gastos_servicios_controller.js',
                 'administrador/proyectos/listar/gastos_bibliograficos_controller.js',
                 'administrador/proyectos/listar/gastos_digitales_controller.js',
+                'administrador/proyectos/listar/informe_avance_controller.js',
+                'administrador/proyectos/listar/final_proyecto_controller.js',
+                'administrador/proyectos/listar/prorroga_controller.js',
                 ];
             
             $angular_sgpi_app_extra_dependencies = ['ngAnimate', 'ngTouch', 'ngSanitize', 'ngFileUpload', 'ui.bootstrap', 'datatables', 'datatables.bootstrap'];
@@ -1320,12 +1365,411 @@
                     'codigo' => $e->getCode()
                     ));                
             }
-            
-            // aprobado: $scope.desembolso.aprobado,
-            // comentario_revision: $scope.desembolso.comentario_revision,
-            // codigo_aprobacion: $scope.desembolso.codigo_aprobacion,            
         }
         
+    	/*
+    	|--------------------------------------------------------------------------
+    	| guardar_revision_informe_avance()
+    	|--------------------------------------------------------------------------
+    	| Guarda la revisión de informe de avance de un proyecto determinado
+    	*/                  
+        public function guardar_revision_informe_avance(){
+            
+            try{
+                
+                // aplica validacion al identificador de proyecto enviado
+                if(is_null(Input::get('id_proyecto', null)))
+                    throw new Exception('Identificador de proyecto inválido. No se ha enviado tal dato');
+                $validacion = Validator::make(
+                    ['id_proyecto' => Input::get('id_proyecto')],
+                    ['id_proyecto' => 'required|exists:proyectos,id']);
+                if($validacion->fails())
+                    throw new Exception('Identificador de proyecto inválido. No coincide tal dato');
+                
+                // recupera el registro de informe de avance actual
+                $informe_avance = DocumentoProyecto::where('id_proyecto', '=', Input::get('id_proyecto'))
+                    ->where('id_formato_tipo_documento', '=', FormatoTipoDocumento::where('nombre', '=', 'Informe de avance')->first()->id)->first();
+                    
+                // formatea valor de aprobado a un valor booleano correcto
+                if(Input::get('aprobado') == 'true')
+                    $aprobado = 1;
+                else if(Input::get('aprobado') == 'false')
+                    $aprobado = 0;
+                
+                // actializa campos de revision del informe de avance
+                $informe_avance->aprobado = $aprobado;
+                if(!empty(Input::get('comentario_revision', null)))
+                    $informe_avance->comentario_revision = Input::get('comentario_revision');
+                    
+                // actualiza registro
+                $informe_avance->save();
+                
+                // retorna respuesta exitosa
+                return json_encode([
+                    'consultado' => 1
+                    ]);
+            }
+            catch(\Exception $e){
+                return json_encode(array(
+                    'consultado' => 2,
+                    'mensaje' => $e->getMessage(),
+                    'codigo' => $e->getCode()
+                    ));                                
+            }
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| guardar_revision_final_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Guarda la revisión de final de proyecto de un determinado prpoyecto
+    	*/          
+        public function guardar_revision_final_proyecto(){
+            
+            try{
+                
+                // aplica validacion al identificador de proyecto enviado
+                if(is_null(Input::get('id_proyecto', null)))
+                    throw new Exception('Identificador de proyecto inválido. No se ha enviado tal dato');
+                    
+                $validacion = Validator::make(
+                    ['id_proyecto' => Input::get('id_proyecto')],
+                    ['id_proyecto' => 'required|exists:proyectos,id']
+                    );
+                    
+                if($validacion->fails())
+                    throw new Exception('Identificador de proyecto inválido. No coincide tal dato');
+                
+                // formatea valor de aprobado a un valor booleano correcto
+                $aprobado = Input::get('aprobado');
+                if(Input::get('aprobado') === 'true')
+                    $aprobado = 1;
+                else if(Input::get('aprobado') === 'false')
+                    $aprobado = 0;
+                
+                // aplica validación al archivo de revisión enviado
+                // teniendo en cuenta que se envía archivo solo si se trata de una aprobación de revisión
+                if($aprobado){
+                    if(!Input::hasFile('archivo')){
+                        throw new Exception('Archivo de revisión de final de proyecto inválido. No se ha cargado ningún archivo');
+                    }
+                    $validacion = Validator::make(
+                        array('archivo' => Input::file("archivo")),
+                        array('archivo' => 'required|max:20000') // unidad de medida predeterminada en Kylobytes. Aquí es 20MB
+                    );                
+                    if($validacion->fails()){
+                        throw new Exception('Archivo de revisión de final de proyecto inválido. Tamaño maximo 20 MB');
+                    }                                 
+                }
+                
+                DB::transaction(function ()
+                {
+                    // formatea valor de aprobado a un valor booleano correcto
+                    $aprobado = Input::get('aprobado');
+                    if(Input::get('aprobado') === 'true')
+                        $aprobado = 1;
+                    else if(Input::get('aprobado') === 'false')
+                        $aprobado = 0;
+                        
+                    // consulta el registro de final de proyecto
+                    // como el final de proyecto se conforma de dos documentos, se maneja dos registros: memoria academica y facta de finalziación
+                    $acta_finalizacion = DocumentoProyecto::where('id_proyecto', '=', Input::get('id_proyecto'))
+                        ->where('id_formato_tipo_documento', '=', FormatoTipoDocumento::where('nombre', '=', 'Acta finalizacion')->first()->id)->first();
+                    $memoria_academica = DocumentoProyecto::where('id_proyecto', '=', Input::get('id_proyecto'))
+                        ->where('id_formato_tipo_documento', '=', FormatoTipoDocumento::where('nombre', '=', 'Memoria academica')->first()->id)->first();                    
+           
+                    // actualiza registros con los datos de la revisión enviada
+                    $acta_finalizacion->aprobado = $aprobado;
+                    $memoria_academica->aprobado = $aprobado;
+                    if(!empty(Input::get('comentario_revision', null)))
+                    {
+                        $acta_finalizacion->comentario_revision = Input::get('comentario_revision');
+                        $memoria_academica->comentario_revision = Input::get('comentario_revision');                        
+                    }
+                    $acta_finalizacion->save();
+                    $memoria_academica->save();
+                    
+                    // consulta registro de aprobación de final de proyecto actual
+                    $documento_aprobacion_final_proyecto = DocumentoProyecto::where('id_proyecto', '=', Input::get('id_proyecto'))
+                        ->where('id_formato_tipo_documento', '=', FormatoTipoDocumento::where('nombre', '=', 'Aprobacion final proyecto')->first()->id)->first();
+                        
+                    // si se trata de una No aprobación se elimina el registro de aprobación actual y se elimina su archivo del sistema de ficheros. 
+                    // Esto para solo tener registros de aprobación en la BD, archivos de aprobación actializados y archivos útiles
+                    if(!$aprobado){
+                        
+                        // elimina el registro de aprobación de final de proyecto actual y su archivo del sistema de ficheros si existe tal registro
+                        if($documento_aprobacion_final_proyecto){
+                            if(file_exists(storage_path('archivos/aprobaciones_final_proyecto/'.$documento_aprobacion_final_proyecto->archivo))){
+                                unlink(storage_path('archivos/aprobaciones_final_proyecto/'.$documento_aprobacion_final_proyecto->archivo)); // borra archivo
+                            }
+                            DocumentoProyecto::find($documento_aprobacion_final_proyecto->id)->forceDelete();
+                        }
+                    }
+                    else{
+                        // se trata de una aprobación, se elimina archivo relacionado con el registro de aprobacion de final de proyecto actual
+                        // asegurandose que exista tal registro. Esto no debería pasar nunca ya que si se trata de una aprobación positiva, previamente 
+                        // se ha eliminado el registro por una no aprobación. De todos modos se procede como seguridad
+                        if($documento_aprobacion_final_proyecto){
+                            if(file_exists(storage_path('archivos/aprobaciones_final_proyecto/'.$documento_aprobacion_final_proyecto->archivo))){
+                                unlink(storage_path('archivos/aprobaciones_final_proyecto/'.$documento_aprobacion_final_proyecto->archivo)); // borra archivo
+                            }
+                            $documento_aprobacion_final_proyecto = DocumentoProyecto::find($documento_aprobacion_final_proyecto->id);
+                        }
+                        else{
+                            // no existe el registro. Se crea uno nuevo
+                            $documento_aprobacion_final_proyecto = new DocumentoProyecto();
+                            $documento_aprobacion_final_proyecto->id_proyecto = Input::get('id_proyecto');
+                            $documento_aprobacion_final_proyecto->id_formato_tipo_documento = FormatoTipoDocumento::where('nombre', '=', 'Aprobacion final proyecto')->first()->id;
+                            $documento_aprobacion_final_proyecto->save();
+                        }
+                        // copia nuevo archivo de aprobación de final de proyecto
+                        $archivo_copiado = Archivo::copiar_aprobacion_final_proyecto(Input::file("archivo"), $documento_aprobacion_final_proyecto->id);
+                        
+                        if($archivo_copiado){ // se copio el archivo correctamente
+                        
+                            // actualiza campo archivo, copia comentario de revisión y actualiza registro
+                            $documento_aprobacion_final_proyecto->archivo = $archivo_copiado->getFilename();
+                            
+                            if(!empty(Input::get('comentario_revision')))
+                                $documento_aprobacion_final_proyecto->comentario_revision = Input::get('comentario_revision');
+                                
+                            $documento_aprobacion_final_proyecto->save();
+                        }
+                    }
+                });
+                
+                // ninguna excepción ha ocurrido, se retorna respuesta positiva
+                return json_encode([
+                    'consultado' => 1
+                    ]);
+            }
+            catch(\Exception $e){
+                // throw $e;
+                return json_encode(array(
+                    'consultado' => 2,
+                    'mensaje' => $e->getMessage(),
+                    'codigo' => $e->getCode()
+                    ));                                
+            }            
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| guardar_revision_prorroga()
+    	|--------------------------------------------------------------------------
+    	| Guarda la revisión de prórroga de final de proyecto de un determinado proyecto
+    	*/          
+        public function guardar_revision_prorroga(){
+            
+            try{
+                
+                // aplica validacion al identificador de proyecto enviado
+                if(is_null(Input::get('id_proyecto', null)))
+                    throw new Exception('Identificador de proyecto inválido. No se ha enviado tal dato');
+                    
+                $validacion = Validator::make(
+                    ['id_proyecto' => Input::get('id_proyecto')],
+                    ['id_proyecto' => 'required|exists:proyectos,id']
+                    );
+                    
+                if($validacion->fails())
+                    throw new Exception('Identificador de proyecto inválido. No coincide tal dato');
+                
+                // formatea valor de aprobado a un valor booleano correcto
+                $aprobado = Input::get('aprobado');
+                if(Input::get('aprobado') === 'true')
+                    $aprobado = 1;
+                else if(Input::get('aprobado') === 'false')
+                    $aprobado = 0;
+                
+                // aplica validación al archivo de revisión enviado
+                // teniendo en cuenta que se envía archivo solo si se trata de una aprobación de revisión
+                if($aprobado){
+                    if(!Input::hasFile('archivo')){
+                        throw new Exception('Archivo de revisión de prórroga de final de proyecto inválido. No se ha cargado ningún archivo');
+                    }
+                    $validacion = Validator::make(
+                        array('archivo' => Input::file("archivo")),
+                        array('archivo' => 'required|max:20000') // unidad de medida predeterminada en Kylobytes. Aquí es 20MB
+                    );                
+                    if($validacion->fails()){
+                        throw new Exception('Archivo de revisión de prórroga final de proyecto inválido. Tamaño maximo 20 MB');
+                    }       
+                }
+                
+                DB::transaction(function ()
+                {
+                    // formatea valor de aprobado a un valor booleano correcto
+                    $aprobado = Input::get('aprobado');
+                    if(Input::get('aprobado') === 'true')
+                        $aprobado = 1;
+                    else if(Input::get('aprobado') === 'false')
+                        $aprobado = 0;                    
+                        
+                    // consulta el registro de prórroga de final de proyecto
+                    $prorroga = DocumentoProyecto::where('id_proyecto', '=', Input::get('id_proyecto'))
+                        ->where('id_formato_tipo_documento', '=', FormatoTipoDocumento::where('nombre', '=', 'Prorroga')->first()->id)->first();                        
+                        
+                    // actualiza registros con los datos de la revisión enviada
+                    $prorroga->aprobado = $aprobado;
+                    if(!empty(Input::get('comentario_revision', null)))
+                    {
+                        $prorroga->comentario_revision = Input::get('comentario_revision');
+                    }
+                    $prorroga->save();
+                    
+                    // consulta registro de aprobación de prórroga final de proyecto actual
+                    $aprobacion_prorroga = DocumentoProyecto::where('id_proyecto', '=', Input::get('id_proyecto'))
+                        ->where('id_formato_tipo_documento', '=', FormatoTipoDocumento::where('nombre', '=', 'Aprobacion prorroga')->first()->id)->first();
+                    
+                    // si se trata de una No aprobación se elimina el registro de aprobación actual y se elimina su archivo del sistema de ficheros. 
+                    // Esto para solo tener registros de aprobación en la BD, archivos de aprobación actializados y archivos útiles
+                    if(!$aprobado){
+                        
+                        // elimina el registro de aprobación de prórroga de final de proyecto actual y su archivo del sistema de ficheros si existe tal registro
+                        if($aprobacion_prorroga){
+                            if(file_exists(storage_path('archivos/aprobaciones_prorrogas/'.$aprobacion_prorroga->archivo))){
+                                unlink(storage_path('archivos/aprobaciones_prorrogas/'.$aprobacion_prorroga->archivo)); // borra archivo
+                            }
+                            DocumentoProyecto::find($aprobacion_prorroga->id)->forceDelete();
+                        }
+                    }      
+                    else{
+                        // se trata de una aprobación, se elimina archivo relacionado con el registro de aprobacion de prórroga de final de proyecto actual
+                        // asegurandose que exista tal registro. Esto no debería pasar nunca ya que si se trata de una aprobación positiva, previamente 
+                        // se ha eliminado el registro por una no aprobación. De todos modos se procede como seguridad
+                        if($aprobacion_prorroga){
+                            if(file_exists(storage_path('archivos/aprobaciones_prorrogas/'.$aprobacion_prorroga->archivo))){
+                                unlink(storage_path('archivos/aprobaciones_prorrogas/'.$aprobacion_prorroga->archivo)); // borra archivo
+                            }
+                            $aprobacion_prorroga = DocumentoProyecto::find($aprobacion_prorroga->id);
+                        }
+                        else{
+                            // no existe el registro. Se crea uno nuevo
+                            $aprobacion_prorroga = new DocumentoProyecto();
+                            $aprobacion_prorroga->id_proyecto = Input::get('id_proyecto');
+                            $aprobacion_prorroga->id_formato_tipo_documento = FormatoTipoDocumento::where('nombre', '=', 'Aprobacion prorroga')->first()->id;
+                            $aprobacion_prorroga->save();
+                        }
+                        // copia nuevo archivo de aprobación de final de proyecto
+                        $archivo_copiado = Archivo::copiar_aprobacion_prorroga(Input::file("archivo"), $aprobacion_prorroga->id);
+                        
+                        if($archivo_copiado){ // se copio el archivo correctamente
+                        
+                            // actualiza campo archivo, copia comentario de revisión y actualiza registro
+                            $aprobacion_prorroga->archivo = $archivo_copiado->getFilename();
+                            
+                            if(!empty(Input::get('comentario_revision')))
+                                $aprobacion_prorroga->comentario_revision = Input::get('comentario_revision');
+                                
+                            $aprobacion_prorroga->save();
+                        }
+                    }
+                });
+                
+                // ninguna excepción ha ocurrido, se retorna respuesta positiva
+                return json_encode([
+                    'consultado' => 1
+                    ]);                
+            }
+            catch(\Exception $e){
+                // throw $e;
+                return json_encode(array(
+                    'consultado' => 2,
+                    'mensaje' => $e->getMessage(),
+                    'codigo' => $e->getCode()
+                    ));                                
+            }            
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| listar_proyectos_coordinador()
+    	|--------------------------------------------------------------------------
+    	| Presenta vista de Gestión de Proyectos con todos los proyectos de investigación cuyo grupo de investigación ejecutor es el mismo del usuario coordinador
+    	*/                  
+        public function listar_proyectos_coordinador(){
+            
+            // provee estilos personalizados para la vista
+            $styles = [
+                'vendor/ngAnimate/ngAnimate.css',
+                'vendor/datatables/dataTables.bootstrap.css',
+                'vendor/angular-datatables/css/angular-datatables.min.css',
+                'vendor/angular-datatables/plugins/bootstrap/datatables.bootstrap.min.css',
+                'vendor/mCustomScrollbar/jquery.mCustomScrollbar.css',
+                ]; 
+            
+            // provee scripts extras o personalizados para la vista a cargar
+            $pre_scripts = [
+                'vendor/angular/sanitize/angular-sanitize.js',
+                'vendor/ng-file-upload/ng-file-upload-shim.js',
+                'vendor/ng-file-upload/ng-file-upload.min.js',
+                'vendor/angular-ui/ui-bootstrap-tpls-2.2.0.min.js',
+                'vendor/datatables/jquery.dataTables.min.js',
+                'vendor/angular-datatables/angular-datatables.min.js',
+                'vendor/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.min.js',
+                'vendor/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js',
+                'vendor/amcharts/amcharts.js', 
+                'vendor/amcharts/pie.js',
+                'vendor/amcharts/plugins/responsive/responsive.min.js'                                
+                ];
+                
+            $post_scripts = [
+                'coordinador/proyectos/listar/listar_proyectos_controller.js',
+                'coordinador/proyectos/listar/mas_info_proyecto_controller.js',
+                'coordinador/proyectos/listar/productos_controller.js',
+                'coordinador/proyectos/listar/gastos_controller.js',
+                'coordinador/proyectos/listar/gastos_personal_controller.js',
+                'coordinador/proyectos/listar/gastos_equipos_controller.js',
+                'coordinador/proyectos/listar/gastos_software_controller.js',
+                'coordinador/proyectos/listar/gastos_salidas_campo_controller.js',
+                'coordinador/proyectos/listar/gastos_materiales_controller.js',
+                'coordinador/proyectos/listar/gastos_servicios_controller.js',
+                'coordinador/proyectos/listar/gastos_bibliograficos_controller.js',
+                'coordinador/proyectos/listar/gastos_digitales_controller.js',     
+                'coordinador/proyectos/listar/informe_avance_controller.js',
+                'coordinador/proyectos/listar/final_proyecto_controller.js',
+                'coordinador/proyectos/listar/prorroga_controller.js',
+                ];
+            
+            $angular_sgpi_app_extra_dependencies = ['ngAnimate', 'ngTouch', 'ngSanitize', 'ngFileUpload', 'ui.bootstrap', 'datatables', 'datatables.bootstrap'];
+            
+            return View::make('coordinador.proyectos.listar.listar', array(
+                'styles' => $styles, 
+                'pre_scripts' => $pre_scripts,
+                'post_scripts' => $post_scripts,
+                'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies
+                ));                     
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| proyectos_coordinador()
+    	|--------------------------------------------------------------------------
+    	| Retorno json con todos los proyectos de investigación cuo grupo de investigación ejecutor es el mismo del usuario coordinador
+    	*/          
+        public function proyectos_coordinador(){
+            
+            try{
+                
+                // verifica que el actual usuario sea administrador
+                if(Auth::user()->id_rol != 2)
+                    throw new Exception('Acceso denegado a los proyectos por falta de privilegios de usuario');
+                    
+                $proyectos = Proyecto::proyectos_de_un_grupo_investigacion(Auth::user()->id_grupo_investigacion_ucc);
+                return json_encode(array(
+                    'proyectos' => $proyectos,
+                    'consultado' => 1
+                    ));
+            }
+            catch(Exception $e){
+                return json_encode(array(
+                    'consultado' => 2,
+                    'mensaje' => $e->getMessage(),
+                    'codigo' => $e->getCode()
+                    ));
+            }                      
+        }
     }
     
     

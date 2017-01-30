@@ -2,7 +2,7 @@
 
     use Illuminate\Database\Eloquent\SoftDeletingTrait;
     
-    class LineaGrupoInvestigacion extends Eloquent {
+    class LineaGrupoInvestigacionUCC extends Eloquent {
         
         protected $fillable = ['id_grupo_investigacion_ucc', 'id_linea_investigacion'];
         

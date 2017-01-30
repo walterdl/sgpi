@@ -183,12 +183,12 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
 	| valida codigo_fmi verificando que halla texto y que sea mayor a 2 y menor a 50
 	*/             
     $scope.validar_codigo_fmi = function() {
-        if($scope.data.codigo_fmi && $scope.data.codigo_fmi.length > 2 && $scope.data.codigo_fmi.length < 50){
+        if($scope.data.codigo_fmi && $scope.data.codigo_fmi.length >= 2 && $scope.data.codigo_fmi.length < 50){
             // valido
             $scope.data.validacion_codigo_fmi = null;
             return false;
         }
-        $scope.data.validacion_codigo_fmi = 'Longitud mínima 2 caracteres';
+        $scope.data.validacion_codigo_fmi = 'Longitud mínima 2 caracteres y máxima de 50';
         return true;
     };
 
@@ -199,12 +199,12 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
 	| valida subcentro_costo verificando que halla texto y que sea mayor a 2 y menor a 50
 	*/         
     $scope.validar_subcentro_costo = function() {
-        if($scope.data.subcentro_costo && $scope.data.subcentro_costo.length > 2 && $scope.data.subcentro_costo.length < 50){
+        if($scope.data.subcentro_costo && $scope.data.subcentro_costo.length >= 2 && $scope.data.subcentro_costo.length < 50){
             // valido
             $scope.data.validacion_subcentro_costo = null;
             return false;
         }
-        $scope.data.validacion_subcentro_costo = 'Longitud mínima 2 caracteres';
+        $scope.data.validacion_subcentro_costo = 'Longitud mínima 2 caracteres y máxima de 50';
         return true;        
     };
     
@@ -215,12 +215,12 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
 	| valida nombre_proyecto verificando que halla texto y que sea mayor a 2 y menor a 200
 	*/             
     $scope.validar_nombre_proyecto = function() {
-        if($scope.data.nombre_proyecto && $scope.data.nombre_proyecto.length > 2 && $scope.data.nombre_proyecto.length < 200){
+        if($scope.data.nombre_proyecto && $scope.data.nombre_proyecto.length >= 5 && $scope.data.nombre_proyecto.length < 200){
             // valido
             $scope.data.validacion_nombre_proyecto = null;
             return false;
         }
-        $scope.data.validacion_nombre_proyecto = 'Longitud mínima 2 caracteres y máxima 200';
+        $scope.data.validacion_nombre_proyecto = 'Longitud mínima 5 caracteres y máxima 200';
         return true;                
     };
     
@@ -263,7 +263,7 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
 	| valida objetivo_general verificando que la longitud sea mayor a 2 y menor a 200
 	*/              
     $scope.validar_objetivo_general = function() {
-        if($scope.data.objetivo_general != null && $scope.data.objetivo_general.length > 2 && $scope.data.objetivo_general.length < 200){
+        if($scope.data.objetivo_general != null && $scope.data.objetivo_general.length >= 5 && $scope.data.objetivo_general.length < 200){
             $scope.data.validacion_objetivo_general = null;
             return false;
         }
@@ -283,7 +283,7 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
     $scope.validar_objetivos_especificos = function(objetivo_especifico=null){
         
         if(objetivo_especifico){ // si se especifica la validacion para un objetivo específico determinado
-            if(objetivo_especifico.nombre != null && objetivo_especifico.nombre.length > 5 && objetivo_especifico.nombre.length < 200){
+            if(objetivo_especifico.nombre != null && objetivo_especifico.nombre.length >= 5 && objetivo_especifico.nombre.length < 200){
                 objetivo_especifico.validacion = null;
                 return false;
             }
@@ -300,7 +300,7 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
             var resultado_validacion = false;
             for(var i = 0; i < $scope.data.objetivos_especificos.length; i++){
                 objetivo_especifico = $scope.data.objetivos_especificos[i];
-                if(objetivo_especifico.nombre != null && objetivo_especifico.nombre.length > 5 && objetivo_especifico.nombre.length < 200){
+                if(objetivo_especifico.nombre != null && objetivo_especifico.nombre.length >= 5 && objetivo_especifico.nombre.length < 200){
                     objetivo_especifico.validacion = null;
                 }
                 else{

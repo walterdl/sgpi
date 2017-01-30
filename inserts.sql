@@ -412,7 +412,8 @@ INSERT INTO `formatos_tipos_documentos` (nombre, archivo, created_at) VALUES
 ('Memoria academica', 'FMI6-10-V1 Formato Memoria Academica.dotx', curdate()),
 ('Acta finalizacion', 'FMI6-2 Acta de Finalización.docx', curdate()),
 ('Prorroga', NULL, curdate()),
-('Aprobacion prorroga', NULL, curdate());
+('Aprobacion final proyecto', NULL, curdate()),
+('Aprobacion prorroga', NULL, curdate()),;
 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

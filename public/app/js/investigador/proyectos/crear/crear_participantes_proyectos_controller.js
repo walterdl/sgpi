@@ -217,6 +217,7 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
             $scope.data.entidades_presupuesto_seleccionadas.forEach(function(item) {
                 otras_entidades_presupuesto[item.id] = 0;
             });        
+        
         $scope.data.participantes_proyecto.push({
             es_investigador_principal: false,
             nombres: $scope.data.nombres_nuevo_participante,
@@ -249,7 +250,7 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
             fecha_ejecucion: null,
             fecha_ejecucion_invalido: false
         });
-        console.log($scope.data.participantes_proyecto);
+        // console.log($scope.data.participantes_proyecto);
         
         $scope.buscar_otra_id();
     };    
@@ -411,12 +412,12 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
 	*/          
     $scope.validar_nombres_nuevo_participante = function(mostrar_campo_invalido=true) {
         if($scope.data.nombres_nuevo_participante == null || 
-            $scope.data.nombres_nuevo_participante.length == 5 || 
-            $scope.data.nombres_nuevo_participante.length > 240)
+            $scope.data.nombres_nuevo_participante.length < 5 || 
+            $scope.data.nombres_nuevo_participante.length > 200)
         {
             if(mostrar_campo_invalido)
                 $scope.visibilidad.nombres_nuevo_participante_invalido = true;
-            $scope.data.msj_validacion_nombres_nuevo_participante = 'Logitud mínima de 5 catacteres y máximo de 240';
+            $scope.data.msj_validacion_nombres_nuevo_participante = 'Logitud mínima de 5 caractéres y máximo de 200';
             return true; 
         }
         else
@@ -436,12 +437,12 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
 	*/              
     $scope.validar_apellidos_nuevo_participante = function(mostrar_campo_invalido=true) {
         if($scope.data.apellidos_nuevo_participante == null || 
-            $scope.data.apellidos_nuevo_participante.length == 0 || 
-            $scope.data.apellidos_nuevo_participante.length > 240)
+            $scope.data.apellidos_nuevo_participante.length < 5 || 
+            $scope.data.apellidos_nuevo_participante.length > 200)
         {
             if(mostrar_campo_invalido)
                 $scope.visibilidad.apellidos_nuevo_participante_invalido = true;
-            $scope.data.msj_validacion_apellidos_nuevo_participante = 'Logitud mínima de 5 catacteres y máximo de 240';
+            $scope.data.msj_validacion_apellidos_nuevo_participante = 'Logitud mínima de 5 catacteres y máximo de 200';
             return true; 
         }
         else

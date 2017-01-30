@@ -19,6 +19,7 @@ sgpi_app.controller('crear_grupos_investigacion_controller', function($scope, $h
             url: '/grupos/data_inicial_vista_crear',
         })
         .success(function(data){
+            console.log(data);
             if(data.consultado !== undefined || data.consultado !== null){
                 
                 $scope.data.todas_las_areas = data.areas;
@@ -52,7 +53,7 @@ sgpi_app.controller('crear_grupos_investigacion_controller', function($scope, $h
     $(document).ready(function(){
         // aplica estilos responsivos dependiendo del tamaño actual de la pantalla
         $scope.aplicar_margin_btn_add_linea();
-        $scope.ajustar_ancho_chosen_select();
+        // $scope.ajustar_ancho_chosen_select();
     });
     
     // reigstra controlador de evneto resize de la ventana par aaplicar estilos reponsivos a algunos elementos ui
@@ -224,11 +225,16 @@ sgpi_app.controller('crear_grupos_investigacion_controller', function($scope, $h
    
     $scope.cambia_sede = function(){
         
+        console.log('en $scope.cambia_sede()');
+        console.log('Sede seleccionada: ');
+        console.log($scope.data.sede);
+
+        
         $scope.data.facultades_correspondientes = [];
         $scope.data.facultad = null;
         if($scope.data.sede.id != undefined){
             $scope.data.facultades.forEach(function(item){
-                if(item.id_sede == $scope.data.sede.id)
+                if(item.id_sede_ucc == $scope.data.sede.id)
                     $scope.data.facultades_correspondientes.push(item);
             });
         }

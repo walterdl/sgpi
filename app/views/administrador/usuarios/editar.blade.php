@@ -305,7 +305,6 @@
             <script type="text/javascript" src="/app/js/{{ $script }}"></script>
         @endforeach
     @endif
-    
     <!-- --------------- carga los datos a unas variables java script-->
     <script type="text/javascript">
         $(document).ready(function(){

@@ -17,6 +17,13 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
     
     $scope.data.producto=[];
     $scope.data.info_investigadores_usuario=[];
+    
+    ///fuentes de presupuesto
+    $scope.data.fuente_presupuesto={
+        presupuesto:null,
+        total_gastos_columnas:null,
+        total_gastos_global:null,
+    };
 
 
     $scope.data.objetivos_especificos = [{
@@ -95,29 +102,96 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
                 
                 var cont=0;
                 
+                ///////gasto personal
                 data.info_gastos.todo.gastos_personal.forEach(function(entry) {
+                cont_aux=0;
                 cont++;
+                
                      entry.investigador.dedicacion_horas_semanales=parseInt(entry.investigador.dedicacion_horas_semanales);   
                      entry.investigador.total_semanas=parseInt(entry.investigador.total_semanas);   
                      entry.investigador.valor_hora=parseInt(entry.investigador.valor_hora);   
                      entry.fecha_ejecucion=Date.parse(entry.fecha_ejecucion);
                      
                      entry.gasto.forEach(function(item) {
+                         
+                        if(cont_aux == 0 && cont == 1){
+                            
+                            var arrayTemp=[];
+                            entry.gasto.forEach(function(aux) {
+                              arrayTemp.push(aux.entidad_fuente_presupuesto.nombre);
+                              arrayTemp[aux.entidad_fuente_presupuesto.nombre]=aux.valor;
+                            });
+                            
+                            $scope.data.fuente_presupuesto.total_gastos_columnas=arrayTemp;
+                            
+                        }//fin del if
+
+                        cont_aux++;
                         item.valor=parseInt(item.valor); //parseo el valor a numerico
+                        
+                        
+                        aux_nombre=item.entidad_fuente_presupuesto.nombre;
+                        $scope.data.fuente_presupuesto.total_gastos_global=$scope.data.fuente_presupuesto.total_gastos_global+item.valor;
+                        
+                        // para el total gstos por columna
+                        if(cont > 1){
+                            $scope.data.fuente_presupuesto.total_gastos_columnas[aux_nombre]=parseInt($scope.data.fuente_presupuesto.total_gastos_columnas[aux_nombre])+item.valor;
+                         }
+                        
+                        if(cont_aux == 1){
+                             entry['gasto_total']={'presupuesto_total_fila': item.valor};
+
+                        }else if(cont_aux >1 && item.valor != null){
+                             entry['gasto_total'].presupuesto_total_fila=(entry['gasto_total'].presupuesto_total_fila+item.valor);
+                        }  
+                        
+                        
                      });
-                     
+                        
+                        
                      if(cont == 1){
-                         $scope.data.fuente_presupuesto=entry.gasto;
-                     }    
+                         $scope.data.fuente_presupuesto.presupuesto=entry.gasto;
+                     }
+                     
                      
                 });
+                
+                console.log($scope.data.fuente_presupuesto);
+      
+
+                //---------------------aplicar funcion
+                
+                /////////equipo
+                $scope.data.fuente_presupuesto_equipos=$scope.procesarDatos(data.info_gastos.todo.gastos_equipos);
+                
+                /////////software
+                $scope.data.fuente_presupuesto_software=$scope.procesarDatos(data.info_gastos.todo.gastos_software);
+                
+                /////////salidas de campo
+                $scope.data.fuente_presupuesto_salida=$scope.procesarDatos(data.info_gastos.todo.gastos_salidas_campo);
+                
+              /////////materiales
+                $scope.data.fuente_presupuesto_materiales=$scope.procesarDatos(data.info_gastos.todo.gastos_materiales);
+                
+                /////////servicios
+                $scope.data.fuente_presupuesto_servicios=$scope.procesarDatos(data.info_gastos.todo.gastos_servicios);
+                
+                
+                /////////bibliografia
+                $scope.data.fuente_presupuesto_bibliografia=$scope.procesarDatos(data.info_gastos.todo.gastos_bibliograficos);
+                
+                
+                /////////digitales
+                $scope.data.fuente_presupuesto_digitales=$scope.procesarDatos(data.info_gastos.todo.gastos_digitales);
+                
+                
                 
                 $scope.data.gasto_personal=data.info_gastos.todo.gastos_personal;
                 $scope.data.gastos_equipos=data.info_gastos.todo.gastos_equipos;
                 $scope.data.gastos_software=data.info_gastos.todo.gastos_software;
                 $scope.data.gastos_salidas_campo=data.info_gastos.todo.gastos_salidas_campo;
                 $scope.data.gastos_materiales=data.info_gastos.todo.gastos_materiales;
-                $scope.data.gastos_servicios=data.info_gastos.todo.gastos_servicios;
+                $scope.data.gastos_servicios_tecnicos=data.info_gastos.todo.gastos_servicios;
                 $scope.data.gastos_bibliograficos=data.info_gastos.todo.gastos_bibliograficos;
                 $scope.data.gastos_digitales=data.info_gastos.todo.gastos_digitales;
                 
@@ -228,10 +302,46 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
     };
     
     
-    $scope.iniciarPorducto = function(data){
-         $scope.data.info_productos=data.info_productos;
-         $scope.data.info_investigadores_usuario=data.info_investigadores_usuario;
+    /*
+	|--------------------------------------------------------------------------
+	| procesarDatos()
+	|--------------------------------------------------------------------------
+	| //esta funcion convierte los datos  strin a number y a date
+	*/ 
+    
+    $scope.procesarDatos = function(datos){
+        cont=0;
+        
+        datos.forEach(function(entry) {
+        cont++;
+            
+            
+            if(entry.valor_unitario){
+                    entry.valor_unitario=parseInt(entry.valor_unitario); //parseo el valor_unitario a numerico para salidas de campo
+            }
+                        
+            entry.gasto.forEach(function(item) {
+                
+                if(item.valor){
+                    item.valor=parseInt(item.valor); //parseo el valor a numerico
+                }  
+
+            });
+   
+             
+             entry.fecha_ejecucion=Date.parse(entry.fecha_ejecucion);
+            //console.log(entry);
+             
+             if(cont == 1){
+                 gasto_temp=entry.gasto;
+             }
+             
+        });
+        
+        return gasto_temp;
     }
+    
+    
     
     
     /*

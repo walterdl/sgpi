@@ -161,6 +161,11 @@ Route::group(array('before' => 'auth'), function(){
 		// sirve los archivos de prórroga
 		Route::get('file/prorroga/{nombre_archivo}', 'FileController@get_prorroga');		
 		
+		// sirve los archivos de aprobación de revisión de final de proyecto
+		Route::get('file/aprobacion_final_proyecto/{nombre_archivo}', 'FileController@get_aprobacion_final_proyecto');
+		
+		// sirve los archivos de aprobación de revisión de final de proyecto
+		Route::get('file/aprobacion_prorroga/{nombre_archivo}', 'FileController@get_aprobacion_prorroga');						
 
 		// Grupos de investigación
 		Route::get('grupos', 'GruposInvestigacionController@listar');
@@ -176,6 +181,7 @@ Route::group(array('before' => 'auth'), function(){
 	    Route::get('grupos/validar_edicion_grupo_inv', 'GruposInvestigacionController@validar_edicion_grupo_inv');
 	    Route::post('grupos/guardar_edicion_grupo_inv', 'GruposInvestigacionController@guardar_edicion_grupo_inv');
 	    Route::get('grupos/validar_eliminacion_grupo_inv', 'GruposInvestigacionController@validar_eliminacion_grupo_inv');
+	    Route::post('grupos/eliminar_grupo_inv', 'GruposInvestigacionController@eliminar_grupo_investigacion');
 	    
 	    // Líneas de investigación
 	    Route::get('lineas_investigacion/listar', 'LineasInvestigacionController@index');
@@ -219,6 +225,12 @@ Route::group(array('before' => 'auth'), function(){
 		Route::get('proyectos/gastos_de_proyecto', 'GestionProyectosController@gastos_de_proyecto');		
 		Route::get('proyectos/revision_desembolso', 'GestionProyectosController@revision_desembolso');
 		Route::post('proyectos/guardar_revision_desembolso', 'GestionProyectosController@guardar_revision_desembolso');
+		Route::get('proyectos/informe_avance', 'GestionProyectosController@consultar_informe_avance');
+		Route::post('proyectos/guardar_revision_informe_avance', 'GestionProyectosController@guardar_revision_informe_avance');
+		Route::get('proyectos/final_proyecto', 'GestionProyectosController@consultar_final_proyecto');		
+		Route::post('proyectos/guardar_revision_final_proyecto', 'GestionProyectosController@guardar_revision_final_proyecto');
+		Route::get('proyectos/prorroga', 'GestionProyectosController@consultar_prorroga');
+		Route::post('proyectos/guardar_revision_prorroga', 'GestionProyectosController@guardar_revision_prorroga');
 	    
 	    //Retorna 404 para ruta de administrador no encontrada
 		App::missing(function($e) 
@@ -232,11 +244,45 @@ Route::group(array('before' => 'auth'), function(){
 	/*********Rutas coordinador**********/
 	else if (Auth::user()->id_rol == 2) {
 
-		// Ruta que sirve las imágenes de perfil
+		// Sirve las imágenes de perfil
 		Route::get('file/imagen_perfil/{nombre_foto?}', 'FileController@get_imagen_perfil');
 		
 		// Sirve los formatos guía de los documentos
-		Route::get('file/formato/', 'FileController@get_formato_documento');		
+		Route::get('file/formato', 'FileController@get_formato_documento');
+		
+		// sirve archivos de presupuesto
+		Route::get('file/presupuesto/{nombre_archivo}', 'FileController@get_presupuesto');
+		
+		// sirve archivos de presentación de proyecto
+		Route::get('file/presentacion_proyecto/{nombre_archivo}', 'FileController@get_presentacion_proyecto');		
+		
+		// sirve archivos de acta de inicio
+		Route::get('file/acta_inicio/{nombre_archivo}', 'FileController@get_acta_inicio');				
+		
+		// Sirve archivos de los productos
+		Route::get('file/producto_fecha_proyectada_radicacion/{nombre_archivo}', 'FileController@get_archivo_fecha_proyectada_radicacion');
+		Route::get('file/producto_fecha_publicacion/{nombre_archivo}', 'FileController@get_archivo_fecha_publicacion');
+		
+		// sirve los archivos de desembolso
+		Route::get('file/desembolso/{nombre_archivo}', 'FileController@get_desembolso');
+		
+		// sirve los archivos de informes de avance
+		Route::get('file/informe_avance/{nombre_archivo}', 'FileController@get_informe_avance');
+		
+		// sirve los archivos de acta de finalización
+		Route::get('file/acta_finalizacion/{nombre_archivo}', 'FileController@get_acta_finalizacion');
+		
+		// sirve los archivos de memoria académica
+		Route::get('file/memoria_academica/{nombre_archivo}', 'FileController@get_memoria_academica');
+		
+		// sirve los archivos de prórroga
+		Route::get('file/prorroga/{nombre_archivo}', 'FileController@get_prorroga');		
+		
+		// sirve los archivos de aprobación de revisión de final de proyecto
+		Route::get('file/aprobacion_final_proyecto/{nombre_archivo}', 'FileController@get_aprobacion_final_proyecto');
+		
+		// sirve los archivos de aprobación de revisión de final de proyecto
+		Route::get('file/aprobacion_prorroga/{nombre_archivo}', 'FileController@get_aprobacion_prorroga');				
 		
 	    // Propio perfil
 		Route::get('usuarios/propio_perfil', 'UsuariosController@ver_propio_perfil');
@@ -244,6 +290,18 @@ Route::group(array('before' => 'auth'), function(){
 		Route::post('usuarios/guardar_edicion_propio_perfil', 'UsuariosController@guardar_edicion_propio_perfil');
 		Route::post('usuarios/cambiar_contrasenia', 'UsuariosController@cambiar_contrasenia');
 		Route::post('usuarios/validar_username_identificacion', 'UsuariosController@validar_username_identificacion');		
+		
+		Route::get('proyectos/listar', 'GestionProyectosController@listar_proyectos_coordinador');		
+		Route::get('proyectos/proyectos_coordinador', 'GestionProyectosController@proyectos_coordinador');
+		Route::get('proyectos/mas_info_proyecto', 'GestionProyectosController@mas_info_proyecto');		
+		Route::get('proyectos/productos_de_proyecto', 'GestionProyectosController@productos_de_proyecto');		
+		Route::get('proyectos/verificar_existencia_archivo_fecha_proyectada_postular', 'GestionProyectosController@consultar_producto_fecha_proyectada_postular');
+		Route::get('proyectos/verificar_existencia_archivo_fecha_publicacion', 'GestionProyectosController@consultar_producto_fecha_publicacion');
+		Route::get('proyectos/gastos_de_proyecto', 'GestionProyectosController@gastos_de_proyecto');
+		Route::get('proyectos/revision_desembolso', 'GestionProyectosController@revision_desembolso');
+		Route::get('proyectos/informe_avance', 'GestionProyectosController@consultar_informe_avance');
+		Route::get('proyectos/final_proyecto', 'GestionProyectosController@consultar_final_proyecto');		
+		Route::get('proyectos/prorroga', 'GestionProyectosController@consultar_prorroga');
 		
         //Retorna 404 para ruta de administrador no encontrada
 		App::missing(function($e) 
@@ -297,13 +355,13 @@ Route::group(array('before' => 'auth'), function(){
 		Route::post('usuarios/guardar_edicion_propio_perfil', 'UsuariosController@guardar_edicion_propio_perfil');
 		Route::post('usuarios/cambiar_contrasenia', 'UsuariosController@cambiar_contrasenia');
 		Route::post('usuarios/validar_username_identificacion', 'UsuariosController@validar_username_identificacion');
+		Route::get('usuarios/buscar_datos_basicos', 'UsuariosController@buscar_datos_basicos'); // permite buscar datos básicos de un participante del proyecto
 		
 		// proyectos
 		Route::get('proyectos/listar', 'GestionProyectosController@listar_proyectos_investigador_principal');
 		Route::get('proyectos/proyectos_investigador_principal', 'GestionProyectosController@proyectos_investigador_principal');
 		Route::get('proyectos/registrar', 'ProyectosController@crear');
 		Route::get('proyectos/data_inicial_crear_proyecto', 'ProyectosController@data_inicial_crear_proyecto');
-		Route::get('usuarios/buscar_datos_basicos', 'UsuariosController@buscar_datos_basicos'); // permite buscar datos básicos de un participante del proyecto
 		Route::post('proyectos/registrar_nuevo_proyecto', 'ProyectosController@registrar_nuevo_proyecto');
 		Route::get('proyectos/productos_de_proyecto', 'GestionProyectosController@productos_de_proyecto');
 		Route::post('proyectos/cargar_producto_fecha_proyectada_radicacion', 'GestionProyectosController@guardar_producto_fecha_proyectada_radicacion');
@@ -401,6 +459,9 @@ Route::get('truncar_bd', 'BaseController@truncar_bd');
 Route::get('test', function(){
 	
 	$proyecto = Proyecto::find(1);
-	echo $proyecto->updated_at->format('Y-m-d');
+    $fecha_final = strtotime($proyecto->fecha_fin);
+    $fecha_inicio = strtotime($proyecto->fecha_inicio);
+    $diferencia_fechas = $fecha_final - $fecha_inicio;
+    echo floor($diferencia_fechas / (60 * 60 * 24));      
 });
 

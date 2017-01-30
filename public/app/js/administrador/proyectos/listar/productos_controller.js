@@ -66,8 +66,6 @@ sgpi_app.controller('productos_controller', function ($scope, $http, $uibModal) 
         $('a[href="#contenido_tab_proyectos"]').tab('show');
     };    
     
-    $scope.productos
-    
 	/*
 	|--------------------------------------------------------------------------
 	| producto_fecha_proyectada_radicacion()

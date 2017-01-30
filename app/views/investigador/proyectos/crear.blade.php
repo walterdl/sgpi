@@ -28,6 +28,9 @@
             background-color: #8B0000;
             box-shadow: 0 6px 12px rgba(0,0,0,.175);
         }
+        .number-fixed-width {
+            width: 170px;
+        }
     </style>
 @stop <!--Stop section 'styles'-->
 
@@ -883,7 +886,7 @@
                                                         </span>
                         		                    </div>
                         		                </td>
-                        		                <td>
+                        		                <td style="min-width: 180px;">
                         		                    <span class="error-text" ng-show="producto.fecha_remision_invalido">Ingresar fecha</span>
                         		                    <div class="input-group">
                                                         <input type="text" name="fecha_remision_{$ $index $}"
@@ -892,7 +895,8 @@
                                                             datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
                                                             clear-text="Borrar" close-text="Seleccionar" current-text="Seleccionar"
                                                             ng-click="producto.show_popup_fecha_remision=true"
-                                                            class="form-control" ng-class="{'invalid_control': producto.fecha_remision_invalido}"/>
+                                                            class="form-control white-readonly" ng-class="{'invalid_control': producto.fecha_remision_invalido}"
+                                                            ng-readonly="true"/>
                                                         <span class="input-group-addon btn btn-default" ng-click="producto.show_popup_fecha_remision=true">
                                                             <i class="glyphicon glyphicon-calendar"></i>
                                                         </span>
@@ -907,7 +911,8 @@
                                                             datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
                                                             clear-text="Borrar" close-text="Seleccionar" current-text="Seleccionar"
                                                             ng-click="producto.show_popup_fecha_confirmacion_editorial=true"
-                                                            class="form-control" ng-class="{'invalid_control': producto.fecha_confirmacion_editorial_invalido}"/>
+                                                            class="form-control white-readonly" ng-class="{'invalid_control': producto.fecha_confirmacion_editorial_invalido}"
+                                                            ng-readonly="true"/>
                                                         <span class="input-group-addon btn btn-default" ng-click="producto.show_popup_fecha_confirmacion_editorial=true">
                                                             <i class="glyphicon glyphicon-calendar"></i>
                                                         </span>
@@ -922,7 +927,8 @@
                                                             datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
                                                             clear-text="Borrar" close-text="Seleccionar" current-text="Seleccionar"
                                                             ng-click="producto.show_popup_fecha_recepcion_evaluacion=true"
-                                                            class="form-control" ng-class="{'invalid_control': producto.fecha_recepcion_evaluacion_invalido}"/>
+                                                            class="form-control white-readonly" ng-class="{'invalid_control': producto.fecha_recepcion_evaluacion_invalido}"
+                                                            ng-readonly="true"/>
                                                         <span class="input-group-addon btn btn-default" ng-click="producto.show_popup_fecha_recepcion_evaluacion=true">
                                                             <i class="glyphicon glyphicon-calendar"></i>
                                                         </span>
@@ -938,7 +944,8 @@
                                                             datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
                                                             clear-text="Borrar" close-text="Seleccionar" current-text="Seleccionar"
                                                             ng-click="producto.show_popup_fecha_respuesta_evaluacion=true"
-                                                            class="form-control" ng-class="{'invalid_control': producto.fecha_respuesta_evaluacion_invalido}"/>
+                                                            class="form-control white-readonly" ng-class="{'invalid_control': producto.fecha_respuesta_evaluacion_invalido}"
+                                                            ng-readonly="true"/>
                                                         <span class="input-group-addon btn btn-default" ng-click="producto.show_popup_fecha_respuesta_evaluacion=true">
                                                             <i class="glyphicon glyphicon-calendar"></i>
                                                         </span>
@@ -954,7 +961,8 @@
                                                             datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
                                                             clear-text="Borrar" close-text="Seleccionar" current-text="Seleccionar"
                                                             ng-click="producto.show_popup_fecha_aprobacion_publicacion=true"
-                                                            class="form-control" ng-class="{'invalid_control': producto.fecha_aprobacion_publicacion_invalido}" />
+                                                            class="form-control white-readonly" ng-class="{'invalid_control': producto.fecha_aprobacion_publicacion_invalido}"
+                                                            ng-readonly="true"/>
                                                         <span class="input-group-addon btn btn-default" ng-click="producto.show_popup_fecha_aprobacion_publicacion=true">
                                                             <i class="glyphicon glyphicon-calendar"></i>
                                                         </span>
@@ -969,7 +977,8 @@
                                                             datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
                                                             clear-text="Borrar" close-text="Seleccionar" current-text="Seleccionar"
                                                             ng-click="producto.show_popup_fecha_publicacion=true"
-                                                            class="form-control" ng-class="{'invalid_control': producto.fecha_publicacion_invalido}"/>
+                                                            class="form-control white-readonly" ng-class="{'invalid_control': producto.fecha_publicacion_invalido}"
+                                                            ng-readonly="true"/>
                                                         <span class="input-group-addon btn btn-default" ng-click="producto.show_popup_fecha_publicacion=true">
                                                             <i class="glyphicon glyphicon-calendar"></i>
                                                         </span>
@@ -1040,6 +1049,7 @@
                                     </div>
                                 </div>
                             </div>
+                            
                             <br />
                             
                             {{--Gastos personas--}}
@@ -1095,7 +1105,7 @@
                                                             uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.valor_hora_invalido"/>
                                                         </td>                                                                                                        
                                                         <td>
-                                                            <input type="number" name="gasto_personal_presupuesto_ucc_{$ participante.identificacion $}" 
+                                                            <input type="number" name="gasto_personal_presupuesto_ucc_{$ participante.identificacion $}" min="0"
                                                             ng-model="participante.presupuesto_ucc" ng-change="suma_totales_personal(participante, 'ucc')"
                                                             class="form-control" ng-class="{'invalid_control': participante.presupuesto_ucc_invalido}"
                                                             uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.presupuesto_ucc_invalido"/>
@@ -1122,7 +1132,7 @@
                                                                     </span>
                                                             </div>
                                                         </td>
-                                                        <td>
+                                                        <td class="number-fixed-width text-right">
                                                             {$ participante.presupuesto_total|currency:$:2 $}
                                                         </td>
                                                     </tr>
@@ -1225,7 +1235,7 @@
                                                                     </span>
                                                             </div>                                                            
                                                         </td>                                                        
-                                                        <td>
+                                                        <td class="number-fixed-width text-left">
                                                             {$ gasto_equipo.total|currency:$:2 $}
                                                         </td>
                                                         <td>
@@ -1333,7 +1343,7 @@
                                                                     </span>
                                                             </div>                                                            
                                                         </td>                                                   				
-                                        				<td>
+                                        				<td class="number-fixed-width text-left">
                                         				    {$ gasto_software.total|currency:$:2 $}
                                         				</td>
                                         				<td>
@@ -1348,7 +1358,7 @@
                             							    {$ data.totales_software.otras_entidades_presupuesto[entidad_presupuesto.id]|currency:$ $}
                             							</td>
                             							<td>&nbsp;</td>
-                            							<td class="text-right">{$ data.totales_software.total|currency:$ $}</td>
+                            							<td>{$ data.totales_software.total|currency:$ $}</td>
                             						</tr>                                                                                    			
                                         		</tbody>
                                         	</table>                            
@@ -1448,7 +1458,7 @@
                                                                     </span>
                                                             </div>                                                            
                                                         </td>                                                   			
-                            							<td>
+                            							<td class="number-fixed-width text-left">
                             							    {$ gasto_salida.total|currency:$:2 $}
                             							</td>
                             							<td>
@@ -1556,7 +1566,7 @@
                                                                     </span>
                                                             </div>                                                            
                                                         </td>                                             							
-                            							<td>
+                            							<td class="number-fixed-width text-left">
                             							    {$ gasto_material.total|currency:$:2 $}
                             							</td>
                             							<td>
@@ -1664,7 +1674,7 @@
                                                                     </span>
                                                             </div>                                                            
                                                         </td>                            							
-                            							<td>
+                            							<td class="number-fixed-width text-left">
                             							    {$ gasto_servicio.total|currency:$:2 $}
                             							</td>
                             							<td>
@@ -1772,8 +1782,8 @@
                                                                     </span>
                                                             </div>                                                            
                                                         </td>                                     							
-                            							<td>
-                            							    {$ gasto_bibliografico.total $}
+                            							<td class="number-fixed-width text-left">
+                            							    {$ gasto_bibliografico.total | currency:$:2 $}
                             							</td>
                             							<td>
                             								<button type="button" class="btn btn-default" ng-click="remover_gasto_bibliografico(gasto_bibliografico)"><i class="fa fa-times" aria-hidden="true"></i></button>
@@ -1879,8 +1889,8 @@
                                                                     </span>
                                                             </div>                                                            
                                                         </td>                              							
-                            							<td>
-                            							    {$ gasto_digital.total $}
+                            							<td class="number-fixed-width text-left">
+                            							    {$ gasto_digital.total | currecny:$:2 $}
                             							</td>
                             							<td>
                             								<button type="button" class="btn btn-default" ng-click="remover_gasto_digital(gasto_digital)"><i class="fa fa-times" aria-hidden="true"></i></button>

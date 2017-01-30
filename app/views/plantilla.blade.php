@@ -42,6 +42,10 @@
         <!-- Ionicons -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
         
+        <!-- Magnific popup -->
+        <link rel="stylesheet" href="/vendor/magnific-popup/magnific-popup.css">
+        <script type="text/javascript" src="/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+        
         <!-- Theme style -->
         <link rel="stylesheet" href="{{url()}}/adminlte/css/AdminLTE.css">
         
@@ -121,7 +125,7 @@
                             @elseif(Auth::user()->id_rol == 2)
                                 <b style="font-size:35px;">Coordinador</b>
                             @else
-                                <b style="font-size:35px;">Investigador</b>
+                                <b class="nombre_rol_admin">Investigador</b>
                             @endif
                          </span>
                     </div>
@@ -137,14 +141,20 @@
                                 <ul class="dropdown-menu">
                                     <!-- Imagen de usuario -->
                                     <li class="user-header">
-                                        @if(Auth::user()->persona->foto == "") 
-                                             @if(Auth::user()->persona->sexo == "m")
-                                                <img class="profile-user-img img-responsive img-circle" src="/file/imagen_perfil/male.jpg" class="img-circle" alt="User Image">
-                                             @else
-                                                <img class="profile-user-img img-responsive img-circle" src="/file/imagen_perfil/female.jpg" class="img-circle" alt="User Image">
-                                             @endif
+                                        @if(Auth::user()->persona->foto == "")
+                                            @if(Auth::user()->persona->sexo == "m")
+                                                <a href="/file/imagen_perfil/male.jpg" class="imagen_perfil_raiz">
+                                                    <img class="profile-user-img img-circle" src="/file/imagen_perfil/male.jpg" alt="User Image">
+                                                </a>
+                                            @else
+                                                <a href="/file/imagen_perfil/female.jpg" class="imagen_perfil_raiz">
+                                                    <img class="profile-user-img img-circle" src="/file/imagen_perfil/female.jpg" alt="User Image">
+                                                </a>
+                                            @endif
                                         @else
-                                            <img class="profile-user-img img-responsive img-circle" src="/file/imagen_perfil/{{Auth::user()->persona->foto}}" class="img-circle" alt="User Image">
+                                            <a href="/file/imagen_perfil/{{Auth::user()->persona->foto}}" class="imagen_perfil_raiz">
+                                                <img class="profile-user-img img-circle" src="/file/imagen_perfil/{{Auth::user()->persona->foto}}" alt="User Image">
+                                            </a>
                                         @endif
                                         <p>
                                             {{ucwords(Auth::user()->persona->nombres)." ".ucwords(Auth::user()->persona->apellidos)}}
@@ -173,17 +183,23 @@
                 <section class="sidebar">
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
-                        <div class="pull-left image">
+                        <!--<div class="pull-left image">-->
                             @if(Auth::user()->persona->foto == "") 
                                 @if(Auth::user()->persona->sexo == "m")
-                                    <img class="img-responsive img-circle" src="/file/imagen_perfil/male.jpg" class="img-circle" alt="User Image">
+                                <a href="/file/imagen_perfil/male.jpg" class="imagen_perfil_raiz pull-left image">
+                                    <img src="/file/imagen_perfil/male.jpg" alt="User Image">
+                                </a>
                                 @else
-                                    <img class="img-responsive img-circle" src="/file/imagen_perfil/female.jpg" class="img-circle" alt="User Image">
+                                    <a href="/file/imagen_perfil/female.jpg" class="imagen_perfil_raiz pull-left image">
+                                        <img src="/file/imagen_perfil/female.jpg" alt="User Image">
+                                    </a>
                                 @endif
                             @else
-                                <img class="img-responsive img-circle" src="/file/imagen_perfil/{{Auth::user()->persona->foto}}" class="img-circle" alt="User Image">
+                                <a href="/file/imagen_perfil/{{Auth::user()->persona->foto}}" class="imagen_perfil_raiz pull-left image">
+                                    <img src="/file/imagen_perfil/{{Auth::user()->persona->foto}}" alt="User Image">
+                                </a>
                             @endif
-                        </div>
+                        <!--</div>-->
                         
                         <div class="pull-left info">
                             <p><?php 
@@ -237,21 +253,12 @@
                     @elseif(Auth::user()->id_rol == 2)
                         {{--Menu de coordinador--}}
                         <ul class="sidebar-menu">
-                            <li class="treeview">
+                            <li class="treeview active">
                                 <a href="#">
-                                    <i class="fa fa-group"></i> <span>Usuarios</span> <i class="fa fa-angle-left pull-right"></i>
+                                    <i class="fa fa-briefcase"></i> <span>Proyectos</span><i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
-                                    <li><a href="{{url()}}/usuarios/listar"><i class="fa fa-eye"></i> Listar</a></li>
-                                </ul>
-                            </li>
-                            <li class="treeview">
-                                <a href="#">
-                                    <i class="fa fa-briefcase"></i> <span>Proyectos</span> <i class="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul class="treeview-menu">
-                                    <li><a href="/proyectos/avances"><i class="fa fa-line-chart"></i> Avances por producto</a></li>
-                                    <li><a href="/proyectos/gastos"><i class="fa fa-usd" aria-hidden="true"></i> Evidencias de gastos</a></li>
+                                    <li><a href="/proyectos/listar"><i class="fa fa-list"></i> Gestion de proyectos</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -499,6 +506,19 @@
         </script>
         
         @yield('post_scripts')
+        {{--Presenta mensajes de alerta de la memoria flash de la operación previa--}}
+        <?php $hay_notify_operacion_previa = Session::get('notify_operacion_previa') ?>
+            @if(isset($hay_notify_operacion_previa))
+                <script type="text/javascript">
+                    sgpi_app.value('notify_operacion_previa', {{ json_encode(Session::get("notify_operacion_previa")) }});
+                    sgpi_app.value('mensaje_operacion_previa', {{ json_encode(Session::get("mensaje_operacion_previa")) }});
+                </script>
+            @else
+                <script type="text/javascript">
+                    sgpi_app.value('notify_operacion_previa', null);
+                    sgpi_app.value('mensaje_operacion_previa', null);
+                </script>        
+            @endif            
         @yield('post_sgpi_app_dependencies')
     
     </body>

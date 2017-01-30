@@ -7,6 +7,7 @@
         use SoftDeletingTrait;
         
         protected $table = 'desembolsos';
+        
         protected $dates = ['deleted_at'];
         
         protected $fillable = [
@@ -20,16 +21,13 @@
             'comentario_revision'
         ];
         
-        
         public function detalleGasto() { 
             return $this->belongsTo('DetalleGasto', 'id_detalle_gasto'); 
         }
         
-        
         public function formatoTipoDocumento() { 
             return $this->belongsTo('FormatoTipoDocumento', 'id_formato_tipo_documento'); 
         }
-        
         
     	/*
     	|--------------------------------------------------------------------------
@@ -52,6 +50,41 @@
             }
             else
                 return ['hay_desembolso' => 0];            
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| desembolsos_aprobados_x_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Consulta los desembolsos aprobados y no aprobados de un determinado proyecto
+    	*/                  
+        public static function desembolsos_aprobados_x_proyecto($id_proyecto){
+            
+            $query = '
+                SELECT DISTINCT(g.id_detalle_gasto) as id_detalle_gasto
+                FROM gastos g
+                WHERE
+                    g.id_proyecto = '.$id_proyecto.';';
+            
+            $gastod = DB::select(DB::raw($query));
+            $no_aprobados = 0;
+            $aprobados = 0;
+            
+            foreach($gastod as $gasto)
+            {
+                // verifica si tiene desembolso, 
+                // si no lo tiene se cuenta como no aprobado, si lo tiene verifica estado de aprobacion
+                $desembolso = Desembolso::where('id_detalle_gasto', '=', $gasto->id_detalle_gasto)->first();
+                if($desembolso){
+                    if($desembolso->aprobado)
+                        $aprobados++;
+                    else
+                        $no_aprobados++;
+                }
+                else
+                    $no_aprobados++;
+            }
+            return ['aprobados' => $aprobados, 'no_aprobados' => $no_aprobados];
         }
     }
 

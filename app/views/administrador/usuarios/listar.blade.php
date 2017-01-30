@@ -16,6 +16,13 @@
         .sin-margen{
             margin:0;
         }
+        .foto_perfil{
+            height: 120px;
+            width: 120px;
+        }
+        .foto_perfil > img{
+            height: 100%;
+        }
     </style>
 @stop <!--Stop section 'styles'-->
 
@@ -40,15 +47,17 @@
         <div class="box">
             <div class="box-header with-border">
                 <section class="content-header">
-                    <ul class="nav pull-right navbar-nav">
-                        <li style="margin-right: 5px;">
-                            <a href="/usuarios/registrar" class="btn btn-primary" role="button">Registrar nuevo usuario</a>
-                        </li>
-                    </ul>
+                    <!--<ul class="nav pull-right navbar-nav">-->
+                    <!--    <li style="margin-right: 5px;">-->
+                    <!--        <a href="/usuarios/registrar" class="btn btn-primary" role="button">Registrar nuevo usuario</a>-->
+                    <!--    </li>-->
+                    <!--</ul>-->
                     <h1>Usuarios</h1>
                 </section>
             </div>
+            <br />
             <div class="box-body" id="contenedor_tabla_usuarios" >
+                <a href="/usuarios/registrar" class="btn btn-primary" role="button">Registrar nuevo usuario</a>
                 <div class="table-responsive custom-scrollbar">
                     <table datatable="ng" dt-options="dtOptions" class="table table-hover table-stripped table-bordered">
                         <thead>
@@ -71,14 +80,13 @@
                                 <td>{$ usuario.nombre_estado $}</td>
                                 <td>
                                     <button ng-show="visibilidad.btn_cambiarEstado" type="button" class="btn btn-default">
-                                            <a ng-show="usuario.id_estado == 1" ng-click="btn_cambiar_estado(usuario,2)" ><i class="fa fa-ban" aria-hidden="true"></i></a>
-                                            <a ng-show="usuario.id_estado == 2" ng-click="btn_cambiar_estado(usuario,1)"><i class="fa fa-check" aria-hidden="true"></i></a>
+                                        <a ng-show="usuario.id_estado == 1" ng-click="btn_cambiar_estado(usuario,2)" ><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                        <a ng-show="usuario.id_estado == 2" ng-click="btn_cambiar_estado(usuario,1)"><i class="fa fa-check" aria-hidden="true"></i></a>
                                     </button>
                                     
                                     <div class="overlay" ng-show="visibilidad.show_cargando_cambiarEstado">
                                         <i class="fa fa-circle-o-notch fa-spin"></i>
                                     </div>
-                                    
                                 </td>
                                 <td><button type="button" class="btn btn-default" ng-click="btn_mas_info_usuario_click(usuario.id_usuario)"><i class="fa fa-info-circle" aria-hidden="true"></i></button></td>
                                 <td><a href="/usuarios/editar/{$ usuario.id_usuario $}" type="button" class="btn btn-default"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
@@ -98,6 +106,8 @@
           
             </div>
         </div>
+        
+        {{--Más información del usuario--}}
         <div class="box box-primary">
             <div class="box-header with-border">
                 <h3 class="box-title">Más información del usuario</h3>
@@ -106,52 +116,73 @@
                 </div>
             </div>
             <div class="box-body" id="mas_info_boxbody">
-                <div class="row is-flex sin-margen">
-                    <div class="col-xs-12 col-sm-6 col-md-4">
-                        <div class="info-box custom-info-box">
-                            <span class="info-box-icon">
-                                <img ng-if="data.info_usuario.foto==null && data.info_usuario.sexo=='m'" class="profile-user-img img-responsive img-circle" src="{{url()}}/adminlte/img/male.jpg" class="img-circle" alt="User Image">
-                                <img ng-if="data.info_usuario.foto==null && data.info_usuario.sexo=='f'" class="profile-user-img img-responsive img-circle" src="{{url()}}/adminlte/img/female.jpg" class="img-circle" alt="User Image">
-                                <img ng-if="data.info_usuario.foto!=null" class="profile-user-img img-responsive img-circle" src="{{url()}}/adminlte/img/male.jpg" class="img-circle" alt="User Image">
-                            </span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">{$ data.info_usuario.nombres $}</span>
-                                <span class="info-box-text">{$ data.info_usuario.apellidos $}</span>
-                                <span class="info-box-text">{$ data.info_usuario.acronimo_tipo_id $} <strong>{$ data.info_usuario.identificacion $}</strong></span>
-                                <hr />
-                                <p class="text-left">Edad: <strong>{$ data.info_usuario.edad $}</strong></p>
-                            	<p class="text-left"><span ng-if="data.info_usuario.sexo=='m'">Hombre</span><span ng-if="data.info_usuario.sexo=='f'">Mujer</span></strong></p>
-                            	<p class="text-left">Formación: <strong>{$ data.info_usuario.formacion $}</strong></p>
-                            </div>
-                        </div>
+                <h4 class="text-center" ng-show="data.mas_info_usuario==null">No se ha solicitado más información de un usuario, seleccionar botón más información</h4>
+                <div class="row is-flex sin-margen" ng-show="data.mas_info_usuario!=null">
+                    <div class="col-xs-12 text-left">
+                        <a ng-show="data.mas_info_usuario.foto==null && data.mas_info_usuario.sexo=='m'" href="/file/imagen_perfil/male.jpg" class="foto_perfil">
+                            <img class="img-responsive img-thumbnail" src="/file/imagen_perfil/male.jpg" alt="Foto de perfil del usuario">
+                        </a>
+                        <a ng-show="data.mas_info_usuario.foto==null && data.mas_info_usuario.sexo=='f'" href="/file/imagen_perfil/female.jpg" class="foto_perfil">
+                            <img class="img-responsive img-thumbnail" src="/file/imagen_perfil/female.jpg" alt="Foto de perfil del usuario">
+                        </a>                        
+                        <a ng-show="data.mas_info_usuario.foto!=null" href="/file/imagen_perfil/{$ data.mas_info_usuario.foto $}" class="foto_perfil">
+                            <img class="img-responsive img-thumbnail" src="/file/imagen_perfil/{$ data.mas_info_usuario.foto $}" alt="Foto de perfil del usuario">
+                        </a>                         
+                        <br />
+                        <span><strong>{$ data.mas_info_usuario.nombres + ' ' + data.mas_info_usuario.apellidos$}</strong> - {$ data.mas_info_usuario.acronimo_tipo_id + '.' + data.mas_info_usuario.identificacion $}</span>
+                        <br />
                     </div>
-                    <div class="col-xs-12 col-sm-6 col-md-4">
-                        <div class="info-box custom-info-box" style="height:100%;">
-                            <div class="info-box-content sin-margen">
-                            	<p class="text-left">Usuario: <strong>{$ data.info_usuario.username $}</strong></p>
-                            	<p class="text-left">Estado del usuario: <strong>{$ data.info_usuario.nombre_estado $}</strong></p>
-                            	<p class="text-left">Tipo de usuario: <strong>{$ data.info_usuario.nombre_rol $}</strong></p>
-                            	<p class="text-left">Email: <span ng-if="data.info_usuario.email==null||data.info_usuario.email==''">Sin registro</span><span ng-if="data.info_usuario.email!=null&&data.info_usuario.email!=''"></span><strong>{$ data.info_usuario.email $}</strong></p>
-                            	<p class="text-left">Miembro desde: <strong>{$ data.info_usuario.created_at $}</strong></p>
-                            </div>
-                        </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <label>Tipo de usuario</label>
+                        <p>{$ data.mas_info_usuario.nombre_rol $}</p>
                     </div>
-                    <div class="col-xs-12 col-sm-6 col-md-4" ng-show="visibilidad.show_col_detalles_usuario">
-                        <div class="info-box custom-info-box" style="height:100%;">
-                            <div class="info-box-content sin-margen" ng-bind-html="data.detalles_usuario">
-                            </div>
-                        </div>
-                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <label>Nombre de usuario</label>
+                        <p>{$ data.mas_info_usuario.username $}</p>
+                    </div>                                  
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <label>Sexo</label>
+                        <p ng-if="data.mas_info_usuario.sexo=='m'">Hombre</p>
+                        <p ng-if="data.mas_info_usuario.sexo=='f'">Mujer</p>
+                    </div>                                                   
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <label>Edad</label>
+                        <p>{$ data.mas_info_usuario.edad $}</p>
+                    </div>                              
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <label>Email</label>
+                        <p>{$ data.mas_info_usuario.email $}</p>
+                    </div>                               
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <label>Formación</label>
+                        <p>{$ data.mas_info_usuario.formacion $}</p>
+                    </div>                                   
+                    <div class="col-xs-12 col-sm-6 col-md-3" ng-if="data.mas_info_usuario.id_rol==2 || data.mas_info_usuario.id_rol==3">
+                        <label>Grupo de investigación</label>
+                        <p>{$ data.mas_info_usuario.nombre_grupo_inv $}</p>
+                    </div>                  
+                    <div class="col-xs-12 col-sm-6 col-md-3" ng-if="data.mas_info_usuario.id_rol==2 || data.mas_info_usuario.id_rol==3">
+                        <label>Grupo de investigación</label>
+                        <p>{$ data.mas_info_usuario.nombre_facultad $}</p>
+                    </div>                                      
+                    <div class="col-xs-12 col-sm-6 col-md-3" ng-if="data.mas_info_usuario.id_rol==2 || data.mas_info_usuario.id_rol==3">
+                        <label>Facultad / dependencia</label>
+                        <p>{$ data.mas_info_usuario.nombre_facultad $}</p>
+                    </div>                                                
+                    <div class="col-xs-12 col-sm-6 col-md-3" ng-if="data.mas_info_usuario.id_rol==2 || data.mas_info_usuario.id_rol==3">
+                        <label>Sede</label>
+                        <p>{$ data.mas_info_usuario.nombre_sede $}</p>
+                    </div>                                                                    
                 </div>
             </div>
-            
-            <div class="overlay" ng-show="visibilidad.show_cargando_mas_info_usuario">
-                <i class="fa fa-circle-o-notch fa-spin"></i>
+            <div class="overlay" ng-show="visibilidad.show_velo_mas_info_usuario">
+                <div style="display:table; width:100%; height:100%;">
+                    <div style="display:table-cell; vertical-align: middle;" ng-bind-html="data.msj_mas_info_usuario">
+                        <!--Contenido definido dinámicamente desde controlador-->
+                    </div>
+                </div>                                        
             </div>
-            <div class="overlay" ng-show="visibilidad.show_operacion_mas_info_usuario" ng-class="{'white-background': !data.btn_mas_info_seleccionado}">
-                <h3 class="text-center">{$ data.msj_operacion_mas_info_usuario $}</h3>
-            </div>
-        </div>
+        </div>{{--Más información del usuario--}}
 </section>
 
 @stop <!--Stop section 'contenido'-->
@@ -162,18 +193,6 @@
             <script type="text/javascript" src="/app/js/{{ $script }}"></script>
         @endforeach
     @endif
-    <?php $hay_notify_operacion_previa = Session::get('notify_operacion_previa') ?>
-        @if(isset($hay_notify_operacion_previa))
-            <script type="text/javascript">
-                sgpi_app.value('notify_operacion_previa', {{ json_encode(Session::get("notify_operacion_previa")) }});
-                sgpi_app.value('mensaje_operacion_previa', {{ json_encode(Session::get("mensaje_operacion_previa")) }});
-            </script>
-        @else
-            <script type="text/javascript">
-                sgpi_app.value('notify_operacion_previa', null);
-                sgpi_app.value('mensaje_operacion_previa', null);
-            </script>        
-        @endif
 @stop <!--Stop section 'scripts'-->
 
 @if(isset($angular_sgpi_app_extra_dependencies))

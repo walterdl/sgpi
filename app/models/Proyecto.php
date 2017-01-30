@@ -310,6 +310,23 @@
             }
             return $entidades_grupos_investigacion;
         }        
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| proyectos_de_un_grupo_investigacion()
+    	|--------------------------------------------------------------------------
+    	| Consulta todos los proyectos de investigación cuyo grupo de investigación ejecutor es el mismo identificado por el parámetro pasado
+    	*/
+        public static function proyectos_de_un_grupo_investigacion($id_grupo_investigación_ucc){
+            
+            $query = '
+                SELECT p.id, gi.nombre, p.codigo_fmi, p.subcentro_costo, p.nombre as nombre_proyecto, p.fecha_fin,  
+                    p.duracion_meses, gi.nombre as nombre_grupo_inv_principal 
+                FROM proyectos p, grupos_investigacion_ucc gi 
+                WHERE p.id_grupo_investigacion_ucc = gi.id AND gi.id = '.$id_grupo_investigación_ucc.'; ';
+                
+            return DB::select(DB::raw($query));
+        }                
     
     }
 

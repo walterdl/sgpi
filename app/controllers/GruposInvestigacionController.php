@@ -183,37 +183,38 @@
             
             try 
             {
-                $data = Input::all();   
-                $facultad = FacultadDependenciaUCC::find($data['facultad']);  
+                DB::transaction(function ()
+                {
+                    $data = Input::all();   
+                    $facultad = FacultadDependenciaUCC::find($data['facultad']);  
+                    
+                    $grupo_inv = GrupoInvestigacionUCC::create(array(
+                        'nombre' => $data['nombre'],
+                        'id_facultad_dependencia_ucc' => $facultad->id,
+                        'id_area' => $data['area'],
+                        'id_clasificacion_grupo_investigacion' => $data['clasificacion_grupo_inv']
+                        ));
                 
-                
-                $grupo_inv = GrupoInvestigacionUCC::create(array(
-                    'nombre' => $data['nombre'],
-                    'id_facultad_dependencia_ucc' => $facultad->id,
-                    'id_area' => $data['area'],
-                    'id_clasificacion_grupo_investigacion' => $data['clasificacion_grupo_inv']
-                    ));
-            
-                if(isset($data['nuevas_lineas'])){
-                    foreach($data['nuevas_lineas'] as $linea){
-                        $linea = LineaInvestigacion::create(array('nombre' => $linea));
-                        LineaGrupoInvestigacionUCC::create(array('id_linea_investigacion' => $linea->id, 'id_grupo_investigacion_ucc' => $grupo_inv->id));
-                        
+                    if(isset($data['nuevas_lineas'])){
+                        foreach($data['nuevas_lineas'] as $linea){
+                            $linea = LineaInvestigacion::create(array('nombre' => $linea));
+                            LineaGrupoInvestigacionUCC::create(array('id_linea_investigacion' => $linea->id, 'id_grupo_investigacion_ucc' => $grupo_inv->id));
+                        }
                     }
-                }
-                if(isset($data['lineas_existentes'])){
-                    foreach($data['lineas_existentes'] as $linea){
-                        $linea = LineaInvestigacion::find($linea);
-                        LineaGrupoInvestigacionUCC::create(array('id_linea_investigacion' => $linea->id, 'id_grupo_investigacion_ucc' => $grupo_inv->id));
+                    if(isset($data['lineas_existentes'])){                           
+                        foreach($data['lineas_existentes'] as $linea){
+                            $linea = LineaInvestigacion::find($linea);
+                            LineaGrupoInvestigacionUCC::create(array('id_linea_investigacion' => $linea->id, 'id_grupo_investigacion_ucc' => $grupo_inv->id));
+                        }
                     }
-                }
+                });
                 
-                Session::flash('notify_operacion_previa', 'true');
+                Session::flash('notify_operacion_previa', 'success');
                 Session::flash('mensaje_operacion_previa', 'Grupo de investigación registrado');
             } 
             catch(Exception $e) 
             {
-                Session::flash('notify_operacion_previa', 'false');
+                Session::flash('notify_operacion_previa', 'error');
                 Session::flash('mensaje_operacion_previa', $e->getMessage());
                 Session::flash('codigo_error_operacion_previa', $e->getCode());
             }   
@@ -267,12 +268,13 @@
                 
                 $id_grupo_investigacion = Input::all()['id'];
                 
-                $query_grupo_inv = 'SELECT gi.*, s.id as id_sede, s.id_universidad_entidad, fd.id as id_facultad_dependencia ';
-                $query_grupo_inv .= 'FROM grupos_investigacion_ucc gi, facultades_dependencias_ucc fd, sedes_ucc s ';
-                $query_grupo_inv .= 'WHERE ';
-                $query_grupo_inv .= '	gi.id = '.$id_grupo_investigacion.' ';
-                $query_grupo_inv .= 'AND gi.id_facultad_dependencia_ucc = fd.id ';
-                $query_grupo_inv .= 'AND fd.id_sede_ucc = s.id; ';
+                $query_grupo_inv = '
+                    SELECT gi.*, s.id as id_sede, fd.id as id_facultad_dependencia 
+                    FROM grupos_investigacion_ucc gi, facultades_dependencias_ucc fd, sedes_ucc s 
+                    WHERE 
+                    	gi.id = '.$id_grupo_investigacion.' 
+                    AND gi.id_facultad_dependencia_ucc = fd.id 
+                    AND fd.id_sede_ucc = s.id; ';
                 $grupo_investigacion = DB::select(DB::raw($query_grupo_inv))[0];
                 
                 $query_lineas_inv_del_grupo =  'SELECT li.* ';
@@ -351,105 +353,208 @@
         public function guardar_edicion_grupo_inv(){
             
             try{
-                
-                $data = Input::all();
-                $grupo_investigacion = GrupoInvestigacionUCC::find($data['id_grupo_investigacion']);
-                $grupo_investigacion->nombre = $data['nombre'];
-                $grupo_investigacion->id_area = $data['area'];
-                $grupo_investigacion->id_clasificacion_grupo_investigacion = $data['clasificacion_grupo_inv'];
-                
-                $facultad = FacultadDependenciaUCC::find($data['facultad']);
-                
-                $grupo_investigacion->id_facultad_dependencia = $facultad->id;                
-                $grupo_investigacion->save();
-                
-                // trata las lineas existentes del grupo eliminadas
-                // primero se consulta por las lineas de investigacion almacenadas actualmente del grupo de inv 
-                $query = 'SELECT li.id as id_linea_investigacion, lgi.id as id_lgi ';
-                $query .= 'FROM lineas_investigacion li, lineas_grupos_investigacion_ucc lgi ';
-                $query .= 'WHERE  ';
-                $query .= '    li.id = lgi.id_linea_investigacion ';
-                $query .= 'AND lgi.id_grupo_investigacion_ucc = '.$grupo_investigacion->id.' ;';
-                $lineas_del_grupo_existentes = DB::select(DB::raw($query));
-                
-                if(count($lineas_del_grupo_existentes)){
+                DB::transaction(function ()
+                {
+                    $data = Input::all();
+                    $grupo_investigacion = GrupoInvestigacionUCC::find($data['id_grupo_investigacion']);
+                    $grupo_investigacion->nombre = $data['nombre'];
+                    $grupo_investigacion->id_area = $data['area'];
+                    $grupo_investigacion->id_clasificacion_grupo_investigacion = $data['clasificacion_grupo_inv'];
                     
-                    if(isset($data['lineas_existentes'])){
+                    $facultad = FacultadDependenciaUCC::find($data['facultad']);
+                    
+                    $grupo_investigacion->id_facultad_dependencia_ucc = $facultad->id;                
+                    $grupo_investigacion->save();
+                    
+                    // trata las lineas existentes del grupo eliminadas
+                    // primero se consulta por las lineas de investigacion almacenadas actualmente del grupo de inv 
+                    $query = 'SELECT li.id as id_linea_investigacion, lgi.id as id_lgi ';
+                    $query .= 'FROM lineas_investigacion li, lineas_grupos_investigacion_ucc lgi ';
+                    $query .= 'WHERE  ';
+                    $query .= '    li.id = lgi.id_linea_investigacion ';
+                    $query .= 'AND lgi.id_grupo_investigacion_ucc = '.$grupo_investigacion->id.' ;';
+                    $lineas_del_grupo_existentes = DB::select(DB::raw($query));
+                    
+                    if(count($lineas_del_grupo_existentes)){
                         
-                        $lineas_existentes_enviadas = $data['lineas_existentes'];
-                        foreach($lineas_del_grupo_existentes as $linea_grupo_existente){
+                        if(isset($data['lineas_existentes'])){
                             
-                            $resultado_busqueda_linea = array_search($linea_grupo_existente->id_linea_investigacion, $lineas_existentes_enviadas);
-                            if($resultado_busqueda_linea === false){
+                            $lineas_existentes_enviadas = $data['lineas_existentes'];
+                            foreach($lineas_del_grupo_existentes as $linea_grupo_existente){
                                 
-                                // se elimino una linea de investigacion existente
+                                $resultado_busqueda_linea = array_search($linea_grupo_existente->id_linea_investigacion, $lineas_existentes_enviadas);
+                                if($resultado_busqueda_linea === false){
+                                    
+                                    // se elimino una linea de investigacion existente
+                                    LineaGrupoInvestigacionUCC::find($linea_grupo_existente->id_lgi)->delete();
+                                }
+                            }
+                        }
+                        else{
+                            // se han eliminado todas las lineas existentes del grupo de inv
+                            foreach($lineas_del_grupo_existentes as $linea_grupo_existente){
                                 LineaGrupoInvestigacionUCC::find($linea_grupo_existente->id_lgi)->delete();
                             }
                         }
                     }
-                    else{
-                        // se han eliminado todas las lineas existentes del grupo de inv
-                        foreach($lineas_del_grupo_existentes as $linea_grupo_existente){
-                            LineaGrupoInvestigacionUCC::find($linea_grupo_existente->id_lgi)->delete();
+                    
+                    // trata las lineas existentes en la bd asociandas como nuevas al grupo de investigación
+                    if(isset($data['lineas_existentes_agregadas'])){
+                        foreach($data['lineas_existentes_agregadas'] as $linea_existente_agregada){
+                            // se realiza primero una reconfirmación de que la linea ya no este relacionada con el grupo de investigación
+                            $linea_ya_asociada = LineaGrupoInvestigacionUCC::
+                                where('id_linea_investigacion', '=', $linea_existente_agregada)
+                                ->where('id_grupo_investigacion_ucc', '=', $grupo_investigacion->id)->get();
+                            if(count($linea_ya_asociada)){
+                                // no se opera pues la linea ya se encuentra relacionada
+                                continue;
+                            }
+                            else{
+                                // no esta asociada al grupo de investigacio, se procede a relacionarla
+                                LineaGrupoInvestigacionUCC::create(array('id_linea_investigacion' => $linea_existente_agregada, 'id_grupo_investigacion_ucc' => $grupo_investigacion->id));
+                            }
                         }
                     }
-                }
-                
-                // trata las lineas existentes en la bd asociandas como nuevas al grupo de investigación
-                if(isset($data['lineas_existentes_agregadas'])){
-                    foreach($data['lineas_existentes_agregadas'] as $linea_existente_agregada){
-                        // se realiza primero una reconfirmación de que la linea ya no este relacionada con el grupo de investigación
-                        $linea_ya_asociada = LineaGrupoInvestigacionUCC::
-                            where('id_linea_investigacion', '=', $linea_existente_agregada)
-                            ->where('id_grupo_investigacion_ucc', '=', $grupo_investigacion->id)->get();
-                        if(count($linea_ya_asociada)){
-                            // no se opera pues la linea ya se encuentra relacionada
-                            continue;
-                        }
-                        else{
-                            // no esta asociada al grupo de investigacio, se procede a relacionarla
-                            LineaGrupoInvestigacionUCC::create(array('id_linea_investigacion' => $linea_existente_agregada, 'id_grupo_investigacion_ucc' => $grupo_investigacion->id));
+                    
+                    // trata la creación de nuevas lineas y su respctiva asociacion con el grupo de investigación
+                    if(isset($data['nuevas_lineas'])){
+                        foreach($data['nuevas_lineas'] as $linea){
+                            $linea = LineaInvestigacion::create(array('nombre' => $linea));
+                            LineaGrupoInvestigacionUCC::create(array('id_linea_investigacion' => $linea->id, 'id_grupo_investigacion_ucc' => $grupo_investigacion->id));
                         }
                     }
-                }
-                
-                // trata la creación de nuevas lineas y su respctiva asociacion con el grupo de investigación
-                if(isset($data['nuevas_lineas'])){
-                    foreach($data['nuevas_lineas'] as $linea){
-                        $linea = LineaInvestigacion::create(array('nombre' => $linea));
-                        LineaGrupoInvestigacionUCC::create(array('id_linea_investigacion' => $linea->id, 'id_grupo_investigacion_ucc' => $grupo_investigacion->id));
-                    }
-                }
-                
-                Session::flash('notify_operacion_previa', 'true');
+                });
+                Session::flash('notify_operacion_previa', 'success');
                 Session::flash('mensaje_operacion_previa', 'Grupo de investigación editado');
             }
             catch(Exception $e) 
             {
-                Session::flash('notify_operacion_previa', 'false');
+                Session::flash('notify_operacion_previa', 'error');
                 Session::flash('mensaje_operacion_previa', $e->getMessage());
                 Session::flash('codigo_error_operacion_previa', $e->getCode());
             }   
             return Redirect::to('/grupos/listar');
-            
         }
-        
         
         /*
     	|--------------------------------------------------------------------------
-    	| validar_eliminacion_grupo_inv() --En desarrollo
+    	| validar_eliminacion_grupo_inv()
     	|--------------------------------------------------------------------------
-    	| Resuesta ajax validando la peticion de eliminacion de grupo de investigacion siguiendo la regla:
-        | -No se elimmina si no tiene usuarios cuyo grupo de investigación sea el que se desee eliminar
+    	| Resuesta ajax validando la peticion de eliminacion de grupo de investigacion haciendo uso de la funcion validar_eliminacion_grupo_investigacion()
+        | Responde con un valor 1 al campo 'se_puede_eliminar' si el grupo sí se puede eliminar, retorna 0 de lo contrario
     	*/          
         public function validar_eliminacion_grupo_inv(){
             
             try{
                 
+                // valida el identificador del grupo de investigación ucc enviado
+                if(is_null(Input::get('id_grupo_investigacion_ucc', null)))
+                    throw new Exception('Identificador de grupo de investigación inválido. No se ha enviado tal dato');
+                $validacion = Validator::make(
+                    ['id_grupo_investigacion_ucc' => Input::get('id_grupo_investigacion_ucc')],
+                    ['id_grupo_investigacion_ucc' => 'required|exists:grupos_investigacion_ucc,id']
+                    );
+                if($validacion->fails())
+                    throw new Exception('Identificador de grupo de investigación inválido. No se encuentran registros con tal dato');
+                
+                $se_puede_eliminar = $this->validar_eliminacion_grupo_investigacion(Input::get('id_grupo_investigacion_ucc'));
+                if($se_puede_eliminar)
+                    $se_puede_eliminar = 1;
+                else
+                    $se_puede_eliminar = 0;
+                
+                // no hay usuario, proyecto ni investigador con el grupo de investigación referenciado, se puede eliminar
+                return json_encode([
+                    'consultado' => 1,
+                    'se_puede_eliminar' => $se_puede_eliminar
+                    ]);                                                        
             }
             catch(Exception $e){
-                echo json_encode(array('codigo' => $e->getCode(), 'mensaje' => $e->getMessage()));
+                echo json_encode(array('consultado' => 2, 'codigo' => $e->getCode(), 'mensaje' => $e->getMessage()));
             }
+        }
+        
+        /*
+    	|--------------------------------------------------------------------------
+    	| validar_eliminacion_grupo_investigacion()
+    	|--------------------------------------------------------------------------
+    	| Valida si un grupo de investigación puede ser eliminado de la BD teniendo en cuenta las siguientes reglas:
+        | -No se elimina si hay usuario coordinador o investigador cuyo grupo de investiigación es el grupo a liminar
+        | -No se elimina si hay proyecto cuyo grupo de investigación ejecutor es el grupo a eliminar
+        | -No se elimina si hay investigador interno cuyo grupo de investigación es el grupo a eliminar
+        | Responde con false si no se puede eliminar
+    	*/          
+        private function validar_eliminacion_grupo_investigacion($id_grupo_investigacion){
+            
+            // verifica existencia de usuarios cuyo grupo de investigación sea el mismo a eliminar
+            $usuario = Usuario::where('id_grupo_investigacion_ucc', '=', $id_grupo_investigacion)->first();
+            if($usuario) // si hay al menos un usuario con el grupo
+            {
+                return false;
+            }
+            
+            // verifica si hay proyecto de investigación con el grupo a eliminar
+            $proyecto = Proyecto::where('id_grupo_investigacion_ucc', '=', $id_grupo_investigacion)->first();
+            if($proyecto)
+            {
+                return false;                 
+            }
+            
+            // verifica si hay investigador con el grupo de investigación a eliminar
+            $investigador = Investigador::where('id_grupo_investigacion_ucc', '=', $id_grupo_investigacion)->first();
+            if($investigador)
+            {
+                return false;                                    
+            }            
+            
+            return true;
+        }
+        
+        /*
+    	|--------------------------------------------------------------------------
+    	| eliminar_grupo_investigacion()
+    	|--------------------------------------------------------------------------
+    	| Elimina un grupo de investigación ucc aplicando la validación de validar_eliminacion_grupo_inv()
+    	*/          
+        public function eliminar_grupo_investigacion(){
+            
+            try{
+                DB::transaction(function ()
+                {
+                    // valida el identificador del grupo de investigación ucc enviado
+                    if(is_null(Input::get('id_grupo_investigacion_ucc', null)))
+                        throw new Exception('Identificador de grupo de investigación inválido. No se ha enviado tal dato');
+                    $validacion = Validator::make(
+                        ['id_grupo_investigacion_ucc' => Input::get('id_grupo_investigacion_ucc')],
+                        ['id_grupo_investigacion_ucc' => 'required|exists:grupos_investigacion_ucc,id']
+                        );
+                    if($validacion->fails())
+                        throw new Exception('Identificador de grupo de investigación inválido. No se encuentran registros con tal dato');
+                            
+                    // utiliza la funcion validar_eliminacion_grupo_inv para verificar si se puede o no eliminar
+                    $se_puede_eliminar = $this->validar_eliminacion_grupo_investigacion(Input::get('id_grupo_investigacion_ucc'));
+                    
+                    if($se_puede_eliminar)
+                    {
+                        $query = 'DELETE FROM lineas_grupos_investigacion_ucc WHERE id_grupo_investigacion_ucc = '.Input::get('id_grupo_investigacion_ucc').';';
+                        DB::select(DB::raw($query));
+                        GrupoInvestigacionUCC::find(Input::get('id_grupo_investigacion_ucc'))->forceDelete();
+                        Session::flash('notify_operacion_previa', 'success');
+                        Session::flash('mensaje_operacion_previa', 'Grupo de investigación eliminado');                        
+                    }
+                    else
+                    {
+                        Session::flash('notify_operacion_previa', 'error');
+                        Session::flash('mensaje_operacion_previa', 'No se puede eliminar el grupo de investigación ya que: un usuario, un investigador o un proyecto de investigación lo está usando');
+                    }
+                });
+
+            }
+            catch(Exception $e){
+                Session::flash('notify_operacion_previa', 'error');
+                Session::flash('mensaje_operacion_previa', 'Error al intentar eliminar el grupo de investigación. Detalles: '.$e->getMessage());
+            }
+            return Redirect::to('/grupos/listar');
         }
         
     }

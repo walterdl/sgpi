@@ -1,49 +1,30 @@
 
 Array
 (
-    [aprobado] => 0
-    [codigo_aprobacion] => que vaina :)
-    [comentario_revision] => se aprueba esto
+    [id_grupo_investigacion_ucc] => 
 )
 
 Array
 (
-    [aprobado] => 0
-    [codigo_aprobacion] => jeje
-    [comentario_revision] => vamoaprobarlo
+    [id_grupo_investigacion_ucc] => 8
 )
 
 Array
 (
-    [aprobado] => true
-    [codigo_aprobacion] => se aprueba
-    [comentario_revision] => ahora si
+    [id_grupo_investigacion_ucc] => 8
 )
 
 Array
 (
-    [aprobado] => false
-    [codigo_aprobacion] => vamoa ver
-    [comentario_revision] => debe ser false
+    [id_grupo_investigacion_ucc] => 14
 )
 
 Array
 (
-    [aprobado] => 0
-    [comentario_revision] => se manda tal cual
+    [id_grupo_investigacion_ucc] => 9
 )
 
 Array
 (
-    [aprobado] => 0
+    [id_grupo_investigacion_ucc] => 15
 )
-
-Array
-(
-    [aprobado] => true
-    [codigo_aprobacion] => yeah
-    [comentario_revision] => vamoa aprobarlo
-    [id_detalle_gasto] => 3
-)
-
-string

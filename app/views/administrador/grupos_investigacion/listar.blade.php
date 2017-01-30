@@ -49,14 +49,6 @@
     
     <section class="content" ng-cloak>
         <div class="box" ng-controller="listar_grupos_investigacion_controller" ng-init='data.sedes={{ json_encode($sedes) }}'>
-            <?php $hay_notify_operacion_previa = Session::get('notify_operacion_previa') ?>
-            @if(isset($hay_notify_operacion_previa))
-                <span ng-hide="true" ng-init="notify_operacion_previa={{ Session::get('notify_operacion_previa') }}"></span>
-                <span ng-hide="true" ng-init="mensaje_operacion_previa='{{ Session::get('mensaje_operacion_previa') }}'"></span>
-                @if(Session::get('notify_operacion_previa') == 'false')
-                    <span ng-hide="true" ng-init="codigo_error_operacion_previa='{{ Session::get('codigo_error_operacion_previa') }}'"></span>
-                @endif
-            @endif
             <div class="box-header with-border">
                 <h3>Grupos de investigación</h3>
             </div>
@@ -96,11 +88,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!--<tr ng-show="visibilidad.mostrar_mensaje_operacion">-->
-                                <!--    <td colspan="7" class="text-center">{$ data.mensaje_operacion $}</td>-->
-                                <!--</tr>-->
                                 <tr ng-show="visibilidad.mostrar_grupos_investigacion" ng-repeat="grupo_investigacion in data.grupos_investigacion">
-                                    <!--<td colspan="5" class="text-center">Si hay grupos de inv para esta sede</td>-->
                                     <td>{$ grupo_investigacion.nombre_grupo_investigacion $}</td>
                                     <td>{$ grupo_investigacion.clasificacion_grupo_investigacion $}</td>
                                     <td>{$ grupo_investigacion.area $}</td>
@@ -109,9 +97,6 @@
                                     <td><a href="/grupos/editar?id={$ grupo_investigacion.id $}" class="btn btn-default" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
                                     <td><button type="button" class="btn btn-default" ng-click="btn_eliminar_grupo_inv_click(grupo_investigacion)"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                 </tr>
-                                <!--<tr ng-show="visibilidad.show_sin_grupos">-->
-                                <!--    <td colspan="7" class="text-center">Sin grupos de investigación</td>-->
-                                <!--</tr>-->
                             </tbody>
                         </table>
                     </div>
@@ -136,6 +121,19 @@
                     </div>
                 </div>
             </div>
+            {{--Formulario de eliminación de un grupo de investigación--}}
+            <form action="/grupos/eliminar_grupo_inv" method="POST" ng-hide="true">
+                <input type="hidden" name="id_grupo_investigacion_ucc" value="{$ id_grupo_investigacion_ucc_eliminar $}">
+                <input type="submit" id="btn_form_eliminar_grupo_inv" ng-hide="true"/>
+            </form>
+           {{--Overlay o velo general--}}
+           <div class="overlay" ng-show="show_velo_msj_operacion">
+                <div style="display:table; width:100%; height:100%;">
+                    <div style="display:table-cell; vertical-align: middle;" ng-bind-html="msj_operacion">
+                        <!--Contenido definido dinámicamente desde controlador-->
+                    </div>
+                </div>    
+            </div>                    
         </div>
     </section>
     

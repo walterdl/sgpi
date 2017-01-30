@@ -573,39 +573,77 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
 	| Realiza las sumas de los totales del presupuesto otorgado por cada entidad_presupuesto de cada gasto de personal.
 	| También calcula los totales generales de los gastos de personal
 	*/                           
-    $scope.suma_totales_personal = function(participante, entidad_presupuesto, id_entidad_presupuesto){
+    $scope.suma_totales_personal = function(participante, entidad_presupuesto, id_entidad_presupuesto,gastos_personal){
+        
         
         // actualiza los totales para el de personal específico
-        var total_otras_entidades_gasto_personal = 0;
-        
-        for(var id in participante.otras_entidades_presupuesto){
-            total_otras_entidades_gasto_personal += participante.otras_entidades_presupuesto[id];
-        }
-        participante.presupuesto_total = participante.presupuesto_ucc + total_otras_entidades_gasto_personal;
-        
-        // actualiza los totales generales
-        if(entidad_presupuesto == 'ucc'){
-            $scope.validar_presupuesto_ucc_participante(participante);
-            var total_ucc = 0;
-            $scope.data.participantes_proyecto.forEach(function(participante_proyecto) {
-                total_ucc += participante_proyecto.presupuesto_ucc;
+        participante['gasto_total'].presupuesto_total_fila=0;
+        $scope.data.fuente_presupuesto.total_gastos_global=0;
+        $scope.data.fuente_presupuesto.total_gastos_columnas=0;
+         
+        participante.gasto.forEach(function(item) {
+                 participante['gasto_total'].presupuesto_total_fila=(participante['gasto_total'].presupuesto_total_fila+item.valor);
+        });
+         
+        cont=0;
+        gastos_personal.forEach(function(entry) {
+            cont++;
+            cont_aux=0;
+            
+            entry.gasto.forEach(function(item) {
+                
+                if(cont_aux == 0 && cont == 1){
+                            
+                    var arrayTemp=[];
+                    entry.gasto.forEach(function(aux) {
+                      arrayTemp.push(aux.entidad_fuente_presupuesto.nombre);
+                      arrayTemp[aux.entidad_fuente_presupuesto.nombre]=aux.valor;
+                    });
+                    
+                    $scope.data.fuente_presupuesto.total_gastos_columnas=arrayTemp;
+                    
+                }//fin del if
+                cont_aux++;
+                aux_nombre=item.entidad_fuente_presupuesto.nombre;
+   
+                // para el total gstos por columna
+                if(cont > 1){
+                    $scope.data.fuente_presupuesto.total_gastos_columnas[aux_nombre]=parseInt($scope.data.fuente_presupuesto.total_gastos_columnas[aux_nombre])+item.valor;
+                 }
+                    
+                /// total gastos global
+                $scope.data.fuente_presupuesto.total_gastos_global=$scope.data.fuente_presupuesto.total_gastos_global+item.valor;
             });
-            $scope.data.totales_personal.ucc = total_ucc;
-        }        
-        else if(entidad_presupuesto == 'otro'){
-            $scope.validar_presupuesto_externo_participante(participante, id_entidad_presupuesto);
-            var total_otra_entidad_presupuesto = 0;
-            $scope.data.participantes_proyecto.forEach(function(item) {
-                total_otra_entidad_presupuesto += item.otras_entidades_presupuesto[id_entidad_presupuesto];
-            }); 
-            $scope.data.totales_personal.otras_entidades_presupuesto[id_entidad_presupuesto] = total_otra_entidad_presupuesto;
-        }        
+        });
+         
+         
         
-        // Suma el total general        
-        $scope.data.totales_personal.total = 0;
-        $scope.data.participantes_proyecto.forEach(function(item) {
-            $scope.data.totales_personal.total += item.presupuesto_total;
-        });        
+        // for(var id in participante.otras_entidades_presupuesto){
+        //     total_otras_entidades_gasto_personal += participante.otras_entidades_presupuesto[id];
+        // }
+        
+        
+        
+        // // actualiza los totales generales
+        // if(entidad_presupuesto == 'ucc'){
+        //     $scope.validar_presupuesto_ucc_participante(participante);
+        //     var total_ucc = 0;
+        //     $scope.data.participantes_proyecto.forEach(function(participante_proyecto) {
+        //         total_ucc += participante_proyecto.presupuesto_ucc;
+        //     });
+        //     $scope.data.totales_personal.ucc = total_ucc;
+        // }        
+        // else if(entidad_presupuesto == 'otro'){
+        //     $scope.validar_presupuesto_externo_participante(participante, id_entidad_presupuesto);
+        //     var total_otra_entidad_presupuesto = 0;
+        //     $scope.data.participantes_proyecto.forEach(function(item) {
+        //         total_otra_entidad_presupuesto += item.otras_entidades_presupuesto[id_entidad_presupuesto];
+        //     }); 
+        //     $scope.data.totales_personal.otras_entidades_presupuesto[id_entidad_presupuesto] = total_otra_entidad_presupuesto;
+        // }        
+        
+
+        
     };
     
     /*

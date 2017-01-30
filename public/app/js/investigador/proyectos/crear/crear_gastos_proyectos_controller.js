@@ -260,7 +260,6 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
             $scope.data.entidades_presupuesto_seleccionadas.forEach(function(item) {
                 otras_entidades_presupuesto[item.id] = 0;
             });
-        
         $scope.data.gastos_equipos.push({
             equipo: null, 
             justificacion: null,
@@ -270,7 +269,7 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
             presupuesto_externo_invalido: [],
             fecha_ejecucion: null,
             total: 0
-        });        
+        });
     };
     
     /*
@@ -347,7 +346,6 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
             $scope.data.entidades_presupuesto_seleccionadas.forEach(function(item) {
                 otras_entidades_presupuesto[item.id] = 0;
             });
-        
         $scope.data.gastos_salidas.push({
             justificacion: null,
             cantidad_salidas: 0,
@@ -358,7 +356,7 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
             presupuesto_externo_invalido: [],
             fecha_ejecucion: null,
             total: 0
-        });        
+        });
     };
     
     /*

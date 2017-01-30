@@ -121,4 +121,12 @@ fieldset[disabled] .btn-sgpi.active {
     background-color: #fff !important;
 }
 
+.nombre_rol_admin{
+    font-size: 30px;
+}
 
+@media (min-width: 768px) {
+    .nombre_rol_admin{
+        font-size: 35px;
+    }
+}

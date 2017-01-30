@@ -128,7 +128,7 @@ sgpi_app.controller('crear_productos_proyecto_controller', function ($scope, $ht
     $scope.validar_nombre_producto = function(producto) {
         
         // se valida el nombre del producto
-        if(producto.nombre && producto.nombre.length > 5 && producto.nombre.length < 200){
+        if(producto.nombre && producto.nombre.length >= 5 && producto.nombre.length < 200){
             producto.nombre_invalido = false;
             return false;
         }

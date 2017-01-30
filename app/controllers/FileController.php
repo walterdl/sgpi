@@ -171,4 +171,25 @@
             return Response::download(storage_path('archivos/prorrogas/'.$nombre_archivo), null, [], 'attachment');
         }
         
+        /*
+    	|--------------------------------------------------------------------------
+    	| get_aprobacion_final_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Retorna respuesta http para descargar archivo de aprobación de revisión de final de proyecto
+    	*/                          
+        public function get_aprobacion_final_proyecto($nombre_archivo){
+            return Response::download(storage_path('archivos/aprobaciones_final_proyecto/'.$nombre_archivo), null, [], 'attachment');
+        }        
+        
+        /*
+    	|--------------------------------------------------------------------------
+    	| get_aprobacion_prorroga()
+    	|--------------------------------------------------------------------------
+    	| Retorna respuesta http para descargar archivo de aprobación de prórorga de final de proyecto
+    	*/                          
+        public function get_aprobacion_prorroga($nombre_archivo){
+            return Response::download(storage_path('archivos/aprobaciones_prorrogas/'.$nombre_archivo), null, [], 'attachment');
+        }                
+        
+        
     }

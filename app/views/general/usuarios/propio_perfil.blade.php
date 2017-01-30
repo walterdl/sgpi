@@ -337,7 +337,7 @@
         @foreach($post_scripts as $script) 
             <script type="text/javascript" src="/app/js/{{ $script }}"></script>
         @endforeach
-    @endif
+    @endif    
 @stop <!--Stop section 'post_scripts'-->
 
 

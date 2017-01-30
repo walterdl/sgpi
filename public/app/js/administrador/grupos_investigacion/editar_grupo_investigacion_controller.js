@@ -20,8 +20,8 @@ sgpi_app.controller('editar_grupo_investigacion_controller', function($scope, $h
                 }
             })
             .success(function(data){
-                if(data.consultado !== undefined && data.consultado !== null && data.consultado == 1){
-                    
+                console.log(data);
+                if(data.consultado == 1){
                     $scope.data.nombre_original = data.grupo_investigacion.nombre;
                     $scope.data.gran_areas = data.gran_areas;
                     $scope.data.areas = data.areas;
@@ -35,7 +35,6 @@ sgpi_app.controller('editar_grupo_investigacion_controller', function($scope, $h
                     $scope.init();
                 }
                 else{
-                    console.log('Error en la carga de datos iniciales, código de error: ' + data.codigo + ', mensaje: ' + data.mensaje);
                     Alertify.error('Error en la carga de datos iniciales, código de error: ' + data.codigo);
                     $scope.visibilidad.error_carga_inicial = true;
                     $scope.visibilidad.error_carga_data_inicial = true;
@@ -43,9 +42,8 @@ sgpi_app.controller('editar_grupo_investigacion_controller', function($scope, $h
                 }
             })
             .error(function(data, status) {
-                Alertify.error('Error en la carga de datos iniciales, código de error: ' + status);
-                console.log('Error en la carga de datos iniciales, código de error: ' + status);
                 console.log(data);
+                Alertify.error('Error en la carga de datos iniciales, código de error: ' + status);
                 $scope.visibilidad.error_carga_inicial = true;
                 $scope.visibilidad.error_carga_data_inicial = true;
                 $scope.mensaje_error_carga_inicial = 'Error en la carga de datos iniciales, código de error: ' + status;
@@ -85,7 +83,7 @@ sgpi_app.controller('editar_grupo_investigacion_controller', function($scope, $h
         });
         
         $scope.data.facultades.forEach(function(item){
-            if(item.id_sede == $scope.data.edicion_sede.id){
+            if(item.id_sede_ucc == $scope.data.edicion_sede.id){
                 $scope.data.facultades_correspondientes.push(item);
                 if(item.id == $scope.facultad_original)
                     $scope.data.edicion_facultad = item;
@@ -256,7 +254,7 @@ sgpi_app.controller('editar_grupo_investigacion_controller', function($scope, $h
         $scope.data.edicion_facultad = null;
         if($scope.data.edicion_sede.id != undefined){
             $scope.data.facultades.forEach(function(item){
-                if(item.id_sede == $scope.data.edicion_sede.id)
+                if(item.id_sede_ucc == $scope.data.edicion_sede.id)
                     $scope.data.facultades_correspondientes.push(item);
             });
         }

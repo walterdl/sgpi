@@ -71,6 +71,7 @@ sgpi_app.controller('final_proyecto_controller', function ($scope, $http, Upload
             	if(data.final_proyecto != null){
 	                $scope.final_proyecto = data.final_proyecto;
 	                $scope.comentario_investigador = data.final_proyecto.comentario_investigador;
+	                $scope.comentario_revision = data.final_proyecto.comentario_revision;
 	                $scope.archivo_acta_finalizacion = data.final_proyecto.archivo_acta_finalizacion;
 					$scope.archivo_memoria_academica = data.final_proyecto.archivo_memoria_academica;
             	}

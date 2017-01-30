@@ -203,6 +203,40 @@
                 return false;                            
         }
         
+        /*
+    	|--------------------------------------------------------------------------
+    	| copiar_aprobacion_final_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Copia un archivo de aprobación de final de proyecto,
+    	| distinguiendo su nombre con el id del registro de DocumentoProyecto que le corresponde
+    	| Recibe como parámetro el id citado
+    	| Retorna el objeto File (Archivo) que representa el archivo copiado o false en caso de que no se halla copiado
+    	*/                              
+        public static function copiar_aprobacion_final_proyecto($archivo, $id_aprobacion_final_proyecto){
+            $archivo = $archivo->move(storage_path('archivos/aprobaciones_final_proyecto/'), $id_aprobacion_final_proyecto.'__'.$archivo->getClientOriginalName());
+            if($archivo)
+                return $archivo;
+            else
+                return false;                                        
+        }
+        
+        /*
+    	|--------------------------------------------------------------------------
+    	| copiar_aprobacion_prorroga()
+    	|--------------------------------------------------------------------------
+    	| Copia un archivo de aprobación de prórroga de final de proyecto,
+    	| distinguiendo su nombre con el id del registro de DocumentoProyecto que le corresponde
+    	| Recibe como parámetro el id citado
+    	| Retorna el objeto File (Archivo) que representa el archivo copiado o false en caso de que no se halla copiado
+    	*/                                     
+        public static function copiar_aprobacion_prorroga($archivo, $id_aprobacion_prorroga){
+            $archivo = $archivo->move(storage_path('archivos/aprobaciones_prorrogas/'), $id_aprobacion_prorroga.'__'.$archivo->getClientOriginalName());
+            if($archivo)
+                return $archivo;
+            else
+                return false;                                                    
+        }
+        
     }
 
 ?>

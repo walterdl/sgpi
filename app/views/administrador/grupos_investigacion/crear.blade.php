@@ -143,7 +143,7 @@
                             </div>
                             <div class="col-xs-12 col-sm-6">
                                 <label for="sede">Facultad / dependencia: <i ng-show="visibilidad.cargando_data_inicial" class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i> </label> <span style="color:rgb(139,0,0);" ng-show="btn_guardar_seleccionado && visibilidad.show_facultad_invalido">Campo requerido</span>
-                                <ui-select ng-model="data.facultad" theme="bootstrap" ng-change="validar_facultad()"  ng-class="{'invalid_control': btn_guardar_seleccionado && visibilidad.show_facultad_invalido}"
+                                <ui-select ng-model="data.facultad" theme="bootstrap" ng-change="validar_facultad()" ng-class="{'invalid_control': btn_guardar_seleccionado && visibilidad.show_facultad_invalido}"
                                 ng-disabled="visibilidad.error_carga_data_inicial">
                                 	<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
                                 	<ui-select-choices repeat="item in data.facultades_correspondientes | filter: $select.search">

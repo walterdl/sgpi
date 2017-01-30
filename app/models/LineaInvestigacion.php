@@ -18,7 +18,7 @@
         */            
         public static function eliminar_linea_investigacion($id){
             
-            $query = 'DELETE FROM lineas_grupos_investigacion ';
+            $query = 'DELETE FROM lineas_grupos_investigacion_ucc ';
             $query .= 'WHERE id_linea_investigacion = '.$id.';';
             DB::select(DB::raw($query));
             LineaInvestigacion::find($id)->delete();

@@ -59,6 +59,7 @@ sgpi_app.controller('listar_grupos_investigacion_controller', function($scope, $
         mostrar_lineas_inv: false,
         show_sin_grupos: false
     };
+    $scope.show_velo_msj_operacion = false;
     $scope.data = {
         mensaje_operacion: 'Seleccionar una sede',
         mensaje_operacion_lineas_inv: 'Seleccione un grupo de investigación',
@@ -107,7 +108,6 @@ sgpi_app.controller('listar_grupos_investigacion_controller', function($scope, $
         catch(e){
             if (e !== BreakException) throw e;
         }
-        
     }); 
     
     $scope.cambiaSede = function(){
@@ -164,6 +164,7 @@ sgpi_app.controller('listar_grupos_investigacion_controller', function($scope, $
                 }
             })
             .success(function(data){
+                console.log(data);
                 if(data.length){
                     $scope.data.lineas_investigacion = data;
                     $scope.visibilidad.mostrar_lineas_inv = true;
@@ -201,39 +202,48 @@ sgpi_app.controller('listar_grupos_investigacion_controller', function($scope, $
     
     $scope.btn_eliminar_grupo_inv_click = function(grupo_investigacion){
         /*
-        Un grupo de investigacion se puede eliminar si:
-        -No tiene usuarios cuyo grupo de investigación sea el que se desee eliminar
+        Un grupo de investigacion no se puede eliminar si:
+        | -Si hay usuario coordinador o investigador cuyo grupo de investiigación es el grupo a liminar
+        | -Si hay proyecto cuyo grupo de investigación ejecutor es el grupo a eliminar
+        | -Si hay investigador interno cuyo grupo de investigación es el grupo a eliminar
         */
         // se envia solicitud ajax para realizar la validacion citada anteriormente
+        $scope.id_grupo_investigacion_ucc_eliminar = grupo_investigacion.id;
+        $scope.msj_operacion = '<h4 class="text-center">Validando eliminación de grupo de investigación...<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i></h4>';
+        $scope.show_velo_msj_operacion = true;
         $http({
-                    method: 'GET',
-                    url: 'grupos/validar_eliminacion_grupo_inv',
-                    params: {
-                        id: grupo_investigacion.id,
-                    }
-                })
-                .success(function(data){
-                    if(data.length){
-                        $scope.visibilidad.mostrar_mensaje_operacion = false;
-                        $scope.visibilidad.mostrar_grupos_investigacion = true;
-                        $scope.data.grupos_investigacion = data;
+                method: 'GET',
+                url: '/grupos/validar_eliminacion_grupo_inv',
+                params: {
+                    id_grupo_investigacion_ucc: grupo_investigacion.id,
+                }
+            })
+            .success(function(data){
+                console.log(data);
+                if(data.consultado == 1){
+                    // btn_form_eliminar_grupo_inv
+                    if(data.se_puede_eliminar == 1){
+                        $scope.msj_operacion = '<h4 class="text-center">Eliminando grupo de investigación...<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i></h4>';
+                        $('#btn_form_eliminar_grupo_inv').trigger('click'); // envia formulario de eliminación de grupo de investigación
                     }
                     else{
-                        var sede_seleccionada = $('option.sede[value="'+ $scope.data.sede +'"]').text();
-                        $scope.data.mensaje_operacion = 'No hay grupos de investigación registrados para la sede ' + sede_seleccionada;
-                        $scope.visibilidad.mostrar_mensaje_operacion = true;
+                        var delay = alertify.get('notifier','delay');
+                        alertify.set('notifier','delay', 0);
+                        alertify.error('El grupo de investigación no se puede eliminar ya que: existe un usuario, un investigador interno o un proyecto de investigación usándolo');
+                        alertify.set('notifier','delay', delay);
+                        $scope.show_velo_msj_operacion = false;
                     }
-                })
-                .error(function(data, status) {
-                    Alertify.error('Un error ha ocurrido. Codigo de estado: ' + status);
-                    $scope.data.mensaje_operacion = 'Un error ha ocurrido. Codigo de estado: ' + status;
-                    $scope.visibilidad.mostrar_mensaje_operacion = true;
-                    console.log('Error consultando los grupos de investigacion de la sede');
-                    console.log(data);
-                })
-                .finally(function() {
-                    $scope.visibilidad.mostrar_velo = false;
-                });
+                }
+                else{
+                    alertify.error('Error al eliminar el grupo de investigación. Código de error: ' + data.codigo);
+                    $scope.show_velo_msj_operacion = false;
+                }
+            })
+            .error(function(data, status) {
+                console.log(data);
+                alertify.error('Error XHR o de servidor al eliminar el grupo de investigación. Código de estado: ' + status);
+                $scope.show_velo_msj_operacion = false;
+            });
     };
     
 });

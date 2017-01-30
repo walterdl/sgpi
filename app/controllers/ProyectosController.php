@@ -175,15 +175,15 @@
                     'cantidad_objetivos_especificos' => $data['cantidad_objetivos_especificos']
                     ),
                 array(
-                    'codigo_fmi' => array('required', 'min:5', 'max:250'),
-                    'subcentro_costo' => array('required', 'min:5', 'max:250'),
-                    'nombre' => array('required', 'min:5', 'max:250'),
+                    'codigo_fmi' => array('required', 'min:2', 'max:50'),
+                    'subcentro_costo' => array('required', 'min:2', 'max:50'),
+                    'nombre' => array('required', 'min:5', 'max:200'),
                     'fecha_inicio' => array('date_format:Y-m-d'),
                     'fecha_fin' => array('date_format:Y-m-d'),
                     'duracion_meses' => array('integer', 'min:12'),
                     'convocatoria' => array('max:250'),
                     'anio_convocatoria' => array('integer'),
-                    'objetivo_general' => array('required', 'min:5', 'max:250'),
+                    'objetivo_general' => array('required', 'min:5', 'max:200'),
                     'cantidad_objetivos_especificos' => array('required', 'min:1')
                     )
             );
@@ -391,11 +391,11 @@
                         'sexo' => $sexo
                         );
                 $reglas_de_validacion = array(
-                        'nombres' => array('required', 'min:5', 'max:250'),
-                        'apellidos' => array('required', 'min:5', 'max:250'),
+                        'nombres' => array('required', 'min:5', 'max:200'),
+                        'apellidos' => array('required', 'min:5', 'max:200'),
                         'formacion' => array('required', 'in:Ph. D,Doctorado,Maestría,Especialización,Pregado'),
                         'tipo_identificacion' => array('required', 'integer', 'exists:tipos_identificacion,id'),
-                        'edad' => array('required', 'integer', 'min:1', 'max:120'),
+                        'edad' => array('required', 'integer', 'min:10', 'max:120'),
                         'sexo' => array('required', 'in:m,f')
                         );
                 

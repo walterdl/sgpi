@@ -55,6 +55,7 @@ sgpi_app.controller('informe_avance_controller', function ($scope, Upload, $http
                 $scope.informe_avance = data.informe_avance;
                 $scope.fecha_mitad_proyecto = data.fecha_mitad_proyecto;
                 $scope.comentario_investigador = data.informe_avance.comentario_investigador;
+                $scope.comentario_revision = data.informe_avance.comentario_revision;
                 $scope.nombre_archivo = data.informe_avance.archivo;
                 $scope.show_velo_msj_operacion = false;
             }
