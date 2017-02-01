@@ -4,9 +4,8 @@
     
     class GrupoInvestigacionUCC extends Eloquent {
         
-        
-        
         protected $table = 'grupos_investigacion_ucc';
+        
         protected $dates = ['deleted_at'];
         
         protected $fillable = array('id','nombre', 'id_facultad_dependencia_ucc', 'id_area', 'id_clasificacion_grupo_investigacion');
@@ -14,7 +13,6 @@
         public function facultad() { 
             return $this->belongsTo('FacultadDependenciaUCC', 'id_facultad_dependencia_ucc'); 
         }
-        
         
     	/*
     	|--------------------------------------------------------------------------
@@ -50,6 +48,33 @@
                     'nombre_sede' => $sede->nombre,
                     'grupos_investigacion' => $resultado_query_grupos_investigacion
                     );
+            }
+            return $respuesta;
+        }
+
+    	/*
+    	|--------------------------------------------------------------------------
+    	| grupos_inv_x_facultades()
+    	|--------------------------------------------------------------------------
+    	| Retorna los grupos de investigacipon y su información relacionada agrupados por facultad en un array asociativo cuya clave es el id de la facultad
+    	| ej:
+    	| Array(1 => Array(
+    	|       'nombre_facultad' => 'Ingeniería'
+    	|       'grupos_investigacion' => Array(GrupoInvestigacion1, GrupoInvestigacion2,....)
+    	|      ),
+    	|       2 => Array(Otra facultad junto con sus grupos de investigación...)
+    	| )
+    	*/                  
+        public static function grupos_inv_x_facultades(){
+            
+            $facultades_ucc = FacultadDependenciaUCC::all();
+            $respuesta = [];
+            foreach($facultades_ucc as $facultad){
+                $grupos_investigacion_ucc = GrupoInvestigacionUCC::where('id_facultad_dependencia_ucc', '=', $facultad->id)->get();
+                $respuesta[$facultad->id] = [
+                    'nombre_facultad' => $facultad->nombre,
+                    'grupos_investigacion' => $grupos_investigacion_ucc
+                    ];
             }
             return $respuesta;
         }

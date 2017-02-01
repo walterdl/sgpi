@@ -78,6 +78,7 @@
                         <table datatable="ng" dt-options="dtOptions" class="table table-hover table-stripped table-bordered">
                             <thead>
                                 <tr>
+                                    <th>Facultad / dependencia</th>
                                     <th>Grupo de investigación</th>
                                     <th>Clasificación del grupo</th>
                                     <th>Area Colciencias</th>
@@ -89,6 +90,7 @@
                             </thead>
                             <tbody>
                                 <tr ng-show="visibilidad.mostrar_grupos_investigacion" ng-repeat="grupo_investigacion in data.grupos_investigacion">
+                                    <td>{$ grupo_investigacion.nombre_facultad_dependencia $}</td>
                                     <td>{$ grupo_investigacion.nombre_grupo_investigacion $}</td>
                                     <td>{$ grupo_investigacion.clasificacion_grupo_investigacion $}</td>
                                     <td>{$ grupo_investigacion.area $}</td>

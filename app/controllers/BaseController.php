@@ -27,8 +27,8 @@ class BaseController extends Controller {
                 foreach ($statements as $stmt) {
                     DB::statement($stmt);
                 }
-                echo 'BD germinada, retorno a la aplicación: <a href="/">Inicio</a>';
         	});
+            return 'BD germinada, retorno a la aplicación: <a href="/">Inicio</a>';
         }
         catch (Exception $e){
             return 'Error en la germinación de la BD; <br />Codigo: '.$e->getCode().'<br />Mensaje de excepción: '.$e->getMessage();
@@ -60,8 +60,8 @@ class BaseController extends Controller {
                 foreach ($statements as $stmt) {
                     DB::statement($stmt);
                 }
-                echo 'BD truncada, se recomienda germinar BD: <a href="/sembrar_bd">Germinar BD</a>';
             });
+            return 'BD truncada, se recomienda germinar BD: <a href="/sembrar_bd">Germinar BD</a>';
         }
         catch (Exception $e){
             return 'Error en la truncación de la BD; <br />Codigo: '.$e->getCode().'<br />Mensaje de excepción: '.$e->getMessage();

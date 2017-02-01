@@ -112,7 +112,7 @@
                     if($validacion->fails()){
                         Session::flash('notify_operacion_previa', 'error');
                         Session::flash('mensaje_operacion_previa', 'Error en el registro de nuevo proyecto. Detalles: Identificación de investigador principal '.$data['identificacion_investigador_principal'].' inválida');
-                        return Redirect::to('/proyectos/listar');                       
+                        return Redirect::to('/proyectos/listar');
                     }
                     
                     // validación de identificación correcta
@@ -1850,7 +1850,32 @@
                 throw new Exception('Error al copiar archivo de acta de inicio de proyecto'); 
         }
         
-        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| consultar_proyectos_filtrados()
+    	|--------------------------------------------------------------------------
+    	| Retorno json con los proyectos filtrados por sede, facultad o grupo de investigación
+    	| función usada en vista de indicadores de proyectos
+    	*/          
+        public function consultar_proyectos_filtrados(){
+            
+            try{
+                
+                $proyectos = Proyecto::proyectos_filtrados(Input::get('filtro', null), Input::get('id_sede', null), Input::get('id_facultad', null), Input::get('id_grupo_investigacion', null));
+                return json_encode([
+                    'consultado' => 1,
+                    'proyectos' => $proyectos
+                    ]);
+            }
+            catch(\Exception $e){
+                return json_encode([
+                    'consultado' => 2,
+                    'mensaje' => $e->getMessage(),
+                    'codigo' => $g->getCode()
+                    ]);
+            }
+            
+        }
         
         
         

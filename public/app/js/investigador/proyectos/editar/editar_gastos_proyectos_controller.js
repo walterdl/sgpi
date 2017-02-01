@@ -48,6 +48,7 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
     $scope.agregar_nueva_entidadPresupuesto = function() {
         if($scope.data.nueva_entidad_entidad_presupuesto != null && $scope.data.nueva_entidad_entidad_presupuesto.length > 0){
             var existe_entidadPresupuesto = false;
+            
             $scope.data.entidades_fuente_presupuesto.forEach(function(item) {
                 if(item.nombre == $scope.data.nueva_entidad_entidad_presupuesto)
                     existe_entidadPresupuesto = true;
@@ -62,6 +63,7 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
                 id: $scope.data.contador_nuevas_entidades_presupuesto + 'x', // la 'x' significa que se trata de una entidad añadida por el usuario y no se trata de una ya existente en la BD
                 nombre: $scope.data.nueva_entidad_entidad_presupuesto
             }
+            
             $scope.data.entidades_fuente_presupuesto.push(nueva_entidad_presupuesto);
             $scope.data.entidades_presupuesto_seleccionadas.push(nueva_entidad_presupuesto);
             $scope.agregar_entidad_presupuesto_a_gastos(nueva_entidad_presupuesto);

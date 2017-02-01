@@ -96,6 +96,61 @@
         
     	/*
     	|--------------------------------------------------------------------------
+    	| proyectos_filtrados()
+    	|--------------------------------------------------------------------------
+    	| Consulta los proyectos de investigación filstrados por sede, facultad o grupo de investigación
+    	*/        
+        public static function proyectos_filtrados($filtro, $id_sede=null, $id_facultad=null, $id_grupo_inv=null){
+            
+
+            if($filtro == 'sede')
+                $query = '
+                    SELECT 
+                        p.id, gi.nombre, p.codigo_fmi, p.subcentro_costo, p.nombre as nombre_proyecto, p.fecha_fin,  
+                        p.duracion_meses, gi.nombre as nombre_grupo_inv_principal 
+                    FROM proyectos p, grupos_investigacion_ucc gi, facultades_dependencias_ucc f, sedes_ucc s
+                    WHERE 
+                        p.id_grupo_investigacion_ucc = gi.id
+                    AND gi.id_facultad_dependencia_ucc = f.id
+                    AND f.id_sede_ucc = s.id
+                    AND s.id = '.$id_sede.';';
+            
+            else if($filtro == 'facultad')
+                $query = '
+                    SELECT 
+                        p.id, gi.nombre, p.codigo_fmi, p.subcentro_costo, p.nombre as nombre_proyecto, p.fecha_fin,  
+                        p.duracion_meses, gi.nombre as nombre_grupo_inv_principal 
+                    FROM proyectos p, grupos_investigacion_ucc gi, facultades_dependencias_ucc f
+                    WHERE 
+                        p.id_grupo_investigacion_ucc = gi.id
+                    AND gi.id_facultad_dependencia_ucc = f.id
+                    AND f.id = '.$id_facultad.';';
+                    
+            else if($filtro == 'grupo')
+                $query = '
+                    SELECT 
+                        p.id, gi.nombre, p.codigo_fmi, p.subcentro_costo, p.nombre as nombre_proyecto, p.fecha_fin,  
+                        p.duracion_meses, gi.nombre as nombre_grupo_inv_principal 
+                    FROM proyectos p, grupos_investigacion_ucc gi
+                    WHERE 
+                        p.id_grupo_investigacion_ucc = gi.id
+                    AND gi.id = '.$id_grupo_inv.';';
+            else
+                $query = '
+                    SELECT 
+                        p.id, gi.nombre, p.codigo_fmi, p.subcentro_costo, p.nombre as nombre_proyecto, p.fecha_fin,  
+                        p.duracion_meses, gi.nombre as nombre_grupo_inv_principal 
+                    FROM proyectos p, grupos_investigacion_ucc gi 
+                    WHERE p.id_grupo_investigacion_ucc = gi.id; ';
+                    
+                    
+            return DB::select(DB::raw($query));
+            
+            
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
     	| productos_de_proyecto()
     	|--------------------------------------------------------------------------
     	| Consulta los productos de un determinado proyecto junto con las postulaciones/publicaciones que tengan los mismos, adjunta los datos del participante encargado
@@ -327,6 +382,71 @@
                 
             return DB::select(DB::raw($query));
         }                
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| cantidad_mujeres_hombres()
+    	|--------------------------------------------------------------------------
+    	| Consulta la cantidad total de mujeres y de hombres participantes en todos los proyectos de iinvestigación
+    	*/        
+        public static function cantidad_mujeres_hombres(){
+            
+            $proyectos = Proyecto::all();
+            
+            $hombres = 0;
+            $mujeres = 0;
+            foreach($proyectos as $proyecto){
+                $investigadores = Investigador::where('id_proyecto', '=', $proyecto->id)->get();
+                foreach($investigadores as $investigador){
+                    if($investigador->id_rol == 3){
+                        // es inv ppal
+                        $usuario_inv_ppal = Usuario::find($investigador->id_usuario_investigador_principal);
+                        $persona_inv_ppal = Persona::find($usuario_inv_ppal->id_persona);
+                        if($persona_inv_ppal->sexo == 'm')
+                            $hombres++;
+                        else if($persona_inv_ppal->sexo == 'f')
+                            $mujeres++;
+                    }
+                    else{
+                        $persona = Persona::find($investigador->id_persona_coinvestigador);
+                        if($persona->sexo == 'm')
+                            $hombres++;
+                        else if($persona->sexo == 'f')
+                            $mujeres++;                        
+                    }
+                }
+            }
+            return [
+                'hombres' => $hombres,
+                'mujeres' => $mujeres
+                ];
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| cantidad_proyectos_final_aprobado()
+    	|--------------------------------------------------------------------------
+    	| Consulta la cantidad total de proyectos cuyo final de proyecto ha sido aprobado
+    	*/          
+        public static function cantidad_proyectos_final_aprobado(){
+            
+            $proyectos = Proyecto::all();
+            
+            $finales_aprobados = 0;
+            $finales_no_aprobados = 0;
+            foreach($proyectos as $proyecto){
+                $acta_finalizacion = DocumentoProyecto::where('id_proyecto', '=', $proyecto->id)
+                    ->where('id_formato_tipo_documento', '=', 'Aprobacion final proyecto');
+                if($acta_finalizacion)
+                    $finales_aprobados++;
+                else
+                    $finales_no_aprobados++;
+            }
+            return [
+                'finales_aprobados' => $finales_aprobados,
+                'finales_no_aprobados' => $finales_no_aprobados
+                ];
+        }
     
     }
 

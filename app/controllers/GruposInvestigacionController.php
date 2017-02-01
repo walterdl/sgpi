@@ -50,21 +50,25 @@
     	|--------------------------------------------------------------------------
     	| get_grupos_investigacion()
     	|--------------------------------------------------------------------------
-    	| Retorno json con los grupos de investigación de una sede determinada por su id
+    	| Retorno json con los grupos de investigación de una sede determinada por su id, añade el nombre de la facultad a la cual pertenece
     	*/
         public function get_grupos_investigacion(){
             
             $id_sede = Input::all()['id_sede'];
             
-            $query = 'SELECT gi.id as id, gi.nombre as nombre_grupo_investigacion, cgi.nombre as clasificacion_grupo_investigacion, a.nombre as area, ga.nombre as gran_area  ';
-            $query .= 'FROM grupos_investigacion_ucc gi, clasificaciones_grupos_investigacion cgi, areas a, gran_areas ga, facultades_dependencias_ucc fd ';
-            $query .= 'WHERE  ';
-            $query .= '	gi.id_clasificacion_grupo_investigacion = cgi.id  ';
-            $query .= 'AND gi.id_area = a.id   ';
-            $query .= 'AND a.id_gran_area = ga.id  ';
-            $query .= 'AND fd.id_sede_ucc = '.$id_sede.' ';
-            $query .= 'AND fd.id = gi.id_facultad_dependencia_ucc ';
-            $query .= 'ORDER BY gi.nombre  ';
+            $query = '
+    			SELECT 
+    				gi.id as id, gi.nombre as nombre_grupo_investigacion, 
+    				fd.id as id_facultad_dependencia, fd.nombre as nombre_facultad_dependencia,
+    				cgi.nombre as clasificacion_grupo_investigacion, a.nombre as area, ga.nombre as gran_area
+                FROM grupos_investigacion_ucc gi, clasificaciones_grupos_investigacion cgi, areas a, gran_areas ga, facultades_dependencias_ucc fd 
+                WHERE  
+                	gi.id_clasificacion_grupo_investigacion = cgi.id  
+                AND gi.id_area = a.id   
+                AND a.id_gran_area = ga.id  
+                AND fd.id_sede_ucc = '.$id_sede.'
+                AND fd.id = gi.id_facultad_dependencia_ucc 
+                ORDER BY gi.nombre;';
                 
             $resultado = DB::select(DB::raw($query));
             

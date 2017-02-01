@@ -18,7 +18,9 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
     $scope.data.producto=[];
     $scope.data.info_investigadores_usuario=[];
     
-    ///fuentes de presupuesto
+    // $scope.data.entidades_presupuesto_seleccionadas = [];
+    
+    ///fuentes de presupuesto participantes
     $scope.data.fuente_presupuesto={
         presupuesto:null,
         total_gastos_columnas:null,
@@ -145,6 +147,15 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
                              entry['gasto_total'].presupuesto_total_fila=(entry['gasto_total'].presupuesto_total_fila+item.valor);
                         }  
                         
+                        if(cont == 1){
+                            
+                        //     var entidad_presupuesto = {
+                        //         id: item.entidad_fuente_presupuesto.id, 
+                        //         nombre: item.entidad_fuente_presupuesto.nombre
+                        //     }               
+            
+                        //   $scope.data.entidades_presupuesto_seleccionadas.push(entidad_presupuesto);
+                        }
                         
                      });
                         
@@ -208,7 +219,7 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
                $scope.data.proyecto.fecha_inicio=Date.parse($scope.data.proyecto.fecha_inicio);
             }
             
-            console.log(data.proyecto);
+            //console.log(data.proyecto);
                  
             $scope.data.grupos_investigacion_y_sedes = data.grupos_investigacion_y_sedes;
             $scope.data.facultades_dependencias = data.facultades_dependencias;
@@ -223,7 +234,7 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
             $scope.visibilidad.show_velo_general = false;
             $scope.data.entidades_fuente_presupuesto = data.entidades_fuente_presupuesto;
             
-            
+            console.log($scope.data.entidades_fuente_presupuesto);
             // se agrega investigador principal a colección de participantes del proyecto            
             if($scope.data.participantes_proyecto){
                 

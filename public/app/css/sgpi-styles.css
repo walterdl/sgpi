@@ -130,3 +130,7 @@ fieldset[disabled] .btn-sgpi.active {
         font-size: 35px;
     }
 }
+
+.wrap-text{
+    white-space: normal;
+}

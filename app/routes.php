@@ -68,7 +68,6 @@ Route::get('pass', function(){
 |
 */
 Route::get('/', array('before' => 'validate', function(){
-
 	return View::make('login');
 }));
 
@@ -231,14 +230,11 @@ Route::group(array('before' => 'auth'), function(){
 		Route::post('proyectos/guardar_revision_final_proyecto', 'GestionProyectosController@guardar_revision_final_proyecto');
 		Route::get('proyectos/prorroga', 'GestionProyectosController@consultar_prorroga');
 		Route::post('proyectos/guardar_revision_prorroga', 'GestionProyectosController@guardar_revision_prorroga');
-	    
-	    //Retorna 404 para ruta de administrador no encontrada
-		App::missing(function($e) 
-		{ 
-		    $url = Request::fullUrl(); 
-		    Log::warning("404 for URL: $url"); 
-		     return View::make('nofound');
-		});
+		Route::get('proyectos/indicadores', 'IndicadoresController@indicadores_admin');
+		Route::get('proyectos/consultar_proyectos_filtrados', 'ProyectosController@consultar_proyectos_filtrados');
+		
+		// indicadores
+		Route::get('indicadores/data_inicial_admin', 'IndicadoresController@data_inicial_admin');
 	}
 	
 	/*********Rutas coordinador**********/
@@ -302,14 +298,6 @@ Route::group(array('before' => 'auth'), function(){
 		Route::get('proyectos/informe_avance', 'GestionProyectosController@consultar_informe_avance');
 		Route::get('proyectos/final_proyecto', 'GestionProyectosController@consultar_final_proyecto');		
 		Route::get('proyectos/prorroga', 'GestionProyectosController@consultar_prorroga');
-		
-        //Retorna 404 para ruta de administrador no encontrada
-		App::missing(function($e) 
-		{ 
-		    $url = Request::fullUrl(); 
-		    Log::warning("404 for URL: $url"); 
-		     return View::make('nofound');
-		});
 	}
 	
 	/*********Rutas investigador**********/
@@ -385,16 +373,6 @@ Route::group(array('before' => 'auth'), function(){
 		*/
 		Route::get('proyectos/editar/{pagina}/{id}', 'ProyectosController@editarVer');
 		Route::get('proyectos/datos_iniciales_editar_proyecto', 'ProyectosController@datos_iniciales_editar_proyecto');
-		
-		
-		
-		// Retorna 404 para ruta de administrador no encontrada
-		App::missing(function($e) 
-		{ 
-		    $url = Request::fullUrl(); 
-		    Log::warning("404 for URL: $url"); 
-		     return View::make('nofound');
-		});
 	}
 });
 
@@ -426,9 +404,19 @@ Route::post('check', 'AuthController@check');
 */
 App::missing(function($e) 
 { 
-    $url = Request::fullUrl(); 
-    Log::warning("404 for URL: $url"); 
-    return Response::make('<h1>404 not found!</h1><br> <a href="/">ir a Login</a>', 404); 
+	if(Auth::check()){
+	    $url = Request::fullUrl(); 
+	    Log::warning("404 for URL: $url"); 
+	    Session::flash('notify_operacion_previa', 'error');
+	    Session::flash('mensaje_operacion_previa', '404 not found. Dirección '.$url.' no reconocida');
+	    return Redirect::to('home');		
+	}
+	else{
+	    $url = Request::fullUrl(); 
+	    $url = Request::fullUrl(); 
+	    Log::warning("404 for URL: $url"); 
+	    return Response::make('<h1>404 not found!</h1><br> <a href="/">ir a Login</a>', 404); 
+	}
 });
 
 

@@ -413,7 +413,7 @@ INSERT INTO `formatos_tipos_documentos` (nombre, archivo, created_at) VALUES
 ('Acta finalizacion', 'FMI6-2 Acta de Finalización.docx', curdate()),
 ('Prorroga', NULL, curdate()),
 ('Aprobacion final proyecto', NULL, curdate()),
-('Aprobacion prorroga', NULL, curdate()),;
+('Aprobacion prorroga', NULL, curdate());
 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
