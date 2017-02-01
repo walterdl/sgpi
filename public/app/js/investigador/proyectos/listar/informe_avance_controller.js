@@ -54,9 +54,9 @@ sgpi_app.controller('informe_avance_controller', function ($scope, Upload, $http
             if(data.consultado == 1){
                 $scope.informe_avance = data.informe_avance;
                 $scope.fecha_mitad_proyecto = data.fecha_mitad_proyecto;
-                $scope.comentario_investigador = data.informe_avance.comentario_investigador;
-                $scope.comentario_revision = data.informe_avance.comentario_revision;
-                $scope.nombre_archivo = data.informe_avance.archivo;
+                $scope.comentario_investigador = data.informe_avance != null ? data.informe_avance.comentario_investigador : null;
+                $scope.comentario_revision = data.informe_avance != null ? data.informe_avance.comentario_revision : null;
+                $scope.nombre_archivo = data.informe_avance != null ? data.informe_avance.archivo : null;
                 $scope.show_velo_msj_operacion = false;
             }
             else{

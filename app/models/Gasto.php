@@ -127,7 +127,7 @@
         private static function consultar_gastos_personal_proyecto($id_proyecto){
             
             $investigadores = Investigador::where('id_proyecto', '=', $id_proyecto)->get();
-            
+
             // Aparte de los campos que la tabla investigadores provee, se añade:
             // los nombres y apellidos concatenados mas la identificación y su acrónimo
             // nombre grupo investigacion
@@ -201,8 +201,7 @@
                 }
                 
                 // agrega los gastos del investigador, agregando el nombre de la entidad fuente de presupuesto
-                $investigador['gastos'] = [];
-                
+                $investigador['gastos'] = [];   
                 $detalle_gasto_investigador = DetalleGasto::where('id_investigador', '=', $investigador['id'])->first();
                 $investigador['id_detalle_gasto'] = $detalle_gasto_investigador->id;
                 $gastos_investigador = Gasto::where('id_detalle_gasto', '=', $detalle_gasto_investigador->id)->orderBy('id_entidad_fuente_presupuesto', 'asc')->get();

@@ -59,7 +59,7 @@
                     AND i.id_proyecto = '.$id_proyecto.';';
             
             $resultado = DB::select(DB::raw($query));
-            if($resultado) // se trata de un coinvestigador
+            if(count($resultado) > 0) // se trata de un coinvestigador
                 return $resultado[0];
             else // se trata del investigador principal
             {
@@ -69,7 +69,8 @@
                     WHERE 
                         p.identificacion = '.$identificacion.'
                         AND p.id = u.id_persona
-                        AND u.id = i.id_usuario_investigador_principal;';
+                        AND u.id = i.id_usuario_investigador_principal
+                        AND i.id_proyecto = '.$id_proyecto.';';
                 return DB::select(DB::raw($query))[0];
             }
             

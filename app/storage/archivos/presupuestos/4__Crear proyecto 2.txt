@@ -1,0 +1,106 @@
+
+    codigo_fmi:FMI-W87
+    subcentro_costo:Subcentro K80
+    nombre_proyecto:Sistema SGPI
+    fecha_inicio:2017-02-10
+    duracion_meses:21
+    fecha_final:2018-11-10
+    convocatoria:Convocatoria incompleta a falta de año de convocatoria
+    anio_convocatoria:
+    objetivo_general:Desarrollar SGPI y graduarme
+    objetivo_especifico_0:obj especifico 1
+    cantidad_objetivos_especificos:1
+    cantidad_participantes:3
+    identificacion_investigador_principal:7
+    nombres_1:un tipo x
+    apellidos_1:un tipo x
+    identificacion_1:12
+    formacion_1:Ph. D
+    id_rol_1:6
+    tipo_identificacion_1:2
+    sexo_1:m
+    edad_1:43
+    email_1:tipox@gmail.com
+    entidad_externa_1:Coomeva
+    programa_academico_1:Sistemas
+    nombres_2:Luz Edith
+    apellidos_2:Tobar Cerón
+    identificacion_2:78
+    formacion_2:Doctorado
+    id_rol_2:5
+    tipo_identificacion_2:1
+    sexo_2:f
+    edad_2:23
+    email_2:lizth93@gmail.com
+    entidad_externa_2:UCC también
+    cantidad_productos:1
+    id_tipo_producto_general_0:3
+    id_tipo_producto_especifico_0:7
+    nombre_producto_0:Producto SGPI para la UCC
+    encargado_producto_0:7
+    fecha_proyectada_radicar_0:2017-01-31
+    fecha_remision_0:2017-02-07
+    fecha_confirmacion_editorial_0:2017-02-08
+    fecha_recepcion_evaluacion_0:2017-02-10
+    fecha_respuesta_evaluacion_0:2017-02-24
+    fecha_aprobacion_publicacion_0:2017-02-16
+    fecha_publicacion_0:2017-03-12
+    cantidad_gastos_equipos:1
+    cantidad_gastos_software:1
+    cantidad_gastos_salidas:1
+    cantidad_gastos_materiales:1
+    cantidad_gastos_servicios_tecnicos:1
+    cantidad_gastos_bibliograficos:1
+    cantidad_gastos_digitales:1
+    gasto_personal_dedicacion_semanal_7:023
+    gasto_personal_total_semanas_7:023
+    gasto_personal_valor_hora_7:023
+    gasto_personal_presupuesto_ucc_7:023
+    gasto_personal_fecha_ejecucion_7:2017-02-08
+    gasto_personal_dedicacion_semanal_12:023
+    gasto_personal_total_semanas_12:023
+    gasto_personal_valor_hora_12:023
+    gasto_personal_presupuesto_ucc_12:023
+    gasto_personal_fecha_ejecucion_12:2017-02-04
+    gasto_personal_dedicacion_semanal_78:023
+    gasto_personal_total_semanas_78:023
+    gasto_personal_valor_hora_78:023
+    gasto_personal_presupuesto_ucc_78:023
+    gasto_personal_fecha_ejecucion_78:2017-03-05
+    gasto_equipo_nombre_0:Equipo 1
+    gasto_equipo_justificacion_0:Justo
+    gasto_equipo_presupuesto_ucc_0:023
+    gasto_equipo_presupuesto_conadi_0:023
+    gasto_equipo_fecha_ejecucion_0:2017-03-10
+    gasto_software_nombre_0:Software 1
+    gasto_software_justificacion_0:Justo
+    gasto_software_presupuesto_ucc_0:02323
+    gasto_software_presupuesto_conadi_0:023
+    gasto_software_fecha_ejecucion_0:2017-02-25
+    gasto_salida_justificacion_0:Justo
+    gasto_salida_cantidad_salidas_0:023
+    gasto_salida_valor_unitario_0:023
+    gasto_salida_presupuesto_ucc_0:023
+    gasto_salida_presupuesto_conadi_0:023
+    gasto_salida_fecha_ejecucion_0:2017-02-23
+    gasto_material_nombre_0:Material n1
+    gasto_material_justificacion_0:Justo
+    gasto_material_presupuesto_ucc_0:023
+    gasto_material_presupuesto_conadi_0:023
+    gasto_material_fecha_ejecucion_0:2017-03-02
+    gasto_servicio_nombre_0:Material 1
+    gasto_servicio_justificacion_0:Justo
+    gasto_servicio_presupuesto_ucc_0:023
+    gasto_servicio_presupuesto_conadi_0:023
+    gasto_servicio_fecha_ejecucion_0:2017-02-17
+    gasto_bibliografico_nombre_0:Titulo
+    gasto_bibliografico_justificacion_0:Juisto
+    gasto_bibliografico_presupuesto_ucc_0:023
+    gasto_bibliografico_presupuesto_conadi_0:023
+    gasto_bibliografico_fecha_ejecucion_0:2017-03-03
+    gasto_digital_nombre_0:Titulo
+    gasto_digital_justificacion_0:Justo
+    gasto_digital_presupuesto_ucc_0:023
+    gasto_digital_presupuesto_conadi_0:023
+    gasto_digital_fecha_ejecucion_0:2017-02-23
+

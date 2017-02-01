@@ -560,7 +560,7 @@
                 'id_tipo_gasto' => TipoGasto::where('nombre', '=', 'Personal')->first()->id,
                 'id_investigador' => $investigador_principal->id
                 ));
-            $presupuesto_ucc_investigador_principal = $data['gasto_personal_presupuesto_ucc_'.$investigador_principal->identificacion];    
+            $presupuesto_ucc_investigador_principal = (int)$data['gasto_personal_presupuesto_ucc_'.$investigador_principal->identificacion];    
             // crea el gasto presupuestado por la ucc
             Gasto::create(array(
                 'id_proyecto' => $id_proyecto,
@@ -583,7 +583,7 @@
                     
                     // abstrae el valor del presupuesto
                     if(isset($data['gasto_personal_presupuesto_externo_'.$id_nueva_entidad.'_'.$investigador_principal->identificacion]))
-                        $presupuesto_nueva_entidad = $data['gasto_personal_presupuesto_externo_'.$id_nueva_entidad.'_'.$investigador_principal->identificacion];
+                        $presupuesto_nueva_entidad = (int)$data['gasto_personal_presupuesto_externo_'.$id_nueva_entidad.'_'.$investigador_principal->identificacion];
                     else
                         $presupuesto_nueva_entidad = 0;
                     
@@ -611,7 +611,7 @@
                     if(isset($data['gasto_personal_presupuesto_externo_'.$id_entidad_existente.'_'.$investigador_principal->identificacion])){
                         $presupuesto_entidad_existente = $data['gasto_personal_presupuesto_externo_'.$id_entidad_existente.'_'.$investigador_principal->identificacion];
                         $validacion = Validator::make(
-                            array('valor' => $presupuesto_entidad_existente),
+                            array('valor' => (int)$presupuesto_entidad_existente),
                             array('valor' => array('required', 'integer', 'min:0'))
                             );
                         if($validacion->fails())
@@ -654,7 +654,7 @@
                     'id_proyecto' => $id_proyecto,
                     'id_entidad_fuente_presupuesto' => $id_entidad_ucc,
                     'id_detalle_gasto' => $detalle_gasto->id,
-                    'valor' => is_null($presupuesto_ucc_investigador) ? 0 : $presupuesto_ucc_investigador
+                    'valor' => is_null($presupuesto_ucc_investigador) ? 0 : ((int)$presupuesto_ucc_investigador)
                     ));
                 // obtiene los presupuestos dados por entidades externas para los gastos personales del investigador
                 if(isset($data['nuevas_entidad_presupuesto'])){
@@ -670,7 +670,7 @@
                         
                         // abstrae el valor del presupuesto
                         if(isset($data['gasto_personal_presupuesto_externo_'.$id_nueva_entidad.'_'.$investigador->identificacion]))
-                            $presupuesto_nueva_entidad = $data['gasto_personal_presupuesto_externo_'.$id_nueva_entidad.'_'.$investigador->identificacion];
+                            $presupuesto_nueva_entidad = (int)$data['gasto_personal_presupuesto_externo_'.$id_nueva_entidad.'_'.$investigador->identificacion];
                         else
                             $presupuesto_nueva_entidad = 0;
                             
@@ -695,7 +695,7 @@
                         $id_entidad_existente = EntidadFuentePresupuesto::find($entidad_existente)->id; 
                         
                         if(isset($data['gasto_personal_presupuesto_externo_'.$id_entidad_existente.'_'.$investigador->identificacion])){
-                            $presupuesto_entidad_existente = $data['gasto_personal_presupuesto_externo_'.$id_entidad_existente.'_'.$investigador->identificacion];
+                            $presupuesto_entidad_existente = (int)$data['gasto_personal_presupuesto_externo_'.$id_entidad_existente.'_'.$investigador->identificacion];
                             $validacion = Validator::make(
                                 array('valor' => $presupuesto_entidad_existente),
                                 array('valor' => array('required', 'integer', 'min:0'))
@@ -794,7 +794,7 @@
                 // registra los gastos presupuestados por UCC
                 {
                     if(isset($data['gasto_equipo_presupuesto_ucc_'.$i])){
-                        $valor_ucc = $data['gasto_equipo_presupuesto_ucc_'.$i];
+                        $valor_ucc = (int)$data['gasto_equipo_presupuesto_ucc_'.$i];
                         $validacion = Validator::make(
                             array('valor' => $valor_ucc),
                             array('valor' => array('required', 'integer', 'min:0'))
@@ -815,7 +815,7 @@
                 // registra los gastos presupuestados por CONADI
                 {
                     if(isset($data['gasto_equipo_presupuesto_conadi_'.$i])){
-                        $valor_conadi = $data['gasto_equipo_presupuesto_conadi_'.$i];
+                        $valor_conadi = (int)$data['gasto_equipo_presupuesto_conadi_'.$i];
                         $validacion = Validator::make(
                             array('valor' => $valor_conadi),
                             array('valor' => array('required', 'integer', 'min:0'))
@@ -844,7 +844,7 @@
                         $nueva_entidad_presupuesto = EntidadFuentePresupuesto::where('nombre', '=', $nombre_nueva_entidad)->first();
                         
                         if(isset($data['gasto_equipo_presupuesto_externo_'.$id_nueva_entidad.'_'.$i])){
-                            $valor = $data['gasto_equipo_presupuesto_externo_'.$id_nueva_entidad.'_'.$i];
+                            $valor = (int)$data['gasto_equipo_presupuesto_externo_'.$id_nueva_entidad.'_'.$i];
                             $validacion = Validator::make(
                                 array('valor' => $valor),
                                 array('valor' => array('required', 'integer', 'min:0'))
@@ -872,7 +872,7 @@
                         $entidad_existente = EntidadFuentePresupuesto::find($entidad_existente); 
                         
                         if(isset($data['gasto_equipo_presupuesto_externo_'.$entidad_existente->id.'_'.$i])){
-                            $valor = $data['gasto_equipo_presupuesto_externo_'.$entidad_existente->id.'_'.$i];
+                            $valor = (int)$data['gasto_equipo_presupuesto_externo_'.$entidad_existente->id.'_'.$i];
                             $validacion = Validator::make(
                                 array('valor' => $valor),
                                 array('valor' => array('required', 'integer', 'min:0'))
@@ -941,7 +941,7 @@
                 // registra los gastos presupuestados por UCC
                 {
                     if(isset($data['gasto_software_presupuesto_ucc_'.$i])){
-                        $valor_ucc = $data['gasto_software_presupuesto_ucc_'.$i];
+                        $valor_ucc = (int)$data['gasto_software_presupuesto_ucc_'.$i];
                         $validacion = Validator::make(
                             array('valor' => $valor_ucc),
                             array('valor' => array('required', 'integer', 'min:0'))
@@ -962,7 +962,7 @@
                 // registra los gastos presupuestados por CONADI
                 {
                     if(isset($data['gasto_software_presupuesto_conadi_'.$i])){
-                        $valor_conadi = $data['gasto_software_presupuesto_conadi_'.$i];
+                        $valor_conadi = (int)$data['gasto_software_presupuesto_conadi_'.$i];
                         $validacion = Validator::make(
                             array('valor' => $valor_conadi),
                             array('valor' => array('required', 'integer', 'min:0'))
@@ -991,7 +991,7 @@
                         $nueva_entidad_presupuesto = EntidadFuentePresupuesto::where('nombre', '=', $nombre_nueva_entidad)->first();
                         
                         if(isset($data['gasto_software_presupuesto_externo_'.$id_nueva_entidad.'_'.$i])){
-                            $valor = $data['gasto_software_presupuesto_externo_'.$id_nueva_entidad.'_'.$i];
+                            $valor = (int)$data['gasto_software_presupuesto_externo_'.$id_nueva_entidad.'_'.$i];
                             $validacion = Validator::make(
                                 array('valor' => $valor),
                                 array('valor' => array('required', 'integer', 'min:0'))
@@ -1019,7 +1019,7 @@
                         $entidad_existente = EntidadFuentePresupuesto::find($entidad_existente); 
                         
                         if(isset($data['gasto_software_presupuesto_externo_'.$entidad_existente->id.'_'.$i])){
-                            $valor = $data['gasto_software_presupuesto_externo_'.$entidad_existente->id.'_'.$i];
+                            $valor = (int)$data['gasto_software_presupuesto_externo_'.$entidad_existente->id.'_'.$i];
                             $validacion = Validator::make(
                                 array('valor' => $valor),
                                 array('valor' => array('required', 'integer', 'min:0'))
@@ -1068,8 +1068,8 @@
                 $validacion = Validator::make(
                     array(
                         'justificacion' => $justificacion,
-                        'cantidad_salidas' => $cantidad_salidas,
-                        'valor_unitario' => $valor_unitario,
+                        'cantidad_salidas' => (int)$cantidad_salidas,
+                        'valor_unitario' => (int)$valor_unitario,
                         'fecha_ejecucion' => $fecha_ejecucion
                         ),
                     array(
@@ -1080,7 +1080,7 @@
                         )
                     );
                 if($validacion->fails())
-                    throw new Exception('Uno o varios datos de las salidas de campo son inválidos');
+                    throw new Exception('Uno o varios datos de las salidas de campo son inválidos. Detalles: '.$validacion->messages());
                 // throw new Exception($validacion->messages());
                     
                 $detalle_gasto = DetalleGasto::create(array(
@@ -1094,7 +1094,7 @@
                 // registra los gastos presupuestados por UCC
                 {
                     if(isset($data['gasto_salida_presupuesto_ucc_'.$i])){
-                        $valor_ucc = $data['gasto_salida_presupuesto_ucc_'.$i];
+                        $valor_ucc = (int)$data['gasto_salida_presupuesto_ucc_'.$i];
                         $validacion = Validator::make(
                             array('valor' => $valor_ucc),
                             array('valor' => array('required', 'integer', 'min:0'))
@@ -1115,7 +1115,7 @@
                 // registra los gastos presupuestados por CONADI
                 {
                     if(isset($data['gasto_salida_presupuesto_conadi_'.$i])){
-                        $valor_conadi = $data['gasto_salida_presupuesto_conadi_'.$i];
+                        $valor_conadi = (int)$data['gasto_salida_presupuesto_conadi_'.$i];
                         $validacion = Validator::make(
                             array('valor' => $valor_conadi),
                             array('valor' => array('required', 'integer', 'min:0'))
@@ -1144,7 +1144,7 @@
                         $nueva_entidad_presupuesto = EntidadFuentePresupuesto::where('nombre', '=', $nombre_nueva_entidad)->first();
                         
                         if(isset($data['gasto_salida_presupuesto_externo_'.$id_nueva_entidad.'_'.$i])){
-                            $valor = $data['gasto_salida_presupuesto_externo_'.$id_nueva_entidad.'_'.$i];
+                            $valor = (int)$data['gasto_salida_presupuesto_externo_'.$id_nueva_entidad.'_'.$i];
                             $validacion = Validator::make(
                                 array('valor' => $valor),
                                 array('valor' => array('required', 'integer', 'min:0'))
@@ -1172,7 +1172,7 @@
                         $entidad_existente = EntidadFuentePresupuesto::find($entidad_existente); 
                         
                         if(isset($data['gasto_salida_presupuesto_externo_'.$entidad_existente->id.'_'.$i])){
-                            $valor = $data['gasto_salida_presupuesto_externo_'.$entidad_existente->id.'_'.$i];
+                            $valor = (int)$data['gasto_salida_presupuesto_externo_'.$entidad_existente->id.'_'.$i];
                             $validacion = Validator::make(
                                 array('valor' => $valor),
                                 array('valor' => array('required', 'integer', 'min:0'))
@@ -1241,7 +1241,7 @@
                 // registra los gastos presupuestados por UCC
                 {
                     if(isset($data['gasto_material_presupuesto_ucc_'.$i])){
-                        $valor_ucc = $data['gasto_material_presupuesto_ucc_'.$i];
+                        $valor_ucc = (int)$data['gasto_material_presupuesto_ucc_'.$i];
                         $validacion = Validator::make(
                             array('valor' => $valor_ucc),
                             array('valor' => array('required', 'integer', 'min:0'))
@@ -1262,7 +1262,7 @@
                 // registra los gastos presupuestados por CONADI
                 {
                     if(isset($data['gasto_material_presupuesto_conadi_'.$i])){
-                        $valor_conadi = $data['gasto_material_presupuesto_conadi_'.$i];
+                        $valor_conadi = (int)$data['gasto_material_presupuesto_conadi_'.$i];
                         $validacion = Validator::make(
                             array('valor' => $valor_conadi),
                             array('valor' => array('required', 'integer', 'min:0'))
@@ -1291,7 +1291,7 @@
                         $nueva_entidad_presupuesto = EntidadFuentePresupuesto::where('nombre', '=', $nombre_nueva_entidad)->first();
                         
                         if(isset($data['gasto_material_presupuesto_externo_'.$id_nueva_entidad.'_'.$i])){
-                            $valor = $data['gasto_material_presupuesto_externo_'.$id_nueva_entidad.'_'.$i];
+                            $valor = (int)$data['gasto_material_presupuesto_externo_'.$id_nueva_entidad.'_'.$i];
                             $validacion = Validator::make(
                                 array('valor' => $valor),
                                 array('valor' => array('required', 'integer', 'min:0'))
@@ -1319,7 +1319,7 @@
                         $entidad_existente = EntidadFuentePresupuesto::find($entidad_existente); 
                         
                         if(isset($data['gasto_material_presupuesto_externo_'.$entidad_existente->id.'_'.$i])){
-                            $valor = $data['gasto_material_presupuesto_externo_'.$entidad_existente->id.'_'.$i];
+                            $valor = (int)$data['gasto_material_presupuesto_externo_'.$entidad_existente->id.'_'.$i];
                             $validacion = Validator::make(
                                 array('valor' => $valor),
                                 array('valor' => array('required', 'integer', 'min:0'))
@@ -1388,7 +1388,7 @@
                 // registra los gastos presupuestados por UCC
                 {
                     if(isset($data['gasto_servicio_presupuesto_ucc_'.$i])){
-                        $valor_ucc = $data['gasto_servicio_presupuesto_ucc_'.$i];
+                        $valor_ucc = (int)$data['gasto_servicio_presupuesto_ucc_'.$i];
                         $validacion = Validator::make(
                             array('valor' => $valor_ucc),
                             array('valor' => array('required', 'integer', 'min:0'))
@@ -1409,7 +1409,7 @@
                 // registra los gastos presupuestados por CONADI
                 {
                     if(isset($data['gasto_servicio_presupuesto_conadi_'.$i])){
-                        $valor_conadi = $data['gasto_servicio_presupuesto_conadi_'.$i];
+                        $valor_conadi = (int)$data['gasto_servicio_presupuesto_conadi_'.$i];
                         $validacion = Validator::make(
                             array('valor' => $valor_conadi),
                             array('valor' => array('required', 'integer', 'min:0'))
@@ -1438,7 +1438,7 @@
                         $nueva_entidad_presupuesto = EntidadFuentePresupuesto::where('nombre', '=', $nombre_nueva_entidad)->first();
                         
                         if(isset($data['gasto_servicio_presupuesto_externo_'.$id_nueva_entidad.'_'.$i])){
-                            $valor = $data['gasto_servicio_presupuesto_externo_'.$id_nueva_entidad.'_'.$i];
+                            $valor = (int)$data['gasto_servicio_presupuesto_externo_'.$id_nueva_entidad.'_'.$i];
                             $validacion = Validator::make(
                                 array('valor' => $valor),
                                 array('valor' => array('required', 'integer', 'min:0'))
@@ -1466,7 +1466,7 @@
                         $entidad_existente = EntidadFuentePresupuesto::find($entidad_existente); 
                         
                         if(isset($data['gasto_servicio_presupuesto_externo_'.$entidad_existente->id.'_'.$i])){
-                            $valor = $data['gasto_servicio_presupuesto_externo_'.$entidad_existente->id.'_'.$i];
+                            $valor = (int)$data['gasto_servicio_presupuesto_externo_'.$entidad_existente->id.'_'.$i];
                             $validacion = Validator::make(
                                 array('valor' => $valor),
                                 array('valor' => array('required', 'integer', 'min:0'))
@@ -1535,7 +1535,7 @@
                 // registra los gastos presupuestados por UCC
                 {
                     if(isset($data['gasto_bibliografico_presupuesto_ucc_'.$i])){
-                        $valor_ucc = $data['gasto_bibliografico_presupuesto_ucc_'.$i];
+                        $valor_ucc = (int)$data['gasto_bibliografico_presupuesto_ucc_'.$i];
                         $validacion = Validator::make(
                             array('valor' => $valor_ucc),
                             array('valor' => array('required', 'integer', 'min:0'))
@@ -1556,7 +1556,7 @@
                 // registra los gastos presupuestados por CONADI
                 {
                     if(isset($data['gasto_bibliografico_presupuesto_conadi_'.$i])){
-                        $valor_conadi = $data['gasto_bibliografico_presupuesto_conadi_'.$i];
+                        $valor_conadi = (int)$data['gasto_bibliografico_presupuesto_conadi_'.$i];
                         $validacion = Validator::make(
                             array('valor' => $valor_conadi),
                             array('valor' => array('required', 'integer', 'min:0'))
@@ -1585,7 +1585,7 @@
                         $nueva_entidad_presupuesto = EntidadFuentePresupuesto::where('nombre', '=', $nombre_nueva_entidad)->first();
                         
                         if(isset($data['gasto_bibliografico_presupuesto_externo_'.$id_nueva_entidad.'_'.$i])){
-                            $valor = $data['gasto_bibliografico_presupuesto_externo_'.$id_nueva_entidad.'_'.$i];
+                            $valor = (int)$data['gasto_bibliografico_presupuesto_externo_'.$id_nueva_entidad.'_'.$i];
                             $validacion = Validator::make(
                                 array('valor' => $valor),
                                 array('valor' => array('required', 'integer', 'min:0'))
@@ -1613,7 +1613,7 @@
                         $entidad_existente = EntidadFuentePresupuesto::find($entidad_existente); 
                         
                         if(isset($data['gasto_bibliografico_presupuesto_externo_'.$entidad_existente->id.'_'.$i])){
-                            $valor = $data['gasto_bibliografico_presupuesto_externo_'.$entidad_existente->id.'_'.$i];
+                            $valor = (int)$data['gasto_bibliografico_presupuesto_externo_'.$entidad_existente->id.'_'.$i];
                             $validacion = Validator::make(
                                 array('valor' => $valor),
                                 array('valor' => array('required', 'integer', 'min:0'))
@@ -1682,7 +1682,7 @@
                 // registra los gastos presupuestados por UCC
                 {
                     if(isset($data['gasto_digital_presupuesto_ucc_'.$i])){
-                        $valor_ucc = $data['gasto_digital_presupuesto_ucc_'.$i];
+                        $valor_ucc = (int)$data['gasto_digital_presupuesto_ucc_'.$i];
                         $validacion = Validator::make(
                             array('valor' => $valor_ucc),
                             array('valor' => array('required', 'integer', 'min:0'))
@@ -1703,7 +1703,7 @@
                 // registra los gastos presupuestados por CONADI
                 {
                     if(isset($data['gasto_digital_presupuesto_conadi_'.$i])){
-                        $valor_conadi = $data['gasto_digital_presupuesto_conadi_'.$i];
+                        $valor_conadi = (int)$data['gasto_digital_presupuesto_conadi_'.$i];
                         $validacion = Validator::make(
                             array('valor' => $valor_conadi),
                             array('valor' => array('required', 'integer', 'min:0'))
@@ -1732,7 +1732,7 @@
                         $nueva_entidad_presupuesto = EntidadFuentePresupuesto::where('nombre', '=', $nombre_nueva_entidad)->first();
                         
                         if(isset($data['gasto_digital_presupuesto_externo_'.$id_nueva_entidad.'_'.$i])){
-                            $valor = $data['gasto_digital_presupuesto_externo_'.$id_nueva_entidad.'_'.$i];
+                            $valor = (int)$data['gasto_digital_presupuesto_externo_'.$id_nueva_entidad.'_'.$i];
                             $validacion = Validator::make(
                                 array('valor' => $valor),
                                 array('valor' => array('required', 'integer', 'min:0'))
@@ -1760,7 +1760,7 @@
                         $entidad_existente = EntidadFuentePresupuesto::find($entidad_existente); 
                         
                         if(isset($data['gasto_digital_presupuesto_externo_'.$entidad_existente->id.'_'.$i])){
-                            $valor = $data['gasto_digital_presupuesto_externo_'.$entidad_existente->id.'_'.$i];
+                            $valor = (int)$data['gasto_digital_presupuesto_externo_'.$entidad_existente->id.'_'.$i];
                             $validacion = Validator::make(
                                 array('valor' => $valor),
                                 array('valor' => array('required', 'integer', 'min:0'))

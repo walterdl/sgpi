@@ -1711,7 +1711,7 @@
                             		<div class="panel-body">
                             			<div class="row">
                             				<div class="col-xs-12 col-sm-6 col-md-4">
-                            					<button type="button" class="btn btn-primary btn-block" ng-click="agregar_recurso_bibliografico()">Agregar recurso bibliográfico<i class="fa fa-plus" aria-hidden="true"></i></button>
+                            					<button type="button" class="btn btn-primary btn-block" ng-click="agregar_recurso_bibliografico()">Agregar recurso bibliográfico&nbsp;<i class="fa fa-plus" aria-hidden="true"></i></button>
                             				</div>
                             			</div>
                             			<br />
@@ -1818,7 +1818,7 @@
                             		<div class="panel-body">
                             			<div class="row">
                             				<div class="col-xs-12 col-sm-6 col-md-4">
-                            					<button type="button" class="btn btn-primary btn-block" ng-click="agregar_recurso_digital()">Agregar recurso educativo digital<i class="fa fa-plus" aria-hidden="true"></i></button>
+                            					<button type="button" class="btn btn-primary btn-block" ng-click="agregar_recurso_digital()">Agregar recurso educativo digital&nbsp;<i class="fa fa-plus" aria-hidden="true"></i></button>
                             				</div>
                             			</div>
                             			<br />
@@ -1890,7 +1890,7 @@
                                                             </div>                                                            
                                                         </td>                              							
                             							<td class="number-fixed-width text-left">
-                            							    {$ gasto_digital.total | currecny:$:2 $}
+                            							    {$ gasto_digital.total|currency:$:2 $}
                             							</td>
                             							<td>
                             								<button type="button" class="btn btn-default" ng-click="remover_gasto_digital(gasto_digital)"><i class="fa fa-times" aria-hidden="true"></i></button>

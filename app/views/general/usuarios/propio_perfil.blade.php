@@ -59,7 +59,7 @@
                        <fieldset>
                 			<legend>Datos básicos</legend>
                 			<div class="row is-flex sin-margen">
-                			    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" id="col_foto">
+                			    <div class="col-xs-12 col-sm-6 col-md-4" id="col_foto">
                 			        <div class="form-grouo">
                     					<label for="foto">Foto <span ng-show="data.btn_guardar_seleccionado && data.editar_datos && visibilidad.show_foto_invalido" class="error-text">{$ data.msj_error_foto $}</span></label>
                     					<input id="foto" class="form-control" type="file" name="foto"
@@ -92,7 +92,7 @@
                 			        </div>
                 				</div>            
                 				<!--<div class="hidden-xs hidden-sm col-md-8 col-lg-9">&nbsp;</div>-->
-                				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                				<div class="col-xs-12 col-sm-6 col-md-4">
                 				    <div class="form-group" ng-class="{'margin-top': visibilidad.margin_top_nombres}" id="#form-group-nombres">
                     					<label for="nombre">Nombres <span ng-show="data.btn_guardar_seleccionado && data.editar_datos && visibilidad.show_nombres_invalido" class="error-text">{$ data.msj_error_nombres $}</span></label>
                     					<input type="text" name="nombres" ng-model="data.nombres" ng-change="validar_nombres()" 
@@ -101,7 +101,7 @@
                     					ng-readonly="!data.editar_datos"/>                				    
                 				    </div>
                     			</div>
-                    			<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    			<div class="col-xs-12 col-sm-6 col-md-4">
                     			    <div class="form-group" ng-class="{'margin-top': visibilidad.margin_top_apellidos}" id="#form-group-apellidos">
                     					<label for="apellidos">Apellidos <span ng-show="data.btn_guardar_seleccionado && data.editar_datos && visibilidad.show_apellidos_invalido" class="error-text">{$ data.msj_error_apellidos $}</span></label>
                     					<input type="text" name="apellidos" ng-model="data.apellidos" ng-change="validar_apellidos()" 
@@ -111,8 +111,9 @@
                     					ng-readonly="!data.editar_datos"/>
                     			    </div>
                 				</div>
-                				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                				    <div class="form-group" ng-class="{'margin-top': visibilidad.margin_top_identificacion}" id="#form-group-identificacion">
+                				<div class="col-xs-12 col-sm-6 col-md-4">
+                				    <!--ng-class="{'margin-top': visibilidad.margin_top_identificacion}" id="#form-group-identificacion"-->
+                				    <div class="form-group">
                     					<label for="identificacion">Identificación <span ng-show="data.btn_guardar_seleccionado && data.editar_datos && visibilidad.show_identificacion_invalido" class="error-text">{$ data.msj_error_identificacion $}</span></label>
                     					<input type="number" name="identificacion"  ng-model="data.identificacion" ng-change="validar_id()"
                     					class="form-control"
@@ -121,7 +122,7 @@
                     					ng-readonly="!data.editar_datos"/>
                 				    </div>
                 				</div>
-                				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                				<div class="col-xs-12 col-sm-6 col-md-4">
                 				    <div class="form-group">
                     					<label for="tipo_identificacion">Tipo de identificación <span ng-show="data.btn_guardar_seleccionado && data.editar_datos && visibilidad.show_tipo_id_invalido" class="error-text">{$ data.msj_error_tipo_id $}</span></label>
                     					<ui-select theme="bootstrap"
@@ -137,7 +138,7 @@
                     					<input type="hidden" name="tipo_identificacion" value="{$ data.tipo_identificacion.id $}"/>
                 				    </div>
                 				</div>
-                				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                				<div class="col-xs-12 col-sm-6 col-md-4">
                 				    <div class="form-group">
                     					<label for="sexo">Sexo <span ng-show="data.btn_guardar_seleccionado && data.editar_datos && visibilidad.show_sexo_invalido" class="error-text">{$ data.msj_error_sexo $}</span></label>
                     					<ui-select theme="bootstrap"
@@ -153,7 +154,7 @@
                     					<input type="hidden" name="sexo" value="{$ data.sexo.id $}"/>
                 				    </div>
                 				</div>
-                				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                				<div class="col-xs-12 col-sm-6 col-md-4">
                 				    <div class="form-group">
                     					<label for="edad">Edad <span ng-show="data.btn_guardar_seleccionado && data.editar_datos && visibilidad.show_edad_invalido" class="error-text">{$ data.msj_error_edad $}</span></label>
                     					<input type="number" name="edad"  ng-model="data.edad" ng-change="validar_edad()"
@@ -163,7 +164,7 @@
                     					ng-readonly="!data.editar_datos"/>                				    
                 				    </div>
                 				</div>
-                				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                				<div class="col-xs-12 col-sm-6 col-md-4">
                 				    <div class="form-group">
                     					<label for="formacion">Formación <span ng-show="data.btn_guardar_seleccionado && data.editar_datos && visibilidad.show_formacion_invalido" class="error-text">{$ data.msj_error_formacion $}</span></label>
                     					<ui-select theme="bootstrap"  
@@ -178,7 +179,7 @@
                     					<input type="hidden" name="formacion" value="{$ data.formacion $}"/>
                 				    </div>
                 				</div>
-                				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                				<div class="col-xs-12 col-sm-6 col-md-4">
                 				    <div class="form-group">
                     					<label for="email">Email <span ng-show="data.btn_guardar_seleccionado && data.editar_datos && visibilidad.show_email_invalido" class="error-text">{$ data.msj_error_email $}</span></label>
                     					<input type="email" name="email" ng-model="data.email" ng-change="validar_email()"
@@ -195,7 +196,7 @@
                 		<fieldset>
                 			<legend>Datos del usuario</legend>
                 			<div class="row is-flex sin-margen">
-                				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                				<div class="col-xs-12 col-sm-6 col-md-4">
                 				    <div class="form-group">
                     					<label for="username">Nombre de usuario <span ng-show="data.btn_guardar_seleccionado && data.editar_datos && visibilidad.show_username_invalido" class="error-text">{$ data.msj_error_username $}</span></label>
                     					<input type="text" name="username" ng-model="data.username" ng-change="validar_username()"
@@ -205,17 +206,17 @@
                     					ng-readonly="!data.editar_datos"/>
                 				    </div>
                 				</div>
-                				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                				<div class="col-xs-12 col-sm-6 col-md-4">
                                     <label>&nbsp;</label>
                                     <button type="button" class="btn btn-default btn-block text-center" ng-click="cambiar_contrasenia()">Cambiar contraseña</button>
                                 </div>                  			    
-                				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                				<div class="col-xs-12 col-sm-6 col-md-4">
                 				    <div class="form-group">
                     				    <label for="tipo_usuario">Tipo de usuario</label>
                     				    <input type="text" class="form-control" ng-readonly="true" value="{$ data.tipo_usuario $}"/>
                 				    </div>
                 				</div>
-                				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-show="visibilidad.show_categoria_inv">
+                				<div class="col-xs-12 col-sm-6 col-md-4" ng-show="visibilidad.show_categoria_inv">
                 				    <div class="form-group">
                     					<label for="categoria_investigador">Categoría de investigador <span ng-show="data.btn_guardar_seleccionado && data.editar_datos && visibilidad.show_categoria_inv_invalido" class="error-text">{$ data.msj_error_categoria_inv $}</span></label>
                     					<ui-select theme="bootstrap"  
@@ -231,7 +232,7 @@
                     					<input type="hidden" name="categoria_investigador" value="{$ data.categoria_investigador.id $}"/>
                 				    </div>
                 				</div>                        
-                				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-show="visibilidad.show_sede">
+                				<div class="col-xs-12 col-sm-6 col-md-4" ng-show="visibilidad.show_sede">
                 				    <div class="form-group">
                     					<label for="sede">Sede de origen <span ng-show="data.btn_guardar_seleccionado && data.editar_datos && visibilidad.show_sede_invalido" class="error-text">{$ data.msj_error_sede $}</span></label>
                     					<ui-select theme="bootstrap" 

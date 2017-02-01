@@ -382,7 +382,7 @@ Route::group(array('before' => 'auth'), function(){
 | Rutas de usuarios temporalmente afuera para pruebas
 |--------------------------------------------------------------------------
 */
-// Route::get('proyectos/registrar_nuevo_proyecto', 'ProyectosController@registrar_nuevo_proyecto');
+Route::post('proyectos/registrar_nuevo_proyecto', 'ProyectosController@registrar_nuevo_proyecto');
 
 
 /*
@@ -446,10 +446,18 @@ Route::get('truncar_bd', 'BaseController@truncar_bd');
 */
 Route::get('test', function(){
 	
-	$proyecto = Proyecto::find(1);
-    $fecha_final = strtotime($proyecto->fecha_fin);
-    $fecha_inicio = strtotime($proyecto->fecha_inicio);
-    $diferencia_fechas = $fecha_final - $fecha_inicio;
-    echo floor($diferencia_fechas / (60 * 60 * 24));      
+	echo (int)'hello world';
+	
+    // $gasto_salida_cantidad_salidas_0 = Input::get('gasto_salida_cantidad_salidas_0');
+    // echo gettype($gasto_salida_cantidad_salidas_0);
+    // echo (int)$gasto_salida_cantidad_salidas_0;
+    // $validacion = Validator::make(
+    // 	['cantidad_salidas' => $gasto_salida_cantidad_salidas_0],
+    // 	['cantidad_salidas' => array('required', 'integer', 'min:0'),]);
+    // if($validacion->fails())
+    // 	return $validacion->messages();
+    // else {
+    // 	return 'valido';
+    // }
 });
 
