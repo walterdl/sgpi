@@ -40,7 +40,7 @@
                             
                             <h1 class="text-white" style="margin-left:10px;">Bienvenido
                                 @if(Auth::user()->persona->sexo == "m")
-                                    <small> Sr, 
+                                    <small style="color: #C0C0C0;"> Sr, 
                                     
                                     <?php 
                                         $nombres=Auth::user()->persona->nombres;

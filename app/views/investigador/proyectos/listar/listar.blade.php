@@ -149,21 +149,21 @@
                                         <td>{$ proyecto.nombre_proyecto $}</td>
                                         <td>{$ proyecto.nombre_grupo_inv_principal $}</td>
                                         <td>{$ proyecto.duracion_meses $}</td>
-                                        <!--<td>-->
-                                        <!--    <div class="btn-group" uib-dropdown dropdown-append-to-body>-->
-                                        <!--        <button type="button" class="fa fa-pencil-square-o btn btn-default" uib-dropdown-toggle>-->
-                                        <!--            <span class="caret"></span>-->
-                                        <!--        </button>-->
-                                        <!--        <ul class="dropdown-menu" uib-dropdown-menu role="menu">-->
-                                        <!--            <li role="menuitem"><a href="/proyectos/editar/1/{$ proyecto.id$}">Inf. general</a></li>-->
-                                        <!--            <li role="menuitem"><a href="/proyectos/editar/2/{$ proyecto.id$}">Participantes</a></li>-->
-                                        <!--            <li role="menuitem"><a href="/proyectos/editar/3/{$ proyecto.id$}">Productos</a></li>-->
-                                        <!--            <li role="menuitem"><a href="/proyectos/editar/4/{$ proyecto.id$}">Gastos</a></li>-->
-                                        <!--            <li role="menuitem"><a href="/proyectos/editar/5/{$ proyecto.id$}">Adjuntos</a></li>-->
-                                        <!--        </ul>-->
-                                        <!--    </div>                                            -->
-                                            <!--<button type="button" class="btn btn-default"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>-->
-                                        <!--</td>-->
+                                        <td>
+                                            <div class="btn-group" uib-dropdown dropdown-append-to-body>
+                                                <button type="button" class="fa fa-pencil-square-o btn btn-default" uib-dropdown-toggle>
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+                                                    <li role="menuitem"><a href="/proyectos/editar/1/{$ proyecto.id$}">Inf. general</a></li>
+                                                    <li role="menuitem"><a href="/proyectos/editar/2/{$ proyecto.id$}">Participantes</a></li>
+                                                    <li role="menuitem"><a href="/proyectos/editar/3/{$ proyecto.id$}">Productos</a></li>
+                                                    <li role="menuitem"><a href="/proyectos/editar/4/{$ proyecto.id$}">Gastos</a></li>
+                                                    <li role="menuitem"><a href="/proyectos/editar/5/{$ proyecto.id$}">Adjuntos</a></li>
+                                                </ul>
+                                            </div>                                            
+                                            <button type="button" class="btn btn-default"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                        </td>
                                         <td>
                                             <div class="btn-group" uib-dropdown dropdown-append-to-body>
                                                 <button type="button" class="fa fa-check btn btn-default" uib-dropdown-toggle>
