@@ -138,10 +138,11 @@
                     				</div>
                     				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="edad">Edad</label>
-                    					<input type="number" name="edad" 
+                    					<input type="number" name="edad" min="10"
                     					class="form-control"
                     					ng-model="data.edad" ng-change="validar_edad()"
                     					ng-class="{'invalid_control': data.btn_guardar_seleccionado && visibilidad.show_edad_invalido}"
+                    					uib-tooltip="Valor mínimo de 10" tooltip-enable="true"
                     					ng-required="true" min="0"/>                				    
                     				</div>
                     				<div class="form-group col-xs-12 col-sm-6 col-md-4">
@@ -246,20 +247,6 @@
                     					</ui-select>
                     					<input type="hidden" name="grupo_investigacion" value="{$ data.grupo_investigacion.id $}"/>
                     				</div>                			    
-                    			    <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                    					<label for="foto">Foto&nbsp;<span style="font-weight: normal;">Prueba de msj de error</span></label>
-                    					<input id="foto" class="form-control" type="file" ngf-select ngf-pattern=".jpg,.jpeg,.png" name="foto" ngf-accept="'image/jpg, image/jpeg, image/png'" 
-                    					ng-model="data.foto"
-                    					ngf-change="cambiaFoto($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"/>
-                    					<div class="row row-sin-margen">
-                    						<div class="col-xs-12">
-                    							<p class="text-center"><img ng-show="form_nuevo_usuario.foto.$valid" ngf-thumbnail="data.foto" class="thumb img-circle" style="height:120px; width: 120px;"></p>
-                    						</div>
-                    						<div class="col-xs-12">
-                    							<button type="button" class="btn btn-default btn-block" ng-click="data.foto=null" ng-show="data.foto">Eliminar</button>
-                    						</div>
-                    					</div>
-                    				</div>                                  
                     			</div>
                     		</fieldset>
                     		<br />

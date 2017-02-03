@@ -103,10 +103,10 @@
 		<div class="wrapper">
 			<header class="main-header">
 				<!-- Logo -->
-				<a href="{{url()}}" class="logo">
+				<a href="/" class="logo">
 					<!-- mini logo for sidebar mini 50x50 pixels -->
 					<span class="logo-mini">
-						<img class="img-responsive" alt="Responsive" src="{{url()}}/img/logo1.png">
+						<img class="img-responsive" alt="Responsive" src="/img/logo1.png">
 					</span>
 					<!-- logo for regular state and mobile devices -->
 					<!--<span class="logo-lg" href=""><img class="img-responsive" alt="Responsive" src="{{url()}}/img/logoLetras3.png" /></span>-->
@@ -125,7 +125,8 @@
 					<div class="pull-left info">
 						<span style="padding-left:10px;">
 							@if(Auth::user()->id_rol == 1)
-								<b style="font-size:35px;">Administrador</b>
+								<!--<b style="font-size:35px;">Administrador</b>-->
+								<b class="nombre_rol_admin">Administrador</b>
 							@elseif(Auth::user()->id_rol == 2)
 								<b style="font-size:35px;">Coordinador</b>
 							@else
@@ -140,7 +141,7 @@
 							{{-- User Account: style can be found in dropdown.less --}}
 							<li class="dropdown user user-menu">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									<span class="hidden-xs">Perfil y sesión&nbsp;</span><img src="{{url()}}/img/logoUsuario3.png" class="user-image" alt="User Image"><br>
+									<span class="hidden-xs">Perfil y sesión&nbsp;</span><img src="/img/logoUsuario3.png" class="user-image" alt="User Image"><br>
 								</a>
 								<ul class="dropdown-menu">
 									<!-- Imagen de usuario -->
@@ -259,6 +260,14 @@
 									<li class="wrap-text"><a href="/proyectos/indicadores"><i class="fa fa-list"></i> Indicadores de proyectos de inv.</a></li>
 								</ul>
 							</li>							
+							<li class="treeview">
+								<a href="#">
+									<i class="fa fa-file-text" aria-hidden="true"></i> <span>Formatos documentos</span> <i class="fa fa-angle-left pull-right"></i>
+								</a>
+								<ul class="treeview-menu">
+									<li class="wrap-text"><a href="/formatos_tipos_documentos/listar_editar"><i class="fa fa-list"></i> Gestionar formatos</a></li>
+								</ul>
+							</li>														
 						</ul>
 					@elseif(Auth::user()->id_rol == 2)
 						{{--Menu de coordinador--}}
@@ -299,7 +308,7 @@
 				<div class="pull-right hidden-xs">
 					<b>Version</b> 1.0
 				</div>
-				<strong>Copyright &copy; 2015-2016.</strong> All rights reserved.
+				<strong>2017</strong>. Universidad Cooperativa de Colombia
 			</footer>
 			
 			<!-- Add the sidebar's background. This div must be placed

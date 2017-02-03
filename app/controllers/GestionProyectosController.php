@@ -1026,7 +1026,7 @@
         
     	/*
     	|--------------------------------------------------------------------------
-    	| ()
+    	| consultar_prorroga()
     	|--------------------------------------------------------------------------
     	| Consulta los registros de prórroga y el estado de revisión del mismo de un determinado proyecto
     	*/          

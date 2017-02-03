@@ -235,6 +235,11 @@ Route::group(array('before' => 'auth'), function(){
 		
 		// indicadores
 		Route::get('indicadores/data_inicial_admin', 'IndicadoresController@data_inicial_admin');
+		
+		// formatos tipos documentos
+		Route::get('formatos_tipos_documentos/listar_editar', 'FormatosTiposDocumentosController@listar_editar');
+		Route::post('formatos_tipos_documentos/guardar_nuevo_formato', 'FormatosTiposDocumentosController@guardar_nuevo_formato');
+
 	}
 	
 	/*********Rutas coordinador**********/
@@ -376,6 +381,8 @@ Route::group(array('before' => 'auth'), function(){
 	}
 });
 
+// tarea programada
+Route::get('tarea_programada', 'TareasProgramadasController@tarea_programada');
 
 /*
 |--------------------------------------------------------------------------
@@ -446,18 +453,44 @@ Route::get('truncar_bd', 'BaseController@truncar_bd');
 */
 Route::get('test', function(){
 	
-	echo (int)'hello world';
+	// $no_encontrado = true;
+ //   $fecha = date_create_from_format('Y-m-d', '2015-10-01');
+ //   $fecha->modify('+16 month');
+ //   $fecha = date('Y-m', strtotime($fecha->format('Y-m-d')));
+ //   $fecha_objetivo = date('Y-m', strtotime('2017-02-23'));
+    
+ //   echo 'Fecha: '.$fecha;
+ //   echo '<br />';
+ //   echo 'Fecha objetivo: '.$fecha_objetivo;
+ //   echo '<br />';
+ //   if($fecha == $fecha_objetivo)
+ //   {
+ //   	echo 'son iguales';
+ //   }
+ //   else
+ //   {
+ //   	echo 'no son iguales';
+ //   }
+    
 	
-    // $gasto_salida_cantidad_salidas_0 = Input::get('gasto_salida_cantidad_salidas_0');
-    // echo gettype($gasto_salida_cantidad_salidas_0);
-    // echo (int)$gasto_salida_cantidad_salidas_0;
-    // $validacion = Validator::make(
-    // 	['cantidad_salidas' => $gasto_salida_cantidad_salidas_0],
-    // 	['cantidad_salidas' => array('required', 'integer', 'min:0'),]);
-    // if($validacion->fails())
-    // 	return $validacion->messages();
-    // else {
-    // 	return 'valido';
-    // }
+	
+	// 2015-10-01
+	// 2017-02-23
+	// 1024
+	// 33
+	
+    $query = '
+        SELECT DISTINCT(g.id_detalle_gasto), dg.*, tg.nombre as nombre_tipo_gasto
+        FROM gastos g, detalles_gastos dg, tipos_gastos tg
+        WHERE
+        	g.id_proyecto = 2
+        AND	g.id_detalle_gasto = dg.id
+        AND dg.id_tipo_gasto = tg.id;';
+    $detalles_gastos = DB::select(DB::raw($query));	
+    foreach($detalles_gastos as $row){
+    	$query = 'UPDATE detalles_gastos SET fecha_ejecucion = \'2017-02-04\' WHERE id = '.$row->id.';';
+    	DB::select(DB::raw($query));
+    }
+    echo 'ya';
 });
 

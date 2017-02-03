@@ -79,6 +79,29 @@
             return $respuesta;
         }
 
+    	/*
+    	|--------------------------------------------------------------------------
+    	| coordinadores_grupo_investigacion()
+    	|--------------------------------------------------------------------------
+    	| Obtiene los coordinadores de un determinado grupo de investigacion
+    	*/         
+        public static function coordinadores_grupo_investigacion($id_grupo_investigacion_ucc){
+            
+            $coordinadores = Usuario::where('id_grupo_investigacion_ucc', '=', $id_grupo_investigacion_ucc)
+                ->where('id_rol', '=', 2)->get();
+            for($i = 0; $i < count($coordinadores); $i++){
+                
+                $coordinador = $coordinadores[$i];
+                $persona = Persona::find($coordinador->id);
+                $coordinador = $coordinador->toArray();
+                $coordinador['nombres'] = $persona->nombres; 
+                $coordinador['apellidos'] = $persona->apellidos;
+                $coordinador = (object)$coordinador;
+                $coordinadores[$i] = $coordinador;
+            }
+            return $coordinadores;
+        }
+
     }
 
 ?>

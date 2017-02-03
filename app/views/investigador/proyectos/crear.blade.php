@@ -1948,10 +1948,10 @@
                                                 <div class="form-group">
                                                     <label for="documento_presupuesto">Cargar aquí el documento de presupuesto</label>
                                                     <input id="presupuesto" type="file" name="presupuesto"
-                                                    	ngf-select ngf-pattern=".xlsx,.xltm,.xlsm,.xls" ngf-max-size="20MB"
+                                                    	ngf-select ngf-max-size="20MB"
                                                     	ng-model="data.documento_presupuesto"
                                                     	ngf-change="cambia_documento_presupuesto($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
-                                                    	uib-tooltip="El archivo a cargar debe seguir el formato de presupuesto, formato Excel y máximo de 20MB" tooltip-enable="true"
+                                                    	uib-tooltip="El archivo a cargar debe seguir el formato de presupuesto, tamaño máximo de 20MB" tooltip-enable="true"
                                                     	class="form-control" ng-class="{'invalid_control': data.documento_presupuesto_invalido}"/>
                                                 </div>
                                             </div>
@@ -1978,10 +1978,10 @@
                                                 <div class="form-group">
                                                     <label for="documento_presentacion_proyecto">Cargar aquí el documento de presentación</label>
                                                     <input id="presentacion_proyecto" type="file" name="presentacion_proyecto"
-                                                    	ngf-select ngf-pattern=".doc,.docx,.dotx,.DOC,.DOCX" ngf-max-size="20MB"
+                                                    	ngf-select ngf-max-size="20MB"
                                                     	ng-model="data.documento_presentacion_proyecto"
                                                     	ngf-change="cambia_documento_presentacion_proyecto($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
-                                                    	uib-tooltip="El archivo a cargar debe seguir el formato de presentación de proyecto, formato Word y máximo de 20MB" tooltip-enable="true"
+                                                    	uib-tooltip="El archivo a cargar debe seguir el formato de presentación de proyecto, tamaño máximo de 20MB" tooltip-enable="true"
                                                     	class="form-control" ng-class="{'invalid_control': data.documento_presentacion_proyecto_invalido}"/>
                                                 </div>
                                             </div>
@@ -2008,10 +2008,10 @@
                                                 <div class="form-group">
                                                     <label for="documento_acta_inicio">Cargar aquí el documento de acta de inicio</label>
                                                     <input id="acta_inicio" type="file" name="acta_inicio"
-                                                    	ngf-select ngf-pattern=".doc,.docx,.dotx,.DOC,.DOCX,.w" ngf-max-size="20MB"
+                                                    	ngf-select ngf-max-size="20MB"
                                                     	ng-model="data.documento_acta_inicio"
                                                     	ngf-change="cambia_documento_acta_inicio($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
-                                                    	uib-tooltip="El archivo a cargar debe seguir el formato de acta de inicio, formato Excel y máximo de 20MB" tooltip-enable="true"
+                                                    	uib-tooltip="El archivo a cargar debe seguir el formato de acta de inicio, tamaño máximo de 20MB" tooltip-enable="true"
                                                     	class="form-control" ng-class="{'invalid_control': data.documento_acta_inicio_invalido}"/>
                                                 </div>
                                             </div>
@@ -2036,7 +2036,7 @@
                     	        </div>                        	        
                     	        <div class="col-xs-12">&nbsp;</div>                    		                                                                        
                                 <div class="col-xs-12 col-sm-6 col-md-4">
-                                    <button type="button" class="btn btn-primary btn-block" ng-click="registrar_proyecto()">Registrar proyecto&nbsp;<i class="fa fa-check" aria-hidden="true"></i></button>
+                                    <button type="button" class="btn btn-primary btn-block" ng-click="registrar_proyecto()" ng-disabled="deshabilitar_btn_registrar_proy">Registrar proyecto&nbsp;<i class="fa fa-check" aria-hidden="true"></i></button>
                                     <input type="submit" id="input_registrar_proyecto" ng-hide="true"/>
                                 </div>
                             </div>

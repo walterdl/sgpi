@@ -22,7 +22,7 @@ class RemindersController extends Controller {
 		
 		$response= Password::remind(Input::only('email'), function($message)
 		{
-		    $message->subject('Password Reminder');
+		    $message->subject('Recuperación de contraseña');
 		});
 		
 		
@@ -39,14 +39,18 @@ class RemindersController extends Controller {
 		switch ($response)
 		{
 			case Password::INVALID_USER:
-		        // echo "hola mundo1";
-				return View::make('login',array('user'=>'1','mensaje' =>'Error el correo no existe'));
-
+				// return View::make('login',array('user'=>'1','mensaje' =>'Error el correo no existe'));
+                Session::flash('notify_operacion_previa', 'error');
+                Session::flash('mensaje_operacion_previa', 'Error. El correo electrónico no existe');
+                return Redirect::to('login');;				
+				break;
+				
 			case Password::REMINDER_SENT:
-				// echo "hola mundo2";
-				return View::make('login',array('user'=>'0','mensaje' =>'Correo valido'));
+                Session::flash('notify_operacion_previa', 'success');
+                Session::flash('mensaje_operacion_previa', 'Recuperación de contraseña enviada a correo electrónico');
+                return Redirect::to('login');;
+				break;
 		}
-		
 	}
 
 	/**

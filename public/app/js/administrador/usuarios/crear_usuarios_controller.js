@@ -27,6 +27,11 @@ sgpi_app.controller('crear_usuarios_controller', function($scope, $http, Alertif
         show_error_cargando_guardado: false,
         show_msj_operacion_busqueda: false
     };
+    $('#input_buscar_id').on('keydown', function(e) {
+        if (e.which == 13) {
+            $scope.buscar_id();
+        }
+    });    
     
     /*
     |--------------------------------------------------------------------------
@@ -335,12 +340,18 @@ sgpi_app.controller('crear_usuarios_controller', function($scope, $http, Alertif
     |--------------------------------------------------------------------------
     | validar_edad()
     |--------------------------------------------------------------------------
-    | Valida <select> de edad asegurandose de que el modelo tenga sea mayor a 0
+    | Valida <select> de edad asegurandose de que el modelo tenga sea mayor a 10
     */            
     $scope.validar_edad = function(){
         if($scope.data.edad){
-            $scope.visibilidad.show_edad_invalido = false;
-            return true;
+            if($scope.data.edad >= 10){
+                $scope.visibilidad.show_edad_invalido = false;
+                return true;
+            }
+            else{
+                $scope.visibilidad.show_edad_invalido = true;
+                return false;            
+            }
         }
         $scope.visibilidad.show_edad_invalido = true;
         return false;        

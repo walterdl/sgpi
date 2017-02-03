@@ -105,11 +105,12 @@
                 'vendor/ng-file-upload/ng-file-upload-shim.js',
                 'vendor/ng-file-upload/ng-file-upload.min.js',
                 'vendor/angular-ui/ui-select.js',
+                'vendor/angular-ui/ui-bootstrap-tpls-2.2.0.min.js'
                 ];
             $post_scripts = [
                 'administrador/usuarios/crear_usuarios_controller.js'
                 ];
-            $angular_sgpi_app_extra_dependencies = ['ui.select', 'ngSanitize', 'ngFileUpload'];
+            $angular_sgpi_app_extra_dependencies = ['ui.select', 'ngSanitize', 'ngFileUpload', 'ui.bootstrap'];
 
             return View::make('administrador.usuarios.crear', array(
                     'styles' => $styles,
@@ -889,5 +890,7 @@
                     ));
             }
         }
+        
+
     }
 

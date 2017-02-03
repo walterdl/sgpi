@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>Login</title>
+		<title>SGPI - Inciar sesión</title>
 		<!-- Tell the browser to be responsive to screen width -->
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 		<!-- Bootstrap 3.3.6 -->
@@ -66,8 +66,9 @@
 			<div class="col-sm-6">
 				<div class="login-box">
 					<div class="login-logo">
-						<!--<br />-->
-						<p style=" font-size:30px;">Sistema de gestión de proyectos de investigación <span style=" font-size:45px;"><b>SG</b><b style="color:gray;">P</b><b>I</b></span></p>
+						<span style=" font-size:30px;">Sistema de gestión de proyectos de investigación</span>
+						<br />
+						<span style=" font-size:45px;"><b>SG</b><b style="color:gray;">P</b><b>I</b></span>
 					</div>
 					<!-- /.login-logo -->
 					<div class="login-box-body" style="border-left-style: double; border-right-style: double;">
@@ -83,16 +84,14 @@
 						</div>
 						@endif
 						<p class="login-box-msg">Autenticarse para iniciar la sesión</p>
-						
-						@if(isset($user))
-						@if($user ==1)
-						<div class="alert alert-danger" role="alert">{{$mensaje}}</div>
-						@else
-						<div class="alert alert-success" role="alert">{{$mensaje}}</div>
-						@endif
-						@endif
-						
-						
+                		<?php $hay_notify_operacion_previa = Session::get('notify_operacion_previa') ?>
+                		@if(isset($hay_notify_operacion_previa))
+                		    @if(Session::get('notify_operacion_previa')=='success')
+                		        <div class="alert alert-success" role="alert">{{ Session::get('mensaje_operacion_previa') }}</div>
+                            @else
+                                <div class="alert alert-danger" role="alert">{{ Session::get('mensaje_operacion_previa') }}</div>
+                            @endif
+                		@endif
 						<form action="check" method="post">
 							<div class="form-group has-feedback">
 								<input type="text" name="username" class="form-control" placeholder="Usuario" required="true">

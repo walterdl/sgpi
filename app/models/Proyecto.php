@@ -143,10 +143,7 @@
                     FROM proyectos p, grupos_investigacion_ucc gi 
                     WHERE p.id_grupo_investigacion_ucc = gi.id; ';
                     
-                    
-            return DB::select(DB::raw($query));
-            
-            
+            return DB::select(DB::raw($query));   
         }
         
     	/*

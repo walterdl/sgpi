@@ -204,6 +204,20 @@
             }
             return DB::select(DB::raw($query))[0];
         }
+  
+        public static function administradores(){
+            
+            $administradores = Usuario::where('id_rol', '=', 1)->get();
+            for ($i = 0; $i < count($administradores); $i++) {
+                $administrador = $administradores[$i];
+                $persona = Persona::find($administrador->id_persona);
+                $administrador = $administrador->toArray();
+                $administrador['nombres'] = $persona->nombres;
+                $administrador['apellidos'] = $persona->apellidos;
+                $administradores[$i] = (object)$administrador;
+            }
+            return $administradores;
+        }  
         
     }
 

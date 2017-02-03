@@ -4,6 +4,21 @@
         
     	/*
     	|--------------------------------------------------------------------------
+    	| copiar_formato_tipo_documento()
+    	|--------------------------------------------------------------------------
+    	| Copia un formato de tipo documento
+    	| Retorna el objeto File (Archivo) que representa el archivo copiado o false en caso de que no se halla copiado
+    	*/                          
+        public static function copiar_formato_tipo_documento($archivo){
+            $archivo = $archivo->move(storage_path('archivos/formatos_documentos/'), $archivo->getClientOriginalName());
+            if($archivo) // el método move retorna un archivo si se movio el archivo correctamente.
+                return $archivo;
+            else
+                return false;            
+        }        
+        
+    	/*
+    	|--------------------------------------------------------------------------
     	| eliminar_imagen_perfil()
     	|--------------------------------------------------------------------------
     	| Elimina una imagen de perfil de una persona dado su id

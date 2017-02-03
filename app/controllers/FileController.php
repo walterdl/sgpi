@@ -41,31 +41,54 @@
             
             if($nombre_formato == 'presupuesto'){
                 $nombre_archivo = FormatoTipoDocumento::where('nombre', '=', 'Presupuesto')->first()->archivo;
-                return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');                
+                if(file_exists(storage_path('archivos/formatos_documentos/'.$nombre_archivo)))
+                    return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');                
+                else
+                    return Response::download(storage_path('archivos/formatos_documentos/predeterminados/predeterminado_presupuesto.xlsx'), null, [], 'attachment');
             }
             else if($nombre_formato == 'presentacion_proyecto'){
                 $nombre_archivo = FormatoTipoDocumento::where('nombre', '=', 'Presentacion proyecto')->first()->archivo;
-                return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');                                
+                if(file_exists(storage_path('archivos/formatos_documentos/'.$nombre_archivo)))
+                    return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');                                
+                else
+                    return Response::download(storage_path('archivos/formatos_documentos/predeterminados/predeterminado_presentacion_proyecto.docx'), null, [], 'attachment');
             }
             else if($nombre_formato == 'acta_inicio'){
                 $nombre_archivo = FormatoTipoDocumento::where('nombre', '=', 'Acta inicio')->first()->archivo;
-                return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');                                                
+                if(file_exists(storage_path('archivos/formatos_documentos/'.$nombre_archivo)))
+                    return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');                                                
+                else
+                    return Response::download(storage_path('archivos/formatos_documentos/predeterminados/predeterminado_acta_inicio.docx'), null, [], 'attachment');                                                
             }
             else if($nombre_formato == 'desembolso'){
                 $nombre_archivo = FormatoTipoDocumento::where('nombre', '=', 'Desembolso')->first()->archivo;
-                return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');
+                if(file_exists(storage_path('archivos/formatos_documentos/'.$nombre_archivo)))
+                    return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');
+                else 
+                    return Response::download(storage_path('archivos/formatos_documentos/predeterminados/predeterminado_desembolso.xlsx'), null, [], 'attachment');
+                
             }            
             else if($nombre_formato == 'informe_avance'){
                 $nombre_archivo = FormatoTipoDocumento::where('nombre', '=', 'Informe de avance')->first()->archivo;
-                return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');                
+                if(file_exists(storage_path('archivos/formatos_documentos/'.$nombre_archivo)))
+                    return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');                
+                else
+                    return Response::download(storage_path('archivos/formatos_documentos/predeterminados/predeterminado_informe_avance.dotx'), null, [], 'attachment');
+                
             }
             else if($nombre_formato == 'acta_finalizacion'){
                 $nombre_archivo = FormatoTipoDocumento::where('nombre', '=', 'Acta finalizacion')->first()->archivo;
-                return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');                                
+                if(file_exists(storage_path('archivos/formatos_documentos/'.$nombre_archivo)))
+                    return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');                                
+                else
+                    return Response::download(storage_path('archivos/formatos_documentos/predeterminados/predeterminado_acta_finalizacion.docx'), null, [], 'attachment');
             }
             else if($nombre_formato == 'memoria_academica'){
                 $nombre_archivo = FormatoTipoDocumento::where('nombre', '=', 'Memoria academica')->first()->archivo;
-                return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');
+                if(file_exists(storage_path('archivos/formatos_documentos/'.$nombre_archivo)))
+                    return Response::download(storage_path('archivos/formatos_documentos/'.$nombre_archivo), null, [], 'attachment');
+                else
+                    return Response::download(storage_path('archivos/formatos_documentos/predeterminados/predeterminado_memoria_academica.dotx'), null, [], 'attachment');
             }
         }
         

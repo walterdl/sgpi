@@ -163,7 +163,39 @@
             
             return $respuesta_investigaodres;
         }
-    
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| investigador_principal_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Obtiene el investigador principal de un determinado proyecto
+    	*/                               
+        public static function investigador_principal_proyecto($id_proyecto){
+            
+            $registro_investigador = Investigador::where('id_proyecto', '=', $id_proyecto)->whereNotNull('id_usuario_investigador_principal')->first();
+            
+            if($registro_investigador)
+            {
+                $registro_usuario = Usuario::find($registro_investigador->id_usuario_investigador_principal);
+                $registro_persona = Persona::find($registro_usuario->id_persona);
+                
+                return (object)[
+                    'id_persona' => $registro_persona->id,
+                    'id_usuario' => $registro_usuario->id,
+                    'id_investigador' => $registro_investigador->id,
+                    'nombres' => $registro_persona->nombres,
+                    'apellidos' => $registro_persona->apellidos,
+                    'edad' => $registro_persona->edad,
+                    'sexo' => $registro_persona->sexo,
+                    'identificacion' => $registro_persona->identificacion,
+                    'username' => $registro_usuario->username,
+                    'email' => $registro_usuario->email
+                    ];
+            }
+            else
+                return null;
+        }
+        
     }
 
 ?>
