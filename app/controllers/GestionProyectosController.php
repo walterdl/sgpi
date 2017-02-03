@@ -560,8 +560,8 @@
                         else
                         {
                             // existe desembolso pero no se encuentra aprobado, se perimite sobrescirtura de archivo
-                            
-                            unlink(storage_path('archivos/desembolsos/'.$desembolso->archivo)); // borra archivo
+                            if(file_exists(storage_path('archivos/desembolsos/'.$desembolso->archivo)))
+                                unlink(storage_path('archivos/desembolsos/'.$desembolso->archivo)); // borra archivo
                             
                             // copia archivo
                             $archivo_copiado = Archivo::copiar_desembolso(Input::file("archivo"), $desembolso->id);
@@ -733,8 +733,8 @@
                         else
                         {
                             // existe informe de avance pero no se encuentra aprobado, se perimite sobrescirtura de archivo
-                            
-                            unlink(storage_path('archivos/informes_avance/'.$doc_informe_avance->archivo)); // borra archivo
+                            if(file_exists(storage_path('archivos/informes_avance/'.$doc_informe_avance->archivo)))
+                                unlink(storage_path('archivos/informes_avance/'.$doc_informe_avance->archivo)); // borra archivo
                             
                             // copia archivo
                             $archivo_copiado = Archivo::copiar_informe_avance(Input::file("archivo"), $doc_informe_avance->id);
@@ -926,11 +926,13 @@
                         // como la entrada a este código sucede si algun registro no existe, se asegura si existe un documento especifico solamente
                         // si existe lo elimina. Esto con el fin de crear registros realmente nuevos
                         if(isset($acta_finalizacion)){
-                            unlink(storage_path('archivos/actas_finalizacion/'.$acta_finalizacion->archivo)); //borra el archivo que le corresponde
+                            if(file_exists(storage_path('archivos/actas_finalizacion/'.$acta_finalizacion->archivo)))
+                                unlink(storage_path('archivos/actas_finalizacion/'.$acta_finalizacion->archivo)); //borra el archivo que le corresponde
                             DocumentoProyecto::find($acta_finalizacion->id)->forceDelete();
                         }
                         else if(isset($memoria_academica)){
-                            unlink(storage_path('archivos/memorias_academicas/'.$memoria_academica->archivo)); //borra el archivo que le corresponde
+                            if(file_exists(storage_path('archivos/memorias_academicas/'.$memoria_academica->archivo)))
+                                unlink(storage_path('archivos/memorias_academicas/'.$memoria_academica->archivo)); //borra el archivo que le corresponde
                             DocumentoProyecto::find($memoria_academica->id)->forceDelete();
                         }
                         
@@ -978,12 +980,14 @@
                         
 
                         // borra archivo de acta de finalizacion actual
-                        unlink(storage_path('archivos/actas_finalizacion/'.$acta_finalizacion->archivo));
+                        if(file_exists(storage_path('archivos/actas_finalizacion/'.$acta_finalizacion->archivo)))
+                            unlink(storage_path('archivos/actas_finalizacion/'.$acta_finalizacion->archivo));
                         // copia nuevo archivo de actia de finalizacion
                         $archivo_acta_finalizacion_copiado = Archivo::copiar_acta_finalizacion(Input::file("archivo_acta_finalizacion"), $acta_finalizacion->id);        
                         
                         // borra archivo de acta de memoria académica
-                        unlink(storage_path('archivos/memorias_academicas/'.$memoria_academica->archivo));                        
+                        if(file_exists(storage_path('archivos/memorias_academicas/'.$memoria_academica->archivo)))
+                            unlink(storage_path('archivos/memorias_academicas/'.$memoria_academica->archivo));                        
                         // copia nuevo archivo de memoria académica
                         $archivo_memoria_academica_copiado = Archivo::copiar_memoria_academica(Input::file("archivo_memoria_academica"), $memoria_academica->id);                                
                         
@@ -1123,7 +1127,8 @@
                             throw new Exception('La solicitud de prórroga del proyecto  ya se encuentra aprobada.');
                             
                         // la prórroga no se encuentra aporbada, se permite sobrescritura
-                        unlink(storage_path('archivos/prorrogas/'.$prorroga->archivo)); // borra archivo de prorroga
+                        if(file_exists(storage_path('archivos/prorrogas/'.$prorroga->archivo)))
+                            unlink(storage_path('archivos/prorrogas/'.$prorroga->archivo)); // borra archivo de prorroga
                         
                         // consulta modelo de prorroga ORM que permite actualizar registro
                         $prorroga = DocumentoProyecto::find($prorroga->id);

@@ -90,7 +90,8 @@
                     
                 // borra archivo de formato actual
                 if(isset($formato_actual->archivo))
-                    unlink(storage_path('archivos/formatos_documentos/'.$formato_actual->archivo)); 
+                    if(file_exists(storage_path('archivos/formatos_documentos/'.$formato_actual->archivo)))
+                        unlink(storage_path('archivos/formatos_documentos/'.$formato_actual->archivo)); 
                     
                 // copia archivo
                 $archivo_copiado = Archivo::copiar_formato_tipo_documento(Input::file("archivo"));
