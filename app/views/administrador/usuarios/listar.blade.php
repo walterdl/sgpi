@@ -73,17 +73,18 @@
                         </thead>
                         <tbody>
                             <!--ng-show="visibilidad.mostrar_usuarios"-->
-                            <tr  ng-repeat="usuario in data.usuarios">
+                            <tr ng-repeat="usuario in data.usuarios">
                                 <td>{$ usuario.nombres $}</td>
                                 <td>{$ usuario.identificacion $}</td>
                                 <td>{$ usuario.nombre_rol $}</td>
                                 <td>{$ usuario.nombre_estado $}</td>
                                 <td>
-                                    <button ng-show="visibilidad.btn_cambiarEstado" type="button" class="btn btn-default">
-                                        <a ng-show="usuario.id_estado == 1" ng-click="btn_cambiar_estado(usuario,2)" ><i class="fa fa-ban" aria-hidden="true"></i></a>
-                                        <a ng-show="usuario.id_estado == 2" ng-click="btn_cambiar_estado(usuario,1)"><i class="fa fa-check" aria-hidden="true"></i></a>
+                                    <button ng-show="visibilidad.btn_cambiarEstado" type="button" class="btn btn-default" ng-click="btn_cambiar_estado(usuario)">
+                                        <a ng-show="usuario.id_estado==1" ><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                        <a ng-show="usuario.id_estado==2"><i class="fa fa-check" aria-hidden="true"></i></a>
+                                        <!--ng-click="btn_cambiar_estado(usuario,2)"-->
+                                        <!--ng-click="btn_cambiar_estado(usuario,1)"-->
                                     </button>
-                                    
                                     <div class="overlay" ng-show="visibilidad.show_cargando_cambiarEstado">
                                         <i class="fa fa-circle-o-notch fa-spin"></i>
                                     </div>

@@ -111,78 +111,81 @@ sgpi_app.controller('listar_usuarios_controller', function($scope, $http, Alerti
     }
 
     // cambia el estado del usuario
-    $scope.btn_cambiar_estado= function(usuario,cambio){
+    $scope.btn_cambiar_estado = function(usuario){
         // $scope.visibilidad.show_cargando_mas_info_usuario = true;
+        
+        var cambio = usuario.id_estado == 1 ? 2 : 1;
+        var estado = null;
         if(cambio == 1)
         {
-            estado="Habilitar";
+            estado = "habilitar";
         }
         else
         {
-            estado="Inhabilitar";
+            estado = "inhabilitar";
         }
-        alertify.confirm('Desea '+estado+' el usuario?', 
-        
-        function(){ // cuando acepta cambiar el esatdo del usuario
+
+        alertify.confirm('Habilitar / deshabilitar usuario', 'Desea '+estado+' el usuario?', 
+        function()
+        { 
+            // cuando acepta cambiar el esatdo del usuario
             
-                $scope.visibilidad.btn_cambiarEstado=false;
-                $scope.visibilidad.show_cargando_cambiarEstado=true;
-                
-                $http({
-                        method: 'GET',
-                        url: '/usuarios/cambiarEstado',
-                        params: {
-                            id_usuario: usuario.id_usuario 
-                        }
-                    })
-                    .success(function(data){
-                        console.log(data);
-                        bandera=0;
-                        datos=data;
-                        
-                        if(data.consultado == 1){
-                            // $scope.data.info_usuario = data.info_usuario[0];
-                            console.log("si consulto");
-                        }
-                        else{
-                            //$scope.visibilidad.show_operacion_mas_info_usuario = false;
-                            console.log('Error en inhabilitar usurio, código de error: ' + data.codigo + ', mensaje: ' + data.mensaje);
-                            Alertify.error('Error en inhabilitar usurio, código de error: ' + data.codigo);
-                            bandera=1;
-                        }
-                    })
-                    .error(function(data, status){
-                        
+            $scope.visibilidad.btn_cambiarEstado=false;
+            $scope.visibilidad.show_cargando_cambiarEstado=true;
+            
+            $http({
+                    method: 'GET',
+                    url: '/usuarios/cambiarEstado',
+                    params: {
+                        id_usuario: usuario.id_usuario 
+                    }
+                })
+                .success(function(data){
+                    console.log(data);
+                    bandera=0;
+                    datos=data;
+                    
+                    if(data.consultado == 1){
+                        // $scope.data.info_usuario = data.info_usuario[0];
+                        console.log("si consulto");
+                    }
+                    else{
                         //$scope.visibilidad.show_operacion_mas_info_usuario = false;
-                        Alertify.error('Error en inhabilitar usurio, código de error: ' + status);
-                        console.log('Error en inhabilitar usurio, código de error: ' + status);
+                        console.log('Error en inhabilitar usurio, código de error: ' + data.codigo + ', mensaje: ' + data.mensaje);
+                        Alertify.error('Error en inhabilitar usurio, código de error: ' + data.codigo);
                         bandera=1;
-                        
-                    })
-                    .finally(function() {
-                        
-                            $scope.visibilidad.btn_cambiarEstado=true;
-                            $scope.visibilidad.show_cargando_cambiarEstado=false;
-                        
-                            if(bandera == 0){
-                                alertify.success('Se a '+datos.cambio+' el Usuario');
-                            
-                                if(usuario.id_estado ==  2){
-                                    usuario.id_estado =1;
-                                    usuario.nombre_estado ="Activo";
-                                }else{
-                                    usuario.id_estado =2;
-                                    usuario.nombre_estado ="Inactivo";
-                                }
-                            }
-                        
-                    });
-            
-        }).set('oncancel', function(closeEvent){ 
-            //canccela la operacion cambia estado del usuario seleccionado
-            alertify.error('Cancel');
-        } ); 
-            
+                    }
+                })
+                .error(function(data, status){
+                    
+                    //$scope.visibilidad.show_operacion_mas_info_usuario = false;
+                    Alertify.error('Error en inhabilitar usurio, código de error: ' + status);
+                    console.log('Error en inhabilitar usurio, código de error: ' + status);
+                    bandera=1;
+                    
+                })
+                .finally(function() {
+                    
+                    $scope.visibilidad.btn_cambiarEstado=true;
+                    $scope.visibilidad.show_cargando_cambiarEstado=false;
+                
+                    if(bandera == 0){
+                        alertify.success('Se a '+datos.cambio+' el Usuario');
+                    
+                        if(usuario.id_estado ==  2){
+                            usuario.id_estado =1;
+                            usuario.nombre_estado ="Activo";
+                        }else{
+                            usuario.id_estado =2;
+                            usuario.nombre_estado ="Inactivo";
+                        }
+                    }
+                });
+        },
+        function () {
+            // no hacer nada si cancela 
+        })
+        .set('labels', {ok:'Confirmar', cancel:'Cancelar'});
     };
     
     

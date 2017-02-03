@@ -138,7 +138,6 @@
                                         <th class="no-wrap">Nombre de proyecto</th>
                                         <th class="no-wrap">Grupo de investigación ejecutor</th>
                                         <th>Duración (meses)</th>
-                                        <th class="no-wrap">Estado de progreso</th>
                                         <th>Gestión de proyecto</th>
                                         <th>Más información</th>
                                     </tr>
@@ -150,7 +149,6 @@
                                         <td>{$ proyecto.nombre_proyecto $}</td>
                                         <td>{$ proyecto.nombre_grupo_inv_principal $}</td>
                                         <td>{$ proyecto.duracion_meses $}</td>
-                                        <td>Coming soon. Se mostrará: en desarrollo, en posterga o finalizado</td>
                                         <td>
                                             <div class="btn-group" uib-dropdown dropdown-append-to-body>
                                                 <button type="button" class="fa fa-check btn btn-default" uib-dropdown-toggle>

@@ -419,10 +419,11 @@ App::missing(function($e)
 	    return Redirect::to('home');		
 	}
 	else{
-	    $url = Request::fullUrl(); 
-	    $url = Request::fullUrl(); 
-	    Log::warning("404 for URL: $url"); 
-	    return Response::make('<h1>404 not found!</h1><br> <a href="/">ir a Login</a>', 404); 
+	    // $url = Request::fullUrl(); 
+	    // $url = Request::fullUrl(); 
+	    // Log::warning("404 for URL: $url"); 
+	    // return Response::make('<h1>404 not found!</h1><br> <a href="/">ir a Login</a>', 404);
+		return View::make('general.404');
 	}
 });
 

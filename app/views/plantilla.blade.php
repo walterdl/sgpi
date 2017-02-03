@@ -106,7 +106,7 @@
 				<a href="/" class="logo">
 					<!-- mini logo for sidebar mini 50x50 pixels -->
 					<span class="logo-mini">
-						<img class="img-responsive" alt="Responsive" src="/img/logo1.png">
+						<img class="img-responsive" alt="Logo SGPI" src="/img/logo1.png">
 					</span>
 					<!-- logo for regular state and mobile devices -->
 					<!--<span class="logo-lg" href=""><img class="img-responsive" alt="Responsive" src="{{url()}}/img/logoLetras3.png" /></span>-->
