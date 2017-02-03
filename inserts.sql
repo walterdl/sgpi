@@ -310,8 +310,8 @@ INSERT INTO lineas_investigacion (id, nombre, created_at, updated_at, deleted_at
 --  Volcado de datos para la tabla 'personas'
 -- 
 
-INSERT INTO personas (id, id_categoria_investigador, id_tipo_identificacion, nombres, apellidos, edad, sexo, identificacion, formacion, foto, created_at, updated_at, deleted_at) VALUES(1, NULL, 1, 'Curly Jack', 'Henao Hollo', 23, 'm', 1547897711, 'Maestría', NULL, '2016-12-16', '2016-12-16', NULL);
-INSERT INTO personas (id, id_categoria_investigador, id_tipo_identificacion, nombres, apellidos, edad, sexo, identificacion, formacion, foto, created_at, updated_at, deleted_at) VALUES(2, 1, 1, 'Walter', 'Devia', 23, 'm', 7, 'Maestría', NULL, curdate(), NULL, NULL);
+INSERT INTO personas (id, id_categoria_investigador, id_tipo_identificacion, nombres, apellidos, edad, sexo, identificacion, formacion, foto, created_at, updated_at, deleted_at) VALUES(1, NULL, 1, 'Curly Jack', 'Henao Hollo', 1234567, 'm', 1547897711, 'Maestría', NULL, '2016-12-16', '2016-12-16', NULL);
+INSERT INTO personas (id, id_categoria_investigador, id_tipo_identificacion, nombres, apellidos, edad, sexo, identificacion, formacion, foto, created_at, updated_at, deleted_at) VALUES(2, 1, 1, 'Walter', 'Devia', 23, 'm', 1151949168, 'Maestría', NULL, curdate(), NULL, NULL);
 
 -- 
 --  Volcado de datos para la tabla 'roles'

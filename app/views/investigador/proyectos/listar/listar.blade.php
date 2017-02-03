@@ -137,7 +137,7 @@
                                         <th class="no-wrap">Nombre de proyecto</th>
                                         <th class="no-wrap">Grupo de investigación ejecutor</th>
                                         <th>Duración (meses)</th>
-                                        <!--<th>Editar proyecto</th>-->
+                                        <th>Editar proyecto</th>
                                         <th>Gestión de proyecto</th>
                                         <th>Más información</th>
                                     </tr>
@@ -162,7 +162,7 @@
                                                     <li role="menuitem"><a href="/proyectos/editar/5/{$ proyecto.id$}">Adjuntos</a></li>
                                                 </ul>
                                             </div>                                            
-                                            <button type="button" class="btn btn-default"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                            <!--<button type="button" class="btn btn-default"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>-->
                                         </td>
                                         <td>
                                             <div class="btn-group" uib-dropdown dropdown-append-to-body>

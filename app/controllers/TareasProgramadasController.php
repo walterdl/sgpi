@@ -48,7 +48,7 @@
             }
             catch(\Exception $e){
                 // throw $e;
-                Log::error($e);                
+                Log::error($e);
             }            
         }
         

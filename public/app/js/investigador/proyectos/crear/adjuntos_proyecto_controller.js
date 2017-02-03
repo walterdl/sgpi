@@ -81,6 +81,8 @@ sgpi_app.controller('adjuntos_proyecto_controller', function ($scope) {
         }
         else
         {
+            $scope.data.msj_operacion_general = '<h4 class="text-center">Registrando proyecto, puede tardar un momento...<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i></h4>'
+            $scope.visibilidad.show_velo_general = true;
             $scope.deshabilitar_btn_registrar_proy = true;
             $('#input_registrar_proyecto').trigger('click');
         }

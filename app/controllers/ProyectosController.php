@@ -109,11 +109,8 @@
                         array('identificacion' => $data['identificacion_investigador_principal']),
                         array('identificacion' => array('required', 'integer', 'min:0', 'max:99999999999', 'exists:personas,identificacion'))
                     );              
-                    if($validacion->fails()){
-                        Session::flash('notify_operacion_previa', 'error');
-                        Session::flash('mensaje_operacion_previa', 'Error en el registro de nuevo proyecto. Detalles: Identificación de investigador principal '.$data['identificacion_investigador_principal'].' inválida');
-                        return Redirect::to('/proyectos/listar');
-                    }
+                    if($validacion->fails())
+                        throw new Exception('Error en el registro de nuevo proyecto. Detalles: Identificación de investigador principal '.$data['identificacion_investigador_principal'].' inválida');
                     
                     // validación de identificación correcta
                     // se obtiene el usuario del investigador principal 
@@ -134,21 +131,20 @@
                     // se registran los documentos iniciales del proyecto, esto es:
                     // presupuesto, presentacion de proyecto, acta de inicio
                     $this->registrar_documentos_iniciales_proyecto($proyecto->id);
-
-                    Session::flash('notify_operacion_previa', 'success');
-                    Session::flash('mensaje_operacion_previa', 'Proyecto de investigación registrado');
-                    return Redirect::to('/proyectos/listar');                    
-                    
                 }); 
+                
+                Session::flash('notify_operacion_previa', 'success');
+                Session::flash('mensaje_operacion_previa', 'Proyecto de investigación registrado');
+                return Redirect::to('/proyectos/listar');                                    
             }
             catch (\Exception $e){
                 // aquí redirigir a listar proyectos con mensaje flash de error
                 // throw $e;
+                Log::error($e);
                 Session::flash('notify_operacion_previa', 'error');
                 Session::flash('mensaje_operacion_previa', 'Error en el registro de nuevo proyecto. Detalles: '.$e->getMessage());
                 return Redirect::to('/proyectos/listar');
             }
-            
         }
         
     	/*
@@ -1059,10 +1055,10 @@
             // itera por cada una da las entidades de presupuesto, tanto nuevas como existentes y crea los gastos
             for($i = 0; $i < $data['cantidad_gastos_salidas']; $i++){
                 
-                $justificacion = $data['gasto_software_justificacion_'.$i];
+                $justificacion = $data['gasto_salida_justificacion_'.$i];
                 $cantidad_salidas = $data['gasto_salida_cantidad_salidas_'.$i];
                 $valor_unitario = $data['gasto_salida_valor_unitario_'.$i];
-                $fecha_ejecucion = $data['gasto_software_fecha_ejecucion_'.$i];
+                $fecha_ejecucion = $data['gasto_salida_fecha_ejecucion_'.$i];
 
                 // aplica validacion a los campos del DetalleGasto
                 $validacion = Validator::make(
@@ -1203,7 +1199,7 @@
         private function registrar_gastos_materiales($data, $id_proyecto){
             
             if(!isset($data['cantidad_gastos_materiales']) || isset($data['cantidad_gastos_materiales']) == 0)
-                return; // sin gastos de software para este proyecto
+                return; // sin gastos de materiales para este proyecto
 
             // los pasos mas importantes son:
             // 1 obtiene los campos de la tabla detalles_gastos para una mejor manipulación
