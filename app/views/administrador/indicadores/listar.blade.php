@@ -66,7 +66,7 @@
                 <h3>Indicadores de proyectos de investigación</h3>
             </div>
             <div class="box-body">
-                <div class="row is-flex">
+                <div class="row is-flex" ng-show="proyectos.length>0">
                     <div class="col-xs-12 col-sm-6">
                         <div id="proyectos_final_aprobado" style="width: 100%; height:370px;"></div>
                     </div>
@@ -80,6 +80,7 @@
                         <div id="proys_x_area" style="width: 100%; height:370px;"></div>
                     </div>
                 </div>
+                <h4 ng-show="proyectos.length==0">Sin proyectos de investigación, no se pueden mostrar indicadores</h4>
                 <br />
                 <fieldset>
                     <legend>Proyectos de investigación</legend>
