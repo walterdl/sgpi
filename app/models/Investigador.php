@@ -10,6 +10,7 @@
         protected $dates = ['deleted_at'];
         protected $fillable = [
             'id',
+            'id_estado',
             'id_usuario_investigador_principal',
             'id_persona_coinvestigador',
             'id_grupo_investigacion_ucc',
@@ -39,7 +40,16 @@
             public function rol(){ 
                 return $this->belongsTo('Rol', 'id_rol'); 
             }
- 
+            
+            
+            
+            //relaciones indirectas
+            
+            public function producto()
+            {
+                return $this->hasMany('Producto','id_investigador');
+            }
+     
             
     	/*
     	|--------------------------------------------------------------------------

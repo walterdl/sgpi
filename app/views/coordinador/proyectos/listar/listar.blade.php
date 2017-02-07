@@ -777,8 +777,7 @@
                                         </div>
                                         <div class="col-xs-12">
                                             <label>Comentario de revisión</label>
-                                            <textarea rows="3" ng-model="informe_avance.comentario_revision" class="form-control white-readonly" ng-readonly="true"
-                                            uib-tooltip="Ingresar un comentario de revisión" tooltip-enable="true"></textarea>
+                                            <textarea rows="3" ng-model="informe_avance.comentario_revision" class="form-control white-readonly" ng-readonly="true"></textarea>
                                             <br />
                                         </div>            
                                     </div>
@@ -852,8 +851,7 @@
                                         <div class="col-xs-12">
                                             <br />
                                             <label>Comentario de revisión (opcional)</label>
-                                            <textarea rows="3" class="form-control white-readonly" ng-model="final_proyecto.comentario_revision" ng-readonly="true"
-                                            uib-tooltip="Ingresar un comentario de revisión" tooltip-enable="true"></textarea>
+                                            <textarea rows="3" class="form-control white-readonly" ng-model="final_proyecto.comentario_revision" ng-readonly="true"></textarea>
                                         </div>
                                     </div>                                
                                 </div>                                
@@ -920,8 +918,7 @@
                                         <div class="col-xs-12">
                                             <br />
                                             <label>Comentario de revisión</label>
-                                            <textarea rows="3" class="form-control white-readonly" ng-model="prorroga.comentario_revision" ng-readonly="true"
-                                            uib-tooltip="Ingresar un comentario de revisión" tooltip-enable="true"></textarea>
+                                            <textarea rows="3" class="form-control white-readonly" ng-model="prorroga.comentario_revision" ng-readonly="true"></textarea>
                                         </div>
                                     </div>                                
                                 </div>                                

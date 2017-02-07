@@ -275,7 +275,7 @@
         private function alertas_informes_avances
             ($proyecto, $investigador_principal, $coordinadores_grupo_inv_ejecutor, $administradores, $fecha_actual_mas_20_dias)
         {
-            calcula la fecha de mitad de proyecto
+            // calcula la fecha de mitad de proyecto
             $duracion_meses_dividida = $proyecto->duracion_meses / 2;
             $fecha_mitad_proyecto = date_create_from_format('Y-m-d', $proyecto->fecha_inicio);
             $fecha_mitad_proyecto->modify('+'.$duracion_meses_dividida.' month');

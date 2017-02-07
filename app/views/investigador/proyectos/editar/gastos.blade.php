@@ -89,8 +89,9 @@
                             <p><strong>Agregar entidad fuente de presupuesto (por defecto se tiene UCC y CONADI)</strong></p>
                             <div class="row">
                                 <div class="col-xs-12 col-md-6">
+                                    
                                     <ui-select id="multiselect_entidades_presupuesto" 
-                                    multiple ng-model="data.entidades_presupuesto_seleccionadas" 
+                                    multiple ng-model="data.entidad_fuente_presupuesto_seleccionadas" 
                                     close-on-select="true" search-enabled="true" on-select="seleccion_entidad_presupuesto($item)" on-remove="remocion_entidad_presupuesto($item)"
                                     style="width: 100%; height: 34px;" theme="bootstrap"  title="Seleccionar otras entidades fuente de presupuesto...">
                                         <ui-select-match placeholder="Seleccione...">{$ $item.nombre $}</ui-select-match>
@@ -98,11 +99,14 @@
                                             {$ entidad_presupuesto.nombre $}
                                         </ui-select-choices>
                                     </ui-select>
+                                    
+                                    
                                     <div id="inputs_nuevas_entidades_fuente_presupuesto" ng-hide="true">
                                         {{--contenido generado desde controlador--}}
                                         {{--son inputs hidden para crear nuevos registros de entidades financiadoras--}}
                                     </div>
                                 </div>
+                                
                                 <div class="col-xs-12 col-md-6">
                                     <p style="color: rgb(178, 34, 34);" ng-show="visibilidad.nueva_entidadPresupuesto_incorrecto">{$ data.msj_nueva_entidadPresupuesto_incorrecto $}</p>
                                     <div class="input-group">
@@ -114,6 +118,13 @@
                                         </span>
                                     </div>
                                 </div>
+                                
+                                <div class="col-xs-12 col-md-6"><br>
+                                    <div class="alert alert-info">
+                                      <strong>Info!</strong> Señor usuario tenga en cuenta que al borrar un entidad de presupuesto se borrarran todas.
+                                    </div>
+                                </div>
+                                
                             </div>
                             <br />
                             

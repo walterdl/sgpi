@@ -42,11 +42,13 @@ class BaseController extends Controller {
 	 */    
     public function truncar_bd(){
         try{
-            DB::transaction(function(){
+
+            $statements = 'Hello there';
+            DB::transaction(function() use(&$statements){
+                // mediante truncacion
                 $query = "SELECT Concat('TRUNCATE TABLE ', table_schema,'.',TABLE_NAME, ';') as truncacion ";
-                $query .= "FROM INFORMATION_SCHEMA.TABLES where  table_schema in ('sgpi');";
+                $query .= "FROM INFORMATION_SCHEMA.TABLES where  table_schema in ('sgpi');";                
                 $resultado = DB::select(DB::raw($query));
-                
                 if(!$resultado)
                     return 'Sin tablas para truncar';
                 
@@ -59,15 +61,57 @@ class BaseController extends Controller {
                 
                 foreach ($statements as $stmt) {
                     DB::statement($stmt);
-                }
+                }        
             });
-            return 'BD truncada, se recomienda germinar BD: <a href="/sembrar_bd">Germinar BD</a>';
+            $resultado = 'BD truncada, se recomienda germinar BD: <a href="/sembrar_bd">Germinar BD</a><br/><br/>';
+            foreach($statements as $statement)
+                $resultado .= '<br />'.$statement;
+            return $resultado;
         }
         catch (Exception $e){
             return 'Error en la truncación de la BD; <br />Codigo: '.$e->getCode().'<br />Mensaje de excepción: '.$e->getMessage();
         }
     }
     
-	
+    public function show_sentencias_truncacion(){
+        $query = "SELECT Concat('TRUNCATE TABLE ', table_schema,'.',TABLE_NAME, ';') as truncacion ";
+        $query .= "FROM INFORMATION_SCHEMA.TABLES where table_schema like '%sgpi%';";                        
+        $resultado = DB::select(DB::raw($query));
+        
+        if(!$resultado)
+            return 'Sin tablas para truncar';
+        
+        $statements = ['SET FOREIGN_KEY_CHECKS=0;'];
+        
+        foreach($resultado as $exp_truncacion)
+            array_push($statements, $exp_truncacion->truncacion);
+            
+        array_push($statements, 'SET FOREIGN_KEY_CHECKS=1;');        
+        
+        $cadena_resultado = '';
+        foreach($statements as $statement)
+            $cadena_resultado .= '<br />'.$statement;
+        return $cadena_resultado;
+    }
     
+    public function show_alter_collation()
+    {
+        $query = 
+            "SELECT Concat('ALTER TABLE ', table_schema,'.',TABLE_NAME, ' DEFAULT CHARSET=latin1 COLLATE latin1_swedish_ci;') as statement
+            FROM INFORMATION_SCHEMA.TABLES where table_schema like '%sgpi%';";                        
+        $resultado = DB::select(DB::raw($query));        
+
+        if(!$resultado)
+            return 'Sin tablas para modificar';        
+            
+        $statements = [];
+        
+        foreach($resultado as $exp_truncacion)
+            array_push($statements, $exp_truncacion->statement);            
+            
+        $cadena_resultado = '';
+        foreach($statements as $statement)
+            $cadena_resultado .= '<br />'.$statement;
+        return $cadena_resultado;        
+    }
 }

@@ -37,7 +37,7 @@
         
         public function objetivosEspecificos()
         {
-            return $this->hasMany('ObjetivoEspecifico','id_proyecto');
+            return $this->hasMany('ObjetivoEspecifico','id_proyecto')->where("id_estado","1");
         }
         
 
@@ -49,7 +49,7 @@
         
         public function investigadores()
         {
-            return $this->hasMany('Investigador','id_proyecto');
+            return $this->hasMany('Investigador','id_proyecto')->where("id_estado","1");
         }
         
         public function gastos()

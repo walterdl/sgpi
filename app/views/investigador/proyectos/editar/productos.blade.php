@@ -148,17 +148,17 @@
                         		                    <input type="hidden" name="id_tipo_producto_especifico_{$ $index $}" value="{$ producto.tipo_producto_especifico.id $}"/>
                         		                </td>
                         		                <td>
-                        		                    <span class="error-text" ng-show="producto.nombre_invalido">Longitud mínima de 5 caracteres y máxima de 200</span>
-                        		                    <input type="text" name="nombre_producto_{$ $index $}" ng-model="item.producto.nombre" ng-change="validar_nombre_producto(producto)"
+                        		                    <span class="error-text" ng-show="item.producto.nombre_invalido">Longitud mínima de 5 caracteres y máxima de 200</span>
+                        		                    <input type="text" name="nombre_producto_{$ $index $}" ng-model="item.producto.nombre" ng-change="validar_nombre_producto(item)"
                         		                    class="form-control" ng-class="{'invalid_control': producto.nombre_invalido}" style="min-width: 170px;"/>
                         		                </td>
                         		                
                         		                <!--<td>{$ item.producto.investigador.persona  $}</td>-->
                         		                
                         		                <td>
-                        		                    <span class="error-text" ng-show="producto.participante_invalido">Campo requerido. Elegir un participante</span>
+                        		                    <span class="error-text" ng-show="item.producto.participante_invalido">Campo requerido. Elegir un participante</span>
                                 					<ui-select theme="bootstrap" append-to-body="true"
-                                					ng-model="item.producto.investigador.persona" ng-change="validar_participante_producto($select.selected,item.producto.investigador.persona)"
+                                					ng-model="item.producto.investigador.persona" ng-change="validar_participante_producto(item.producto)"
                                 					ng-required="true" ng-class="{'invalid_control': producto.participante_invalido}">
                                 						<ui-select-match placeholder="Seleccione...">{$ $select.selected.info_investigador.nombres + ' ' + $select.selected.info_investigador.apellidos $}</ui-select-match>
                                 						<ui-select-choices repeat="participante in data.info_investigadores_usuario | filter: $select.search">
@@ -172,10 +172,10 @@
                         		                {{----}}
                         		                
                         		                <td>
-                        		                    <span class="error-text" ng-show="producto.fecha_proyectada_radicar_invalido">Ingresar fecha</span>
+                        		                    <span class="error-text" ng-show="item.producto.fecha_proyectada_radicar_invalido">Ingresar fecha</span>
                         		                    <div class="input-group">
                                                         <input type="text" name="fecha_proyectada_radicar_{$ $index $}"
-                                                            ng-model="item.producto.fecha_proyectada_radicacion" ng-change="validar_fecha_proyectada_radicar(producto)"
+                                                            ng-model="item.producto.fecha_proyectada_radicacion" ng-change="validar_fecha_proyectada_radicar(item.prodcuto)"
                                                             is-open="producto.show_popup_fecha_proyectada_radicar"
                                                             datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
                                                             clear-text="Borrar" close-text="Seleccionar" current-text="Seleccionar"
@@ -188,10 +188,10 @@
                         		                    </div>
                         		                </td>
                         		                <td>
-                        		                    <span class="error-text" ng-show="producto.fecha_remision_invalido">Ingresar fecha</span>
+                        		                    <span class="error-text" ng-show="item.producto.fecha_remision_invalido">Ingresar fecha</span>
                         		                    <div class="input-group">
                                                         <input type="text" name="fecha_remision_{$ $index $}"
-                                                            ng-model="item.producto.fecha_remision" ng-change="validar_fecha_remision(producto)"
+                                                            ng-model="item.producto.fecha_remision" ng-change="validar_fecha_remision(item.prodcuto)"
                                                             is-open="producto.show_popup_fecha_remision"
                                                             datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
                                                             clear-text="Borrar" close-text="Seleccionar" current-text="Seleccionar"
@@ -203,10 +203,10 @@
                                                     </div>
                         		                </td>                    		                
                         		                <td>
-                        		                    <span class="error-text" ng-show="producto.fecha_confirmacion_editorial_invalido">Ingresar fecha</span>
+                        		                    <span class="error-text" ng-show="item.producto.fecha_confirmacion_editorial_invalido">Ingresar fecha</span>
                         		                    <div class="input-group">
                                                         <input type="text" name="fecha_confirmacion_editorial_{$ $index $}"
-                                                            ng-model="item.producto.fecha_confirmacion_editorial" ng-change="validar_fecha_confirmacion_editorial(producto)"
+                                                            ng-model="item.producto.fecha_confirmacion_editorial" ng-change="validar_fecha_confirmacion_editorial(item.prodcuto)"
                                                             is-open="producto.show_popup_fecha_confirmacion_editorial"
                                                             datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
                                                             clear-text="Borrar" close-text="Seleccionar" current-text="Seleccionar"
@@ -218,10 +218,10 @@
                                                     </div>
                         		                </td>                    		                                    		                
                         		                <td>
-                        		                    <span class="error-text" ng-show="producto.fecha_recepcion_evaluacion_invalido">Ingresar fecha</span>
+                        		                    <span class="error-text" ng-show="item.producto.fecha_recepcion_evaluacion_invalido">Ingresar fecha</span>
                         		                    <div class="input-group">
                                                         <input type="text" name="fecha_recepcion_evaluacion_{$ $index $}"
-                                                            ng-model="item.producto.fecha_recepcion_evaluacion" ng-change="validar_fecha_recepcion_evaluacion(producto)"
+                                                            ng-model="item.producto.fecha_recepcion_evaluacion" ng-change="validar_fecha_recepcion_evaluacion(item.prodcuto)"
                                                             is-open="producto.show_popup_fecha_recepcion_evaluacion"
                                                             datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
                                                             clear-text="Borrar" close-text="Seleccionar" current-text="Seleccionar"
@@ -234,10 +234,10 @@
                         		                </td>                    		                                    		                
                         		                
                         		                <td>
-                        		                    <span class="error-text" ng-show="producto.fecha_respuesta_evaluacion_invalido">Ingresar fecha</span>
+                        		                    <span class="error-text" ng-show="item.producto.fecha_respuesta_evaluacion_invalido">Ingresar fecha</span>
                         		                    <div class="input-group">
                                                         <input type="text" name="fecha_respuesta_evaluacion_{$ $index $}"
-                                                            ng-model="item.producto.fecha_respuesta_evaluacion" ng-change="validar_fecha_respuesta_evaluacion(producto)"
+                                                            ng-model="item.producto.fecha_respuesta_evaluacion" ng-change="validar_fecha_respuesta_evaluacion(item.prodcuto)"
                                                             is-open="producto.show_popup_fecha_respuesta_evaluacion"
                                                             datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
                                                             clear-text="Borrar" close-text="Seleccionar" current-text="Seleccionar"
@@ -250,10 +250,10 @@
                         		                </td>                    		                                    		                                        		                
                         		                
                         		                <td>
-                        		                    <span class="error-text" ng-show="producto.fecha_aprobacion_publicacion_invalido">Ingresar fecha</span>
+                        		                    <span class="error-text" ng-show="item.producto.fecha_aprobacion_publicacion_invalido">Ingresar fecha</span>
                         		                    <div class="input-group">
                                                         <input type="text" name="fecha_aprobacion_publicacion_{$ $index $}"
-                                                            ng-model="item.producto.fecha_aprobacion_publicacion" ng-change="validar_fecha_aprobacion_publicacion(producto)"
+                                                            ng-model="item.producto.fecha_aprobacion_publicacion" ng-change="validar_fecha_aprobacion_publicacion(item.prodcuto)"
                                                             is-open="producto.show_popup_fecha_aprobacion_publicacion"
                                                             datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
                                                             clear-text="Borrar" close-text="Seleccionar" current-text="Seleccionar"
@@ -265,10 +265,10 @@
                                                     </div>
                         		                </td>                    		                        		                
                         		                <td>
-                        		                    <span class="error-text" ng-show="producto.fecha_publicacion_invalido">{$ producto.msj_fecha_publicacion_invalido $}</span>
+                        		                    <span class="error-text" ng-show="item.producto.fecha_publicacion_invalido">{$ item.producto.msj_fecha_publicacion_invalido $}</span>
                         		                    <div class="input-group">
                                                         <input type="text" name="fecha_publicacion_{$ $index $}"
-                                                            ng-model="item.producto.fecha_publicacion" ng-change="validar_fecha_publicacion(producto)"
+                                                            ng-model="item.producto.fecha_publicacion" ng-change="validar_fecha_publicacion(item.prodcuto)"
                                                             is-open="producto.show_popup_fecha_publicacion"
                                                             datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
                                                             clear-text="Borrar" close-text="Seleccionar" current-text="Seleccionar"
@@ -280,7 +280,7 @@
                                                     </div>
                         		                </td>    
                         		                <td>
-                        		                    <button type="button" class="btn btn-default" ng-click="remover_producto(producto)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        		                    <button type="button" class="btn btn-default" ng-click="remover_producto(item)"><i class="fa fa-times" aria-hidden="true"></i></button>
                         		                </td>
                         		            </tr>
                         		        </tbody>
@@ -291,6 +291,7 @@
                                    		        
                     		        <div class="col-xs-12 col-sm-6 col-md-4">
                     		            <button type="button" class="btn btn-primary btn-block" ng-click="continuar_a_gastos()">Guardar Cambios</button>
+                    		            <input type="submit" id="input_editar_proyecto" ng-hide="true"/>
                     		        </div>
                     		    </div>                    		
                         	</div>

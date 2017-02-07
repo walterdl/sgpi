@@ -13,7 +13,7 @@
 		<link rel="stylesheet" href="/app/css/precargador.css">
 		
 		<!-- jQuery 2.2.0 -->
-		<script src="{{url()}}/vendor/jQuery/jQuery-2.2.0.min.js"></script>
+		<script src="/vendor/jQuery/jQuery-2.2.0.min.js"></script>
 		<!--<script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>-->
 		
 		<!--Esconde precargador-->
@@ -47,36 +47,36 @@
 		<script type="text/javascript" src="/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
 		
 		<!-- Theme style -->
-		<link rel="stylesheet" href="{{url()}}/adminlte/css/AdminLTE.css">
+		<link rel="stylesheet" href="/adminlte/css/AdminLTE.css">
 		
 		<!-- AdminLTE Skins. Choose a skin from the css/skins
 		folder instead of downloading all of them to reduce the load. -->
-		<link rel="stylesheet" href="{{url()}}/adminlte/css/skins/_all-skins.min.css">
+		<link rel="stylesheet" href="/adminlte/css/skins/_all-skins.min.css">
 		
 		<!-- Bootstrap css 3.3.6 -->
-		<link rel="stylesheet" href="{{ url() }}/vendor/bootstrap/css/bootstrap.css">
+		<link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.css">
 		
 		<!-- Bootstrap js 3.3.6 -->
-		<script src="{{url()}}/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 		
 		<!-- Bootstrap's col with same height by flex property,
 		source at: https://scotch.io/bar-talk/different-tricks-on-how-to-make-bootstrap-columns-all-the-same-height -->
 		<link rel="stylesheet" href="/app/css/bootstrap-col-same-height-by-flex.css" type="text/css" />
 		
 		<!-- SlimScroll -->
-		<script src="{{url()}}/vendor/slimScroll/jquery.slimscroll.min.js"></script>
+		<script src="/vendor/slimScroll/jquery.slimscroll.min.js"></script>
 		
 		<!--Alertify. Ver referencia en: http://alertifyjs.com/ y en http://kensho.github.io/ng-alertify/-->
-		<link rel="stylesheet" href="{{ url() }}/vendor/alertify/alertify1/css/alertify.min.css">
-		<link rel="stylesheet" href="{{ url() }}/vendor/alertify/alertify1/css/themes/bootstrap.min.css">
-		<script type="text/javascript" src="{{ url() }}/vendor/alertify/alertify1/alertify.min.js"></script>
+		<link rel="stylesheet" href="/vendor/alertify/alertify1/css/alertify.min.css">
+		<link rel="stylesheet" href="/vendor/alertify/alertify1/css/themes/bootstrap.min.css">
+		<script type="text/javascript" src="/vendor/alertify/alertify1/alertify.min.js"></script>
 		
 		<!--Alertify wrapper for angular-->
 		<!--<link rel="stylesheet" href="{{ url() }}/vendor/alertify/ng-alertify.css">-->
-		<script type="text/javascript" src="{{ url() }}/vendor/alertify/ng-alertify.js"></script>
+		<script type="text/javascript" src="/vendor/alertify/ng-alertify.js"></script>
 		
 		<!--angular-bind-html-compile-->
-		<script type="text/javascript" src="{{ url() }}/vendor/angular-bind-html-compile/angular-bind-html-compile.min.js"></script>
+		<script type="text/javascript" src="/vendor/angular-bind-html-compile/angular-bind-html-compile.min.js"></script>
 		
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -91,7 +91,7 @@
 		@yield('pre_scripts')
 		
 		<!--Inicializacion de angular-->
-		<script type="text/javascript" src="{{url()}}/app/js/general/sgpi_app.js"></script>
+		<script type="text/javascript" src="/app/js/general/sgpi_app.js"></script>
 	</head>
 	
 	<body class="sidebar-mini skin-blue" ng-controller="base_controller">
@@ -319,11 +319,11 @@
 		<!-- ./wrapper -->
 		
 		<!-- FastClick -->
-		<script src="{{url()}}/vendor/fastclick/fastclick.js"></script>
+		<script src="/vendor/fastclick/fastclick.js"></script>
 		<!-- AdminLTE App -->
-		<script src="{{url()}}/adminlte/js/app.min.js"></script>
+		<script src="/adminlte/js/app.min.js"></script>
 		<!-- AdminLTE for demo purposes -->
-		<script src="{{url()}}/adminlte/js/demo.js"></script>
+		<script src="/adminlte/js/demo.js"></script>
 		
 		<script type="text/javascript">
 		// window.history.forward(1);

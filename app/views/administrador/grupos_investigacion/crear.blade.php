@@ -48,8 +48,8 @@
                 <form action="/grupos/guardar_nuevo_grupo_inv" method="POST" name="form_nuevo_grupo_inv">
                     <div class="container-sgpi">
                     <!--<div class="container">-->
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 altura_74">
+                        <div class="row is-flex">
+                            <div class="col-xs-12 col-sm-6 col-md-4">
                                 <div class="form-group">
                                     <label for="nombre">Nombre</label> <span style="color:rgb(139,0,0);" ng-show="btn_guardar_seleccionado && visibilidad.show_nombre_invalido">Campo requerido</span>
                                     <input class="form-control" type="text" name="nombre" id="nombre" ng-model="data.nombre" ng-required="true" ng-change="validar_nombre()" 
@@ -57,7 +57,7 @@
                                     ng-disabled="visibilidad.error_carga_data_inicial"/>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 altura_74">
+                            <div class="col-xs-12 col-sm-6 col-md-4">
                                 <div class="form-group">
                                     <label for="gran_area">Gran area</label> <i ng-show="visibilidad.cargando_data_inicial" class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i> <span style="color:rgb(139,0,0);" ng-show="btn_guardar_seleccionado && visibilidad.show_gran_area_invalido">Campo requerido</span>
                                     <ui-select ng-model="data.gran_area" theme="bootstrap" ng-change="cambia_gran_area()"  
@@ -71,7 +71,7 @@
                                     <input type="hidden" name="gran_area" value="{$ data.gran_area.id $}"/>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 altura_74">
+                            <div class="col-xs-12 col-sm-6 col-md-4">
                                 <div class="form-group">
                                     <label for="area">Area</label> <i ng-show="visibilidad.cargando_data_inicial" class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i> <span style="color:rgb(139,0,0);" ng-show="btn_guardar_seleccionado && visibilidad.show_area_invalido">Campo requerido</span>
                                     <ui-select ng-model="data.area" theme="bootstrap" ng-change="validar_area()" ng-class="{'invalid_control': btn_guardar_seleccionado && visibilidad.show_area_invalido}"
@@ -84,7 +84,7 @@
                                     <input type="hidden" name="area" value="{$ data.area.id $}"/>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 altura_74">
+                            <div class="col-xs-12 col-sm-6 col-md-4">
                                 <div class="form-group">
                                     <label for="area">Clasificación</label> <i ng-show="visibilidad.cargando_data_inicial" class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i> <span style="color:rgb(139,0,0);" ng-show="btn_guardar_seleccionado && visibilidad.show_clasif_grupo_inv_invalido">Campo requerido</span>
                                     <ui-select ng-model="data.clasificacion_grupo_inv" theme="bootstrap" ng-change="validar_clasif_grupo_inv()" ng-class="{'invalid_control': btn_guardar_seleccionado && visibilidad.show_clasif_grupo_inv_invalido}"

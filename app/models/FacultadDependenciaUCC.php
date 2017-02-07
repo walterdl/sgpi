@@ -16,6 +16,11 @@
             return $this->belongsTo('SedeUCC', 'id_sede_ucc'); 
         }
         
+        
+        public function grupo() { 
+            return $this->hasMany('GrupoInvestigacionUCC', 'id_facultad_dependencia_ucc'); 
+        }
+        
     	/*
     	|--------------------------------------------------------------------------
     	| facultades_x_sedes()

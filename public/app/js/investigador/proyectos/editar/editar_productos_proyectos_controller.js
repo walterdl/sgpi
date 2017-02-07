@@ -7,11 +7,12 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
         participante_invalido:false,
     }];
     
-    $scope.data.info_productos2=$scope.data.info_productos;
+    // $scope.data.info_productos=[];
     //$scope.data.info_productos2=[];
     
     console.log("estas del controlador de productos ");
-    console.log($scope.data.participantes_proyecto);
+    // console.log($scope.data.participantes_proyecto);
+    console.log($scope.data.info_productos); // no se ve nada por que no se an cargado por completo el json
     
     $scope.dateOptions = {
         formatYear: 'yy',
@@ -68,19 +69,35 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
             catch(err){}
                     
             var obj = {
-                tipo_producto_general: $scope.data.tipo_producto_general,
-                tipo_producto_especifico: tipo_producto_especifico ,
-                nombre: null,
-                fecha_proyectada_radicar: null,
-                fecha_remision: null,
-                fecha_confirmacion_editorial: null,
-                fecha_recepcion_evaluacion: null,
-                fecha_respuesta_evaluacion: null,
-                fecha_aprobacion_publicacion: null,
-                fecha_publicacion: null
+                'producto':{
+                    'tipo_producto_e': {
+                        'nombre':tipo_producto_especifico.nombre,
+                        'id':tipo_producto_especifico.id,
+                        'tipo_producto_g':$scope.data.tipo_producto_general
+                    } ,
+                    nombre: null,
+                    fecha_proyectada_radicacion: null,
+                    fecha_remision: null,
+                    fecha_confirmacion_editorial: null,
+                    fecha_recepcion_evaluacion: null,
+                    fecha_respuesta_evaluacion: null,
+                    fecha_aprobacion_publicacion: null,
+                    fecha_publicacion: null,
+                    'investigador':{
+                        'id':null,
+                        'persona':{
+                            'info_investigador':{
+                                'id':null,
+                                'nombres':"",
+                                'apellidos':"",
+                            },
+                        },
+                    },
+                },
+                'resgitrado':0
             };
-            $scope.data.info_productos2.push(obj);
-            console.log($scope.data.info_productos2);
+            $scope.data.info_productos.push(obj);
+            console.log($scope.data.info_productos);
         }
     };
     
@@ -91,9 +108,65 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
 	| Remueve un prodcuto agregado de la colección de productos
 	*/                
     $scope.remover_producto = function(producto) {
-        var index_prodcuto = $scope.data.productos.indexOf(producto);
-        if(index_prodcuto != -1)
-            $scope.data.productos.splice(index_prodcuto, 1);
+        
+        console.log("estas en borrar");
+        console.log(producto);
+        console.log($scope.data.info_productos);
+        
+        if(producto.resgitrado == 0){
+            var index_prodcuto = $scope.data.info_productos.indexOf(producto);
+            if(index_prodcuto != -1)
+                $scope.data.info_productos.splice(index_prodcuto, 1);
+        }else{
+            
+            alertify.confirm('Warning', 'Desea eliminar este Producto?', 
+            function(){ 
+                
+                $http({
+                url: '/proyecto/eliminar/producto',
+                method: 'GET',
+                params: {
+                    id_producto: producto.producto.id,
+                }
+                })
+                .success(function(data) {
+                    
+                    console.log(data);
+                    
+                    if(!data.error){
+                        
+                        alertify.success(data.mensaje);
+                        
+                        var index_prodcuto = $scope.data.info_productos.indexOf(producto);
+                        if(index_prodcuto != -1){
+                            $scope.data.info_productos.splice(index_prodcuto, 1);
+                        }
+                        
+                    }else{
+                        alertify.error(data.mensaje);
+                    }
+                
+                })
+                .error(function(data, status) {
+                    $log.log(data);
+                    $scope.data.msj_operacion_general = '<h3 class="text-center">Error al cargar eliminar el participante. Código de error: ' + status + '</h3>';
+                    alertify.error('Error al eliminar el participante: ' + status);
+                });
+                
+                
+                
+                
+            }
+                , function(){ 
+                    alertify.error('Cancel');
+                    
+            });
+            
+            
+        }
+        
+        
+            
     };
     
     /*
@@ -131,6 +204,18 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
         }
     };
     
+    
+    // $scope.validar_tipo_producto_especifico2 = function() {
+    //     if($scope.data.tipo_producto_especifico == null){
+    //         $scope.visibilidad.tipo_producto_especifico_invalido = true;
+    //         return true;
+    //     }
+    //     else{
+    //         $scope.visibilidad.tipo_producto_especifico_invalido = false;        
+    //         return false
+    //     }
+    // };
+    
     /*
 	|--------------------------------------------------------------------------
 	| validar_nombre_producto()
@@ -140,7 +225,25 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
 	*/                    
     $scope.validar_nombre_producto = function(producto) {
         
-        // se valida el nombre del producto
+        console.log(producto);
+        
+        // // se valida el nombre del producto
+        if(producto.producto.nombre && producto.producto.nombre.length > 5 && producto.producto.nombre.length < 200){
+            producto.producto.nombre_invalido = false;
+            return false;
+        }
+        else{
+            producto.producto.nombre_invalido = true;
+            return true;
+        }
+        
+    };
+    
+    $scope.validar_nombre_producto2 = function(producto) {
+        
+        console.log(producto);
+        
+        // // se valida el nombre del producto
         if(producto.nombre && producto.nombre.length > 5 && producto.nombre.length < 200){
             producto.nombre_invalido = false;
             return false;
@@ -158,27 +261,27 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
 	|--------------------------------------------------------------------------
 	| Valida que se halla seleccionado un participante ancargado para este producto
 	*/                        
-    $scope.validar_participante_producto = function(selected,producto) {
+    $scope.validar_participante_producto = function(producto) {
         
-        console.log('wwwwwww');
-        console.log(selected);
+        // console.log('wwwwwww');
+        // console.log(selected);
         console.log(producto);
         
-        // if(producto.investigador.persona){
+        if(producto.investigador.persona.info_investigador.id){
+                $scope.producto.participante_invalido = false;
 
-        //         console.log("hay persona este es la variable: "+$scope.brandon);
-        //         $scope.producto.participante_invalido = false;
-
-        //     return false;
-        // }
-        // else{
+            return false;
+        }
+        else{
             
-        //         console.log("no hay persona");
-        //         producto.participante_invalido = true;
+                console.log("no hay persona");
+                producto.participante_invalido = true;
 
-        //     return true;
-        // }
+            return true;
+        }
     };
+    
+   
     
     /*
 	|--------------------------------------------------------------------------
@@ -187,7 +290,8 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
 	| Valida que se halla ingresado fecha_proyectada_radicar.
 	*/              
     $scope.validar_fecha_proyectada_radicar = function(producto) {
-        if(producto.fecha_proyectada_radicar){
+        
+        if(producto.fecha_proyectada_radicacion){
             producto.fecha_proyectada_radicar_invalido = false;
             return false;
         }
@@ -197,6 +301,19 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
         }        
     };
     
+    
+    $scope.validar_fecha_proyectada_radicar2 = function(producto) {
+        
+        console.log(producto);
+        if(producto.fecha_proyectada_radicacion){
+            producto.fecha_proyectada_radicar_invalido = false;
+            return false;
+        }
+        else{
+            producto.fecha_proyectada_radicar_invalido = true;
+            return true;
+        }        
+    };
     /*
 	|--------------------------------------------------------------------------
 	| validar_fecha_remision()
@@ -293,9 +410,10 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
 	| Valida que se halla seleccionado una fecha_proyectada_radicar menor a fecha_publicacion
 	*/                       
     $scope.validar_fecha_publicacion = function(producto) {
+        
         if(producto.fecha_publicacion){
-            if(producto.fecha_proyectada_radicar){
-                if(producto.fecha_proyectada_radicar < producto.fecha_publicacion){
+            if(producto.fecha_proyectada_radicacion){
+                if(producto.fecha_proyectada_radicacion < producto.fecha_publicacion){
                     producto.fecha_publicacion_invalido = false;
                     return false;
                 }
@@ -323,36 +441,36 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
 	*/           
     $scope.continuar_a_gastos = function() {
         
-        if($scope.data.productos.length == 0){
+        if($scope.data.info_productos.length == 0){
             alertify.error('Error. Ingresar al menos un producto');
             return;
         }
         
         var validaciones = [];
-        $scope.data.productos.forEach(function(producto) {
-            validaciones.push($scope.validar_tipo_producto_especifico(producto));
-            validaciones.push($scope.validar_nombre_producto(producto));
-            validaciones.push($scope.validar_participante_producto(producto));
-            validaciones.push($scope.validar_fecha_proyectada_radicar(producto));
-            validaciones.push($scope.validar_fecha_remision(producto));
-            validaciones.push($scope.validar_fecha_confirmacion_editorial(producto));
-            validaciones.push($scope.validar_fecha_recepcion_evaluacion(producto));
-            validaciones.push($scope.validar_fecha_respuesta_evaluacion(producto));
-            validaciones.push($scope.validar_fecha_aprobacion_publicacion(producto));
-            validaciones.push($scope.validar_fecha_publicacion(producto));
+        $scope.data.info_productos.forEach(function(item) {
+            //// validaciones.push($scope.validar_tipo_producto_especifico(producto));
+            validaciones.push($scope.validar_nombre_producto2(item.producto));
+            validaciones.push($scope.validar_participante_producto(item.producto));
+            validaciones.push($scope.validar_fecha_proyectada_radicar2(item.producto));
+            validaciones.push($scope.validar_fecha_remision(item.producto));
+            validaciones.push($scope.validar_fecha_confirmacion_editorial(item.producto));
+            validaciones.push($scope.validar_fecha_recepcion_evaluacion(item.producto));
+            validaciones.push($scope.validar_fecha_respuesta_evaluacion(item.producto));
+            validaciones.push($scope.validar_fecha_aprobacion_publicacion(item.producto));
+            validaciones.push($scope.validar_fecha_publicacion(item.producto));
         });
         
         if(validaciones.indexOf(true) != -1){ // alguna validacion es incorrecta
             alertify.error('Error con validaciones');
         }
         else{
-            $('a[href="#contenido_gastos"]').tab('show');
+            
+            alertify.success("ok validado");
+            // $('#input_editar_proyecto').trigger('click');
         }
         
     };
     
-    $scope.regresar_participantes = function() {
-        $('a[href="#contenido_participantes"]').tab('show');
-    };
+  
     
 });

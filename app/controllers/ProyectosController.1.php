@@ -2,7 +2,7 @@
     
     use Illuminate\Database\Eloquent\ModelNotFoundException;
     
-    class ProyectosController extends BaseController {
+    class ProyectosController1 extends BaseController {
         
     	/*
     	|--------------------------------------------------------------------------
@@ -2041,22 +2041,6 @@
     	     try{
     	         
     	        $proyecto=Proyecto::find(Input::get('id_proyecto'));
-    	        $gruposInvestigacion_sedes_facultades=SedeUCC::all();
-    	        
-    	        foreach ($gruposInvestigacion_sedes_facultades as $sede) {
-    	            
-    	            if($sede->facultad){
-    	                foreach ($sede->facultad as $facultad) {
-        	                foreach ($facultad->grupo as $grupo) {
-        	                    if($grupo->facultad)
-        	                        $grupo->facultad->sede;
-        	                }
-    	                }
-    	            }
-    	            
-    	        }
-    	        
-    	        
     	        
     	        //para que se pueda ver y utilizar de debe instanciar 
     	        if($proyecto){
@@ -2089,8 +2073,6 @@
                                     $mas_info_usuario []=array(
                                     'info_investigador' =>  $usuario,
                                     'resgitrado'=>1,
-                                    'tiene_usuario'=>true,
-                                    'resgitrado'=>true,
                                     'investigador_principarl'=>1,
                                     );
                                     
@@ -2109,36 +2091,14 @@
                                           $investigador->grupo->facultad->sede;
                                      }
                                      
-                                     $usuario=Usuario::buscarUsuario($persona->id);
-                                     
-                                     if($persona->sexo == "m"){
-                                         $sexo=array("id"=>"m","nombre"=>"Hombre");
-                                     }else{
-                                         $sexo=array("id"=>"f","nombre"=>"Mujer");
-                                     }
-                                     
-                                     if(count($usuario) > 0){
-                                         $mas_info_usuario []=array(
-                                        'info_investigador' =>  $persona,
-                                        'datos_extras'=>$investigador,
-                                        "sexo"=>$sexo,
-                                        'resgitrado'=>true,
-                                        'tiene_usuario'=>true,
-                                        'investigador_principarl'=>0,
-                                        );
-                                     }else{
-                                         $mas_info_usuario []=array(
-                                        'info_investigador' =>  $persona,
-                                        'datos_extras'=>$investigador,
-                                        "sexo"=>$sexo,
-                                        'resgitrado'=>true,
-                                        'tiene_usuario'=>false,
-                                        'investigador_principarl'=>0,
-                                        );
-                                     }
                                     
                                      
-                                    
+                                    $mas_info_usuario []=array(
+                                    'info_investigador' =>  $persona,
+                                    'datos_extras'=>$investigador,
+                                    'resgitrado'=>1,
+                                    'investigador_principarl'=>0,
+                                    );
     
         
                                 }//fin else
@@ -2155,12 +2115,10 @@
                                     $producto->investigador;
                                     $producto->investigador->persona;
                                     
-                                    if($producto->id_estado == 1){
-                                        $mas_info_productos[]= array(
-                                        'producto' => $producto,
-                                        'resgitrado'=>1,
-                                        );
-                                    }
+                                    $mas_info_productos[]= array(
+                                    'producto' => $producto,
+                                    'resgitrado'=>1,
+                                    );
                                     
                                 } ////// fin del foreach 
                                 
@@ -2348,7 +2306,6 @@
                     'tipos_identificacion' => TipoIdentificacion::all(),
                     'sedes' => SedeUCC::all(),
                     'grupos_investigacion_y_sedes' => GrupoInvestigacionUCC::get_grupos_investigacion_con_sedes(),
-                    'grupos_investigacion_y_sedes2' => $gruposInvestigacion_sedes_facultades,
                     'facultades_dependencias' => FacultadDependenciaUCC::all(),
                     'categorias_investigador' => CategoriaInvestigador::all(),
                     'roles' => Rol::whereNotIn('id', array(1, 2, 3))->get(),

@@ -378,7 +378,18 @@ Route::group(array('before' => 'auth'), function(){
 		*/
 		Route::get('proyectos/editar/{pagina}/{id}', 'ProyectosController@editarVer');
 		Route::get('proyectos/datos_iniciales_editar_proyecto', 'ProyectosController@datos_iniciales_editar_proyecto');
+	
+		Route::post('proyectos/editar/general', 'ProyectosEditarController@editarGeneral');
+		Route::get('proyecto/eliminar/objespecifico', 'ProyectosEditarController@eliminarObjEspecifico');
+		
+		Route::post('proyectos/editar/partiicpantes', 'ProyectosEditarController@editarPartcipantes');
+		Route::get('proyecto/eliminar/participante', 'ProyectosEditarController@eliminarPartcipantes');
+	
+		Route::post('proyectos/editar/productos', 'ProyectosEditarController@editarProductos');
+		Route::get('proyecto/eliminar/producto', 'ProyectosEditarController@eliminarProducto');
+		
 	}
+	
 });
 
 // tarea programada
@@ -445,6 +456,21 @@ Route::get('sembrar_bd', 'BaseController@sembrar_bd');
 */
 Route::get('truncar_bd', 'BaseController@truncar_bd');
 
+/*
+|--------------------------------------------------------------------------
+| Presentar sentencias de truncación
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('show_sentencias_truncacion', 'BaseController@show_sentencias_truncacion');
+
+/*
+|--------------------------------------------------------------------------
+| Presentar sentencias de cambio de collation de tablas
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('show_alter_collation', 'BaseController@show_alter_collation');
 
 /*
 |--------------------------------------------------------------------------
@@ -454,44 +480,6 @@ Route::get('truncar_bd', 'BaseController@truncar_bd');
 */
 Route::get('test', function(){
 	
-	// $no_encontrado = true;
- //   $fecha = date_create_from_format('Y-m-d', '2015-10-01');
- //   $fecha->modify('+16 month');
- //   $fecha = date('Y-m', strtotime($fecha->format('Y-m-d')));
- //   $fecha_objetivo = date('Y-m', strtotime('2017-02-23'));
-    
- //   echo 'Fecha: '.$fecha;
- //   echo '<br />';
- //   echo 'Fecha objetivo: '.$fecha_objetivo;
- //   echo '<br />';
- //   if($fecha == $fecha_objetivo)
- //   {
- //   	echo 'son iguales';
- //   }
- //   else
- //   {
- //   	echo 'no son iguales';
- //   }
-    
-	
-	
-	// 2015-10-01
-	// 2017-02-23
-	// 1024
-	// 33
-	
-    $query = '
-        SELECT DISTINCT(g.id_detalle_gasto), dg.*, tg.nombre as nombre_tipo_gasto
-        FROM gastos g, detalles_gastos dg, tipos_gastos tg
-        WHERE
-        	g.id_proyecto = 2
-        AND	g.id_detalle_gasto = dg.id
-        AND dg.id_tipo_gasto = tg.id;';
-    $detalles_gastos = DB::select(DB::raw($query));	
-    foreach($detalles_gastos as $row){
-    	$query = 'UPDATE detalles_gastos SET fecha_ejecucion = \'2017-02-04\' WHERE id = '.$row->id.';';
-    	DB::select(DB::raw($query));
-    }
-    echo 'ya';
+	echo mt_rand(0, 32000);
 });
 

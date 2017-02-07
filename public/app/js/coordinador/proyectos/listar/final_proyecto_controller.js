@@ -61,13 +61,13 @@ sgpi_app.controller('final_proyecto_controller', function ($scope, $http, Upload
             console.log(data);
             if(data.consultado == 1){
                 $scope.final_proyecto = data.final_proyecto;
-                
-                if(data.final_proyecto.aprobado == 1)
-                    $scope.final_proyecto.aprobado = true;
-                
-                else if(data.final_proyecto.aprobado == 0)
-                    $scope.final_proyecto.aprobado = false;
-                
+                if($scope.final_proyecto != null)
+                {
+                    if(data.final_proyecto.aprobado == 1)
+                        $scope.final_proyecto.aprobado = true;
+                    else if(data.final_proyecto.aprobado == 0)
+                        $scope.final_proyecto.aprobado = false;
+                }
                 $scope.fecha_final_proyecto = data.fecha_final_proyecto;
             	$scope.show_velo_msj_operacion = false;
             }

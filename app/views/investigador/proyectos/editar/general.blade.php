@@ -58,8 +58,11 @@
     <!--contenido |-->
     <section class="content" ng-cloak ng-controller="crear_proyecto_controller">
         
-        <form action="/proyectos/registrar_nuevo_proyecto" method="POST" enctype='multipart/form-data'>
-        
+        <form action="/proyectos/editar/general" method="POST" enctype='multipart/form-data'>
+
+            <!--//// este iput hideen manda el id del proyecto-->
+            <input type="hidden" name="id_proyecto_general" value="{{$proyecto_id}}" />
+            
             <div class="box">
                 <div class="box-header with-border">
                     <h3>Editar proyecto</h3>
@@ -81,7 +84,7 @@
                                     <div class="row is-flex">
                                         
                                         {{--Cidigo FMI--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <div class="form-group">
                                                 <label for="codigo_fmi">Código FMI <span class="error-text" ng-show="data.validacion_codigo_fmi != null">{$ data.validacion_codigo_fmi $}</span></label>
                                                 <input type="text" name="codigo_fmi" id="codigo_fmi" ng-model="data.proyecto.codigo_fmi" ng-change="validar_codigo_fmi()" class="form-control" ng-class="{'invalid_control': data.validacion_codigo_fmi != null}"/>
@@ -89,7 +92,7 @@
                                         </div> 
                                         
                                         {{--Subcentro de costo--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <div class="form-group">
                                                 <label for="subcentro_costo">Subcentro de costo <span class="error-text" ng-show="data.validacion_subcentro_costo != null">{$ data.validacion_subcentro_costo $}</span></label>
                                                 <input type="text" name="subcentro_costo" id="subcentro_costo" ng-model="data.proyecto.subcentro_costo" ng-change="validar_subcentro_costo()" class="form-control" ng-class="{'invalid_control': data.validacion_subcentro_costo != null}"/>
@@ -97,7 +100,7 @@
                                         </div> 
                                         
                                         {{--Nombre del proyecto--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <div class="form-group">
                                                 <label for="nombre_proyecto">Nombre del proyecto <span class="error-text" ng-show="data.validacion_nombre_proyecto != null">{$ data.validacion_nombre_proyecto $}</span></label>
                                                 <input type="text" name="nombre_proyecto" id="nombre_proyecto" ng-model="data.proyecto.nombre" ng-change="validar_nombre_proyecto()" class="form-control" ng-class="{'invalid_control': data.validacion_nombre_proyecto != null}"/>
@@ -105,11 +108,11 @@
                                         </div> 
                                         
                                         {{--Fecha de inicio del proyecto--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <label for="fecha_inicio">Fecha de inicio del proyecto <span class="error-text" ng-show="data.validacion_fecha_inicio != null">{$ data.validacion_fecha_inicio $}</span></label>
                                             <div class="input-group">
                                                 <input type="text" name="fecha_inicio" id="fecha_inicio" 
-                                                    ng-model="data.proyecto.fecha_inicio" 
+                                                    ng-model="data.proyecto.fecha_inicio" ng-change="calcular_fecha_final()"
                                                     is-open="visibilidad.show_datepicker_fecha_inicio"
                                                     datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd"
                                                     clear-text="Borrar" close-text="Seleccionar" current-text="Fecha actual"
@@ -123,15 +126,16 @@
                                         </div> 
                                         
                                         {{--Duración en meses del proyecto--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <div class="form-group">
                                                 <label for="duracion_meses">Duración en meses del proyecto <span class="error-text" ng-show="data.validacion_duracion_meses != null">{$ data.validacion_duracion_meses $}</span></label>
-                                                <input type="number" min="12" name="duracion_meses" id="duracion_meses" ng-model="data.proyecto.duracion_meses" ng-change="calcular_fecha_final()" class="form-control" ng-class="{'invalid_control': data.validacion_duracion_meses != null}"/>
+                                                <input type="number" min="12" name="duracion_meses" id="duracion_meses" ng-model="data.proyecto.duracion_meses" ng-change="calcular_fecha_final()" 
+                                                class="form-control" ng-class="{'invalid_control': data.validacion_duracion_meses != null}"/>
                                             </div>
                                         </div> 
                                         
                                         {{--Fecha final del proyecto aproximada--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <label for="fecha_final">Fecha final del proyecto</label>
                                             <div class="input-group">
                                                 <input type="text" name="fecha_final" id="fecha_final" class="form-control white-readonly" 
@@ -147,7 +151,7 @@
                                         </div> 
                                         
                                         {{--Convocatoria--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <div class="form-group">
                                                 <label for="convocatoria">Convocatoria</label>
                                                 <input type="text" name="convocatoria" id="convocatoria" ng-model="data.proyecto.convocatoria" class="form-control"/>
@@ -155,7 +159,7 @@
                                         </div> 
                                         
                                         {{--Año de la convocatoria--}}
-                                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="col-xs-12 col-sm-6 col-md-4">
                                             <div class="form-group">
                                                 <label for="anio_convocatoria">Año de la convocatoria</label>
                                                 <input type="number" min="2000" name="anio_convocatoria" id="anio_convocatoria" ng-model="data.proyecto.anio_convocatoria" class="form-control"/>
@@ -168,6 +172,7 @@
                         		<fieldset>
                         			<legend>Objetivos</legend>
                         			<div class="row">
+                        			    
                                         <div class="col-xs-12 col-sm-6">
                                             <div class="form-group">
                                                 <label for="objetivo_general">Objetivo general <span class="error-text" ng-show="data.validacion_objetivo_general != null">{$ data.validacion_objetivo_general $}</span></label>
@@ -176,12 +181,14 @@
                                                 class="form-control" ng-class="{'invalid_control': data.validacion_objetivo_general != null}"/>
                                             </div>
                                         </div>
+                                        
                                         <div class="col-xs-12">&nbsp;</div>
                                         <div class="col-xs-12">
                                             <div class="row">
                                                 <div class="col-xs-12 col-sm-6">
                                                     <label>Objetivos específicos</label>
                                                 </div>
+                                                
                                                 <div class="col-xs-12 col-sm-6">
                                                     <p class="text-right">
                                                         <button type="button" class="btn btn-primary" ng-class="{'btn-block': windowInnerWidth < 992}" ng-click="add_objetivo_especifico()">
@@ -190,7 +197,12 @@
                                                     </p>
                                                 </div>
                                             </div>
+                                            <input type="hidden" name="cantidad_objetivos_especificos" value="{$ data.proyecto.objetivos_especificos.length $}"/>
+                                            <div ng-hide="true" id="objetivos_especificos_a_eliminar">
+                                                {{--Contenedor de inputs hidden que se encargan de identificar los objetivos espf. "viejos" a eliminar--}}
+                                            </div>                                                                                            
                                             <div style="max-height:280px; overflow-y:auto;" id="contenedor_objetivos_esp">
+
                                                 <table class="table">
                                                     <thead>
                                                         <tr>
@@ -200,9 +212,17 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr ng-repeat="objetivo_especifico in data.proyecto.objetivos_especificos" class="nga-fast nga-stagger-fast nga-fade">
-                                                            <td>
+                                                            <td ng-if="objetivo_especifico.id != null">
                                                                 <span class="error-text" ng-show="objetivo_especifico.validacion != null">{$ objetivo_especifico.validacion $}</span>
-                                                                <input type="text" class="form-control" name="objetivo_especifico_{$ $index $}"
+                                                                <input type="text" class="form-control" name="objetivo_especifico_viejo[]"
+                                                                ng-model="objetivo_especifico.nombre" ng-change="validar_objetivos_especificos(objetivo_especifico)"
+                                                                ng-class="{'invalid_control': objetivo_especifico.validacion != null}"/>
+                                                                
+                                                                <input type="hidden" name="obj_especifico_viejo[]" value="{$objetivo_especifico.id$}" />
+                                                            </td>
+                                                            <td ng-if="objetivo_especifico.id == null">
+                                                                <span class="error-text" ng-show="objetivo_especifico.validacion != null">{$ objetivo_especifico.validacion $}</span>
+                                                                <input type="text" class="form-control" name="objetivo_especifico_nuevo[]"
                                                                 ng-model="objetivo_especifico.nombre" ng-change="validar_objetivos_especificos(objetivo_especifico)"
                                                                 ng-class="{'invalid_control': objetivo_especifico.validacion != null}"/>
                                                             </td>
@@ -217,7 +237,6 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                                <input type="hidden" name="cantidad_objetivos_especificos" value="{$ data.objetivos_especificos.length $}"/>
                                             </div>
                                         </div>
                         			</div>
@@ -225,10 +244,14 @@
                         		
                         		<hr />
                                 <div class="row">
-                                    <div class="col-xs-12 col-sm-6">
-                                        
-                                        <!-- Boton de editar   ng-click="validar_info_general()"-->
-                                        <button type="button" class="btn btn-primary" >Guardar Cambios&nbsp;</button>
+                                    <!--ng-class="{'btn-block': windowInnerWidth < 992}"-->
+                                    <div class="col-xs-12 col-md-4">
+                                        <button type="button" class="btn btn-primary btn-block" ng-click="validar_info_general()" >Guardar Cambios&nbsp;<i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                        <input type="submit" id="input_editar_proyecto" ng-hide="true"/>
+                                    </div>
+                                    <div class="col-xs-12 hidden-md hidden-lg">&nbsp;</div>
+                                    <div class="col-xs-12 col-md-4">
+                                        <a class="btn btn-default btn-block" href="/proyectos/listar">Cancelar</a>
                                     </div>
                                 </div>                    		
                         		
@@ -237,6 +260,8 @@
                         
                     </div> {{--Contenedor del contenido de cada tab--}}
                </div>
+               
+               
         		<div class="overlay" ng-show="visibilidad.show_velo_general">
                     <div style="display:table; width:100%; height:100%;">
                         <div style="display:table-cell; vertical-align: middle;" ng-bind-html="data.msj_operacion_general">
@@ -244,6 +269,8 @@
                         </div>
                     </div>    		    
         		</div>
+        		
+        		
             </div> 
         
         </form>
@@ -275,3 +302,4 @@
         </script>
     @stop
 @endif
+

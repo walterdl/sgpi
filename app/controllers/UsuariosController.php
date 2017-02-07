@@ -529,17 +529,35 @@
             try{
                 $persona = Persona::where('identificacion', '=', Input::all()['identificacion'])->get();
                 
-                if(count($persona))
-                    return json_encode(array(
-                        'consultado' => 1, 
-                        'existe_cc' => 1,
-                        'persona' => $persona[0]
-                    ));
-                else
+                
+                
+                
+                if(count($persona)){
+                
+                    $usuario=Usuario::buscarUsuario($persona[0]->id);
+                    if(count($usuario) > 0){
+                        
+                        return json_encode(array(
+                            'consultado' => 1, 
+                            'existe_cc' => 1,
+                            'tiene_usuario'=>true,
+                            'persona' => $persona[0]
+                        ));
+                    }else{
+                         return json_encode(array(
+                            'consultado' => 1, 
+                            'existe_cc' => 1,
+                            'tiene_usuario'=>false,
+                            'persona' => $persona[0]
+                        ));
+                    }
+                    
+                }else{
                     return json_encode(array(
                         'consultado' => 1, 
                         'existe_cc' => 0
-                    ));                    
+                    ));        
+                }
             }
             catch(Exception $e){                
                 

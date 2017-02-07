@@ -306,8 +306,7 @@
             </div>
             <div class="col-xs-12">
                 <label>Comentario de revisión</label>
-                <textarea rows="3" ng-model="desembolso.comentario_revision" class="form-control white-readonly" ng-readonly="true"
-                uib-tooltip="Ingresar un comentario de revisión" tooltip-enable="true"></textarea>
+                <textarea rows="3" ng-model="desembolso.comentario_revision" class="form-control white-readonly" ng-readonly="true"></textarea>
                 <br />
             </div>                                    
             <div class="col-xs-12">

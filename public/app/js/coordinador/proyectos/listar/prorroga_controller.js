@@ -62,13 +62,13 @@ sgpi_app.controller('prorroga_controller', function ($scope, $http, Upload) {
             if(data.consultado == 1){
                 
                 $scope.prorroga = data.prorroga;
-                
-                if(data.prorroga.aprobado == 1)
-                    $scope.prorroga.aprobado = true;
-                
-                else if(data.prorroga.aprobado == 0)
-                    $scope.prorroga.aprobado = false;
-                
+                if($scope.prorroga != null)
+                {
+                    if(data.prorroga.aprobado == 1)
+                        $scope.prorroga.aprobado = true;
+                    else if(data.prorroga.aprobado == 0)
+                        $scope.prorroga.aprobado = false;
+                }
             	$scope.show_velo_msj_operacion = false;
             }
             else{

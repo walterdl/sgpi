@@ -8,6 +8,8 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
         startingDay: 1
     };        
     
+   
+    
     $scope.data.entidades_presupuesto_seleccionadas = [];
     $scope.data.totales_personal = {ucc: 0, otras_entidades_presupuesto: [], total: 0};
     
@@ -35,6 +37,19 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
     $scope.data.msj_nueva_entidadPresupuesto_incorrecto = '';
     $scope.visibilidad.nueva_entidadPresupuesto_incorrecto = false;
     $scope.data.contador_nuevas_entidades_presupuesto = 0;
+    
+    
+     ///agregar fuentes de presupuesto
+    // $scope.data.fuente_presupuesto.presupuesto.forEach(function(item){
+    //     ///console.log(item);
+        
+    //     if(item.entidad_fuente_presupuesto.id != 1 ||  item.entidad_fuente_presupuesto.id != 2)
+    //         $scope.data.entidades_presupuesto_seleccionadas.push(item.entidad_fuente_presupuesto);
+    // });
+    
+    // console.log("//////////////// gasto");
+    // console.log($scope.$parent.data.fuente_presupuesto.length);
+    
     
     /*
 	|--------------------------------------------------------------------------

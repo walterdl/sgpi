@@ -16,7 +16,7 @@
         ];
         
         public function tipoProductoG() { 
-            return $this->belongsTo('Estado', 'id_tipo_producto_general'); 
+            return $this->belongsTo('TipoProductoGeneral', 'id_tipo_producto_general'); 
         }
         
     	/*

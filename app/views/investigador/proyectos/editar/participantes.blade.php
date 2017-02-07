@@ -60,7 +60,9 @@
     <!--contenido |-->
     <section class="content" ng-cloak ng-controller="crear_proyecto_controller">
         
-        <form action="/proyectos/registrar_nuevo_proyecto" method="POST" enctype='multipart/form-data'>
+        <form action="/proyectos/editar/partiicpantes" method="POST" enctype='multipart/form-data'>
+        <input type="hidden" name="id_proyecto_participantes" value="{{$proyecto_id}}"/>
+        
         
             <div class="box">
                 <div class="box-header with-border">
@@ -139,7 +141,9 @@
                                     		            <label for="apellidos_nuevo_participante">
                                     		                Apellidos <span style="color:#B22222;" ng-show="visibilidad.apellidos_nuevo_participante_invalido">{$ data.msj_validacion_apellidos_nuevo_participante $}</span>
                                     		            </label>
-                                    		            <input type="text" id="apellidos_nuevo_participante" ng-model="data.apellidos_nuevo_participante" ng-change="validar_apellidos_nuevo_participante()"
+                                    		            <input type="text" id="apellidos_nuevo_participante" 
+                                    		            ng-model="data.apellidos_nuevo_participante" 
+                                    		            ng-change="validar_apellidos_nuevo_participante()"
                                     		            class="form-control"
                                     		            ng-class="{'invalid_control': visibilidad.apellidos_nuevo_participante_invalido}"
                                     		            ng-readonly="data.datos_basicos_persona_recuperados"/>
@@ -150,7 +154,9 @@
                                     		            <label for="identificacion_nuevo_participante">
                                     		                Identificación
                                     		            </label>
-                                    		            <input type="number" min="1" id="identificacion_nuevo_participante" ng-model="data.identificacion_nuevo_participante" ng-change="validar_identificacion_nuevo_participante()"
+                                    		            <input type="number" min="1" id="identificacion_nuevo_participante" 
+                                    		            ng-model="data.identificacion_nuevo_participante" 
+                                    		            ng-change="validar_identificacion_nuevo_participante()"
                                     		            class="form-control"
                                     		            ng-readonly="true"/>
                                     		        </div>
@@ -159,6 +165,7 @@
                                 					<label for="formacion_nuevo_participante">
                                 					    Formación <span style="color:#B22222;" ng-show="visibilidad.formacion_nuevo_participante_invalido">{$ data.msj_validacion_formacion_nuevo_participante $}</span>
                                 					</label>
+                                					
                                 					<ui-select id="formacion_nuevo_participante" theme="bootstrap"
                                 					ng-model="data.formacion_nuevo_participante" ng-change="validar_formacion_nuevo_participante()"
                                 					ng-required="true" ng-disabled="data.datos_basicos_persona_recuperados"
@@ -168,10 +175,12 @@
                                 							<div ng-bind-html="item | highlight: $select.search"></div>
                                 						</ui-select-choices>
                                 					</ui-select>
+                                					
                                 				</div>                             
-                                    		     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    		    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                 					<label for="rol">
-                                					    Rol en el proyecto <span style="color:#B22222;" ng-show="visibilidad.rol_nuevo_participante_invalido">Rol requerido. Elegir una opción</span>
+                                					    Rol en el proyecto <span style="color:#B22222;" 
+                                					    ng-show="visibilidad.rol_nuevo_participante_invalido">Rol requerido. Elegir una opción</span>
                                 					</label>
                                 					<ui-select theme="bootstrap" 
                                 					ng-model="data.rol_nuevo_participante" ng-change="cambia_rol_proyecto_nuevo_participante()"
@@ -182,7 +191,9 @@
                                 							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
                                 						</ui-select-choices>
                                 					</ui-select>                    		         
-                                    		     </div>                            				
+                                    		     </div> 
+                                    		     
+                                    		     
                                 				<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                 					<label for="tipo_identificacion_nuevo_participante">
                                 					    Tipo de identificación <span style="color:#B22222;" ng-show="visibilidad.tipo_id_nuevo_participante_invalido">Campo requerido. Elegir una opción</span>
@@ -216,7 +227,9 @@
                                     		            <label for="edad_nuevo_participante">
                                     		                Edad <span style="color:#B22222;" ng-show="visibilidad.edad_nuevo_participante_invalido">Edad mínima de 10</span>
                                     		            </label>
-                                    		            <input type="number" min="10" id="edad_nuevo_participante" ng-model="data.edad_nuevo_participante" ng-change="validar_edad_nuevo_participante()"
+                                    		            <input type="number" min="10" id="edad_nuevo_participante" 
+                                    		            ng-model="data.edad_nuevo_participante" 
+                                    		            ng-change="validar_edad_nuevo_participante()"
                                     		            class="form-control"
                                     		            ng-class="{'invalid_control': visibilidad.edad_nuevo_participante_invalido}"
                                     		            ng-readonly="data.datos_basicos_persona_recuperados"/>
@@ -227,7 +240,9 @@
                                     		            <label for="email_nuevo_participante">
                                     		                Email <span style="color:#B22222;" ng-show="visibilidad.email_nuevo_participante_invalido">Email inválido</span>
                                     		            </label>
-                                    		            <input type="email" id="email_nuevo_participante" ng-model="data.email_nuevo_participante" ng-change="validar_email_nuevo_participante()"
+                                    		            <input type="email" id="email_nuevo_participante" 
+                                    		            ng-model="data.email_nuevo_participante" 
+                                    		            ng-change="validar_email_nuevo_participante()"
                                     		            class="form-control"
                                     		            ng-class="{'invalid_control': visibilidad.email_nuevo_participante_invalido}"/>
                                     		        </div>
@@ -255,6 +270,8 @@
                                     						</ui-select-choices>
                                     					</ui-select>                                		            
                                     		        </div>
+                                    		        
+                                    		        
                                     		     </div>                                                   		     
                                     		    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-show="visibilidad.grupo_inv_nuevo_participante">
                                     		        <div class="form-group">
@@ -286,9 +303,13 @@
                                     		    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-show="visibilidad.entidad_grupo_inv_externo_nuevo_participante">
                                     		        <div class="form-group">
                                     		            <label for="entidad_grupo_inv_externo_nuevo_participante">
-                                    		                Entidad / grupo de investigación co-ejecutor <span style="color:#B22222;" ng-show="visibilidad.entidad_externa_nuevo_participante_invalido">Entidad/grupo inv. inválido</span>
+                                    		                Entidad / grupo de investigación co-ejecutor 
+                                    		                <span style="color:#B22222;" ng-show="visibilidad.entidad_externa_nuevo_participante_invalido">Entidad/grupo inv. inválido</span>
                                     		            </label>
-                                    					<input type="text" id="entidad_grupo_inv_externo_nuevo_participante" ng-model="data.entidad_externa_nuevo_participante" ng-change="validar_entidad_externa_nuevo_participante()"
+                                    					<input type="text" 
+                                    					id="entidad_grupo_inv_externo_nuevo_participante" 
+                                    					ng-model="data.entidad_externa_nuevo_participante" 
+                                    					ng-change="validar_entidad_externa_nuevo_participante()"
                                     					class="form-control"
                                     					ng-class="{'invalid_control': visibilidad.entidad_externa_nuevo_participante_invalido}"/>
                                     		        </div>
@@ -296,9 +317,12 @@
                                     		    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-show="visibilidad.programa_academico_nuevo_participante">
                                     		        <div class="form-group">
                                     		            <label for="programa_academico_nuevo_participante">
-                                    		                Programa académico <span style="color:#B22222;" ng-show="visibilidad.programa_academico_participante_invalido">Programa académico inválido</span>
+                                    		                Programa académico <span style="color:#B22222;" 
+                                    		                ng-show="visibilidad.programa_academico_participante_invalido">Programa académico inválido</span>
                                     		            </label>
-                                    					<input type="text" ng-model="data.programa_academico_nuevo_participante" ng-change="validar_programa_acad_nuevo_participante()"
+                                    					<input type="text" 
+                                    					ng-model="data.programa_academico_nuevo_participante" 
+                                    					ng-change="validar_programa_acad_nuevo_participante()"
                                     					class="form-control"
                                     					ng-class="{'invalid_control': visibilidad.programa_academico_participante_invalido}"/>
                                     		        </div>
@@ -330,7 +354,7 @@
                                 				    
      
                                 				    {{--Investigador pricipal--}}
-                                					<td style="padding-left: 8px; padding-top: 15px; padding-bottom: 15px; padding-right: 0px;" ng-if="participante.investigador_principarl==1">
+                                					<td style="padding-left: 8px; padding-top: 15px; padding-bottom: 15px; padding-right: 0px;" ng-if="participante.investigador_principarl == 1">
                                 						<div class="panel panel-default" style="margin: 0; box-shadow: 1px 3px 23px -5px rgba(0,0,0,0.75);">
                                 							<div class="panel-heading" role="tab">
                                 								<div class="row is-flex">
@@ -444,43 +468,1027 @@
                                 					
                                 				    {{--Otros participantes--}}
                                 					<td style="padding-left: 8px; padding-top: 15px; padding-bottom: 15px; padding-right: 0px;" ng-if="participante.investigador_principarl==0">
-                                						<div class="panel panel-default" style="margin: 0; box-shadow: 1px 3px 23px -5px rgba(0,0,0,0.75);">
-                                							<div class="panel-heading" role="tab">
+                                						
+                                						
+                                						
+                                						<!--//////////////////////////// OJO --- cuando no tiene un usario-->
+                                						
+                                						<div ng-if="participante.tiene_usuario == false" class="panel panel-default" style="margin: 0; box-shadow: 1px 3px 23px -5px rgba(0,0,0,0.75);">
+                                							
+                                							
+                                							<!--/// regitros nuevos es decir sedeben registrar read only--> 
+                                					
+                                							<div ng-if="participante.resgitrado == false">
+                                    							    <div class="panel-heading" role="tab">
+                                    								
+                                        								<input type="hidden" name="persona_id_nuevo[]" value="{$ participante.info_investigador.id $}"/>
+                                        								<input type="hidden" name="investigador_id_nuevo[]" value="{$ participante.datos_extras.id $}"/>
+                                        								
+                                        								
+                                        								<!--nombres, apellidos, identificacion, formacion, rol, btnMasInfo, removerBtn-->
+                                        								<div class="row is-flex">
+                                        								    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                        								        <div class="alert alert-info">
+                                                                                  <strong>Info!</strong> Este participante se puede editar
+                                                                                </div>
+                                        								    </div>
+                                        								</div>
+                                        								
+                                        								<div class="row is-flex">
+                                        									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        										<div class="form-group">
+                                        											<label for="nombres_nuevo_participante">
+                                                                		                Nombres <span style="color:#B22222;" 
+                                                                		                ng-show="visibilidad.nombres_nuevo_participante_invalido2">{$ data.msj_validacion_nombres_nuevo_participante2 $}</span>
+                                                                		            </label>
+                                                                		            
+                                                                		            
+                                        											<input type="text" id="nombres_{$ $index $}" 
+                                        											name="nombres_nuevo[]" 
+                                        											ng-change="validar_nombres_nuevo_participante2(participante.info_investigador.nombres)" 
+                                        											ng-model="participante.info_investigador.nombres" 
+                                        											ng-class="{'invalid_control': visibilidad.nombres_nuevo_participante_invalido2}"
+                                        											class="form-control white-readonly"/>
+                                        										</div>
+                                        									</div>
+                                        									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        										<div class="form-group">
+                                        											<label for="apellidos_nuevo_participante">
+                                                                		                Apellidos <span style="color:#B22222;" 
+                                                                		                ng-show="visibilidad.apellidos_nuevo_participante_invalido2">{$ data.msj_validacion_apellidos_nuevo_participante2 $}</span>
+                                                                		            </label>
+                                        											<input type="text" id="apellidos_{$ $index $}" 
+                                        											 name="apellidos_nuevo[]" 
+                                        											 ng-change="validar_apellidos_nuevo_participante2(participante.info_investigador.apellidos)"
+                                        											 ng-model="participante.info_investigador.apellidos"
+                                        											 ng-class="{'invalid_control': visibilidad.apellidos_nuevo_participante_invalido2}"
+                                        											 class="form-control white-readonly"/>
+                                        										</div>
+                                        									</div>
+                                        									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        										<div class="form-group">
+                                        										    <label for="apellidos_nuevo_participante">
+                                                                		                Identificación <span style="color:#B22222;" 
+                                                                		                ng-show="visibilidad.identificacion_nuevo_participante_invalido2">{$ data.msj_validacion_identificacion_nuevo_participante2 $}</span>
+                                                                		            </label>
+                                        						
+                                        											<input type="number" min="1" 
+                                        											id="identificacion_{$ $index $}" 
+                                        											name="identificacion_nuevo[]" 
+                                        											ng-change="validar_identificacion_nuevo_participante2(participante.info_investigador.identificacion)"
+                                        											ng-model="participante.info_investigador.identificacion" 
+                                        											ng-class="{'invalid_control': visibilidad.identificacion_nuevo_participante_invalido2}"
+                                        											class="form-control white-readonly" />
+                                        										</div>
+                                        									</div>             		
+                                        									<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        										<label for="formacion_nuevo_participante">
+                                                            					    Formación <span style="color:#B22222;" 
+                                                            					    ng-show="visibilidad.formacion_nuevo_participante_invalido2">{$ data.msj_validacion_formacion_nuevo_participante2 $}</span>
+                                                            					</label>
+                                                            					
+                                                            					<ui-select id="formacion_nuevo_participante2" theme="bootstrap"
+                                                                					ng-model="participante.info_investigador.formacion" 
+                                                                					ng-change="validar_formacion_nuevo_participante2(participante.info_investigador.formacion)"
+                                                                					ng-required="true" ng-disabled="data.datos_basicos_persona_recuperados2"
+                                                                					ng-class="{'invalid_control': visibilidad.formacion_nuevo_participante_invalido2, 'white-readonly': data.datos_basicos_persona_recuperados}">
+                                                                						<ui-select-match placeholder="Seleccione...">{$ $select.selected $}</ui-select-match>
+                                                                						<ui-select-choices repeat="item in data.formaciones | filter: $select.search">
+                                                                							<div ng-bind-html="item | highlight: $select.search"></div>
+                                                                						</ui-select-choices>
+                                    				                    	    </ui-select>
+                                                            					
+                                        										<input type="hidden" 
+                                        										id="formacion_{$ $index $}" 
+                                        										name="formacion_nuevo[]" 
+                                        										ng-model="participante.info_investigador.formacion" 
+                                        										ng-readonly="false" class="form-control white-readonly"/>
+                                        									</div> 		
+                                        									
+                                        									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        									    
+                                        									    <label for="rol">
+                                                            					    Rol en el proyecto <span style="color:#B22222;" 
+                                                            					    ng-show="visibilidad.rol_nuevo_participante_invalido2">Rol requerido. Elegir una opción</span>
+                                                            					</label>
+                                                            					<ui-select theme="bootstrap" 
+                                                            					ng-model="participante.datos_extras.rol" ng-change="cambia_rol_proyecto_nuevo_participante2(participante.datos_extras.rol)"
+                                                            					ng-required="true"
+                                                            					ng-class="{'invalid_control': visibilidad.rol_nuevo_participante_invalido2}">
+                                                            						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
+                                                            						<ui-select-choices repeat="item in data.roles | filter: $select.search">
+                                                            							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
+                                                            						</ui-select-choices>
+                                                            					</ui-select> 
+                                                            					
+                                                            					
+                                        										<!--<label for="rol_{$ $index $}">Rol en el proyecto</label>-->
+                                        										<!--<input type="text" id="rol_{$ $index $}" ng-model="participante.datos_extras.rol.nombre" -->
+                                        										<!--ng-readonly="true" class="form-control white-readonly"/>-->
+                                        										
+                                        										
+                                        										<input type="hidden" name="id_rol_nuevo[]" value="{$ participante.datos_extras.rol.id $}"/>
+                                        									</div>
+                                        									
+                                        									
+                                        									<!--botones operacion OJO VER //////////////////////////////////////////  -->
+                                        									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        										<div class="form-group">
+                                        											<label>&nbsp;</label>
+                                        											<button type="button" data-toggle="collapse" data-target="#collapse_{$ $index $}" aria-expanded="true" aria-controls="collapse_{$ $index $}" class="btn btn-primary btn-block">
+                                        												Mas información <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                        											</button>
+                                        										</div>
+                                        									</div>
+                                        									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        										<div class="form-group">                                        					
+                                        											<label>&nbsp;</label>
+                                        											<button type="button" class="btn btn-default btn-block" ng-click="remover_participante(participante)">
+                                        												Remover participante <i class="fa fa-times"></i> &nbsp;
+                                        											</button>                                        							                                        						
+                                        										</div>
+                                        									</div>
+                                        									
+                                        								</div>
+                                        							</div>
+                                    							    <div id="collapse_{$ $index $}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapse_{$ $index $}" aria-expanded="false" style="height: 0px;">
+                                    								<div class="panel-body">
+                                    									<!--tipoId, sexo, edad, email, ucc, sede, grupo_inv, facultad, entidad/grupo_inv externo, programa_acadenimo-->
+                                    									<div class="row is-flex">
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    											
+                                    											<label for="tipo_identificacion_nuevo_participante">
+                                                            					    Tipo de identificación <span style="color:#B22222;" 
+                                                            					    ng-show="visibilidad.tipo_id_nuevo_participante_invalido2">Campo requerido. Elegir una opción</span>
+                                                            					</label>
+                                                            					
+                                                            					<ui-select theme="bootstrap"
+                                                            					ng-model="participante.info_investigador.tipo_identificacion" 
+                                                            					ng-change="validar_tipo_id_nuevo_participante2(true,participante.info_investigador.tipo_identificacion)"
+                                                            					ng-required="false" 
+                                                            					ng-disabled="data.datos_basicos_persona_recuperados2"
+                                                            					ng-class="{'invalid_control': visibilidad.tipo_id_nuevo_participante_invalido2}">
+                                                            						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
+                                                            						<ui-select-choices repeat="item in data.tipos_identificacion | filter: $select.search">
+                                                            							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
+                                                            						</ui-select-choices>
+                                                            					</ui-select>
+                                    											
+                                    											
+                                    											<!--<label for="tipo_identificacion_{$ $index $}">Tipo de identificación</label>-->
+                                    											<!--<input type="text" id="tipo_identificacion_{$ $index $}" ng-model="participante.info_investigador.tipo_identificacion.nombre" -->
+                                    											<!--ng-readonly="false" class="form-control white-readonly"/>-->
+                                    											
+                                    											
+                                    											<input type="hidden" name="tipo_identificacion_nuevo[]" value="{$ participante.info_investigador.tipo_identificacion.id $}"/>
+                                    										</div>
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    											<label for="sexo">
+                                                            					    Sexo <span style="color:#B22222;" 
+                                                            					    ng-show="visibilidad.sexo_nuevo_participante_invalido2">Campo requerido. Elegir una opción</span>
+                                                            					</label>
+                                                            					
+                                                            					<ui-select theme="bootstrap"  
+                                                            					ng-model="participante.sexo" 
+                                                            					ng-change="validar_sexo_nuevo_participante2(participante.sexo)"
+                                                            					ng-require="false" ng-disabled="data.datos_basicos_persona_recuperados2"
+                                                            					ng-class="{'invalid_control': visibilidad.sexo_nuevo_participante_invalido2}">
+                                                            						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
+                                                            						<ui-select-choices repeat="item in data.sexos | filter: $select.search">
+                                                            							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
+                                                            						</ui-select-choices>
+                                                            					</ui-select>
+                                                            				
+                                    								
+                                    											<input type="hidden" id="id_sexo_{$ $index $}" name="sexo_nuevo[]" value="{$ participante.info_investigador.sexo $}"/>
+                                    										</div>
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    											<label for="edad_nuevo_participante">
+                                                            		                Edad <span style="color:#B22222;" 
+                                                            		                ng-show="visibilidad.edad_nuevo_participante_invalido2">Edad mínima de 10</span>
+                                                            		            </label>
+                                                            		            
+                                    											<input type="text" id="edad_{$ $index $}" 
+                                    											name="edad_nuevo[]" 
+                                    											ng-model="participante.info_investigador.edad" 
+                                    											ng-change="validar_edad_nuevo_participante2(participante.info_investigador.edad)"
+                                                            		            class="form-control"
+                                                            		            ng-class="{'invalid_control': visibilidad.edad_nuevo_participante_invalido2}"
+                                    											ng-readonly="false" class="form-control white-readonly"/>
+                                    										</div>                                										
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    											<label for="email_nuevo_participante">
+                                                            		                Email <span style="color:#B22222;" 
+                                                            		                ng-show="visibilidad.email_nuevo_participante_invalido2">Email inválido</span>
+                                                            		            </label>
+                                    											
+                                    											<input type="text" id="email_{$ $index $}" 
+                                    											name="email_nuevo[]" 
+                                    											ng-model="participante.datos_extras.email" 
+                                    											ng-change="validar_email_nuevo_participante2(participante.datos_extras.email)"
+                                                            		            class="form-control"
+                                                            		            ng-class="{'invalid_control': visibilidad.email_nuevo_participante_invalido2}"/>
+                                    										</div>			
+                                    										
+                                    										
+                                    										<!--/////otros datos /////////////////////////////////////////////////////////////////-->
+                                    										
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==4">
+                                    											<label for="ucc_{$ $index $}">Institución / entidad</label>
+                                    											<input type="text" id="ucc_{$ $index $}" value="Universidad Cooperativa de Colombia" 
+                                    											ng-readonly="true" class="form-control white-readonly"/>
+                                    										</div>
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==4">
+                                    											<!--<label for="sede_{$ $index $}">Sede</label>-->
+                                    											<!--<input type="text" id="sede_{$ $index $}" ng-model="participante.datos_extras.grupo.facultad.sede.ciudad" -->
+                                    											<!--ng-readonly="true" class="form-control white-readonly"/>-->
+                                    											
+                                    											<label for="sede_nuevo_participante">
+                                                            		                Sede <span style="color:#B22222;" 
+                                                            		                ng-show="visibilidad.sede_nuevo_participante_invalido2">Campo requerido. Elegir una sede</span>
+                                                            		            </label>
+                                                            					<ui-select theme="bootstrap"  
+                                                            					ng-model="participante.datos_extras.grupo.facultad.sede" 
+                                                            					ng-change="cambia_sede_nuevo_participante2(participante.datos_extras.grupo.facultad.sede, participante.datos_extras.grupo)"
+                                                            					ng-require="true"
+                                                            					ng-class="{'invalid_control': visibilidad.sede_nuevo_participante_invalido2}">
+                                                            						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
+                                                            						<ui-select-choices repeat="item in data.grupos_investigacion_y_sedes2 | filter: $select.search">
+                                                            							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
+                                                            						</ui-select-choices>
+                                                            					</ui-select> 
+                                    											
+                                    											<input type="hidden" id="id_sede_{$ $index $}" 
+                                    											name="sede_nuevo[]" 
+                                    											value="{$ participante.datos_extras.grupo.facultad.sede.id $}"/>
+                                    										</div>
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==4">
+                                    											<!--<label for="grupo_inv_{$ $index $}">Grupo de investigación</label>-->
+                                    											<!--<input type="text" id="grupo_inv_{$ $index $}" ng-model="participante.datos_extras.grupo.nombre" -->
+                                    											<!--ng-readonly="true" class="form-control white-readonly"/>-->
+                                    											
+                                    											<label for="grupo_inv_nuevo_participante">
+                                                            		                Grupo de investigación <span style="color:#B22222;" 
+                                                            		                ng-show="visibilidad.grupo_inv_nuevo_participante_invalido2">Campo requerido. ELegir un grupo de invetigación</span>
+                                                            		            </label>
+                                                            		            
+                                                            					<ui-select theme="bootstrap"  
+                                                            					ng-model="participante.datos_extras.grupo" 
+                                                            					ng-change="cambia_grupo_inv_nuevo_participante2($select.selected.nombre,participante)"
+                                                            					ng-require="true"
+                                                            					ng-class="{'invalid_control': visibilidad.grupo_inv_nuevo_participante_invalido2 }">
+                                                            						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
+                                                            						<ui-select-choices repeat="item in data.grupos_participante | filter: $select.search">
+                                                            							<div  ng-bind-html="item.nombre | highlight: $select.search"></div>
+                            
+                                                            						</ui-select-choices>
+                                                            					</ui-select> 
+                                    											
+                                    											<input type="hidden" id="id_grupo_investigacion_{$ $index $}" 
+                                    											name="grupo_investigacion_nuevo[]" 
+                                    											value="{$ participante.datos_extras.grupo.id $}"/>
+                                    										</div>
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==4">
+                                    											
+                                    											<label for="facultad_{$ $index $}">Facultad / dependencia</label>
+                                    											<input type="text" id="facultad_{$ $index $}" 
+                                    											ng-model="participante.datos_extras.grupo.facultad.nombre" 
+                                    											ng-readonly="true" class="form-control white-readonly"/>
+                                    											
+                                    											
+                                    											<input type="hidden" id="id_facultad_dependencia_{$ $index $}" 
+                                    											name="facultad_dependencia_nuevo[]" 
+                                    											value="{$ participante.datos_extras.grupo.facultad.id $}"/>
+                                    											
+                                    										</div>
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==5 || participante.datos_extras.rol.id==6">
+                                    											<label for="entidad_grupo_inv_externo_nuevo_participante">
+                                                            		                Entidad ejecutora 
+                                                            		                <span style="color:#B22222;" 
+                                                            		                ng-show="visibilidad.entidad_externa_nuevo_participante_invalido2">Entidad/grupo inv. inválido</span>
+                                                            		            </label>
+                                                            		            
+                                    											<input type="text" id="entidad_externa_{$ $index $}" 
+                                    											name="entidad_externa_nuevo[]" 
+                                    											ng-model="participante.datos_extras.entidad_o_grupo_investigacion" 
+                                    											ng-change="validar_entidad_externa_nuevo_participante2(participante.datos_extras.entidad_o_grupo_investigacion)"
+                                                            					class="form-control"
+                                                            					ng-class="{'invalid_control': visibilidad.entidad_externa_nuevo_participante_invalido2}"/>
+                                    										</div>
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==6">
+                                    											<label for="programa_academico_nuevo_participante">
+                                                            		                Programa académico <span style="color:#B22222;" 
+                                                            		                ng-show="visibilidad.programa_academico_participante_invalido2">Programa académico inválido</span>
+                                                            		            </label>
+                                                            		            
+                                    											<input type="text" id="programa_academico_{$ $index $}" 
+                                    											name="programa_academico_nuevo[]" 
+                                    											ng-model="participante.datos_extras.programa_academico" 
+                                    											ngng-change="validar_programa_acad_nuevo_participante2(participante.datos_extras.programa_academico)"
+                                                            					class="form-control"
+                                                            					ng-class="{'invalid_control': visibilidad.programa_academico_participante_invalido2}"/>
+                                    										</div>	
+                                    										
+                                    									</div>
+                                    								</div>
+                                    							</div>
+                                							</div>
+                                							
+                                							
+                                							
+                                							<!--//se deben actualizar editables-->
+                                							<!--/// id != null para los participantes ya registrados es decir regtros viejos-->
+                                							<div ng-if="participante.resgitrado == true">
+                                							    <div class="panel-heading" role="tab">
+                                								
+                                    								<input type="hidden" name="persona_id_viejo[]" value="{$ participante.info_investigador.id $}"/>
+                                    								<input type="hidden" name="investigador_id_viejo[]" value="{$ participante.datos_extras.id $}"/>
+                                    								
+                                    								
+                                    								<!--nombres, apellidos, identificacion, formacion, rol, btnMasInfo, removerBtn-->
+                                    								<div class="row is-flex">
+                                    								    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    								        <div class="alert alert-info">
+                                                                              <strong>Info!</strong> Este participante se puede editar
+                                                                            </div>
+                                    								    </div>
+                                    								</div>
+                                    								
+                                    								<div class="row is-flex">
+                                    									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    										<div class="form-group">
+                                    											<label for="nombres_nuevo_participante">
+                                                            		                Nombres <span style="color:#B22222;" 
+                                                            		                ng-show="visibilidad.nombres_nuevo_participante_invalido2">{$ data.msj_validacion_nombres_nuevo_participante2 $}</span>
+                                                            		            </label>
+                                                            		            
+                                                            		            
+                                    											<input type="text" id="nombres_{$ $index $}" name="nombres_viejo[]" 
+                                    											ng-change="validar_nombres_nuevo_participante2(participante.info_investigador.nombres)" 
+                                    											ng-model="participante.info_investigador.nombres" 
+                                    											ng-class="{'invalid_control': visibilidad.nombres_nuevo_participante_invalido2}"
+                                    											class="form-control white-readonly"/>
+                                    										</div>
+                                    									</div>
+                                    									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    										<div class="form-group">
+                                    											<label for="apellidos_nuevo_participante">
+                                                            		                Apellidos <span style="color:#B22222;" 
+                                                            		                ng-show="visibilidad.apellidos_nuevo_participante_invalido2">{$ data.msj_validacion_apellidos_nuevo_participante2 $}</span>
+                                                            		            </label>
+                                    											<input type="text" id="apellidos_{$ $index $}" 
+                                    											 name="apellidos_viejo[]" 
+                                    											 ng-change="validar_apellidos_nuevo_participante2(participante.info_investigador.apellidos)"
+                                    											 ng-model="participante.info_investigador.apellidos"
+                                    											 ng-class="{'invalid_control': visibilidad.apellidos_nuevo_participante_invalido2}"
+                                    											 class="form-control white-readonly"/>
+                                    										</div>
+                                    									</div>
+                                    									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    										<div class="form-group">
+                                    										    <label for="apellidos_nuevo_participante">
+                                                            		                Identificación <span style="color:#B22222;" 
+                                                            		                ng-show="visibilidad.identificacion_nuevo_participante_invalido2">{$ data.msj_validacion_identificacion_nuevo_participante2 $}</span>
+                                                            		            </label>
+                                    						
+                                    											<input type="number" min="1" 
+                                    											id="identificacion_{$ $index $}" 
+                                    											name="identificacion_viejo[]" 
+                                    											ng-change="validar_identificacion_nuevo_participante2(participante.info_investigador.identificacion)"
+                                    											ng-model="participante.info_investigador.identificacion" 
+                                    											ng-class="{'invalid_control': visibilidad.identificacion_nuevo_participante_invalido2}"
+                                    											class="form-control white-readonly" />
+                                    										</div>
+                                    									</div>             		
+                                    									<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    										<label for="formacion_nuevo_participante">
+                                                        					    Formación <span style="color:#B22222;" 
+                                                        					    ng-show="visibilidad.formacion_nuevo_participante_invalido2">{$ data.msj_validacion_formacion_nuevo_participante2 $}</span>
+                                                        					</label>
+                                                        					
+                                                        					<ui-select id="formacion_nuevo_participante2" theme="bootstrap"
+                                                            					ng-model="participante.info_investigador.formacion" 
+                                                            					ng-change="validar_formacion_nuevo_participante2(participante.info_investigador.formacion)"
+                                                            					ng-required="true" ng-disabled="data.datos_basicos_persona_recuperados2"
+                                                            					ng-class="{'invalid_control': visibilidad.formacion_nuevo_participante_invalido2, 'white-readonly': data.datos_basicos_persona_recuperados}">
+                                                            						<ui-select-match placeholder="Seleccione...">{$ $select.selected $}</ui-select-match>
+                                                            						<ui-select-choices repeat="item in data.formaciones | filter: $select.search">
+                                                            							<!--<div ng-bind-html="item | highlight: $select.search"></div>-->
+                                                            							{$ item $}
+                                                            						</ui-select-choices>
+                                				                    	    </ui-select>
+                                                        					
+                                    										<input type="hidden" id="formacion_{$ $index $}" 
+                                    										name="formacion_viejo[]" 
+                                    										value="{$ participante.info_investigador.formacion $}" 
+                                    										class="form-control white-readonly"/>
+                                    									</div> 		
+                                    									
+                                    									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    									    
+                                    									    <label for="rol">
+                                                        					    Rol en el proyecto <span style="color:#B22222;" 
+                                                        					    ng-show="visibilidad.rol_nuevo_participante_invalido2">Rol requerido. Elegir una opción</span>
+                                                        					</label>
+                                                        					<ui-select theme="bootstrap" 
+                                                        					ng-model="participante.datos_extras.rol" ng-change="cambia_rol_proyecto_nuevo_participante2(participante.datos_extras.rol)"
+                                                        					ng-required="true"
+                                                        					ng-class="{'invalid_control': visibilidad.rol_nuevo_participante_invalido2}">
+                                                        						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
+                                                        						<ui-select-choices repeat="item in data.roles | filter: $select.search">
+                                                        							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
+                                                        						</ui-select-choices>
+                                                        					</ui-select> 
+                                                        					
+                                                        					
+                                    										<!--<label for="rol_{$ $index $}">Rol en el proyecto</label>-->
+                                    										<!--<input type="text" id="rol_{$ $index $}" ng-model="participante.datos_extras.rol.nombre" -->
+                                    										<!--ng-readonly="true" class="form-control white-readonly"/>-->
+                                    										
+                                    										
+                                    										<input type="hidden" name="id_rol_viejo[]" value="{$ participante.datos_extras.rol.id $}"/>
+                                    									</div>
+                                    									
+                                    									
+                                    									<!--botones operacion OJO VER //////////////////////////////////////////  -->
+                                    									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    										<div class="form-group">
+                                    											<label>&nbsp;</label>
+                                    											<button type="button" data-toggle="collapse" data-target="#collapse_{$ $index $}" aria-expanded="true" aria-controls="collapse_{$ $index $}" class="btn btn-primary btn-block">
+                                    												Mas información <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    											</button>
+                                    										</div>
+                                    									</div>
+                                    									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    										<div class="form-group">                                        					
+                                    											<label>&nbsp;</label>
+                                    											<button type="button" class="btn btn-default btn-block" ng-click="remover_participante(participante)">
+                                    												Remover participante <i class="fa fa-times"></i> &nbsp;
+                                    											</button>                                        							                                        						
+                                    										</div>
+                                    									</div>
+                                    									
+                                    								</div>
+                                    							</div>
+                                							    <div id="collapse_{$ $index $}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapse_{$ $index $}" aria-expanded="false" style="height: 0px;">
+                                								<div class="panel-body">
+                                									<!--tipoId, sexo, edad, email, ucc, sede, grupo_inv, facultad, entidad/grupo_inv externo, programa_acadenimo-->
+                                									<div class="row is-flex">
+                                										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                											
+                                											<label for="tipo_identificacion_nuevo_participante">
+                                                        					    Tipo de identificación <span style="color:#B22222;" 
+                                                        					    ng-show="visibilidad.tipo_id_nuevo_participante_invalido2">Campo requerido. Elegir una opción</span>
+                                                        					</label>
+                                                        					
+                                                        					<ui-select theme="bootstrap"
+                                                        					ng-model="participante.info_investigador.tipo_identificacion" 
+                                                        					ng-change="validar_tipo_id_nuevo_participante2(true,participante.info_investigador.tipo_identificacion)"
+                                                        					ng-required="false" 
+                                                        					ng-disabled="data.datos_basicos_persona_recuperados2"
+                                                        					ng-class="{'invalid_control': visibilidad.tipo_id_nuevo_participante_invalido2}">
+                                                        						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
+                                                        						<ui-select-choices repeat="item in data.tipos_identificacion | filter: $select.search">
+                                                        							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
+                                                        						</ui-select-choices>
+                                                        					</ui-select>
+                                											
+                                											
+                                											<!--<label for="tipo_identificacion_{$ $index $}">Tipo de identificación</label>-->
+                                											<!--<input type="text" id="tipo_identificacion_{$ $index $}" ng-model="participante.info_investigador.tipo_identificacion.nombre" -->
+                                											<!--ng-readonly="false" class="form-control white-readonly"/>-->
+                                											
+                                											
+                                											<input type="hidden" name="tipo_identificacion_viejo[]" value="{$ participante.info_investigador.tipo_identificacion.id $}"/>
+                                										</div>
+                                										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                											<label for="sexo">
+                                                        					    Sexo <span style="color:#B22222;" 
+                                                        					    ng-show="visibilidad.sexo_nuevo_participante_invalido2">Campo requerido. Elegir una opción</span>
+                                                        					</label>
+                                                        					
+                                                        					<ui-select theme="bootstrap"  
+                                                        					ng-model="participante.sexo" 
+                                                        					ng-change="validar_sexo_nuevo_participante2(participante.sexo)"
+                                                        					ng-require="false" ng-disabled="data.datos_basicos_persona_recuperados2"
+                                                        					ng-class="{'invalid_control': visibilidad.sexo_nuevo_participante_invalido2}">
+                                                        						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
+                                                        						<ui-select-choices repeat="item in data.sexos | filter: $select.search">
+                                                        							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
+                                                        						</ui-select-choices>
+                                                        					</ui-select>
+                                                        				
+                                								
+                                											<input type="hidden" id="id_sexo_{$ $index $}" name="sexo_viejo[]" value="{$ participante.info_investigador.sexo $}"/>
+                                										</div>
+                                										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                											<label for="edad_nuevo_participante">
+                                                        		                Edad <span style="color:#B22222;" 
+                                                        		                ng-show="visibilidad.edad_nuevo_participante_invalido2">Edad mínima de 10</span>
+                                                        		            </label>
+                                                        		            
+                                											<input type="text" id="edad_{$ $index $}" 
+                                											name="edad_viejo[]" 
+                                											ng-model="participante.info_investigador.edad" 
+                                											ng-change="validar_edad_nuevo_participante2(participante.info_investigador.edad)"
+                                                        		            class="form-control"
+                                                        		            ng-class="{'invalid_control': visibilidad.edad_nuevo_participante_invalido2}"
+                                											ng-readonly="false" class="form-control white-readonly"/>
+                                										</div>                                										
+                                										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                											<label for="email_nuevo_participante">
+                                                        		                Email <span style="color:#B22222;" 
+                                                        		                ng-show="visibilidad.email_nuevo_participante_invalido2">Email inválido</span>
+                                                        		            </label>
+                                											
+                                											<input type="text" id="email_{$ $index $}" 
+                                											name="email_viejo[]" 
+                                											ng-model="participante.datos_extras.email" 
+                                											ng-change="validar_email_nuevo_participante2(participante.datos_extras.email)"
+                                                        		            class="form-control"
+                                                        		            ng-class="{'invalid_control': visibilidad.email_nuevo_participante_invalido2}"/>
+                                										</div>			
+                                										
+                                										
+                                										<!--/////otros datos /////////////////////////////////////////////////////////////////-->
+                                										
+                                										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==4">
+                                											<label for="ucc_{$ $index $}">Institución / entidad</label>
+                                											<input type="text" id="ucc_{$ $index $}" value="Universidad Cooperativa de Colombia" 
+                                											ng-readonly="true" class="form-control white-readonly"/>
+                                										</div>
+                                										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==4">
+                                											<!--<label for="sede_{$ $index $}">Sede</label>-->
+                                											<!--<input type="text" id="sede_{$ $index $}" ng-model="participante.datos_extras.grupo.facultad.sede.ciudad" -->
+                                											<!--ng-readonly="true" class="form-control white-readonly"/>-->
+                                											
+                                											<label for="sede_nuevo_participante">
+                                                        		                Sede <span style="color:#B22222;" 
+                                                        		                ng-show="visibilidad.sede_nuevo_participante_invalido2">Campo requerido. Elegir una sede</span>
+                                                        		            </label>
+                                                        					<ui-select theme="bootstrap"  
+                                                        					ng-model="participante.datos_extras.grupo.facultad.sede" 
+                                                        					ng-change="cambia_sede_nuevo_participante2(participante.datos_extras.grupo.facultad.sede, participante.datos_extras.grupo)"
+                                                        					ng-require="true"
+                                                        					ng-class="{'invalid_control': visibilidad.sede_nuevo_participante_invalido2}">
+                                                        						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
+                                                        						<ui-select-choices repeat="item in data.grupos_investigacion_y_sedes2 | filter: $select.search">
+                                                        							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
+                                                        						</ui-select-choices>
+                                                        					</ui-select> 
+                                											
+                                											<input type="hidden" id="id_sede_{$ $index $}" 
+                                											name="sede_viejo[]" 
+                                											value="{$ participante.datos_extras.grupo.facultad.sede.id $}"/>
+                                										</div>
+                                										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==4">
+                                											<!--<label for="grupo_inv_{$ $index $}">Grupo de investigación</label>-->
+                                											<!--<input type="text" id="grupo_inv_{$ $index $}" ng-model="participante.datos_extras.grupo.nombre" -->
+                                											<!--ng-readonly="true" class="form-control white-readonly"/>-->
+                                											
+                                											<label for="grupo_inv_nuevo_participante">
+                                                        		                Grupo de investigación <span style="color:#B22222;" 
+                                                        		                ng-show="visibilidad.grupo_inv_nuevo_participante_invalido2">Campo requerido. ELegir un grupo de invetigación</span>
+                                                        		            </label>
+                                                        		            
+                                                        					<ui-select theme="bootstrap"  
+                                                        					ng-model="participante.datos_extras.grupo" 
+                                                        					ng-change="cambia_grupo_inv_nuevo_participante2($select.selected.nombre,participante)"
+                                                        					ng-require="true"
+                                                        					ng-class="{'invalid_control': visibilidad.grupo_inv_nuevo_participante_invalido2 }">
+                                                        						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
+                                                        						<ui-select-choices repeat="item in data.grupos_participante | filter: $select.search">
+                                                        							<div  ng-bind-html="item.nombre | highlight: $select.search"></div>
+                        
+                                                        						</ui-select-choices>
+                                                        					</ui-select> 
+                                											
+                                											<input type="hidden" id="id_grupo_investigacion_{$ $index $}" 
+                                											name="grupo_investigacion_viejo[]" 
+                                											value="{$ participante.datos_extras.grupo.id $}"/>
+                                										</div>
+                                										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==4">
+                                											
+                                											<label for="facultad_{$ $index $}">Facultad / dependencia</label>
+                                											<input type="text" id="facultad_{$ $index $}" 
+                                											ng-model="participante.datos_extras.grupo.facultad.nombre" 
+                                											ng-readonly="true" class="form-control white-readonly"/>
+                                											
+                                											
+                                											<input type="hidden" id="id_facultad_dependencia_{$ $index $}" 
+                                											name="facultad_dependencia_viejo[]" 
+                                											value="{$ participante.datos_extras.grupo.facultad.id $}"/>
+                                											
+                                										</div>
+                                										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==5 || participante.datos_extras.rol.id==6">
+                                											<label for="entidad_grupo_inv_externo_nuevo_participante">
+                                                        		                Entidad ejecutora 
+                                                        		                <span style="color:#B22222;" 
+                                                        		                ng-show="visibilidad.entidad_externa_nuevo_participante_invalido2">Entidad/grupo inv. inválido</span>
+                                                        		            </label>
+                                                        		            
+                                											<input type="text" id="entidad_externa_{$ $index $}" 
+                                											name="entidad_externa_viejo[]" 
+                                											ng-model="participante.datos_extras.entidad_o_grupo_investigacion" 
+                                											ng-change="validar_entidad_externa_nuevo_participante2(participante.datos_extras.entidad_o_grupo_investigacion)"
+                                                        					class="form-control"
+                                                        					ng-class="{'invalid_control': visibilidad.entidad_externa_nuevo_participante_invalido2}"/>
+                                										</div>
+                                										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==6">
+                                											<label for="programa_academico_nuevo_participante">
+                                                        		                Programa académico <span style="color:#B22222;" 
+                                                        		                ng-show="visibilidad.programa_academico_participante_invalido2">Programa académico inválido</span>
+                                                        		            </label>
+                                                        		            
+                                											<input type="text" id="programa_academico_{$ $index $}" 
+                                											name="programa_academico_viejo[]" 
+                                											ng-model="participante.datos_extras.programa_academico" 
+                                											ngng-change="validar_programa_acad_nuevo_participante2(participante.datos_extras.programa_academico)"
+                                                        					class="form-control"
+                                                        					ng-class="{'invalid_control': visibilidad.programa_academico_participante_invalido2}"/>
+                                										</div>	
+                                										
+                                									</div>
+                                								</div>
+                                							</div>
+                                							</div>
+                                							
+                                							
+
+                                						</div>
+                                						
+                                						
+                                						
+                                						
+                                						<!--//////////////////////////// OJO ---cuando tiene un usario-->
+                                						
+                                						<div ng-if="participante.tiene_usuario == true" class="panel panel-default" style="margin: 0; box-shadow: 1px 3px 23px -5px rgba(0,0,0,0.75);">
+
+                                                           <!--/// solo actualizar persona y crear investigador-->
+                                							<!--cuando es un registro por ui es decir nuevo-->
+                                							<div ng-if="participante.resgitrado == false">
+                                    							    <div class="panel-heading" role="tab">
+                                    								
+                                        								<input type="hidden" name="persona_id_nuevo_existente[]" value="{$ participante.info_investigador.id $}"/>
+                                        								<input type="hidden" name="investigador_id_nuevo_existente[]" value="{$ participante.datos_extras.id $}"/>
+                                        								
+                                        								
+                                        								<!--nombres, apellidos, identificacion, formacion, rol, btnMasInfo, removerBtn-->
+                                
+                                        								<div class="row is-flex">
+                                        									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        										<div class="form-group">
+                                        											<label for="nombres_nuevo_participante">
+                                                                		                Nombres <span style="color:#B22222;" 
+                                                                		                ng-show="visibilidad.nombres_nuevo_participante_invalido2">{$ data.msj_validacion_nombres_nuevo_participante2 $}</span>
+                                                                		            </label>
+                                                                		            
+                                                                		            
+                                        											<input type="text" id="nombres_{$ $index $}" 
+                                        											name="nombres_nuevo_existente[]" 
+                                        											ng-change="validar_nombres_nuevo_participante2(participante.info_investigador.nombres)" 
+                                        											ng-model="participante.info_investigador.nombres" 
+                                        											ng-class="{'invalid_control': visibilidad.nombres_nuevo_participante_invalido2}"
+                                        											class="form-control white-readonly"
+                                        											ng-readonly="true"/>
+                                        										</div>
+                                        									</div>
+                                        									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        										<div class="form-group">
+                                        											<label for="apellidos_nuevo_participante">
+                                                                		                Apellidos <span style="color:#B22222;" 
+                                                                		                ng-show="visibilidad.apellidos_nuevo_participante_invalido2">{$ data.msj_validacion_apellidos_nuevo_participante2 $}</span>
+                                                                		            </label>
+                                        											<input type="text" id="apellidos_{$ $index $}" 
+                                        											 name="apellidos_nuevo_existente[]" 
+                                        											 ng-change="validar_apellidos_nuevo_participante2(participante.info_investigador.apellidos)"
+                                        											 ng-model="participante.info_investigador.apellidos"
+                                        											 ng-class="{'invalid_control': visibilidad.apellidos_nuevo_participante_invalido2}"
+                                        											 class="form-control white-readonly"
+                                        											 ng-readonly="true"/>
+                                        										</div>
+                                        									</div>
+                                        									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        										<div class="form-group">
+                                        										    <label for="apellidos_nuevo_participante">
+                                                                		                Identificación <span style="color:#B22222;" 
+                                                                		                ng-show="visibilidad.identificacion_nuevo_participante_invalido2">{$ data.msj_validacion_identificacion_nuevo_participante2 $}</span>
+                                                                		            </label>
+                                        						
+                                        											<input type="number" min="1" 
+                                        											id="identificacion_{$ $index $}" 
+                                        											name="identificacion_nuevo_existente[]" 
+                                        											ng-change="validar_identificacion_nuevo_participante2(participante.info_investigador.identificacion)"
+                                        											ng-model="participante.info_investigador.identificacion" 
+                                        											ng-class="{'invalid_control': visibilidad.identificacion_nuevo_participante_invalido2}"
+                                        											class="form-control white-readonly" ng-readonly="true"/>
+                                        										</div>
+                                        									</div>             		
+                                        									<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        										<label for="formacion_nuevo_participante">
+                                                            					    Formación <span style="color:#B22222;" 
+                                                            					    ng-show="visibilidad.formacion_nuevo_participante_invalido2">{$ data.msj_validacion_formacion_nuevo_participante2 $}</span>
+                                                            					</label>
+                                                            					
+                                                            					<ui-select id="formacion_nuevo_participante2" theme="bootstrap"
+                                                            					    ng-readonly="true"
+                                                                					ng-model="participante.info_investigador.formacion" 
+                                                                					ng-change="validar_formacion_nuevo_participante2(participante.info_investigador.formacion)"
+                                                                					ng-required="true" ng-disabled="data.datos_basicos_persona_recuperados2"
+                                                                					ng-class="{'invalid_control': visibilidad.formacion_nuevo_participante_invalido2, 'white-readonly': data.datos_basicos_persona_recuperados}">
+                                                                						<ui-select-match placeholder="Seleccione...">{$ $select.selected $}</ui-select-match>
+                                                                						<ui-select-choices repeat="item in data.formaciones | filter: $select.search">
+                                                                							<div ng-bind-html="item | highlight: $select.search"></div>
+                                                                						</ui-select-choices>
+                                    				                    	    </ui-select>
+                                                            					
+                                        										<input type="hidden" 
+                                        										id="formacion_{$ $index $}" 
+                                        										name="formacion_nuevo_existente[]" 
+                                        										ng-model="participante.info_investigador.formacion" 
+                                        										ng-readonly="false" class="form-control white-readonly"/>
+                                        									</div> 		
+                                        									
+                                        									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        									    
+                                        									    <label for="rol">
+                                                            					    Rol en el proyecto <span style="color:#B22222;" 
+                                                            					    ng-show="visibilidad.rol_nuevo_participante_invalido2">Rol requerido. Elegir una opción</span>
+                                                            					</label>
+                                                            					<ui-select theme="bootstrap" 
+                                                            					ng-model="participante.datos_extras.rol" 
+                                                            					ng-change="cambia_rol_proyecto_nuevo_participante2(participante.datos_extras.rol)"
+                                                            					ng-required="true"
+                                                            					ng-readonly="true"
+                                                            					ng-class="{'invalid_control': visibilidad.rol_nuevo_participante_invalido2}">
+                                                            						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
+                                                            						<ui-select-choices repeat="item in data.roles | filter: $select.search">
+                                                            							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
+                                                            						</ui-select-choices>
+                                                            					</ui-select> 
+                                                            					
+                                                            					
+                                        										<!--<label for="rol_{$ $index $}">Rol en el proyecto</label>-->
+                                        										<!--<input type="text" id="rol_{$ $index $}" ng-model="participante.datos_extras.rol.nombre" -->
+                                        										<!--ng-readonly="true" class="form-control white-readonly"/>-->
+                                        										
+                                        										
+                                        										<input type="hidden" name="id_rol_nuevo_existente[]" value="{$ participante.datos_extras.rol.id $}"/>
+                                        									</div>
+                                        									
+                                        									
+                                        									<!--botones operacion OJO VER //////////////////////////////////////////  -->
+                                        									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        										<div class="form-group">
+                                        											<label>&nbsp;</label>
+                                        											<button type="button" data-toggle="collapse" data-target="#collapse_{$ $index $}" aria-expanded="true" aria-controls="collapse_{$ $index $}" class="btn btn-primary btn-block">
+                                        												Mas información <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                        											</button>
+                                        										</div>
+                                        									</div>
+                                        									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        										<div class="form-group">                                        					
+                                        											<label>&nbsp;</label>
+                                        											<button type="button" class="btn btn-default btn-block" ng-click="remover_participante(participante)">
+                                        												Remover participante <i class="fa fa-times"></i> &nbsp;
+                                        											</button>                                        							                                        						
+                                        										</div>
+                                        									</div>
+                                        									
+                                        								</div>
+                                        							</div>
+                                    							    <div id="collapse_{$ $index $}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapse_{$ $index $}" aria-expanded="false" style="height: 0px;">
+                                    								<div class="panel-body">
+                                    									<!--tipoId, sexo, edad, email, ucc, sede, grupo_inv, facultad, entidad/grupo_inv externo, programa_acadenimo-->
+                                    									<div class="row is-flex">
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    											
+                                    											<label for="tipo_identificacion_nuevo_participante">
+                                                            					    Tipo de identificación <span style="color:#B22222;" 
+                                                            					    ng-show="visibilidad.tipo_id_nuevo_participante_invalido2">Campo requerido. Elegir una opción</span>
+                                                            					</label>
+                                                            					
+                                                            					<ui-select theme="bootstrap"
+                                                            					ng-model="participante.info_investigador.tipo_identificacion" 
+                                                            					ng-change="validar_tipo_id_nuevo_participante2(true,participante.info_investigador.tipo_identificacion)"
+                                                            					ng-required="false" 
+                                                            					ng-disabled="data.datos_basicos_persona_recuperados2"
+                                                            					ng-readonly="true"
+                                                            					ng-class="{'invalid_control': visibilidad.tipo_id_nuevo_participante_invalido2}">
+                                                            						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
+                                                            						<ui-select-choices repeat="item in data.tipos_identificacion | filter: $select.search">
+                                                            							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
+                                                            						</ui-select-choices>
+                                                            					</ui-select>
+                                    											
+                                    											
+                                    											<!--<label for="tipo_identificacion_{$ $index $}">Tipo de identificación</label>-->
+                                    											<!--<input type="text" id="tipo_identificacion_{$ $index $}" ng-model="participante.info_investigador.tipo_identificacion.nombre" -->
+                                    											<!--ng-readonly="false" class="form-control white-readonly"/>-->
+                                    											
+                                    											
+                                    											<input type="hidden" name="tipo_identificacion_nuevo_existente[]" value="{$ participante.info_investigador.tipo_identificacion.id $}"/>
+                                    										</div>
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    											<label for="sexo">
+                                                            					    Sexo <span style="color:#B22222;" 
+                                                            					    ng-show="visibilidad.sexo_nuevo_participante_invalido2">Campo requerido. Elegir una opción</span>
+                                                            					</label>
+                                                            					
+                                                            					<ui-select theme="bootstrap"  
+                                                            					ng-model="participante.sexo" 
+                                                            					ng-readonly="true"
+                                                            					ng-change="validar_sexo_nuevo_participante2(participante.sexo)"
+                                                            					ng-require="false" ng-disabled="data.datos_basicos_persona_recuperados2"
+                                                            					ng-class="{'invalid_control': visibilidad.sexo_nuevo_participante_invalido2}">
+                                                            						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
+                                                            						<ui-select-choices repeat="item in data.sexos | filter: $select.search">
+                                                            							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
+                                                            						</ui-select-choices>
+                                                            					</ui-select>
+                                                            				
+                                    								
+                                    											<input type="hidden" id="id_sexo_{$ $index $}" name="sexo_nuevo_existente[]" value="{$ participante.info_investigador.sexo $}"/>
+                                    										</div>
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    											<label for="edad_nuevo_participante">
+                                                            		                Edad <span style="color:#B22222;" 
+                                                            		                ng-show="visibilidad.edad_nuevo_participante_invalido2">Edad mínima de 10</span>
+                                                            		            </label>
+                                                            		            
+                                    											<input type="text" id="edad_{$ $index $}" 
+                                    											name="edad_nuevo_existente[]" 
+                                    											ng-model="participante.info_investigador.edad" 
+                                    											ng-change="validar_edad_nuevo_participante2(participante.info_investigador.edad)"
+                                                            		            class="form-control"
+                                                            		            ng-class="{'invalid_control': visibilidad.edad_nuevo_participante_invalido2}"
+                                    											ng-readonly="true" 
+                                    											class="form-control white-readonly"/>
+                                    										</div>                                										
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                    											<label for="email_nuevo_participante">
+                                                            		                Email <span style="color:#B22222;" 
+                                                            		                ng-show="visibilidad.email_nuevo_participante_invalido2">Email inválido</span>
+                                                            		            </label>
+                                    											
+                                    											<input type="text" id="email_{$ $index $}" 
+                                    											name="email_nuevo_existente[]" 
+                                    											ng-model="participante.datos_extras.email" 
+                                    											ng-change="validar_email_nuevo_participante2(participante.datos_extras.email)"
+                                                            		            class="form-control"
+                                                            		            ng-readonly="true"
+                                                            		            ng-class="{'invalid_control': visibilidad.email_nuevo_participante_invalido2}"/>
+                                    										</div>			
+                                    										
+                                    										
+                                    										<!--/////otros datos /////////////////////////////////////////////////////////////////-->
+                                    										
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==4">
+                                    											<label for="ucc_{$ $index $}">Institución / entidad</label>
+                                    											<input type="text" id="ucc_{$ $index $}" value="Universidad Cooperativa de Colombia" 
+                                    											ng-readonly="true" class="form-control white-readonly"/>
+                                    										</div>
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==4">
+                                    											<!--<label for="sede_{$ $index $}">Sede</label>-->
+                                    											<!--<input type="text" id="sede_{$ $index $}" ng-model="participante.datos_extras.grupo.facultad.sede.ciudad" -->
+                                    											<!--ng-readonly="true" class="form-control white-readonly"/>-->
+                                    											
+                                    											<label for="sede_nuevo_participante">
+                                                            		                Sede <span style="color:#B22222;" 
+                                                            		                ng-show="visibilidad.sede_nuevo_participante_invalido2">Campo requerido. Elegir una sede</span>
+                                                            		            </label>
+                                                            					<ui-select theme="bootstrap"  
+                                                            					ng-model="participante.datos_extras.grupo.facultad.sede" 
+                                                            					ng-change="cambia_sede_nuevo_participante2(participante.datos_extras.grupo.facultad.sede, participante.datos_extras.grupo)"
+                                                            					ng-require="true"
+                                                            					ng-readonly="true"
+                                                            					ng-class="{'invalid_control': visibilidad.sede_nuevo_participante_invalido2}">
+                                                            						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
+                                                            						<ui-select-choices repeat="item in data.grupos_investigacion_y_sedes2 | filter: $select.search">
+                                                            							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
+                                                            						</ui-select-choices>
+                                                            					</ui-select> 
+                                    											
+                                    											<input type="hidden" id="id_sede_{$ $index $}" 
+                                    											name="sede_nuevo_existente[]" 
+                                    											value="{$ participante.datos_extras.grupo.facultad.sede.id $}"/>
+                                    										</div>
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==4">
+                                    											<!--<label for="grupo_inv_{$ $index $}">Grupo de investigación</label>-->
+                                    											<!--<input type="text" id="grupo_inv_{$ $index $}" ng-model="participante.datos_extras.grupo.nombre" -->
+                                    											<!--ng-readonly="true" class="form-control white-readonly"/>-->
+                                    											
+                                    											<label for="grupo_inv_nuevo_participante">
+                                                            		                Grupo de investigación <span style="color:#B22222;" 
+                                                            		                ng-show="visibilidad.grupo_inv_nuevo_participante_invalido2">Campo requerido. ELegir un grupo de invetigación</span>
+                                                            		            </label>
+                                                            		            
+                                                            					<ui-select theme="bootstrap"  
+                                                            					ng-model="participante.datos_extras.grupo" 
+                                                            					ng-change="cambia_grupo_inv_nuevo_participante2($select.selected.nombre,participante)"
+                                                            					ng-require="true"
+                                                            					ng-readonly="true"
+                                                            					ng-class="{'invalid_control': visibilidad.grupo_inv_nuevo_participante_invalido2 }">
+                                                            						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
+                                                            						<ui-select-choices repeat="item in data.grupos_participante | filter: $select.search">
+                                                            							<div  ng-bind-html="item.nombre | highlight: $select.search"></div>
+                            
+                                                            						</ui-select-choices>
+                                                            					</ui-select> 
+                                    											
+                                    											<input type="hidden" id="id_grupo_investigacion_{$ $index $}" 
+                                    											name="grupo_investigacion_nuevo_existente[]" 
+                                    											value="{$ participante.datos_extras.grupo.id $}"/>
+                                    										</div>
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==4">
+                                    											
+                                    											<label for="facultad_{$ $index $}">Facultad / dependencia</label>
+                                    											<input type="text" id="facultad_{$ $index $}" 
+                                    											ng-model="participante.datos_extras.grupo.facultad.nombre" 
+                                    											ng-readonly="true" class="form-control white-readonly"/>
+                                    											
+                                    											
+                                    											<input type="hidden" id="id_facultad_dependencia_{$ $index $}" 
+                                    											name="facultad_dependencia_nuevo_existente[]" 
+                                    											value="{$ participante.datos_extras.grupo.facultad.id $}"/>
+                                    											
+                                    										</div>
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==5 || participante.datos_extras.rol.id==6">
+                                    											<label for="entidad_grupo_inv_externo_nuevo_participante">
+                                                            		                Entidad ejecutora 
+                                                            		                <span style="color:#B22222;" 
+                                                            		                ng-show="visibilidad.entidad_externa_nuevo_participante_invalido2">Entidad/grupo inv. inválido</span>
+                                                            		            </label>
+                                                            		            
+                                    											<input type="text" id="entidad_externa_{$ $index $}" 
+                                    											name="entidad_externa_nuevo_existente[]" 
+                                    											ng-model="participante.datos_extras.entidad_o_grupo_investigacion" 
+                                    											ng-change="validar_entidad_externa_nuevo_participante2(participante.datos_extras.entidad_o_grupo_investigacion)"
+                                                            					class="form-control"
+                                                            					ng-readonly="true"
+                                                            					ng-class="{'invalid_control': visibilidad.entidad_externa_nuevo_participante_invalido2}"/>
+                                    										</div>
+                                    										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==6">
+                                    											<label for="programa_academico_nuevo_participante">
+                                                            		                Programa académico <span style="color:#B22222;" 
+                                                            		                ng-show="visibilidad.programa_academico_participante_invalido2">Programa académico inválido</span>
+                                                            		            </label>
+                                                            		            
+                                    											<input type="text" id="programa_academico_{$ $index $}" 
+                                    											name="programa_academico_nuevo[]" 
+                                    											ng-model="participante.datos_extras.programa_academico" 
+                                    											ng-change="validar_programa_acad_nuevo_participante2(participante.datos_extras.programa_academico)"
+                                                            					class="form-control"
+                                                            					ng-readonly="true"
+                                                            					ng-class="{'invalid_control': visibilidad.programa_academico_participante_invalido2}"/>
+                                    										</div>	
+                                    										
+                                    									</div>
+                                    								</div>
+                                    							</div>
+                                							</div>
+                                							
+                                							
+                                							<!--cuando es un registro existente solo se muestra y ya -->
+                                							<div ng-if="participante.resgitrado == true ">
+                                							    <div class="panel-heading" role="tab">
                                 								<!--nombres, apellidos, identificacion, formacion, rol, btnMasInfo, removerBtn-->
                                 								<div class="row is-flex">
                                 									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                 										<div class="form-group">
                                 											<label for="nombres_{$ $index $}">Nombres</label>
-                                											<input type="text" id="nombres_{$ $index $}" name="nombres_{$ $index $}" ng-model="participante.info_investigador.nombres" 
+                                											<input type="text" id="nombres_{$ $index $}"  ng-model="participante.info_investigador.nombres" 
                                 											ng-readonly="true" class="form-control white-readonly"/>
                                 										</div>
                                 									</div>
                                 									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                 										<div class="form-group">
                                 											<label for="apellidos_{$ $index $}">Apellidos</label>
-                                											<input type="text" id="apellidos_{$ $index $}" name="apellidos_{$ $index $}" ng-model="participante.info_investigador.apellidos" 
+                                											<input type="text" id="apellidos_{$ $index $}" ng-model="participante.info_investigador.apellidos" 
                                 											ng-readonly="true" class="form-control white-readonly"/>
                                 										</div>
                                 									</div>
                                 									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                 										<div class="form-group">
                                 											<label for="identificacion_{$ $index $}">Identificación</label>
-                                											<input type="number" min="1" id="identificacion_{$ $index $}" name="identificacion_{$ $index $}" ng-model="participante.info_investigador.identificacion" 
+                                											<input type="number" min="1" id="identificacion_{$ $index $}"  ng-model="participante.info_investigador.identificacion" 
                                 											ng-readonly="true" class="form-control white-readonly" />
                                 										</div>
                                 									</div>             		
                                 									<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                 										<label for="formacion_{$ $index $}">Formación</label>
-                                										<input type="text" id="formacion_{$ $index $}" name="formacion_{$ $index $}" ng-model="participante.info_investigador.formacion" 
+                                										<input type="text" id="formacion_{$ $index $}" ng-model="participante.info_investigador.formacion" 
                                 										ng-readonly="true" class="form-control white-readonly"/>
                                 									</div> 		
                                 									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                 										<label for="rol_{$ $index $}">Rol en el proyecto</label>
                                 										<input type="text" id="rol_{$ $index $}" ng-model="participante.datos_extras.rol.nombre" 
                                 										ng-readonly="true" class="form-control white-readonly"/>
-                                										<input type="hidden" name="id_rol_{$ $index $}" value="{$ participante.datos_extras.rol.id $}"/>
+                                										<input type="hidden" value="{$ participante.datos_extras.rol.id $}"/>
                                 									</div>
                                 									
+                                									
+                                									<!--botones operacion OJO VER //////////////////////////////////////////  -->
                                 									<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                 										<div class="form-group">
                                 											<label>&nbsp;</label>
@@ -508,7 +1516,7 @@
                                 											<label for="tipo_identificacion_{$ $index $}">Tipo de identificación</label>
                                 											<input type="text" id="tipo_identificacion_{$ $index $}" ng-model="participante.info_investigador.tipo_identificacion.nombre" 
                                 											ng-readonly="true" class="form-control white-readonly"/>
-                                											<input type="hidden" name="tipo_identificacion_{$ $index $}" value="{$ participante.info_investigador.tipo_identificacion.id $}"/>
+                                											<input type="hidden" value="{$ participante.info_investigador.tipo_identificacion.id $}"/>
                                 										</div>
                                 										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                 											<label for="sexo_{$ $index $}">Sexo</label>
@@ -519,16 +1527,16 @@
                                 											<input type="text" id="sexo_{$ $index $}" ng-if="participante.info_investigador.sexo == 'f'" value="Mujer" 
                                 											ng-readonly="true" class="form-control white-readonly"/>
                                 											
-                                											<input type="hidden" id="id_sexo_{$ $index $}" name="sexo_{$ $index $}" value="{$ participante.info_investigador.id_sexo $}"/>
+                                											<input type="hidden" id="id_sexo_{$ $index $}" value="{$ participante.info_investigador.id_sexo $}"/>
                                 										</div>
                                 										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                 											<label for="edad_{$ $index $}">Edad</label>
-                                											<input type="text" id="edad_{$ $index $}" name="edad_{$ $index $}" ng-model="participante.info_investigador.edad" 
+                                											<input type="text" id="edad_{$ $index $}" ng-model="participante.info_investigador.edad" 
                                 											ng-readonly="true" class="form-control white-readonly"/>
                                 										</div>                                										
                                 										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                 											<label for="email_{$ $index $}">Email</label>
-                                											<input type="text" id="email_{$ $index $}" name="email_{$ $index $}" ng-model="participante.datos_extras.email" 
+                                											<input type="text" id="email_{$ $index $}" ng-model="participante.datos_extras.email" 
                                 											ng-readonly="true" class="form-control white-readonly"/>
                                 										</div>			
                                 										
@@ -544,34 +1552,41 @@
                                 											<label for="sede_{$ $index $}">Sede</label>
                                 											<input type="text" id="sede_{$ $index $}" ng-model="participante.datos_extras.grupo.facultad.sede.ciudad" 
                                 											ng-readonly="true" class="form-control white-readonly"/>
-                                											<input type="hidden" id="id_sede_{$ $index $}" name="sede_{$ $index $}" value="{$ participante.id_sede $}"/>
+                                											<input type="hidden" id="id_sede_{$ $index $}"  value="{$ participante.id_sede $}"/>
                                 										</div>
                                 										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==4">
                                 											<label for="grupo_inv_{$ $index $}">Grupo de investigación</label>
                                 											<input type="text" id="grupo_inv_{$ $index $}" ng-model="participante.datos_extras.grupo.nombre" 
                                 											ng-readonly="true" class="form-control white-readonly"/>
-                                											<input type="hidden" id="id_grupo_investigacion_{$ $index $}" name="grupo_investigacion_{$ $index $}" value="{$ participante.id_grupo_investigacion $}"/>
+                                											<input type="hidden" id="id_grupo_investigacion_{$ $index $}" value="{$ participante.id_grupo_investigacion $}"/>
                                 										</div>
                                 										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==4">
                                 											<label for="facultad_{$ $index $}">Facultad / dependencia</label>
                                 											<input type="text" id="facultad_{$ $index $}" ng-model="participante.datos_extras.grupo.facultad.nombre" 
                                 											ng-readonly="true" class="form-control white-readonly"/>
-                                											<input type="hidden" id="id_facultad_dependencia_{$ $index $}" name="facultad_dependencia_{$ $index $}" value="{$ participante.id_facultad_dependencia $}"/>
+                                											<input type="hidden" id="id_facultad_dependencia_{$ $index $}" value="{$ participante.id_facultad_dependencia $}"/>
                                 										</div>
                                 										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==5 || participante.datos_extras.rol.id==6">
                                 											<label for="entidad_externa_{$ $index $}">Entidad co-ejecutor</label>
-                                											<input type="text" id="entidad_externa_{$ $index $}" name="entidad_externa_{$ $index $}" ng-model="participante.datos_extras.entidad_o_grupo_investigacion" 
+                                											<input type="text" id="entidad_externa_{$ $index $}" ng-model="participante.datos_extras.entidad_o_grupo_investigacion" 
                                 											ng-readonly="true" class="form-control white-readonly"/>
                                 										</div>
                                 										<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="participante.datos_extras.rol.id==6">
                                 											<label for="programa_academico_{$ $index $}">Programa académico</label>
-                                											<input type="text" id="programa_academico_{$ $index $}" name="programa_academico_{$ $index $}" ng-model="participante.datos_extras.programa_academico" 
+                                											<input type="text" id="programa_academico_{$ $index $}" ng-model="participante.datos_extras.programa_academico" 
                                 											ng-readonly="true" class="form-control white-readonly"/>
-                                										</div>			
+                                										</div>	
+                                										
                                 									</div>
                                 								</div>
                                 							</div>
+                                							</div>
+                                							
+
                                 						</div>
+                                						
+                                						
+                                						
                                 					</td>    
                                 				</tr> <!--./tr's participantes agregados-->
                                 				
@@ -582,7 +1597,7 @@
                                 
                                 <div class="row">
                         	        <div class="col-xs-12 col-sm-6">
-                        	            <button type="button" class="btn btn-default btn-block" ng-click="mostrar_modal_grupos_investigacion()">
+                        	            <button type="button" class="btn btn-default btn-block" ng-click="mostrar_modal_grupos_investigacion(data.info_investigadores_usuario)">
                         	                Ver entidades / grupos de investigación participantes
                         	            </button>
                         	        </div>                                    
@@ -596,7 +1611,10 @@
                         	            <button type="button" class="btn btn-primary btn-block" ng-click="continuar_a_productos()">
                         	                Guardar Cambios&nbsp;
                         	            </button>
+                        	            
+                        	            <input type="submit" id="input_editar_proyecto" ng-hide="true"/>
                         	        </div>
+                        	        
                         	    </div>	
                             </div>
                         </div> {{--Contenito tab participantes--}}
