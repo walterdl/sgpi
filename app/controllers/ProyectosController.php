@@ -1873,17 +1873,11 @@
             
         }
         
-        
-        
-        
-        
         /*
     	|--------------------------------------------------------------------------
     	| EDITAR  /////////////////////////////////////////////////////////////////
     	|--------------------------------------------------------------------------
     	*/ 
-    	
-    	
     	
     	/*
     	|--------------------------------------------------------------------------
@@ -1981,18 +1975,17 @@
                     
                     // gastos
                     $post_scripts = [
-                    'investigador/proyectos/editar/editar_document_ready_externo.js',
-                    'investigador/proyectos/editar/editar_datos_basicos_controller.js',
-                    'investigador/proyectos/editar/editar_gastos_proyectos_controller.js',
+                        'investigador/proyectos/editar/editar_document_ready_externo.js',
+                        'investigador/proyectos/editar/editar_gastos_proyectos_controller.js',
                     ];
                     
                     return View::make('investigador.proyectos.editar.gastos', array(
-                    'styles' => $styles,
-                    'pagina'=>$pagina,
-                    'proyecto_id' => $id,
-                    'pre_scripts' => $pre_scripts,
-                    'post_scripts' => $post_scripts,
-                    'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies
+                        'styles' => $styles,
+                        'pagina'=>$pagina,
+                        'proyecto_id' => $id,
+                        'pre_scripts' => $pre_scripts,
+                        'post_scripts' => $post_scripts,
+                        'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies
                     ));
                     
                     
@@ -2001,20 +1994,19 @@
                     
                     // adjuntos
                     $post_scripts = [
-                    'investigador/proyectos/editar/editar_document_ready_externo.js',
-                    'investigador/proyectos/editar/editar_datos_basicos_controller.js',
-                    'investigador/proyectos/editar/adjuntos_proyecto_controller.js'
+                        'investigador/proyectos/editar/editar_document_ready_externo.js',
+                        'investigador/proyectos/editar/editar_datos_basicos_controller.js',
+                        'investigador/proyectos/editar/adjuntos_proyecto_controller.js'
                     ];
                     
                     return View::make('investigador.proyectos.editar.adjuntos', array(
-                    'styles' => $styles,
-                    'pagina'=>$pagina,
-                    'proyecto_id' => $id,
-                    'pre_scripts' => $pre_scripts,
-                    'post_scripts' => $post_scripts,
-                    'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies
+                        'styles' => $styles,
+                        'pagina'=>$pagina,
+                        'proyecto_id' => $id,
+                        'pre_scripts' => $pre_scripts,
+                        'post_scripts' => $post_scripts,
+                        'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies
                     ));
-                    
                     
                     break;
                 default:
@@ -2027,9 +2019,6 @@
             
         }
         
-    	
-    	
-    	
     	/*
     	|--------------------------------------------------------------------------
     	| datos_iniciales_editar_proyecto()

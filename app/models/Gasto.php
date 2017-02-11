@@ -200,10 +200,16 @@
                     $investigador['acronimo_id'] = TipoIdentificacion::find($persona_coinvestigador->id_tipo_identificacion)->acronimo;
                 }
                 
-                // agrega los gastos del investigador, agregando el nombre de la entidad fuente de presupuesto
+                // agrega los gastos del investigador, agregando el nombre de la entidad fuente de presupuesto e indicando si cuenta con desembolso cargado
                 $investigador['gastos'] = [];   
                 $detalle_gasto_investigador = DetalleGasto::where('id_investigador', '=', $investigador['id'])->first();
+                $desembolso = Desembolso::where('id_detalle_gasto' , '=', $detalle_gasto_investigador->id)->first();
+                if($desembolso)
+                    $investigador['tiene_desembolso_cargado'] = 1;
+                else
+                    $investigador['tiene_desembolso_cargado'] = 0;
                 $investigador['id_detalle_gasto'] = $detalle_gasto_investigador->id;
+                $investigador['fecha_ejecucion'] = $detalle_gasto_investigador->fecha_ejecucion;
                 $gastos_investigador = Gasto::where('id_detalle_gasto', '=', $detalle_gasto_investigador->id)->orderBy('id_entidad_fuente_presupuesto', 'asc')->get();
                 
                 foreach($gastos_investigador as $gasto_investigador){
@@ -247,6 +253,11 @@
                 $detalle_gasto = $detalles_gastos[$i];
                 $detalle_gasto = (array)$detalle_gasto;
                 $detalle_gasto['id_detalle_gasto'] = $detalle_gasto['id'];
+                $desembolso = Desembolso::where('id_detalle_gasto', '=', $detalle_gasto['id'])->first();
+                if($desembolso)
+                    $detalle_gasto['tiene_desembolso_cargado'] = 1;
+                else
+                    $detalle_gasto['tiene_desembolso_cargado'] = 0;
                 $gastos = Gasto::where('id_detalle_gasto', '=', $detalle_gasto['id'])->get();
                 $detalle_gasto['gastos'] = [];
                 foreach($gastos as $gasto){

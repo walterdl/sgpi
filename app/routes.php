@@ -388,6 +388,8 @@ Route::group(array('before' => 'auth'), function(){
 		Route::post('proyectos/editar/productos', 'ProyectosEditarController@editarProductos');
 		Route::get('proyecto/eliminar/producto', 'ProyectosEditarController@eliminarProducto');
 		
+		Route::get('proyectos/gastos_proyecto', 'ProyectosEditarController@get_gastos_proyecto');
+		
 	}
 	
 });

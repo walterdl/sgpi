@@ -561,7 +561,7 @@
                                         										<input type="hidden" 
                                         										id="formacion_{$ $index $}" 
                                         										name="formacion_nuevo[]" 
-                                        										ng-model="participante.info_investigador.formacion" 
+                                        										value="{$ participante.info_investigador.formacion $}" 
                                         										ng-readonly="false" class="form-control white-readonly"/>
                                         									</div> 		
                                         									
@@ -707,6 +707,7 @@
                                                             		                Sede <span style="color:#B22222;" 
                                                             		                ng-show="visibilidad.sede_nuevo_participante_invalido2">Campo requerido. Elegir una sede</span>
                                                             		            </label>
+                                                            		            
                                                             					<ui-select theme="bootstrap"  
                                                             					ng-model="participante.datos_extras.grupo.facultad.sede" 
                                                             					ng-change="cambia_sede_nuevo_participante2(participante.datos_extras.grupo.facultad.sede, participante.datos_extras.grupo)"

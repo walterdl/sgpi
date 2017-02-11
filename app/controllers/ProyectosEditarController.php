@@ -92,7 +92,6 @@
             echo json_encode(array("resultado"=>"Se a eliminado el objetivo especifico "));
         }
         
-        
         public function editarPartcipantes(){
             
             try{
@@ -118,7 +117,7 @@
                                 if($persona->identificacion != $data['identificacion_viejo'][$i]){
                                     $verificar_identificacion= DB::table('personas')->where('identificacion', $data['identificacion_viejo'][$i])->get();
                                 
-                                    if($verificar_identificacion){
+                                    if($verificar_identificacion){//*
                                         
                                         Session::flash('notify_operacion_previa', 'error');
                                         Session::flash('mensaje_operacion_previa', 'la identificacion para la persona '.$persona->nombres.' '.$persona->apellidos.' se encuentra registrada');
@@ -134,23 +133,37 @@
                                 }
                                 
                                     
-                                $persona->nombres = $data['nombres_viejo'][$i];
-                                $persona->apellidos = $data['apellidos_viejo'][$i];
-                                $persona->sexo = $data['sexo_viejo'][$i];
-                                $persona->edad = $data['edad_viejo'][$i];
-                                $persona->formacion = $data['formacion_viejo'][$i];
-                                $persona->id_tipo_identificacion = $data['tipo_identificacion_viejo'][$i];
+                                $persona->nombres = $data['nombres_viejo'][$i];//*
+                                $persona->apellidos = $data['apellidos_viejo'][$i];//*
+                                $persona->sexo = $data['sexo_viejo'][$i];//*
+                                $persona->edad = $data['edad_viejo'][$i];//*
+                                $persona->formacion = $data['formacion_viejo'][$i];//*
+                                $persona->id_tipo_identificacion = $data['tipo_identificacion_viejo'][$i];//*
                                 
                                 // if($persona->id_categoria_investigador == null)
                                 //     $persona->id_categoria_investigador = $data['rol'] == 1 || $data['rol'] == 2 ? null : $data['categoria_investigador'];
                                 $persona->save();
                               
-                                $investigador->id_rol= $data['id_rol_viejo'][$i];
-                                $investigador->email= $data['email_viejo'][$i];
+                                $investigador->id_rol= $data['id_rol_viejo'][$i];//*
+                                $investigador->email= $data['email_viejo'][$i];//*
                                 
-                                $investigador->id_grupo_investigacion_ucc= isset($data['grupo_investigacion_viejo'][$i]) ? $data['grupo_investigacion_viejo'][$i] : $investigador->id_grupo_investigacion_ucc;
-                                $investigador->entidad_o_grupo_investigacion= isset($data['entidad_externa_viejo'][$i]) ? $data['grupo_investigacion_viejo'][$i] : $investigador->entidad_o_grupo_investigacion;
-                                $investigador->programa_academico= isset($data['programa_academico_viejo'][$i]) ? $data['grupo_investigacion_viejo'][$i] : $investigador->programa_academico;
+                                if($investigador->id_rol ==4 ){ //interno 
+                                    
+                                    $investigador->id_grupo_investigacion_ucc= isset($data['grupo_investigacion_viejo'][$i]) ? $data['grupo_investigacion_viejo'][$i] : $investigador->id_grupo_investigacion_ucc;
+                                    $investigador->entidad_o_grupo_investigacion= isset($data['entidad_externa_viejo'][$i]) ? $data['entidad_externa_viejo'][$i] : $investigador->entidad_o_grupo_investigacion;
+                                    
+                                }else if($investigador->id_rol == 5 ){//externo
+                                
+                                    $investigador->entidad_o_grupo_investigacion= isset($data['entidad_externa_viejo'][$i]) ? $data['entidad_externa_viejo'][$i] : $investigador->entidad_o_grupo_investigacion;
+                                    
+                                }else if($investigador->id_rol ==6 ){ //estudiante
+                                    
+                                    $investigador->entidad_o_grupo_investigacion= isset($data['entidad_externa_viejo'][$i]) ? $data['entidad_externa_viejo'][$i] : $investigador->entidad_o_grupo_investigacion;
+                                    $investigador->programa_academico= isset($data['programa_academico_viejo'][$i]) ? $data['programa_academico_viejo'][$i] : $investigador->programa_academico;
+                                    
+                                }
+                                
+                                
                                 $investigador->save();
                                 
                                 
@@ -170,7 +183,8 @@
                                 if($id_persona != null){
                                     
                                     
-                                    
+                                    // echo "persona no vacia";
+                                    // die();
                                     $persona = Persona::find($id_persona);
                                     
                                      /// verificacion del documento
@@ -204,15 +218,17 @@
                                     
 
                                     Investigador::create(array(
+                                    'id_persona_coinvestigador'=>$persona->id,
                                     'id_rol' => $data['id_rol_nuevo'][$i],
                                     'id_proyecto'=>$data['id_proyecto_participantes'],
-                                    'email' => $data['email_nuevo'][$i]->id,
+                                    'email' => $data['email_nuevo'][$i],
                                     'id_grupo_investigacion_ucc' => isset($data['grupo_investigacion_nuevo'][$i]) ? $data['grupo_investigacion_nuevo'][$i] : null,
-                                    'entidad_o_grupo_investigacion' => isset($data['entidad_externa_nuevo'][$i]) ? $data['grupo_investigacion_nuevo'][$i] : null,
-                                    'programa_academico' => isset($data['programa_academico_nuevo'][$i]) ? $data['grupo_investigacion_nuevo'][$i] : null
+                                    'entidad_o_grupo_investigacion' => isset($data['entidad_externa_nuevo'][$i]) ? $data['entidad_externa_nuevo'][$i] : null,
+                                    'programa_academico' => isset($data['programa_academico_nuevo'][$i]) ? $data['programa_academico_nuevo'][$i] : null
                                     ));
                                     
                                 }else{
+                                    
                                     
                                     
                                     /// verificacion del documento
@@ -227,26 +243,29 @@
                                         
                                     }
                                     
-                                
+                                    // echo "persona  vacia";
+                                    // die(); 
                                     
-                                    Persona::create(array(
-                                    'nombres' => $data['id_rol_nuevo'][$i],
-                                    'apellidos' => $data['email_nuevo'][$i]->id,
-                                    'sexo' => isset($data['grupo_investigacion_nuevo'][$i]) ? $data['grupo_investigacion_nuevo'][$i] : null,
-                                    'edad' => isset($data['entidad_externa_nuevo'][$i]) ? $data['grupo_investigacion_nuevo'][$i] : null,
-                                    'id_tipo_identificacion' => isset($data['programa_academico_nuevo'][$i]) ? $data['grupo_investigacion_nuevo'][$i] : null,
-                                    'identificacion' => isset($data['programa_academico_nuevo'][$i]) ? $data['grupo_investigacion_nuevo'][$i] : null,
+                                    $temp=Persona::create(array(
+                                    'nombres' => $data['nombres_nuevo'][$i],
+                                    'apellidos' => $data['apellidos_nuevo'][$i],
+                                    'sexo' => isset($data['sexo_nuevo'][$i]) ? $data['sexo_nuevo'][$i] : null,
+                                    'edad' => isset($data['edad_nuevo'][$i]) ? $data['edad_nuevo'][$i] : null,
+                                    'formacion' => isset($data['formacion_nuevo'][$i]) ? $data['formacion_nuevo'][$i] : null,
+                                    'id_tipo_identificacion' => isset($data['tipo_identificacion_nuevo'][$i]) ? $data['tipo_identificacion_nuevo'][$i] : null,
+                                    'identificacion' => isset($data['identificacion_nuevo'][$i]) ? $data['identificacion_nuevo'][$i] : null,
                                     ));
                                     
-                                    
+                                   
                                     
                                     Investigador::create(array(
+                                    'id_persona_coinvestigador'=>$temp->id,
                                     'id_rol' => $data['id_rol_nuevo'][$i],
                                     'id_proyecto'=>$data['id_proyecto_participantes'],
-                                    'email' => $data['email_nuevo'][$i]->id,
+                                    'email' => $data['email_nuevo'][$i],
                                     'id_grupo_investigacion_ucc' => isset($data['grupo_investigacion_nuevo'][$i]) ? $data['grupo_investigacion_nuevo'][$i] : null,
-                                    'entidad_o_grupo_investigacion' => isset($data['entidad_externa_nuevo'][$i]) ? $data['grupo_investigacion_nuevo'][$i] : null,
-                                    'programa_academico' => isset($data['programa_academico_nuevo'][$i]) ? $data['grupo_investigacion_nuevo'][$i] : null
+                                    'entidad_o_grupo_investigacion' => isset($data['entidad_externa_nuevo'][$i]) ? $data['entidad_externa_nuevo'][$i] : null,
+                                    'programa_academico' => isset($data['programa_academico_nuevo'][$i]) ? $data['programa_academico_nuevo'][$i] : null
                                     ));
                                     
                                 }
@@ -302,14 +321,16 @@
                                     
                                     $persona->save();
                                     
+                                    
 
                                     Investigador::create(array(
+                                    'id_persona_coinvestigador'=>$persona->id,
                                     'id_rol' => $data['id_rol_nuevo_existente'][$i],
                                     'id_proyecto'=>$data['id_proyecto_participantes'],
-                                    'email' => $data['email_nuevo_existente'][$i]->id,
+                                    'email' => $data['email_nuevo_existente'][$i],
                                     'id_grupo_investigacion_ucc' => isset($data['grupo_investigacion_nuevo_existente'][$i]) ? $data['grupo_investigacion_nuevo_existente'][$i] : null,
-                                    'entidad_o_grupo_investigacion' => isset($data['entidad_externa_nuevo_existente'][$i]) ? $data['grupo_investigacion_nuevo_existente'][$i] : null,
-                                    'programa_academico' => isset($data['programa_academico_nuevo_existente'][$i]) ? $data['grupo_investigacion_nuevo_existente'][$i] : null
+                                    'entidad_o_grupo_investigacion' => isset($data['entidad_externa_nuevo_existente'][$i]) ? $data['entidad_externa_nuevo_existente'][$i] : null,
+                                    'programa_academico' => isset($data['programa_academico_nuevo_existente'][$i]) ? $data['programa_academico_nuevo_existente'][$i] : null
                                     ));
                                     
                                 }else{
@@ -327,26 +348,30 @@
                                         
                                     }
                                     
+                                    
                                 
                                     
-                                    Persona::create(array(
-                                    'nombres' => $data['id_rol_nuevo_existente'][$i],
-                                    'apellidos' => $data['email_nuevo_existente'][$i]->id,
-                                    'sexo' => isset($data['grupo_investigacion_nuevo_existente'][$i]) ? $data['grupo_investigacion_nuevo_existente'][$i] : null,
-                                    'edad' => isset($data['entidad_externa_nuevo_existente'][$i]) ? $data['grupo_investigacion_nuevo_existente'][$i] : null,
-                                    'id_tipo_identificacion' => isset($data['programa_academico_nuevo_existente'][$i]) ? $data['grupo_investigacion_nuevo_existente'][$i] : null,
-                                    'identificacion' => isset($data['programa_academico_nuevo_existente'][$i]) ? $data['grupo_investigacion_nuevo_existente'][$i] : null
+                                    $temp=Persona::create(array(
+                                    'nombres' => $data['nombres_nuevo_existente'][$i],
+                                    'apellidos' => $data['apellidos_nuevo_existente'][$i],
+                                    'sexo' => isset($data['sexo_nuevo_existente'][$i]) ? $data['sexo_nuevo_existente'][$i] : null,
+                                    'edad' => isset($data['edad_nuevo_existente'][$i]) ? $data['edad_nuevo_existente'][$i] : null,
+                                    'formacion' => isset($data['formacion_nuevo_existente'][$i]) ? $data['formacion_nuevo_existente'][$i] : null,
+                                    'id_tipo_identificacion' => isset($data['tipo_identificacion_nuevo_existente'][$i]) ? $data['tipo_identificacion_nuevo_existente'][$i] : null,
+                                    'identificacion' => isset($data['identificacion_nuevo_existente'][$i]) ? $data['identificacion_nuevo_existente'][$i] : null
                                     ));
                                     
                                     
+
                                     
                                     Investigador::create(array(
+                                    'id_persona_coinvestigador'=>$temp->id,
                                     'id_rol' => $data['id_rol_nuevo_existente'][$i],
                                     'id_proyecto'=>$data['id_proyecto_participantes'],
-                                    'email' => $data['email_nuevo_existente'][$i]->id,
+                                    'email' => $data['email_nuevo_existente'][$i],
                                     'id_grupo_investigacion_ucc' => isset($data['grupo_investigacion_nuevo_existente'][$i]) ? $data['grupo_investigacion_nuevo_existente'][$i] : null,
-                                    'entidad_o_grupo_investigacion' => isset($data['entidad_externa_nuevo_existente'][$i]) ? $data['grupo_investigacion_nuevo_existente'][$i] : null,
-                                    'programa_academico' => isset($data['programa_academico_nuevo_existente'][$i]) ? $data['grupo_investigacion_nuevo_existente'][$i] : null
+                                    'entidad_o_grupo_investigacion' => isset($data['entidad_externa_nuevo_existente'][$i]) ? $data['entidad_externa_nuevo_existente'][$i] : null,
+                                    'programa_academico' => isset($data['programa_academico_nuevo_existente'][$i]) ? $data['programa_academico_nuevo_existente'][$i] : null
                                     ));
                                     
                                 }
@@ -383,7 +408,6 @@
             
         }
         
-        
         public function eliminarPartcipantes(){
             $input=Input::all();
             
@@ -405,7 +429,6 @@
            
         }
         
-        
         public function eliminarProducto(){
             $input=Input::all();
 
@@ -426,6 +449,48 @@
             }
             
            
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| get_gastos_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Consulta los gastos de un determinado proyecto de investigación
+    	*/                
+        public function get_gastos_proyecto(){
+            
+            try{
+                
+                // valida identificador de proeycto enviado
+                if(is_null(Input::get('id_proyecto', null)))
+                    throw new Exception('Identificador de proyecto inválido. No se ha enviado tal dato');
+                $validacion = Validator::make(['id_proyecto' => Input::get('id_proyecto')], ['id_proyecto' => 'required|exists:proyectos,id']);
+                if($validacion->fails())
+                    throw new Exception('Identificador de proyecto inválido. No se encuentra proyecto con tal identificador');
+                    
+                // consulta los gasto del proyecto
+                $gastos_proyecto = Gasto::consultar_gastos_proyecto(Input::get('id_proyecto'));
+                
+                // consulta las entidades fuente de presupuesto que patrocinan los gastos del proyecto
+                $entidades_fuente_presupuesto_proyecto = EntidadFuentePresupuesto::entidades_fuente_presupuesto_proyecto(Input::get('id_proyecto'));
+                
+                // consulta todas las entidades para alimentar el multiselect de entidades
+                $todas_las_entidades_fuente_pres = EntidadFuentePresupuesto::whereNotIn('nombre', ['UCC', 'CONADI'])->get();
+                
+                return json_encode([
+                    'consultado' => 1,
+                    'gastos' => $gastos_proyecto,
+                    'entidades_fuente_presupuesto_proyecto' => $entidades_fuente_presupuesto_proyecto,
+                    'todas_las_entidades_fuente_presupuesto' => $todas_las_entidades_fuente_pres
+                    ]);
+            }
+            catch(\Exception $e){
+                return json_encode([
+                    'consultado' => 2,
+                    'mensaje' => $e->getCode(),
+                    'codigo' => $e->getCode()
+                    ]);
+            }
         }
         
     }

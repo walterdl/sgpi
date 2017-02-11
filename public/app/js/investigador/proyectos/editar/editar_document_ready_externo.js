@@ -37,9 +37,11 @@ $(document).ready(function() {
 		axis:"x",
 		theme: 'dark',
 		advanced:{
-			autoExpandHorizontalScroll: true
+			autoExpandHorizontalScroll: true,
+			// updateOnContentResize: true
 		},
-		autoHideScrollbar: true
+		autoHideScrollbar: false,
+		autoDraggerLength: true
 	}); 
 	$("#contenedor_gastos_equipos").mCustomScrollbar({
 		axis:"x",
@@ -103,8 +105,6 @@ $(document).ready(function() {
 	});	
     // $('#tabs > li').css("pointer-events", "none");
     $('#tabs > li a').click(function (e) {
-    	console.log('hello');
 		e.preventDefault();
-		
 	});
 });

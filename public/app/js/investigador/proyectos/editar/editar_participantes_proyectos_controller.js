@@ -247,6 +247,10 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
                     id:null,
                     tiene_usuario:$scope.data.tiene_usuario,
                     resgitrado:false,
+                    sexo:{
+                       'nombre': $scope.data.sexo_nuevo_participante.nombre,
+                       'id':$scope.data.sexo_nuevo_participante.id, 
+                    },
                     info_investigador:
                     {
                         'id':$scope.data.id_persona,
@@ -276,6 +280,7 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
                                     'nombre':($scope.data.rol_nuevo_participante.id == 4) ? $scope.data.facultad_nuevo_participante.nombre: null, 
                                     'id':($scope.data.rol_nuevo_participante.id == 4) ? $scope.data.facultad_nuevo_participante.id: null,
                                     'sede':{
+                                        'nombre':($scope.data.rol_nuevo_participante.id == 4) ? $scope.data.sede_nuevo_participante.nombre : null,
                                         'ciudad':($scope.data.rol_nuevo_participante.id == 4) ? $scope.data.sede_nuevo_participante.nombre : null,
                                         'id': ($scope.data.rol_nuevo_participante.id == 4) ? $scope.data.sede_nuevo_participante.id : null,
                                     },     
@@ -338,9 +343,9 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
         
         console.log("estas en remover_participante //////////////");
         
-       // console.log(participante.info_investigador);
+        console.log(participante);
         
-        if(participante.info_investigador.resgitrado == false){
+        if(participante.resgitrado == false){
             
             var index_de_participante = $scope.data.info_investigadores_usuario.indexOf(participante);
             if(index_de_participante != -1){
@@ -357,7 +362,7 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
             
         }else{
             
-            alertify.confirm('Warning', 'Desea eliminar este Participante?', 
+            alertify.confirm('Eliminar partcipante', 'Desea eliminar este Participante?', 
             function(){ 
                 
                 
@@ -397,7 +402,7 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
                  //// fin de ok   
             }
                 , function(){ 
-                    alertify.error('Cancel');
+                    alertify.error('Se a cancelado la opercaion');
                     
             });
             
@@ -1059,9 +1064,78 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
 	| Pasa a la pestaña de ingreso de productos
 	*/              
     $scope.continuar_a_productos = function() {
+        participante=$scope.data.info_investigadores_usuario;
         
-        alertify.notify('Validación de información general correcta', 'success', 5, function(){  console.log('dismissed'); });
-        $('#input_editar_proyecto').trigger('click');
+        
+        var validacion = []
+ 
+        participante.forEach(function(item){
+            
+            if(!item.tiene_usuario){
+                // console.log(item);
+                
+                validacion.push($scope.validar_nombres_nuevo_participante2(item.info_investigador.nombres));
+                
+                validacion.push($scope.validar_apellidos_nuevo_participante2(item.info_investigador.apellidos));
+                
+                validacion.push($scope.validar_identificacion_nuevo_participante2(item.info_investigador.identificacion));
+                
+                // validacion.push($scope.validar_formacion_nuevo_participante2());
+                
+                // validacion.push($scope.validar_rol_proyecto_nuevo_participante2());
+                
+                validacion.push($scope.validar_tipo_id_nuevo_participante2(true,item.info_investigador.tipo_identificacion));
+                
+                validacion.push($scope.validar_sexo_nuevo_participante2(item.sexo));
+                
+                validacion.push($scope.validar_edad_nuevo_participante2(item.info_investigador.edad));
+                
+                validacion.push($scope.validar_email_nuevo_participante2(item.datos_extras.email));
+            
+                if(item.datos_extras.id_rol == null){
+                    console.log("id rol es igual a null");
+                    
+                    validacion.push($scope.validar_sede_nuevo_participante2(true,item.datos_extras.grupo.facultad.sede));
+                    validacion.push($scope.validar_grupo_inv_nuevo_participante2(item));
+                    // validacion.push($scope.validar_facultad_nuevo_participante2());  // no hay como validarla          
+                    validacion.push($scope.validar_entidad_externa_nuevo_participante2(item.datos_extras.entidad_o_grupo_investigacion));
+                    validacion.push($scope.validar_programa_acad_nuevo_participante2(item.datos_extras.programa_academico));                        
+                }
+                else if(item.datos_extras.id_rol == 4){
+                    
+                    console.log("id rol es igual a 4");
+                    validacion.push($scope.validar_sede_nuevo_participante2(trrue,item.item.datos_extras.grupo.facultad.sede));
+                    validacion.push($scope.validar_grupo_inv_nuevo_participante2(item));
+                    // validacion.push($scope.validar_facultad_nuevo_participante2());//no hay funcion para vaidar esto
+                }
+                else if(item.datos_extras.id_rol == 5){
+                    console.log("id rol es igual a 5");
+                    validacion.push($scope.validar_entidad_externa_nuevo_participante2(item.datos_extras.entidad_o_grupo_investigacion));
+                }
+                else if(item.datos_extras.id_rol == 6){
+                    
+                    console.log("id rol es igual a 6");
+                    validacion.push($scope.validar_entidad_externa_nuevo_participante2(item.datos_extras.entidad_o_grupo_investigacion));
+                    validacion.push($scope.validar_programa_acad_nuevo_participante2(item.datos_extras.programa_academico));                        
+                }
+                
+             /// fin del else
+            }
+            
+        });
+        
+
+        if(validacion.indexOf(true) != -1) // alguna validacion invalida
+        {
+             alertify.error('Error con validaciones');
+        
+            
+        }else{
+            
+            alertify.success("ok validado");
+            $('#input_editar_proyecto').trigger('click');
+        }
+    
     };
     
     /*
@@ -1088,11 +1162,14 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
 */              
 sgpi_app.controller('modal_grupos_investigacion_controller', function ($scope, $uibModalInstance) {
     
+    console.log($scope.data.info_investigador_principal);
+    
     $scope.entidades_grupos = [
         {
             nombre: $scope.data.info_investigador_principal.nombre_grupo_inv,
             rol: 'Ejecutor'
         }];
+        
     
     $scope.entidad_grupo_ya_agregado = function(entidad_grupo) {
         // se vuelve true si se encuentra un nombre de entidad_grupo ya añadido
