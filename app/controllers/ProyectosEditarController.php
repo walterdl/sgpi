@@ -429,6 +429,84 @@
            
         }
         
+        
+        public function editarProductos(){
+            //   print_r(Input::all());
+            //   die();
+          try
+            {
+                $data = Input::all();
+                
+                DB::transaction(function () use($data)
+                {      
+                    
+                    
+                    for ($i = 0; $i < count($data['id_producto']); $i++) {
+                    
+                        if($data['id_producto'][$i]  != null){
+                            
+                            $producto=Producto::find($data['id_producto'][$i]);
+                            
+                            $persona = DB::table('personas')->where('id', $data['encargado_producto'][$i])->first();
+                            // $persona = DB::table('usuarios')->where('id_persona', $data['encargado_producto'][$i])->first();
+                            $investigador = Investigador::get_investigador_por_identificacion($data['id_proyecto_productos'],$persona->identificacion);
+                            
+                            // print_r($investigador);
+                            // // echo $persona->identificacion;
+                            // echo $investigador->id;
+                            // die();
+                            
+                            $producto->id_investigador=$investigador->id;
+                            $producto->nombre=$data['nombre_producto'][$i];
+                            $producto->fecha_proyectada_radicacion=$data['fecha_proyectada_radicar'][$i];
+                            $producto->fecha_remision=$data['fecha_remision'][$i];
+                            $producto->fecha_confirmacion_editorial=$data['fecha_confirmacion_editorial'][$i];
+                            $producto->fecha_recepcion_evaluacion=$data['fecha_recepcion_evaluacion'][$i];
+                            $producto->fecha_respuesta_evaluacion=$data['fecha_respuesta_evaluacion'][$i];
+                            $producto->fecha_aprobacion_publicacion=$data['fecha_aprobacion_publicacion'][$i];
+                            $producto->fecha_publicacion=$data['fecha_publicacion'][$i];
+                            
+                            $producto->save();                            
+                            
+                        }else {
+                            
+                            $persona = DB::table('personas')->where('id', $data['encargado_producto'][$i])->first();
+                            // $persona = DB::table('usuarios')->where('id_persona', $data['encargado_producto'][$i])->first();
+                            $investigador = Investigador::get_investigador_por_identificacion($data['id_proyecto_productos'],$persona->identificacion);
+                            
+                            
+                            Producto::create(array(
+                                'id_proyecto'=>$data['id_proyecto_productos'],
+                                'id_tipo_producto_especifico'=>$data['id_tipo_producto_especifico'][$i],
+                                'id_investigador'=>$investigador->id,
+                                'id_estado'=>1,
+                                'nombre'=>$data['nombre_producto'][$i],
+                                'fecha_proyectada_radicacion'=>$data['fecha_proyectada_radicar'][$i],
+                                'fecha_remision'=>$data['fecha_remision'][$i],
+                                'fecha_confirmacion_editorial'=>$data['fecha_confirmacion_editorial'][$i],
+                                'fecha_recepcion_evaluacion'=>$data['fecha_recepcion_evaluacion'][$i],
+                                'fecha_respuesta_evaluacion'=>$data['fecha_respuesta_evaluacion'][$i],
+                                'fecha_aprobacion_publicacion'=>$data['fecha_aprobacion_publicacion'][$i],
+                                'fecha_publicacion'=>$data['fecha_publicacion'][$i]
+                            ));
+                            
+                        }
+                        
+                    }
+                    
+                    Session::flash('notify_operacion_previa', 'success');
+                    Session::flash('mensaje_operacion_previa', 'Proyecto  acrualizado');
+                  
+                });
+            }
+            catch(Exception $e)
+            {                
+                Session::flash('notify_operacion_previa', 'error');
+                Session::flash('mensaje_operacion_previa', 'Error en la edición del proyecto , código de error: '.$e->getCode().', detalle: '.$e->getMessage());
+            }   
+            return Redirect::to('/proyectos/listar'); 
+        }
+        
         public function eliminarProducto(){
             $input=Input::all();
 
@@ -475,13 +553,15 @@
                 $entidades_fuente_presupuesto_proyecto = EntidadFuentePresupuesto::entidades_fuente_presupuesto_proyecto(Input::get('id_proyecto'));
                 
                 // consulta todas las entidades para alimentar el multiselect de entidades
-                $todas_las_entidades_fuente_pres = EntidadFuentePresupuesto::whereNotIn('nombre', ['UCC', 'CONADI'])->get();
+                $todas_las_entidades_fuente_pres = EntidadFuentePresupuesto::whereNotIn('nombre', ['UCC', 'CONADI'])->select('id', 'nombre')->orderBy('id')->get();
                 
                 return json_encode([
                     'consultado' => 1,
                     'gastos' => $gastos_proyecto,
                     'entidades_fuente_presupuesto_proyecto' => $entidades_fuente_presupuesto_proyecto,
-                    'todas_las_entidades_fuente_presupuesto' => $todas_las_entidades_fuente_pres
+                    'todas_las_entidades_fuente_presupuesto' => $todas_las_entidades_fuente_pres,
+                    'id_entidad_fuente_presupuesto_ucc' => EntidadFuentePresupuesto::where('nombre', '=', 'UCC')->first()->id,
+                    'id_entidad_fuente_presupuesto_conadi' => EntidadFuentePresupuesto::where('nombre', '=', 'CONADI')->first()->id
                     ]);
             }
             catch(\Exception $e){

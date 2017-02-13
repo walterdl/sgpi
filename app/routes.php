@@ -481,7 +481,20 @@ Route::get('show_alter_collation', 'BaseController@show_alter_collation');
 | Prueba impresiones
 */
 Route::get('test', function(){
+	$miArray = [];
+	$miArray[] = 'hello';
+	$miArray[] = 'world';
+	$miArray[] = 'Walter';
+	for($i = 0; $i < count($miArray); $i++)
+	{
+		$item = $miArray[$i];
+		echo $item.'<hr/>'.$i;
+		if($item === 'WalterX');
+		{
+			echo 'se rompera';
+			break;
+		}		
+	}
 	
-	echo mt_rand(0, 32000);
 });
 

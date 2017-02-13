@@ -97,12 +97,12 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
 
                     if(entry.producto){
                         
-                        date = new Date(entry.producto.fecha_proyectada_radicacion + 'T00:00:00');
-                        userTimezoneOffset = new Date().getTimezoneOffset()*60000;            
-                        entry.producto.fecha_proyectada_radicacion = new Date(date.getTime() + userTimezoneOffset);
+                        // date = new Date(entry.producto.fecha_proyectada_radicacion + 'T00:00:00');
+                        // userTimezoneOffset = new Date().getTimezoneOffset()*60000;            
+                        // entry.producto.fecha_proyectada_radicacion = new Date(date.getTime() + userTimezoneOffset);
                         
                         
-                        // entry.producto.fecha_proyectada_radicacion=Date.parse(entry.producto.fecha_proyectada_radicacion);
+                        entry.producto.fecha_proyectada_radicacion=Date.parse(entry.producto.fecha_proyectada_radicacion);
                         entry.producto.fecha_remision=Date.parse(entry.producto.fecha_remision);
                         entry.producto.fecha_confirmacion_editorial=Date.parse(entry.producto.fecha_confirmacion_editorial);
                         entry.producto.fecha_recepcion_evaluacion=Date.parse(entry.producto.fecha_recepcion_evaluacion);

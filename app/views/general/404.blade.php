@@ -25,7 +25,7 @@
 	    <br />
 	    <h1 class="text-center">Error 404</h1>
 	    <h3 class="text-center">La dirección <br />{{ Request::fullUrl() }}<br />no se encuentra</h3>
-	    <h4 class="text-center">Redirigirse a página de inicio: <a class="btn btn-primary" href="/">Inicio SGPI <i class="fa fa-home" aria-hidden="true"></i></a></h4>
+	    <h4 class="text-center"><a href="/">Redirigirse a página de inicio</a></h4>
 	    <hr />
 	    <div>
             <img class="img-responsive" alt="Logo SGPI" src="/img/logo1.png" 

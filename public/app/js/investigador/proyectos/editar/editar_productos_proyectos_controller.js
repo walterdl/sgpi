@@ -70,6 +70,7 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
                     
             var obj = {
                 'producto':{
+                    'id':null,
                     'tipo_producto_e': {
                         'nombre':tipo_producto_especifico.nombre,
                         'id':tipo_producto_especifico.id,
@@ -86,6 +87,7 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
                     'investigador':{
                         'id':null,
                         'persona':{
+                            'id':null,
                             'info_investigador':{
                                 'id':null,
                                 'nombres':"",
@@ -119,7 +121,7 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
                 $scope.data.info_productos.splice(index_prodcuto, 1);
         }else{
             
-            alertify.confirm('Warning', 'Desea eliminar este Producto?', 
+            alertify.confirm('Eliminar producto', 'Desea eliminar este Producto?', 
             function(){ 
                 
                 $http({
@@ -158,7 +160,7 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
                 
             }
                 , function(){ 
-                    alertify.error('Cancel');
+                    alertify.error('Se cancelo el proceso');
                     
             });
             
@@ -261,11 +263,15 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
 	|--------------------------------------------------------------------------
 	| Valida que se halla seleccionado un participante ancargado para este producto
 	*/                        
-    $scope.validar_participante_producto = function(item) {
+    $scope.validar_participante_producto = function(item,selet) {
         
         // console.log('wwwwwww');
         // console.log(selected);
-        console.log(item);
+        console.log(selet);
+        
+       
+        $scope.data.es_principal=selet.investigador_principarl;
+        
         
         if(item.producto.investigador.persona.info_investigador.id){
                 item.producto.participante_invalido = false;
@@ -281,7 +287,26 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
         }
     };
     
-   
+   $scope.validar_participante_producto2 = function(item) {
+        
+        // console.log('wwwwwww');
+        // console.log(selected);
+        console.log(item);
+        
+
+        if(item.producto.investigador.persona.info_investigador.id){
+                item.producto.participante_invalido = false;
+
+            return false;
+        }
+        else{
+            
+                console.log("no hay persona");
+                item.producto.participante_invalido = true;
+
+            return true;
+        }
+    };
     
     /*
 	|--------------------------------------------------------------------------
@@ -450,7 +475,7 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
         $scope.data.info_productos.forEach(function(item) {
             //// validaciones.push($scope.validar_tipo_producto_especifico(producto));
             validaciones.push($scope.validar_nombre_producto2(item.producto));
-            validaciones.push($scope.validar_participante_producto(item));
+            validaciones.push($scope.validar_participante_producto2(item));
             validaciones.push($scope.validar_fecha_proyectada_radicar2(item));
             validaciones.push($scope.validar_fecha_remision(item));
             validaciones.push($scope.validar_fecha_confirmacion_editorial(item));
@@ -466,7 +491,7 @@ sgpi_app.controller('editar_productos_proyecto_controller', function ($scope, $h
         else{
             
             alertify.success("ok validado");
-            // $('#input_editar_proyecto').trigger('click');
+            $('#input_editar_proyecto').trigger('click');
         }
         
     };

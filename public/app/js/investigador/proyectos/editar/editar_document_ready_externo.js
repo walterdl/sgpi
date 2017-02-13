@@ -33,24 +33,8 @@ $(document).ready(function() {
 		},
 		autoHideScrollbar: true
 	}); 
-	$("#contenedor_gastos_personal").mCustomScrollbar({
-		axis:"x",
-		theme: 'dark',
-		advanced:{
-			autoExpandHorizontalScroll: true,
-			// updateOnContentResize: true
-		},
-		autoHideScrollbar: false,
-		autoDraggerLength: true
-	}); 
-	$("#contenedor_gastos_equipos").mCustomScrollbar({
-		axis:"x",
-		theme: 'dark',
-		advanced:{
-			autoExpandHorizontalScroll: true
-		},
-		autoHideScrollbar: true
-	});
+	$('#contenedor_gastos_personal').perfectScrollbar();
+	$("#contenedor_gastos_equipos").perfectScrollbar();
 	$("#contenedor_gastos_software").mCustomScrollbar({
 		axis:"x",
 		theme: 'dark',

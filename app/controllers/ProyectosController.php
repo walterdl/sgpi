@@ -1892,7 +1892,8 @@
                 'vendor/ngAnimate/ngAnimate.css',
                 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.css',
                 'vendor/angular-ui/ui-select.css', 
-                'vendor/angular-ui/overflow-ui-select.css'
+                'vendor/angular-ui/overflow-ui-select.css',
+                'vendor/perfect-scrollbar/css/perfect-scrollbar.min.css'
                 ]; 
             
             // provee scripts extras o personalizados para la vista a cargar
@@ -1903,6 +1904,7 @@
                 'vendor/angular-ui/ui-select.js',
                 'vendor/angular-ui/ui-bootstrap-tpls-2.2.0.min.js',
                 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js',
+                'vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js'
                 ];
             
             $angular_sgpi_app_extra_dependencies = ['ngAnimate', 'ngTouch', 'ngSanitize', 'ngFileUpload', 'ui.bootstrap', 'ui.select'];
@@ -1975,7 +1977,7 @@
                     
                     // gastos
                     $post_scripts = [
-                        'investigador/proyectos/editar/editar_document_ready_externo.js',
+                        'investigador/proyectos/editar/document_ready_gastos.js',
                         'investigador/proyectos/editar/editar_gastos_proyectos_controller.js',
                     ];
                     
@@ -2042,10 +2044,7 @@
         	                }
     	                }
     	            }
-    	            
     	        }
-    	        
-    	        
     	        
     	        //para que se pueda ver y utilizar de debe instanciar 
     	        if($proyecto){
@@ -2064,8 +2063,6 @@
                         $proyecto->documentosProyectos;
                         $proyecto->investigadores;
                         
-                        
-                        
                         if($pagina == 2){
                             
                             foreach ($proyecto->investigadores as $investigador) {
@@ -2083,9 +2080,9 @@
                                     'investigador_principarl'=>1,
                                     );
                                     
-                                }else{
+                                }
+                                else{
                                      //echo $investigador->id_persona_coinvestigador."<br>";
-                                    
                                     
                                      $persona=Persona::find($investigador->id_persona_coinvestigador);
                                      $persona->tipoIdentificacion;
@@ -2126,36 +2123,42 @@
                                         );
                                      }
                                     
-                                     
-                                    
-    
-        
                                 }//fin else
                                 
                             }//fin for each
 
-                        }else if($pagina == 3){
+                        }
+                        else if($pagina == 3){
                             
-                                // $proyecto->productos;
-                                foreach ($proyecto->productos as $producto) {
-                                    
-                                    $producto->tipoProductoE;
-                                    $producto->tipoProductoE->tipoProductoG;
-                                    $producto->investigador;
-                                    $producto->investigador->persona;
-                                    
-                                    if($producto->id_estado == 1){
-                                        $mas_info_productos[]= array(
-                                        'producto' => $producto,
-                                        'resgitrado'=>1,
-                                        );
-                                    }
-                                    
-                                } ////// fin del foreach 
+                            // $proyecto->productos;
+                            foreach ($proyecto->productos as $producto) {
+                                
+                                $producto->tipoProductoE;
+                                $producto->tipoProductoE->tipoProductoG;
+                                $producto->investigador;
+                                
+                                if($producto->investigador->usuario){
+                                  $per=$producto->investigador->usuario;
+                                  $producto->investigador->persona=$per->persona;
+                                }
+                                else{
+                                  $producto->investigador->persona;
+                                }
+                               
+                                
+                                if($producto->id_estado == 1){
+                                    $mas_info_productos[]= array(
+                                    'producto' => $producto,
+                                    'resgitrado'=>1,
+                                    );
+                                }
+                                
+                            } ////// fin del foreach 
                                 
                             $temp=true;
-    
-                        }else if($pagina == 4){ ///// comineso de la pagina 4
+                        }
+                        else if($pagina == 4)
+                        { ///// comineso de la pagina 4
                             
                             // $gastos=$proyecto->gastos;
                             
@@ -2190,14 +2193,10 @@
                                 $aux->tipoGasto;//llamarel tipo de gasto  que es el detalle de gasto
                                 $aux->desembolso;//llamarel tipo de gasto  que es el detalle de gasto
                                 
-                                
-                                
-                                
                                 $aux->gasto;//llamar los gsatos de cada detalle de gasto
                                 foreach($aux->gasto as $temp){
                                     $temp->entidadFuentePresupuesto;
                                 }
-                                
                                 
                                 if($aux->id_tipo_gasto == 1){ //Personal
                                     $gasto_personal[]=$aux;
@@ -2238,13 +2237,9 @@
                                     
                                 }
                                 
-                                
                                 $detalle_gasto[]=$aux;
                             }
                             
-                            
-                            
-
                             $mas_info_gasto= array(
                             //'gastos' => $gastos,
                             'detalle_gastos'=>$detalle_gasto,
@@ -2265,69 +2260,40 @@
                             $temp=true;
                         }
                         
-                        
                         /// esto es para la pagina 3 y 4
                         if($temp){
                             foreach ($proyecto->investigadores as $investigador) {
                              
-                                //solo para la pagina 4
-                                //  if($pagina == 4){
-                                    
-                                //     if($investigador->id_persona_coinvestigador == null){
-                                        
-                                //         $investigador->rol;
-                                //         $investigador->usuario->persona;
-                                        
-                                //         $mas_info_usuario []=array(
-                                //         'info_investigador' =>  $investigador,
-                                //         'resgitrado'=>1,
-                                //         );
-                                //     }else{
-                                        
-                                //         $investigador->rol;
-                                //         $investigador->persona;
-                                    
-                                //         $mas_info_usuario []=array(
-                                //         'info_investigador' =>  $investigador,
-                                //         'resgitrado'=>1,
-                                //         );
-                                        
-                                //     }
-                                     
-                                //  }else 
                                  if($pagina == 3){
-                                        if($investigador->id_persona_coinvestigador == null){
-                                            
-                                            //echo "///////////////////// ".$investigador->id_usuario_investigador_principal;
-                                            $usuario =Usuario::find($investigador->id_usuario_investigador_principal);
-                                            $persona=Persona::find($usuario->id_persona);
-                                            
-                                            $mas_info_usuario []=array(
-                                            'info_investigador' =>  $persona,
-                                            'resgitrado'=>1,
-                                            'investigador_principarl'=>1,
-                                            );
-                                            
-                                        }else{
-                                             //echo $investigador->id_persona_coinvestigador."<br>";
-                                            
-                                             $persona=Persona::find($investigador->id_persona_coinvestigador);
-     
-                                             $mas_info_usuario []=array(
-                                             'info_investigador' =>  $persona,
-                                             'resgitrado'=>1,
-                                             'investigador_principarl'=>0,
-                                             );
-            
-                
-                                }//fin else
+                                    if($investigador->id_persona_coinvestigador == null){
+                                        
+                                        //echo "///////////////////// ".$investigador->id_usuario_investigador_principal;
+                                        $usuario =Usuario::find($investigador->id_usuario_investigador_principal);
+                                        $persona=Persona::find($usuario->id_persona);
+                                        
+                                        $mas_info_usuario []=array(
+                                        'mas_info_investigador'=>$investigador,
+                                        'info_investigador' =>  $persona,
+                                        'resgitrado'=>1,
+                                        'investigador_principarl'=>1
+                                        );
+                                    }
+                                    else{
+                                         //echo $investigador->id_persona_coinvestigador."<br>";
+                                        
+                                         $persona=Persona::find($investigador->id_persona_coinvestigador);
+ 
+                                         $mas_info_usuario []=array(
+                                         'mas_info_investigador'=>$investigador,
+                                         'info_investigador' =>  $persona,
+                                         'resgitrado'=>1,
+                                         'investigador_principarl'=>0,
+                                         );
+                                    }//fin else
                                  }
-                                 
                             }//fin for each
                         }
-                        
-    	            }
-                    
+	                }
     	        }
     	       
                 return json_encode(array(

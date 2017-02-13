@@ -1,27 +1,32 @@
 
 Array
 (
-    [id_proyecto_general] => 1
-    [codigo_fmi] => mi codigo fmi2
-    [subcentro_costo] => mi subcentro2
-    [nombre_proyecto] => mi proyecto2
-    [fecha_inicio] => 2016-06-06
-    [duracion_meses] => 16
-    [fecha_final] => 2017-10-06
-    [convocatoria] => convocatoria2
-    [anio_convocatoria] => 20132
-    [objetivo_general] => objetivo general2
-    [cantidad_objetivos_especificos] => 2
-    [objetivo_especifico_viejo] => Array
+    [0] => stdClass Object
         (
-            [0] => Hello there
-            [1] => Hello world for second time!
+            [id_entidad_fuente_presupuesto] => 1
+            [nombre_entidad_fuente_presupuesto] => UCC
+            [total] => 2790
         )
 
-    [obj_especifico_viejo] => Array
+    [1] => stdClass Object
         (
-            [0] => 9
-            [1] => 11
+            [id_entidad_fuente_presupuesto] => 2
+            [nombre_entidad_fuente_presupuesto] => CONADI
+            [total] => 849
+        )
+
+    [2] => stdClass Object
+        (
+            [id_entidad_fuente_presupuesto] => 3
+            [nombre_entidad_fuente_presupuesto] => Entidad desde BD
+            [total] => 4412
+        )
+
+    [3] => stdClass Object
+        (
+            [id_entidad_fuente_presupuesto] => 4
+            [nombre_entidad_fuente_presupuesto] => entidad creada desde ui
+            [total] => 38209
         )
 
 )

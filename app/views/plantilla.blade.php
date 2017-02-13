@@ -119,7 +119,7 @@
 				<nav class="navbar navbar-static-top">
 					
 					<!-- Sidebar toggle button-->
-					<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+					<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button" id="sidebar-toggle-button">
 						<span class="sr-only">Toggle navigation</span>
 					</a>
 					<div class="pull-left info">

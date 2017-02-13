@@ -27,19 +27,48 @@
             SELECT efp.id as id_entidad_fuente_presupuesto, efp.nombre as nombre_entidad_fuente_presupuesto, SUM(g.valor) as total
             FROM entidades_fuente_presupuesto efp
             INNER JOIN gastos g ON g.id_proyecto = '.$id_proyecto.' AND g.id_entidad_fuente_presupuesto = efp.id
-            GROUP BY efp.id, efp.nombre;';
+            GROUP BY efp.id, efp.nombre
+            ORDER BY efp.id;';
             
-            $totales_x_entidad_fuente_presupuesto = DB::select(DB::raw($query));
-            
-            // cuenta el total de entidades fuente presupuesto distintas a UCC y CONADI
+            $entidades_fuente_presupuesto = DB::select(DB::raw($query));
             $total_entidades_fuente_presupuesto_externas = 0;
-            foreach($totales_x_entidad_fuente_presupuesto as $entidad){
-                if($entidad->nombre_entidad_fuente_presupuesto != 'UCC' && $entidad->nombre_entidad_fuente_presupuesto != 'CONADI')
-                    $total_entidades_fuente_presupuesto_externas++;
+            
+            // Organiza las entidades de tal manera que quede la entidad UCC y CONADI de primeras
+            // Primero organiza la entidad UCC
+            // Identifica donde se encuentra actualmente la entidad UCC
+            $indice_entidad_ucc = null;
+            for($i = 0; $i < count($entidades_fuente_presupuesto); $i++){
+                $entidad = $entidades_fuente_presupuesto[$i];
+                if($entidad->nombre_entidad_fuente_presupuesto == 'UCC')
+                    $indice_entidad_ucc = $i;
+                    
+                // cuenta la cantidad fuente de presupuesto distintas de UCC y CONADI
+                else if($entidad->nombre_entidad_fuente_presupuesto != 'UCC' && $entidad->nombre_entidad_fuente_presupuesto != 'CONADI')
+                    $total_entidades_fuente_presupuesto_externas++;                    
+            }
+            if($indice_entidad_ucc!=0) // Si UCC no está de primera
+            {
+                $entidad_ucc = $entidades_fuente_presupuesto[$indice_entidad_ucc];
+                array_splice($entidades_fuente_presupuesto, $indice_entidad_ucc, 1); // quita la entidad UCC de la posición donde se encuentra
+                array_splice($entidades_fuente_presupuesto, 0, 0, $entidad_ucc); // coloca la entidad UCC de primera
             }
             
+            // Identifica donde se encuentra actualmente la entidad CONADI
+            $indice_entidad_conadi = null;
+            for($i = 0; $i < count($entidades_fuente_presupuesto); $i++){
+                $entidad = $entidades_fuente_presupuesto[$i];
+                if($entidad->nombre_entidad_fuente_presupuesto == 'CONADI')
+                    $indice_entidad_conadi = $i;
+            }       
+            if($indice_entidad_conadi!=1) // Si CONADI no está de segunda
+            {
+                $entidad_conadi = $entidades_fuente_presupuesto[$indice_entidad_conadi];
+                array_splice($entidades_fuente_presupuesto, $indice_entidad_conadi, 1); // quita la entidad CONADI de la posición donde se encuentra
+                array_splice($entidades_fuente_presupuesto, 0, 0, $entidad_conadi); // coloca la entidad CONADI de primera
+            }            
+            
             return [
-                'entidades' => $totales_x_entidad_fuente_presupuesto,
+                'entidades' => $entidades_fuente_presupuesto,
                 'cantidad_entidades_fuente_presupuesto_distintas' => $total_entidades_fuente_presupuesto_externas
                 ];
         }

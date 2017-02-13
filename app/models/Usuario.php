@@ -24,6 +24,10 @@
             return $this->belongsTo('Persona', 'id_persona'); 
         }
         
+        public function persona2(){ 
+            return $this->belongsTo('Persona', 'id_persona'); 
+        }
+        
         public function rol() { 
             return $this->belongsTo('Rol', 'id_rol'); 
         }
