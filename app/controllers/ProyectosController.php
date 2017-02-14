@@ -17,7 +17,8 @@
                 'vendor/ngAnimate/ngAnimate.css',
                 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.css',
                 'vendor/angular-ui/ui-select.css', 
-                'vendor/angular-ui/overflow-ui-select.css'
+                'vendor/angular-ui/overflow-ui-select.css',
+                'vendor/perfect-scrollbar/css/perfect-scrollbar.min.css'
                 ]; 
             
             // provee scripts extras o personalizados para la vista a cargar
@@ -28,6 +29,7 @@
                 'vendor/angular-ui/ui-select.js',
                 'vendor/angular-ui/ui-bootstrap-tpls-2.2.0.min.js',
                 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js',
+                'vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js'
                 ];
 
             $post_scripts = [

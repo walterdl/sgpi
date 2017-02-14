@@ -214,6 +214,7 @@
                 
                 foreach($gastos_investigador as $gasto_investigador){
                     $gasto_investigador = $gasto_investigador->toArray();
+                    $gasto_investigador['id_gasto'] = $gasto_investigador['id'];
                     $gasto_investigador['entidad_fuente_presupuesto'] = EntidadFuentePresupuesto::find($gasto_investigador['id_entidad_fuente_presupuesto'])->nombre;
                     $gasto_investigador = (object)$gasto_investigador;
                     array_push($investigador['gastos'], $gasto_investigador);
@@ -263,6 +264,7 @@
                 foreach($gastos as $gasto){
                     $entidad_fuente_presupuesto = EntidadFuentePresupuesto::find($gasto->id_entidad_fuente_presupuesto);
                     $gasto = $gasto->toArray();
+                    $gasto['id_gasto'] = $gasto['id'];
                     $gasto['nombre_entidad'] = $entidad_fuente_presupuesto->nombre;
                     array_push($detalle_gasto['gastos'], (object)$gasto);
                 }

@@ -26,6 +26,13 @@ sgpi_app.factory('string_invalida', function(){
 
 sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $http, id_proyecto, numero_invalido, string_invalida) {
     
+    $('#input_text_nueva_entidad').on('keydown', function(e) {
+        if (e.which == 13) {
+            $scope.agregar_nueva_entidad_presupuesto_a_multiselect();
+            $scope.$apply();
+        }
+    });    
+    
     /*
 	| Inicializa modelos
 	*/     
@@ -77,10 +84,16 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
         // alimenta el multiselect con todas las entidades fuente de presupuesto de la BD y selecciona aquellas que financian el proyecto
         $scope.init_multiselect_entidades_fuente_presupuesto(data);
         
-        // inicializa los gastos de personal
+        // inicializa los tipos de gastos
         $scope.init_gastos_personal(data);
+        $scope.init_tipo_gastos_no_personal('gastos_equipos', data); // $scope.init_gastos_equipos(data);
+        $scope.init_tipo_gastos_no_personal('gastos_software', data); // $scope.init_gastos_software(data);
+        $scope.init_tipo_gastos_no_personal('gastos_salidas_campo', data); 
+        $scope.init_tipo_gastos_no_personal('gastos_materiales', data); 
+        $scope.init_tipo_gastos_no_personal('gastos_servicios', data); 
+        $scope.init_tipo_gastos_no_personal('gastos_bibliograficos', data); 
+        $scope.init_tipo_gastos_no_personal('gastos_digitales', data); 
         
-        $scope.init_gastos_equipos(data);
     };
     /*
 	| Alimenta el multiselect con todas las entidades fuente de presupuesto de la BD y selecciona aquellas que financian el proyecto
@@ -130,6 +143,7 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
                 {
                     // se añade gasto formateado
                     gastos.push({
+                        id_gasto: gasto.id_gasto,
                         id_entidad_fuente_presupuesto: gasto.id_entidad_fuente_presupuesto,
                         nombre_entidad_fuente_presupuesto: gasto.entidad_fuente_presupuesto,
                         valor: gasto.valor,
@@ -149,6 +163,7 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
                     {
                         // se añade gasto formateado
                         gastos.push({
+                            id_gasto: gasto.id_gasto,
                             id_entidad_fuente_presupuesto: gasto.id_entidad_fuente_presupuesto,
                             nombre_entidad_fuente_presupuesto: gasto.entidad_fuente_presupuesto,
                             valor: gasto.valor, 
@@ -186,88 +201,120 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
             total_gasto_personal = 0; // reinicia total de presupuesto para el siguiente gasto_personal            
             gastos = [];
         });
-    };    
+    };        
     /*
-	| Inicializa los gastos de equipos
+	| Inicializa los tipos de gastos que no son de tipo de gasto personal
 	*/    
-    $scope.init_gastos_equipos = function(data) {
+    $scope.init_tipo_gastos_no_personal = function(nombre_coleccion_tipo_gasto, data) {
 
         // prepara variables que usara en el proceso de formateo del modelo del tipo de gasto
-        $scope.gastos_equipos = [];                
-        $scope.totales_gastos_equipos = {ucc: 0, conadi: 0, entidades_fuente_presupuesto: {}, total: 0}; // tiene los totales de las columnas del tipo de gasto.
+        $scope[nombre_coleccion_tipo_gasto] = [];                
+        var nombre_totales_tipo_gasto = null;
+        switch(nombre_coleccion_tipo_gasto)
+        {
+        	case 'gastos_personal':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_personal';
+	        	break;
+        	case 'gastos_equipos':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_equipos';
+	        	break;
+        	case 'gastos_software':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_software';
+	        	break;	        
+        	case 'gastos_salidas_campo':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_salidas';
+	        	break;	        	        	
+        	case 'gastos_materiales':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_materiales';
+	        	break;	        	        		        	
+        	case 'gastos_servicios':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_servicios';
+	        	break;	        
+        	case 'gastos_bibliograficos':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_bibliograficos';
+	        	break;	        
+        	case 'gastos_digitales':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_digitales';
+	        	break;	        	        	
+        }       
+        $scope[nombre_totales_tipo_gasto] = {ucc: 0, conadi: 0, entidades_fuente_presupuesto: {}, total: 0}; // tiene los totales de las columnas del tipo de gasto.
         var date = null;
         var userTimezoneOffset = null;
-        var total_gasto_equipo = 0; // tiene el total de la fila de gasto personal, es decir el total de un solo gasto personal        
+        var total_gasto_tipo_gasto = 0; // tiene el total de la fila del tipo de gasto
         var gastos = []; // colección con los gastos formateados y sincronizados con el multiselect del gasto_personal
 
         // los siguientes ciclos aninados sincronizan o aseguran de que se presente las entidades fuente de presupuesto
         // que estan seleccionadas en el multiselect de entidades fuente presupuesto
         // además edita los nombres de los campos del gasto que usado como modelo para mejor legibilidad 
 
-        data.gastos.gastos_equipos.forEach(function(gasto_equipo) {
-            gasto_equipo.gastos.forEach(function(gasto) { // itera por la colección orginal de gastos del gasto_personal que se envía desde server
+        data.gastos[nombre_coleccion_tipo_gasto].forEach(function(tipo_gasto) {
+            tipo_gasto.gastos.forEach(function(gasto) { // itera por la colección orginal de gastos del gasto_personal que se envía desde server
                 if(gasto.nombre_entidad == 'UCC' || gasto.nombre_entidad == 'CONADI') // si se trata del gasto presupuestado por la entidad UCC lo añade manualmente, ya que la UCC no esta en el multiselect
                 {
                     // se añade gasto formateado
                     gastos.push({
+                        id_gasto: gasto.id_gasto,
                         id_entidad_fuente_presupuesto: gasto.id_entidad_fuente_presupuesto,
                         nombre_entidad_fuente_presupuesto: gasto.nombre_entidad,
                         valor: gasto.valor,
                         gasto_invalido: false
                     });
-                    total_gasto_equipo += Number(gasto.valor);
+                    total_gasto_tipo_gasto += Number(gasto.valor);
 
                     if(gasto.nombre_entidad == 'UCC')
-                        $scope.totales_gastos_equipos.ucc += Number(gasto.valor);
+                        $scope[nombre_totales_tipo_gasto].ucc += Number(gasto.valor);
                     else if(gasto.nombre_entidad == 'CONADI')
-                        $scope.totales_gastos_equipos.conadi += Number(gasto.valor);                    
+                        $scope[nombre_totales_tipo_gasto].conadi += Number(gasto.valor);                    
                 }
             });        	
 
             for(var i = 0; i < $scope.data.entidades_fuente_presupuesto_seleccionadas.length; i++) // itera por las entidades que estan seleccionadas en el multiselect
             {
-                for(var ii = 0; ii < gasto_equipo.gastos.length; ii++) // itera por la colección orginal de gastos del gasto_personal que se envía desde server
+                for(var ii = 0; ii < tipo_gasto.gastos.length; ii++) // itera por la colección orginal de gastos del gasto_personal que se envía desde server
                 {
-                    var gasto = gasto_equipo.gastos[ii];
+                    var gasto = tipo_gasto.gastos[ii];
                     if(gasto.id_entidad_fuente_presupuesto == $scope.data.entidades_fuente_presupuesto_seleccionadas[i].id) // si se encuentra la entidad que esta seleccionada en los gastos del gasto_personal...
                     {
                         // se añade gasto formateado
                         gastos.push({
+                            id_gasto: gasto.id_gasto,
                             id_entidad_fuente_presupuesto: gasto.id_entidad_fuente_presupuesto,
                             nombre_entidad_fuente_presupuesto: gasto.nombre_entidad,
                             valor: gasto.valor, 
                             gasto_invalido: false                          
                         });
-                        total_gasto_equipo += Number(gasto.valor);
-                        if($scope.totales_gastos_equipos.entidades_fuente_presupuesto[gasto.id_entidad_fuente_presupuesto] == undefined)
-                            $scope.totales_gastos_equipos.entidades_fuente_presupuesto[gasto.id_entidad_fuente_presupuesto] = Number(gasto.valor);
+                        total_gasto_tipo_gasto += Number(gasto.valor);
+                        if($scope[nombre_totales_tipo_gasto].entidades_fuente_presupuesto[gasto.id_entidad_fuente_presupuesto] == undefined)
+                            $scope[nombre_totales_tipo_gasto].entidades_fuente_presupuesto[gasto.id_entidad_fuente_presupuesto] = Number(gasto.valor);
                         else
-                            $scope.totales_gastos_equipos.entidades_fuente_presupuesto[gasto.id_entidad_fuente_presupuesto] += Number(gasto.valor);
+                            $scope[nombre_totales_tipo_gasto].entidades_fuente_presupuesto[gasto.id_entidad_fuente_presupuesto] += Number(gasto.valor);
                         break; // encontró la entidad, no necesita seguir iterando por las entidades seleccionadas
                     }            
                 }
             }
 
             // Convierte la fecha de ejecución a un objeto tipo Date
-            date = new Date(gasto_equipo.fecha_ejecucion + 'T00:00:00');
+            date = new Date(tipo_gasto.fecha_ejecucion + 'T00:00:00');
             userTimezoneOffset = new Date().getTimezoneOffset()*60000;
             
-            // agrega el modelo gasto personal con solo los campos necesarios
-            $scope.gastos_equipos.push({
-                id_detalle_gasto: gasto_equipo.id_detalle_gasto,
-                concepto: gasto_equipo.concepto,
-                justificacion: gasto_equipo.justificacion,
+            // agrega el modelo del tipo degasto con solo los campos necesarios
+            $scope[nombre_coleccion_tipo_gasto].push({
+                id_detalle_gasto: tipo_gasto.id_detalle_gasto,
+                concepto: tipo_gasto.concepto,
+                justificacion: tipo_gasto.justificacion,
+                cantidad_salidas: tipo_gasto.numero_salidas,
+                valor_unitario: tipo_gasto.valor_unitario,
                 gastos: gastos,
                 fecha_ejecucion: new Date(date.getTime() + userTimezoneOffset),
-                total: total_gasto_equipo,
-                tiene_desembolso_cargado: gasto_equipo.tiene_desembolso_cargado
+                total: total_gasto_tipo_gasto,
+                tiene_desembolso_cargado: tipo_gasto.tiene_desembolso_cargado
             });
             
-            $scope.totales_gastos_equipos.total += total_gasto_equipo;
-            total_gasto_equipo = 0; // reinicia total de presupuesto para el siguiente tipo de gasto
+            $scope[nombre_totales_tipo_gasto].total += total_gasto_tipo_gasto;
+            total_gasto_tipo_gasto = 0; // reinicia total de presupuesto para el siguiente tipo de gasto
             gastos = [];
         });
-    };    
+    };            
     
     /*
 	| Controlador de evento click para le botón que agrega una nueva entidad de fuente de presupuesto.
@@ -339,8 +386,9 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
     $scope.remocion_entidad_presupuesto_multiselect = function(entidad_presupuesto) {
         
         // remueve el gasto patrocinado por la entidad de la colección de gastos de cada tipo de gasto
-        $scope.remocion_entidad_presupuesto_gasto_personal(entidad_presupuesto);
-        $scope.remocion_entidad_presupuesto_gasto_equipo(entidad_presupuesto);
+        // $scope.remocion_entidad_presupuesto_gasto_personal(entidad_presupuesto);
+        // $scope.remocion_entidad_presupuesto_gasto_equipo(entidad_presupuesto);
+        $scope.remocion_entidad_presupuesto_tipo_gasto(entidad_presupuesto);
         
         // remueve el input hidden de la entidad fuente de presupuesto 
         $('input[indice_entidad_presupuesto="' + entidad_presupuesto.id + '"]').remove();
@@ -353,86 +401,110 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
 	*/         
     $scope.agregar_nueva_entidad_presupuesto_a_gastos = function(nueva_entidad_presupuesto){
         
-        // se añade gasto formateado
-        $scope.gastos_personal.forEach(function(gasto_personal) {
-            gasto_personal.gastos.push({
+        var gasto_nueva_entidad = {
                 id_entidad_fuente_presupuesto: nueva_entidad_presupuesto.id,
                 nombre_entidad_fuente_presupuesto: nueva_entidad_presupuesto.nombre,
                 valor: 0,
                 gasto_invalido: false
-            });
+            };
+            
+        // se añade gasto formateado
+        $scope.gastos_personal.forEach(function(tipo_gasto) {
+            var gasto_nueva_entidad_tipo_gasto = $.extend({}, gasto_nueva_entidad);
+            tipo_gasto.gastos.push(gasto_nueva_entidad_tipo_gasto);
         });
         
         // se añade gasto formateado
-        $scope.gastos_equipos.forEach(function(gasto_equipo) {
-            gasto_equipo.gastos.push({
-                id_entidad_fuente_presupuesto: nueva_entidad_presupuesto.id,
-                nombre_entidad_fuente_presupuesto: nueva_entidad_presupuesto.nombre,
-                valor: 0,
-                gasto_invalido: false
-            });
+        $scope.gastos_equipos.forEach(function(tipo_gasto) {
+            var gasto_nueva_entidad_tipo_gasto = $.extend({}, gasto_nueva_entidad);
+            tipo_gasto.gastos.push(gasto_nueva_entidad_tipo_gasto);
         });
         
-        $scope.cacular_totales_gastos();
+        // se añade gasto formateado
+        $scope.gastos_software.forEach(function(tipo_gasto) {
+            var gasto_nueva_entidad_tipo_gasto = $.extend({}, gasto_nueva_entidad);
+            tipo_gasto.gastos.push(gasto_nueva_entidad_tipo_gasto);
+        });        
+        
+        // se añade gasto formateado
+        $scope.gastos_salidas_campo.forEach(function(tipo_gasto) {
+            var gasto_nueva_entidad_tipo_gasto = $.extend({}, gasto_nueva_entidad);
+            tipo_gasto.gastos.push(gasto_nueva_entidad_tipo_gasto);
+        });                
+        
+        // se añade gasto formateado
+        $scope.gastos_materiales.forEach(function(tipo_gasto) {
+            var gasto_nueva_entidad_tipo_gasto = $.extend({}, gasto_nueva_entidad);
+            tipo_gasto.gastos.push(gasto_nueva_entidad_tipo_gasto);
+        });                        
+        
+        // se añade gasto formateado
+        $scope.gastos_servicios.forEach(function(tipo_gasto) {
+            var gasto_nueva_entidad_tipo_gasto = $.extend({}, gasto_nueva_entidad);
+            tipo_gasto.gastos.push(gasto_nueva_entidad_tipo_gasto);
+        });                         
+        
+        // se añade gasto formateado
+        $scope.gastos_bibliograficos.forEach(function(tipo_gasto) {
+            var gasto_nueva_entidad_tipo_gasto = $.extend({}, gasto_nueva_entidad);
+            tipo_gasto.gastos.push(gasto_nueva_entidad_tipo_gasto);
+        });                                 
+        
+        // se añade gasto formateado
+        $scope.gastos_digitales.forEach(function(tipo_gasto) {
+            var gasto_nueva_entidad_tipo_gasto = $.extend({}, gasto_nueva_entidad);
+            tipo_gasto.gastos.push(gasto_nueva_entidad_tipo_gasto);
+        });               
+        
+        $scope.calcular_todos_los_totales_tipos_gastos();
     };    
     
     /*
     | Remueve el objeto de gasto de la colección de gastos de cada tipo de gasto que le corresponde a la entidad_presupuesto a remover.
     | Realiza la resta del valor o dinero que daba la respectiva entidad a cada tipo de gasto y al total general.
 	*/      
-    $scope.remocion_entidad_presupuesto_gasto_personal = function(entidad_presupuesto){
-        $scope.gastos_personal.forEach(function(gasto_personal) {
-            for(var i = 0; i < gasto_personal.gastos.length; i++)
-            {
-                var gasto = gasto_personal.gastos[i];
-                if(gasto.id_entidad_fuente_presupuesto == entidad_presupuesto.id)
+    $scope.remocion_entidad_presupuesto_tipo_gasto = function(entidad_presupuesto) {
+        
+        function func_soporte_remover_entidad_tipo_gasto(nombre_tipo_gasto, nombre_totales_tipo_gasto){
+            $scope[nombre_tipo_gasto].forEach(function(tipo_gasto) {
+                for(var i = 0; i < tipo_gasto.gastos.length; i++)
                 {
-                    gasto_personal.total -= numero_invalido(gasto_personal.gastos[i].valor) ? 0 : gasto_personal.gastos[i].valor;
-                    gasto_personal.gastos.splice(i, 1);
+                    var gasto = tipo_gasto.gastos[i];
+                    if(gasto.id_entidad_fuente_presupuesto == entidad_presupuesto.id)
+                    {
+                        tipo_gasto.total -= numero_invalido(tipo_gasto.gastos[i].valor) ? 0 : tipo_gasto.gastos[i].valor;
+                        tipo_gasto.gastos.splice(i, 1);
+                        break;
+                    }
+                }
+            });
+            // remueve la entidad de los totales del tipo de gasto
+            for(var id in $scope[nombre_totales_tipo_gasto].entidades_fuente_presupuesto)
+            {
+                if(id == entidad_presupuesto.id)
+                {
+                    $scope[nombre_totales_tipo_gasto].total -= Number($scope[nombre_totales_tipo_gasto].entidades_fuente_presupuesto[id]);
+                    delete $scope[nombre_totales_tipo_gasto].entidades_fuente_presupuesto[id];
                     break;
                 }
-            }
-        });
-        // remueve la entidad de los totales de los gastos de personal
-        for(var id in $scope.totales_gastos_personal.entidades_fuente_presupuesto)
-        {
-            if(id == entidad_presupuesto.id)
-            {
-                $scope.totales_gastos_personal.total -= Number($scope.totales_gastos_personal.entidades_fuente_presupuesto[id]);
-                delete $scope.totales_gastos_personal.entidades_fuente_presupuesto[id];
-                break;
-            }
-        }        
-    };    
-    $scope.remocion_entidad_presupuesto_gasto_equipo = function(entidad_presupuesto) {
-        $scope.gastos_equipos.forEach(function(gasto_equipo) {
-            for(var i = 0; i < gasto_equipo.gastos.length; i++)
-            {
-                var gasto = gasto_equipo.gastos[i];
-                if(gasto.id_entidad_fuente_presupuesto == entidad_presupuesto.id)
-                {
-                    gasto_equipo.total -= numero_invalido(gasto_equipo.gastos[i].valor) ? 0 : gasto_equipo.gastos[i].valor;
-                    gasto_equipo.gastos.splice(i, 1);
-                    break;
-                }
-            }
-        });
-        // remueve la entidad de los totales de los gastos de personal
-        for(var id in $scope.totales_gastos_equipos.entidades_fuente_presupuesto)
-        {
-            if(id == entidad_presupuesto.id)
-            {
-                $scope.totales_gastos_equipos.total -= Number($scope.totales_gastos_equipos.entidades_fuente_presupuesto[id]);
-                delete $scope.totales_gastos_equipos.entidades_fuente_presupuesto[id];
-                break;
-            }
-        }               
+            }               
+        }
+        
+        func_soporte_remover_entidad_tipo_gasto('gastos_personal', 'totales_gastos_personal');
+        func_soporte_remover_entidad_tipo_gasto('gastos_equipos', 'totales_gastos_equipos');
+        func_soporte_remover_entidad_tipo_gasto('gastos_software', 'totales_gastos_software');
+        func_soporte_remover_entidad_tipo_gasto('gastos_salidas_campo', 'totales_gastos_salidas');
+        func_soporte_remover_entidad_tipo_gasto('gastos_materiales', 'totales_gastos_materiales');
+        func_soporte_remover_entidad_tipo_gasto('gastos_servicios', 'totales_gastos_servicios');
+        func_soporte_remover_entidad_tipo_gasto('gastos_bibliograficos', 'totales_gastos_bibliograficos');
+        func_soporte_remover_entidad_tipo_gasto('gastos_digitales', 'totales_gastos_digitales');
+        
     };
     
     /*
-	| Las siguientes funciones agregan un determinado tipo de gasto
+	| Agrega un determinado tipo de gasto
 	*/     
-    $scope.agregar_gasto_equipo = function() {
+    $scope.agregar_tipo_gasto = function(nombre_tipo_gasto) {
         
         // inicializa los gastos del tipo de gasto equipo con las entidades UCC y CONADI por defecto
         var gastos = [
@@ -452,6 +524,7 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
         // agrega los gastos patrocinados con las entidades seleccionadas hasta el momento
         $scope.data.entidades_fuente_presupuesto_seleccionadas.forEach(function(entidad) {
             gastos.push({
+                id_gasto: 'nuevo',
                 id_entidad_fuente_presupuesto: entidad.id,
                 nombre_entidad_fuente_presupuesto: entidad.nombre,
                 valor: 0,
@@ -463,153 +536,212 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
             id_detalle_gasto: 'nuevo',
             concepto: null,
             justificacion: null,
+            cantidad_salidas: 0,
+            valor_unitario: 0,
             gastos: gastos,
             fecha_ejecucion: null,
             total: 0,
             tiene_desembolso_cargado: 0
         };
-        
-        // agrega el nuevo tipo de gasto
-        $scope.gastos_equipos.push(nuevo_tipo_gasto);        
+
+        $scope[nombre_tipo_gasto].push(nuevo_tipo_gasto);        
         
         // recalcula totales
-        $scope.calcular_totales_gasto_equipos(nuevo_tipo_gasto);
-    };
-    $scope.remover_gasto_equipo = function (gasto_equipo) {
+        $scope.calcular_totales_tipo_gasto(nombre_tipo_gasto, nuevo_tipo_gasto); //$scope.calcular_totales_gasto_equipos(nuevo_tipo_gasto);        
         
-        if(gasto_equipo.tiene_desembolso_cargado)
+        // actualiza perfect scrollbar
+        $scope.actualizar_perfect_scrollbars(nombre_tipo_gasto);
+    };    
+    $scope.remover_tipo_gasto = function (nombre_coleccion_tipo_gasto, obj_tipo_gasto) {
+        
+        if(obj_tipo_gasto.tiene_desembolso_cargado)
         {
             alertify.error('No se puede remover. Ya tiene desembolso cargado');
             return;
         }
+
+        var nombre_totales_tipo_gasto = null;
+        switch(nombre_coleccion_tipo_gasto)
+        {
+        	case 'gastos_personal':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_personal';
+	        	break;
+        	case 'gastos_equipos':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_equipos';
+	        	break;
+        	case 'gastos_software':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_software';
+	        	break;	  
+        	case 'gastos_salidas_campo':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_salidas';
+	        	break;	      	        	
+        	case 'gastos_materiales':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_materiales';
+	        	break;	      	        		        	
+        	case 'gastos_servicios':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_servicios';
+	        	break;	      	        		        		        	
+        	case 'gastos_bibliograficos':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_bibliograficos';
+	        	break;	      	
+        	case 'gastos_digitales':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_digitales';
+	        	break;	      		        	
+        }        
         // resta la cantidad que da el tipo de gasto a los totales 
         var id_entidad_fuente_presupuesto = null;
         
-        gasto_equipo.gastos.forEach(function(gasto) {
+        obj_tipo_gasto.gastos.forEach(function(gasto) {
             if(gasto.nombre_entidad_fuente_presupuesto == 'UCC')
             {
-                $scope.totales_gastos_equipos.ucc -= gasto.valor;
-                $scope.totales_gastos_equipos.total -= gasto.valor;
+                $scope[nombre_totales_tipo_gasto].ucc -= gasto.valor;
+                $scope[nombre_totales_tipo_gasto].total -= gasto.valor;
             }
             else if(gasto.nombre_entidad_fuente_presupuesto == 'CONADI')
             {
-                $scope.totales_gastos_equipos.conadi -= gasto.valor;
-                $scope.totales_gastos_equipos.total -= gasto.valor;
+                $scope[nombre_totales_tipo_gasto].conadi -= gasto.valor;
+                $scope[nombre_totales_tipo_gasto].total -= gasto.valor;
             }
             else
             {
                 id_entidad_fuente_presupuesto = gasto.id_entidad_fuente_presupuesto;
-                if($scope.totales_gastos_equipos.entidades_fuente_presupuesto[id_entidad_fuente_presupuesto] != undefined)
+                if($scope[nombre_totales_tipo_gasto].entidades_fuente_presupuesto[id_entidad_fuente_presupuesto] != undefined)
                 {
-                    $scope.totales_gastos_equipos.entidades_fuente_presupuesto[id_entidad_fuente_presupuesto] -= gasto.valor;
-                    $scope.totales_gastos_equipos.total -= gasto.valor;
+                    $scope[nombre_totales_tipo_gasto].entidades_fuente_presupuesto[id_entidad_fuente_presupuesto] -= gasto.valor;
+                    $scope[nombre_totales_tipo_gasto].total -= gasto.valor;
                 }
             }
         });
         
         // remueve el tipo de gasto
-        var index = $scope.gastos_equipos.indexOf(gasto_equipo);
+        var index = $scope[nombre_coleccion_tipo_gasto].indexOf(obj_tipo_gasto);
         if (index > -1) 
-            $scope.gastos_equipos.splice(index, 1);
+            $scope[nombre_coleccion_tipo_gasto].splice(index, 1);
             
-        // añade el input hidden que identifica el gasto equipo existente en la BD para su eliminación
-        if(gasto_equipo.id_detalle_gasto != 'nuevo')
-            $('#gastos_equipos_existentes_a_eliminar')
-                .append('<input type="hidden" name="gastos_equipos_a_eliminar[]" value="' + gasto_equipo.id_detalle_gasto + '"/>');
-    };
+        // añade el input hidden que identifica el tipo de gasto existente en la BD para su eliminación
+        if(obj_tipo_gasto.id_detalle_gasto != 'nuevo')
+	        switch(nombre_coleccion_tipo_gasto)
+	        {
+	        	case 'gastos_equipos':
+    	            $('#gastos_equipos_existentes_a_eliminar')
+                		.append('<input type="hidden" name="gastos_equipos_a_eliminar[]" value="' + obj_tipo_gasto.id_detalle_gasto + '"/>');
+		        	break;
+	        	case 'gastos_software':
+    	            $('#gastos_software_existentes_a_eliminar')
+                		.append('<input type="hidden" name="gastos_software_a_eliminar[]" value="' + obj_tipo_gasto.id_detalle_gasto + '"/>');
+		        	break;
+	        	case 'gastos_salidas_campo':
+    	            $('#gastos_salidas_campo_existentes_a_eliminar')
+                		.append('<input type="hidden" name="gastos_salidas_campo_a_eliminar[]" value="' + obj_tipo_gasto.id_detalle_gasto + '"/>');
+		        	break;		        
+	        	case 'gastos_materiales':
+    	            $('#gastos_materiales_existentes_a_eliminar')
+                		.append('<input type="hidden" name="gastos_materiales_a_eliminar[]" value="' + obj_tipo_gasto.id_detalle_gasto + '"/>');
+		        	break;		 
+	        	case 'gastos_servicios':
+    	            $('#gastos_servicios_existentes_a_eliminar')
+                		.append('<input type="hidden" name="gastos_servicios_existentes_a_eliminar[]" value="' + obj_tipo_gasto.id_detalle_gasto + '"/>');
+		        	break;		 		        	
+            	case 'gastos_bibliograficos':
+    	            $('#gastos_bibliograficos_existentes_a_eliminar')
+                		.append('<input type="hidden" name="gastos_bibliograficos_existentes_a_eliminar[]" value="' + obj_tipo_gasto.id_detalle_gasto + '"/>');
+    	        	break;	  	
+        	    case 'gastos_digitales':
+    	            $('#gastos_digitales_existentes_a_eliminar')
+                		.append('<input type="hidden" name="gastos_digitales_existentes_a_eliminar[]" value="' + obj_tipo_gasto.id_detalle_gasto + '"/>');	        	
+	        	    break;    	        	
+	        }      
+    };    
     
     /*
 	| Realiza la sumatoria de los totales generales de todos los tipos de gastos
 	*/             
-    $scope.cacular_totales_gastos = function() {
-        $scope.calcular_totales_gasto_personal();
-        $scope.calcular_totales_gasto_equipos();
+    $scope.calcular_todos_los_totales_tipos_gastos = function() {
+        $scope.calcular_totales_tipo_gasto('gastos_personal'); // $scope.calcular_totales_gasto_personal();
+        $scope.calcular_totales_tipo_gasto('gastos_equipos'); //$scope.calcular_totales_gasto_equipos();
+        $scope.calcular_totales_tipo_gasto('gastos_software'); 
+        $scope.calcular_totales_tipo_gasto('gastos_salidas_campo'); 
+        $scope.calcular_totales_tipo_gasto('gastos_materiales'); 
+        $scope.calcular_totales_tipo_gasto('gastos_servicios'); 
+        $scope.calcular_totales_tipo_gasto('gastos_bibliograficos'); 
+        $scope.calcular_totales_tipo_gasto('gastos_digitales'); 
     };    
-    $scope.calcular_totales_gasto_personal = function(gasto_personal=null) {
+    $scope.calcular_totales_tipo_gasto = function(nombre_tipo_gasto, param_tipo_gasto=null) {
         
-        if(gasto_personal != null) // Calcula el total de un determinado gasto personal
+        if(param_tipo_gasto != null) // Calcula el total de un determinado tipo de gasto
         {
-            gasto_personal.total = 0;
-            gasto_personal.gastos.forEach(function(gasto) {
-                gasto_personal.total += numero_invalido(gasto.valor) ? 0 : Number(gasto.valor);
-            });            
-        }
-        
-        // calcula los totales de los gastos personales
-        $scope.totales_gastos_personal.ucc = 0;
-        $scope.totales_gastos_personal.total = 0;
-        for (var id in $scope.totales_gastos_personal.entidades_fuente_presupuesto){
-            $scope.totales_gastos_personal.entidades_fuente_presupuesto[id] = 0;
-        }
-        $scope.gastos_personal.forEach(function(gasto_personal) {
-            gasto_personal.gastos.forEach(function(gasto) {
-                if(gasto.nombre_entidad_fuente_presupuesto == 'UCC')
-                {
-                    $scope.totales_gastos_personal.ucc += numero_invalido(gasto.valor) ? 0 : Number(gasto.valor);
-                }
-                else
-                {
-                    var valor = numero_invalido(gasto.valor) ? 0 : Number(gasto.valor);
-                    if($scope.totales_gastos_personal.entidades_fuente_presupuesto[gasto.id_entidad_fuente_presupuesto] == undefined)
-                        $scope.totales_gastos_personal.entidades_fuente_presupuesto[gasto.id_entidad_fuente_presupuesto] = valor;
-                    else
-                        $scope.totales_gastos_personal.entidades_fuente_presupuesto[gasto.id_entidad_fuente_presupuesto] += valor;
-                }
-            });
-            $scope.totales_gastos_personal.total += gasto_personal.total;
-        });            
-    };    
-    $scope.calcular_totales_gasto_equipos = function(param_gasto_equipo=null) {
-        
-        if(param_gasto_equipo != null) // Calcula el total de un determinado tipo de gasto
-        {
-            param_gasto_equipo.total = 0;
-            param_gasto_equipo.gastos.forEach(function(gasto) {
-                param_gasto_equipo.total += numero_invalido(gasto.valor) ? 0 : Number(gasto.valor);
+            param_tipo_gasto.total = 0;
+            param_tipo_gasto.gastos.forEach(function(gasto) {
+                param_tipo_gasto.total += numero_invalido(gasto.valor) ? 0 : Number(gasto.valor);
             });            
         }
         
         // calcula los totales del tipo de gasto
-        $scope.totales_gastos_equipos.ucc = 0;
-        $scope.totales_gastos_equipos.conadi = 0;
-        $scope.totales_gastos_equipos.total = 0;
-        for (var id in $scope.totales_gastos_equipos.entidades_fuente_presupuesto){
-            $scope.totales_gastos_equipos.entidades_fuente_presupuesto[id] = 0;
+        var nombre_totales_tipo_gasto = null;
+        switch(nombre_tipo_gasto)
+        {
+        	case 'gastos_personal':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_personal';
+	        	break;
+        	case 'gastos_equipos':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_equipos';
+	        	break;
+        	case 'gastos_software':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_software';
+	        	break;	        	
+        	case 'gastos_salidas_campo':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_salidas';
+	        	break;	        		        	
+        	case 'gastos_materiales':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_materiales';
+	        	break;	  
+        	case 'gastos_servicios':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_servicios';
+	        	break;	  	        
+        	case 'gastos_bibliograficos':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_bibliograficos';
+	        	break;	  	        	        	
+        	case 'gastos_digitales':
+	        	nombre_totales_tipo_gasto = 'totales_gastos_digitales';
+	        	break;	  	        	        		        	
         }
-        $scope.gastos_equipos.forEach(function(gasto_equipo) {
-            gasto_equipo.gastos.forEach(function(gasto) {
+
+        $scope[nombre_totales_tipo_gasto].ucc = 0;
+        $scope[nombre_totales_tipo_gasto].conadi = 0;
+        $scope[nombre_totales_tipo_gasto].total = 0;
+        for (var id in $scope[nombre_totales_tipo_gasto].entidades_fuente_presupuesto){
+            $scope[nombre_totales_tipo_gasto].entidades_fuente_presupuesto[id] = 0;
+        }
+        $scope[nombre_tipo_gasto].forEach(function(tipo_gasto) {
+            tipo_gasto.gastos.forEach(function(gasto) {
                 if(gasto.nombre_entidad_fuente_presupuesto == 'UCC')
                 {
-                    $scope.totales_gastos_equipos.ucc += numero_invalido(gasto.valor) ? 0 : Number(gasto.valor);
+                    $scope[nombre_totales_tipo_gasto].ucc += numero_invalido(gasto.valor) ? 0 : Number(gasto.valor);
                 }
                 else if(gasto.nombre_entidad_fuente_presupuesto == 'CONADI')
                 {
-                    $scope.totales_gastos_equipos.conadi += numero_invalido(gasto.valor) ? 0 : Number(gasto.valor);
+                    $scope[nombre_totales_tipo_gasto].conadi += numero_invalido(gasto.valor) ? 0 : Number(gasto.valor);
                 }
                 else
                 {
                     var valor = numero_invalido(gasto.valor) ? 0 : Number(gasto.valor);
-                    if($scope.totales_gastos_equipos.entidades_fuente_presupuesto[gasto.id_entidad_fuente_presupuesto] == undefined)
-                        $scope.totales_gastos_equipos.entidades_fuente_presupuesto[gasto.id_entidad_fuente_presupuesto] = valor;
+                    if($scope[nombre_totales_tipo_gasto].entidades_fuente_presupuesto[gasto.id_entidad_fuente_presupuesto] == undefined)
+                        $scope[nombre_totales_tipo_gasto].entidades_fuente_presupuesto[gasto.id_entidad_fuente_presupuesto] = valor;
                     else
-                        $scope.totales_gastos_equipos.entidades_fuente_presupuesto[gasto.id_entidad_fuente_presupuesto] += valor;
+                        $scope[nombre_totales_tipo_gasto].entidades_fuente_presupuesto[gasto.id_entidad_fuente_presupuesto] += valor;
                 }
             });
-            $scope.totales_gastos_equipos.total += gasto_equipo.total;
+            $scope[nombre_totales_tipo_gasto].total += tipo_gasto.total;
         });             
-    };
+    };    
     
     /*
 	| ng-change para modelo de valor de gasto de un determinado tipo de gasto
     | valida el presupuesto del gasto y calcula los totales de sus gastos
 	*/                         
-    $scope.cambia_presupuesto_gasto_personal = function(gasto_personal, gasto_entidad_fuente_presupuesto=null) {
+    $scope.cambia_presupuesto_tipo_gasto = function(nombre_tipo_gasto, obj_tipo_gasto, gasto_entidad_fuente_presupuesto) {
         $scope.validar_presupuesto_gasto(gasto_entidad_fuente_presupuesto);
-        $scope.calcular_totales_gasto_personal(gasto_personal);
-    };
-    $scope.cambia_presupuesto_gasto_equipo = function(gasto_equipo, gasto_entidad_fuente_presupuesto=null) {
-        $scope.validar_presupuesto_gasto(gasto_entidad_fuente_presupuesto);
-        $scope.calcular_totales_gasto_equipos(gasto_equipo);
+        $scope.calcular_totales_tipo_gasto(nombre_tipo_gasto, obj_tipo_gasto); // $scope.calcular_totales_gasto_equipos(gasto_equipo);        
     };
     
     // validación de modelos específicos de cada tipo de gasto, aquellos modelos que no son presupuesto como nombre, justificacion, cantidad_salidas, etc.
@@ -647,5 +779,59 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
         tipo_gasto.fecha_ejecucion_invalido = !resultado_validacion;
         return resultado_validacion;
     };
+    $scope.validar_cantidad_salidas = function(gasto_salida) {
+        var resultado_validacion = numero_invalido(gasto_salida.cantidad_salidas);
+        gasto_salida.cantidad_salidas_invalido = resultado_validacion;
+        return resultado_validacion;
+
+    };
+    $scope.validar_valor_unitario = function(gasto_salida) {
+        var resultado_validacion = numero_invalido(gasto_salida.cantidad_salidas);
+        gasto_salida.valor_unitario_invalido = resultado_validacion;
+        return resultado_validacion;        
+    };
+   
+    /*
+	| Actualiza perfect scrollbar contenedor de un determinado tipo de gasto
+	*/     
+    $scope.actualizar_perfect_scrollbars = function(nombre_tipo_gasto) {
+        
+        setTimeout(function(){ 
+            switch(nombre_tipo_gasto)
+            {
+            	case 'gastos_personal':
+    	        	$('#contenedor_gastos_personal').perfectScrollbar('update');
+    	        	break;
+            	case 'gastos_equipos':
+    	        	$("#contenedor_gastos_equipos").perfectScrollbar('update');
+    	        	break;
+            	case 'gastos_software':
+    	        	$('#contenedor_gastos_software').perfectScrollbar('update');
+    	        	break;	        
+            	case 'gastos_salidas_campo':
+    	        	$('#contenedor_gastos_salidas').perfectScrollbar('update');        
+    	        	break;	   
+            	case 'gastos_materiales':
+    	        	$('#contenedor_gastos_materiales').perfectScrollbar('update');        
+    	        	break;	       	     
+            	case 'gastos_servicios':
+    	        	$('#contenedor_gastos_servicios').perfectScrollbar('update');        
+    	        	break;	   
+            	case 'gastos_bibliograficos':
+    	        	$('#contenedor_gastos_bibliograficos').perfectScrollbar('update');        
+    	        	break;	       	      
+            	case 'gastos_digitales':
+    	        	$('#contenedor_gastos_digitales').perfectScrollbar('update');        
+    	        	break;	       	          	        	
+            }                  
+        }, 100);        
+    };
     
+    /*
+	| ngClick para botón de guardar
+	| Ejecuta validaciones antes de enviar el formulario
+	*/         
+    $scope.guardar = function() {
+        
+    };
 });

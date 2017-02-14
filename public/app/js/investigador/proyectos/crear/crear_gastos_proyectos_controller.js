@@ -1,5 +1,12 @@
 sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http) {
     
+    $('#input_text_nueva_entidad').on('keydown', function(e) {
+        if (e.which == 13) {
+            $scope.agregar_nueva_entidadPresupuesto();
+            $scope.$apply();
+        }
+    });      
+    
     // Inicialización de variables y/o modelos
     $scope.dateOptions = {
         formatYear: 'yy',
@@ -33,6 +40,52 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
     $scope.data.msj_nueva_entidadPresupuesto_incorrecto = '';
     $scope.visibilidad.nueva_entidadPresupuesto_incorrecto = false;
     $scope.data.contador_nuevas_entidades_presupuesto = 0;
+    
+    function actualizar_perfect_scrollbars(nombre_contenedor=null){
+        setTimeout(function(){ 
+            switch(nombre_contenedor)
+            {
+            	case 'gastos_personal':
+    	        	$('#contenedor_gastos_personal').perfectScrollbar('update');
+    	        	break;
+            	case 'gastos_equipos':
+    	        	$("#contenedor_gastos_equipos").perfectScrollbar('update');
+    	        	break;
+            	case 'gastos_software':
+    	        	$('#contenedor_gastos_software').perfectScrollbar('update');
+    	        	break;	        
+            	case 'gastos_salidas_campo':
+    	        	$('#contenedor_gastos_salidas').perfectScrollbar('update');        
+    	        	break;	   
+            	case 'gastos_materiales':
+    	        	$('#contenedor_gastos_materiales').perfectScrollbar('update');        
+    	        	break;	       	     
+            	case 'gastos_servicios':
+    	        	$('#contenedor_servicios_tecnicos').perfectScrollbar('update');        
+    	        	break;	   
+            	case 'gastos_bibliograficos':
+    	        	$('#contenedor_recursos_bibliograficos').perfectScrollbar('update');        
+    	        	break;	       	      
+            	case 'gastos_digitales':
+    	        	$('#contenedor_recursos_digitales').perfectScrollbar('update');        
+    	        	break;	
+    	        default:
+                    $('#contenedor_gastos_personal').perfectScrollbar('update');
+                    $("#contenedor_gastos_equipos").perfectScrollbar('update');
+                    $('#contenedor_gastos_software').perfectScrollbar('update');
+                    $('#contenedor_gastos_salidas').perfectScrollbar('update');  
+                    $('#contenedor_gastos_materiales').perfectScrollbar('update');
+                    $('#contenedor_servicios_tecnicos').perfectScrollbar('update');
+                    $('#contenedor_recursos_bibliograficos').perfectScrollbar('update');
+                    $('#contenedor_recursos_digitales').perfectScrollbar('update');    	            
+            }                  
+        }, 100);        
+    }
+    
+    $scope.$watch('data.entidades_presupuesto_seleccionadas', function() {
+        actualizar_perfect_scrollbars();
+    });
+    
     
     /*
 	|--------------------------------------------------------------------------
@@ -270,6 +323,7 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
             fecha_ejecucion: null,
             total: 0
         });
+        actualizar_perfect_scrollbars('gastos_equipos');
     };
     
     /*
@@ -313,6 +367,7 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
             presupuesto_externo_invalido: [],
             total: 0
         });        
+    	actualizar_perfect_scrollbars('gastos_software');
     };
     
     /*
@@ -357,6 +412,7 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
             fecha_ejecucion: null,
             total: 0
         });
+        actualizar_perfect_scrollbars('gastos_salidas_campo');
     };
     
     /*
@@ -401,6 +457,7 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
             fecha_ejecucion: null,
             total: 0
         });        
+        actualizar_perfect_scrollbars('gastos_materiales');
     };
     
     /*
@@ -445,6 +502,7 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
             fecha_ejecucion: null,
             total: 0
         });        
+        actualizar_perfect_scrollbars('gastos_servicios');
     };
    
     /*
@@ -492,6 +550,7 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
             fecha_ejecucion: null,
             total: 0
         });
+        actualizar_perfect_scrollbars('gastos_bibliograficos');
     };
     
     /*
@@ -539,6 +598,7 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
             fecha_ejecucion: null,
             total: 0
         });        
+        actualizar_perfect_scrollbars('gastos_digitales');
     };
 
     /*

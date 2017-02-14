@@ -31,6 +31,26 @@
         .number-fixed-width {
             width: 170px;
         }
+        .min-width-150{
+            min-width: 150px;
+        }
+        .min-width-170{
+            min-width: 170px;
+        }
+        #contenedor_gastos_personal,
+        #contenedor_gastos_equipos,
+        #contenedor_gastos_software,
+        #contenedor_gastos_salidas,
+        #contenedor_gastos_materiales,
+        #contenedor_servicios_tecnicos,
+        #contenedor_recursos_bibliograficos,
+        #contenedor_recursos_digitales
+        {
+            position: relative;
+        }
+        .ps-container > .ps-scrollbar-x-rail{
+            opacity: 0.7 !important;
+        }        
     </style>
 @stop <!--Stop section 'styles'-->
 
@@ -1026,7 +1046,7 @@
                                     <ui-select id="multiselect_entidades_presupuesto" 
                                     multiple ng-model="data.entidades_presupuesto_seleccionadas" 
                                     close-on-select="true" search-enabled="true" on-select="seleccion_entidad_presupuesto($item)" on-remove="remocion_entidad_presupuesto($item)"
-                                    style="width: 100%; height: 34px;" theme="bootstrap"  title="Seleccionar otras entidades fuente de presupuesto...">
+                                    theme="bootstrap"  title="Seleccionar otras entidades fuente de presupuesto...">
                                         <ui-select-match placeholder="Seleccione...">{$ $item.nombre $}</ui-select-match>
                                         <ui-select-choices repeat="entidad_presupuesto in data.entidades_fuente_presupuesto">
                                             {$ entidad_presupuesto.nombre $}
@@ -1040,7 +1060,7 @@
                                 <div class="col-xs-12 col-md-6">
                                     <p style="color: rgb(178, 34, 34);" ng-show="visibilidad.nueva_entidadPresupuesto_incorrecto">{$ data.msj_nueva_entidadPresupuesto_incorrecto $}</p>
                                     <div class="input-group">
-                                        <input type="text" ng-model="data.nueva_entidad_entidad_presupuesto" 
+                                        <input id="input_text_nueva_entidad" type="text" ng-model="data.nueva_entidad_entidad_presupuesto" 
                                         ng-change="visibilidad.nueva_entidadPresupuesto_incorrecto=false" 
                                         class="form-control" ng-class="{'invalid_control': visibilidad.nueva_entidadPresupuesto_incorrecto}"/>
                                         <span class="input-group-addon btn btn-default" ng-click="agregar_nueva_entidadPresupuesto()">
@@ -1076,64 +1096,64 @@
                                                         <th>Valor hora</th>
                                                         <th>UCC</th>
                                                         <th ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">{$ entidad_presupuesto.nombre $}</th>
-                                                        <th>Fecha de ejecución</th>
                                                         <th>Total</th>
+                                                        <th>Fecha de ejecución</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr ng-repeat="participante in data.participantes_proyecto">
                                                         <td>{$ $index + 1 $}</td>
-                                                        <td>{$ participante.nombres + ' ' + participante.apellidos $}</td>
-                                                        <td>{$ participante.formacion $}</td>
-                                                        <td>{$ participante.rol $}</td>
+                                                        <td class="min-width-170">{$ participante.nombres + ' ' + participante.apellidos $}</td>
+                                                        <td class="min-width-170">{$ participante.formacion $}</td>
+                                                        <td class="min-width-170">{$ participante.rol $}</td>
                                                         <td>
                                                             <input type="number" name="gasto_personal_dedicacion_semanal_{$ participante.identificacion $}" min="0" 
                                                             ng-model="participante.dedicacion_semanal" ng-change="validar_dedicacion_semanal(participante)"
-                                                            class="form-control" ng-class="{'invalid_control': participante.dedicacion_semanal_invalido}"
+                                                            class="form-control min-width-150" ng-class="{'invalid_control': participante.dedicacion_semanal_invalido}"
                                                             uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.dedicacion_semanal_invalido"/>
                                                         </td>
                                                         <td>
                                                             <input type="number" name="gasto_personal_total_semanas_{$ participante.identificacion $}" 
                                                             ng-model="participante.total_semanas" ng-change="validar_total_semanas(participante)"
-                                                            class="form-control" ng-class="{'invalid_control': participante.total_semanas_invalido}"
+                                                            class="form-control min-width-150" ng-class="{'invalid_control': participante.total_semanas_invalido}"
                                                             uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.total_semanas_invalido"/>
                                                         </td>
                                                         <td>
                                                             <input type="number" name="gasto_personal_valor_hora_{$ participante.identificacion $}" 
                                                             ng-model="participante.valor_hora" ng-change="validar_valor_hora(participante)"
-                                                            class="form-control" ng-class="{'invalid_control': participante.valor_hora_invalido}"
+                                                            class="form-control min-width-150" ng-class="{'invalid_control': participante.valor_hora_invalido}"
                                                             uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.valor_hora_invalido"/>
                                                         </td>                                                                                                        
                                                         <td>
                                                             <input type="number" name="gasto_personal_presupuesto_ucc_{$ participante.identificacion $}" min="0"
                                                             ng-model="participante.presupuesto_ucc" ng-change="suma_totales_personal(participante, 'ucc')"
-                                                            class="form-control" ng-class="{'invalid_control': participante.presupuesto_ucc_invalido}"
+                                                            class="form-control min-width-150" ng-class="{'invalid_control': participante.presupuesto_ucc_invalido}"
                                                             uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.presupuesto_ucc_invalido"/>
                                                         </td>                                                                                                                                                            
                                                         <td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                                                             <input type="number" name="gasto_personal_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ participante.identificacion $}" 
                                                             ng-model="participante.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_personal(participante, 'otro', entidad_presupuesto.id)"
-                                                            class="form-control" ng-class="{'invalid_control': participante.presupuesto_externo_invalido[entidad_presupuesto.id]}"
+                                                            class="form-control min-width-150" ng-class="{'invalid_control': participante.presupuesto_externo_invalido[entidad_presupuesto.id]}"
                                                             uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                                                         </td>
+                                                        <td class="number-fixed-width">
+                                                            {$ participante.presupuesto_total|currency:$:2 $}
+                                                        </td>                                                        
                                                         <td>
                                                             <div class="input-group">
                                                                 <input type="text" name="gasto_personal_fecha_ejecucion_{$ participante.identificacion $}" id="gasto_personal_fecha_ejecucion_{$ participante.identificacion $}" 
                                                                     ng-model="participante.fecha_ejecucion" ng-change="validar_fecha_ejecucion_participante(participante)"
                                                                     is-open="participante.show_datepicker_fecha_ejecucion"
                                                                     datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
-                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha ejecución"
+                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha actual"
                                                                     ng-click="participante.show_datepicker_fecha_ejecucion=true"
                                                                     ng-readonly="true"
-                                                                    class="form-control white-readonly" ng-class="{'invalid_control': participante.fecha_ejecucion_invalido}"
+                                                                    class="form-control white-readonly min-width-150" ng-class="{'invalid_control': participante.fecha_ejecucion_invalido}"
                                                                     uib-tooltip="Ingresar fecha" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.fecha_ejecucion_invalido"/>
                                                                     <span class="input-group-addon btn btn-default" ng-click="participante.show_datepicker_fecha_ejecucion=true">
                                                                         <i class="glyphicon glyphicon-calendar"></i>
                                                                     </span>
                                                             </div>
-                                                        </td>
-                                                        <td class="number-fixed-width text-right">
-                                                            {$ participante.presupuesto_total|currency:$:2 $}
                                                         </td>
                                                     </tr>
                             						<tr ng-if="data.participantes_proyecto.length>0">
@@ -1142,7 +1162,7 @@
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             							    {$ data.totales_personal.otras_entidades_presupuesto[entidad_presupuesto.id]|currency:$ $}
                             							</td>
-                            							<td colspan="2" class="text-right">{$ data.totales_personal.total|currency:$ $}</td>
+                            							<td>{$ data.totales_personal.total|currency:$ $}</td>
                             						</tr>                                                
                                                 </tbody>
                                 			</table>
@@ -1178,8 +1198,8 @@
                                 			            <th>UCC</th>
                                 			            <th>CONADI</th>
                                 			            <th ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">{$ entidad_presupuesto.nombre $}</th>
-                                			            <th>Fecha de ejecución</th>
                                 			            <th>Total</th>
+                                			            <th>Fecha de ejecución</th>
                                 			            <th>Remover</th>
                                 			        </tr>
                                 			    </thead>
@@ -1192,32 +1212,35 @@
                                                         <td>
                                                             <input type="text" name="gasto_equipo_nombre_{$ $index $}" 
                                                             ng-model="gasto_equipo.equipo" ng-change="validar_nombre_equipo(gasto_equipo)"
-                                                            class="form-control" ng-class="{'invalid_control': gasto_equipo.nombre_equipo_invalido}"
+                                                            class="form-control min-width-170" ng-class="{'invalid_control': gasto_equipo.nombre_equipo_invalido}"
                                                             uib-tooltip="Longitud mínima de 5 caracteres y máximo de 150" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_equipo.nombre_equipo_invalido"/>
                                                         </td>
                                                         <td>
                                                             <input type="text" name="gasto_equipo_justificacion_{$ $index $}" 
                                                             ng-model="gasto_equipo.justificacion" ng-change="validar_justificacion_gasto_equipo(gasto_equipo)"
-                                                            class="form-control" ng-class="{'invalid_control': gasto_equipo.justificacion_invalido}"
+                                                            class="form-control min-width-170" ng-class="{'invalid_control': gasto_equipo.justificacion_invalido}"
                                                             uib-tooltip="Longitud mínima de 5 caracteres y máximo de 150" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_equipo.justificacion_invalido"/>
                                                         </td>                                   
                                                         <td>
                                                             <input type="number" name="gasto_equipo_presupuesto_ucc_{$ $index $}"
                                                             ng-model="gasto_equipo.presupuesto_ucc" ng-change="suma_totales_equipos(gasto_equipo, 'ucc')"
-                                                            class="form-control" ng-class="{'invalid_control': gasto_equipo.presupuesto_ucc_invalido}"
+                                                            class="form-control min-width-150" ng-class="{'invalid_control': gasto_equipo.presupuesto_ucc_invalido}"
                                                             uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_equipo.presupuesto_ucc_invalido"/>
                                                         </td>                                                                                       
                                                         <td>
                                                             <input type="number" name="gasto_equipo_presupuesto_conadi_{$ $index $}"
                                                             ng-model="gasto_equipo.presupuesto_conadi" ng-change="suma_totales_equipos(gasto_equipo, 'conadi')"
-                                                            class="form-control" ng-class="{'invalid_control': gasto_equipo.presupuesto_conadi_invalido}"
+                                                            class="form-control min-width-150" ng-class="{'invalid_control': gasto_equipo.presupuesto_conadi_invalido}"
                                                             uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_equipo.presupuesto_conadi_invalido"/>
                                                         </td> 
                                                         <td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                                                             <input type="number" name="gasto_equipo_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ $parent.$index $}"
                                                             ng-model="gasto_equipo.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_equipos(gasto_equipo, 'otro', entidad_presupuesto.id)"
-                                                            class="form-control" ng-class="{'invalid_control': gasto_equipo.presupuesto_externo_invalido[entidad_presupuesto.id]}"
+                                                            class="form-control min-width-150" ng-class="{'invalid_control': gasto_equipo.presupuesto_externo_invalido[entidad_presupuesto.id]}"
                                                             uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_equipo.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
+                                                        </td>
+                                                        <td class="number-fixed-width">
+                                                            {$ gasto_equipo.total|currency:$:2 $}
                                                         </td>
                                                         <td>
                                                             <div class="input-group">
@@ -1225,19 +1248,16 @@
                                                                     ng-model="gasto_equipo.fecha_ejecucion" ng-change="validar_fecha_ejecucion_gasto_equipo(gasto_equipo)"
                                                                     is-open="gasto_equipo.show_datepicker_fecha_ejecucion"
                                                                     datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
-                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha ejecución"
+                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha actual"
                                                                     ng-click="gasto_equipo.show_datepicker_fecha_ejecucion=true"
                                                                     ng-readonly="true"
-                                                                    class="form-control white-readonly" ng-class="{'invalid_control': gasto_equipo.fecha_ejecucion_invalido}"
+                                                                    class="form-control white-readonly min-width-150" ng-class="{'invalid_control': gasto_equipo.fecha_ejecucion_invalido}"
                                                                     uib-tooltip="Ingresar fecha" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_equipo.fecha_ejecucion_invalido"/>
                                                                     <span class="input-group-addon btn btn-default" ng-click="gasto_equipo.show_datepicker_fecha_ejecucion=true">
                                                                         <i class="glyphicon glyphicon-calendar"></i>
                                                                     </span>
                                                             </div>                                                            
                                                         </td>                                                        
-                                                        <td class="number-fixed-width text-left">
-                                                            {$ gasto_equipo.total|currency:$:2 $}
-                                                        </td>
                                                         <td>
                                                             <button type="button" class="btn btn-default" ng-click="remover_gasto_equipo(gasto_equipo)"><i class="fa fa-times" aria-hidden="true"></i></button>
                                                         </td>
@@ -1249,7 +1269,6 @@
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             							    {$ data.totales_equipos.otras_entidades_presupuesto[entidad_presupuesto.id]|currency:$ $}
                             							</td>
-                            							<td>&nbsp;</td>
                             							<td>{$ data.totales_equipos.total|currency:$ $}</td>
                             						</tr>                                                
                                 			    </tbody>
@@ -1286,8 +1305,8 @@
                                         				<th>UCC</th>
                                         				<th>CONADI</th>
                                         				<th ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">{$ entidad_presupuesto.nombre $}</th>
-                                        				<th>Fecha de ejecución</th>
                                         				<th>Total</th>
+                                        				<th>Fecha de ejecución</th>
                                         				<th>Remover</th>
                                         			</tr>
                                         		</thead>
@@ -1300,52 +1319,52 @@
                                         				<td>
                                         					<input type="text" name="gasto_software_nombre_{$ $index $}" 
                                         					ng-model="gasto_software.software" ng-change="validar_nombre_software(gasto_software)"
-                                        					class="form-control" ng-class="{'invalid_control': gasto_software.nombre_software_invalido}"
+                                        					class="form-control min-width-170" ng-class="{'invalid_control': gasto_software.nombre_software_invalido}"
                                         					uib-tooltip="Longitud mínima de 5 caracteres y máximo de 150" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_software.nombre_software_invalido"/>
                                         				</td>
                                         				<td>
                                         					<input type="text" name="gasto_software_justificacion_{$ $index $}"
                                         					ng-model="gasto_software.justificacion" ng-change="validar_justificacion_software(gasto_software)"
-                                        					class="form-control" ng-class="{'invalid_control': gasto_software.justificacion_invalido}"
+                                        					class="form-control min-width-170" ng-class="{'invalid_control': gasto_software.justificacion_invalido}"
                                         					uib-tooltip="Longitud mínima de 5 caracteres y máximo de 150" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_software.justificacion_invalido"/>
                                         				</td>                                   
                                         				<td>
                                         					<input type="number" name="gasto_software_presupuesto_ucc_{$ $index $}" 
                                         					ng-model="gasto_software.presupuesto_ucc" ng-change="suma_totales_software(gasto_software, 'ucc')"
-                                        					class="form-control" ng-class="{'invalid_control': gasto_software.presupuesto_ucc_invalido}"
+                                        					class="form-control min-width-150" ng-class="{'invalid_control': gasto_software.presupuesto_ucc_invalido}"
                                         					uib-tooltip="La cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_software.presupuesto_ucc_invalido"/>
                                         				</td>                                                                                       
                                         				<td>
                                         					<input type="number" name="gasto_software_presupuesto_conadi_{$ $index $}"
                                         					ng-model="gasto_software.presupuesto_conadi" ng-change="suma_totales_software(gasto_software, 'conadi')"
-                                        					class="form-control" ng-class="{'invalid_control': gasto_software.presupuesto_conadi_invalido}"
+                                        					class="form-control min-width-150" ng-class="{'invalid_control': gasto_software.presupuesto_conadi_invalido}"
                                         					uib-tooltip="La cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_software.presupuesto_conadi_invalido"/>
                                         				</td> 
                                         				<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                                         					<input type="number" name="gasto_software_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ $parent.$index $}"
                                         					ng-model="gasto_software.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_software(gasto_software, 'otro', entidad_presupuesto.id)"
-                                        					class="form-control" ng-class="{'invalid_control': gasto_software.presupuesto_externo_invalido[entidad_presupuesto.id]}"
+                                        					class="form-control min-width-150" ng-class="{'invalid_control': gasto_software.presupuesto_externo_invalido[entidad_presupuesto.id]}"
                                         					uib-tooltip="La cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_software.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                                         				</td>
+                                        				<td class="number-fixed-width">
+                                        				    {$ gasto_software.total|currency:$:2 $}
+                                        				</td>                                        				
                                                         <td>
                                                             <div class="input-group">
                                                                 <input type="text" name="gasto_software_fecha_ejecucion_{$ $index $}"
                                                                     ng-model="gasto_software.fecha_ejecucion" ng-change="validar_fecha_ejecucion_gasto_software(gasto_software)"
                                                                     is-open="gasto_software.show_datepicker_fecha_ejecucion"
                                                                     datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
-                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha ejecución"
+                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha actual"
                                                                     ng-click="gasto_software.show_datepicker_fecha_ejecucion=true"
                                                                     ng-readonly="true"
-                                                                    class="form-control white-readonly" ng-class="{'invalid_control': gasto_software.fecha_ejecucion_invalido}"
+                                                                    class="form-control white-readonly min-width-150" ng-class="{'invalid_control': gasto_software.fecha_ejecucion_invalido}"
                                                                     uib-tooltip="Ingresar fecha" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_software.fecha_ejecucion_invalido"/>
                                                                     <span class="input-group-addon btn btn-default" ng-click="gasto_software.show_datepicker_fecha_ejecucion=true">
                                                                         <i class="glyphicon glyphicon-calendar"></i>
                                                                     </span>
                                                             </div>                                                            
                                                         </td>                                                   				
-                                        				<td class="number-fixed-width text-left">
-                                        				    {$ gasto_software.total|currency:$:2 $}
-                                        				</td>
                                         				<td>
                                         					<button type="button" class="btn btn-default" ng-click="remover_gasto_software(gasto_software)"><i class="fa fa-times" aria-hidden="true"></i></button>
                                         				</td>
@@ -1357,7 +1376,6 @@
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             							    {$ data.totales_software.otras_entidades_presupuesto[entidad_presupuesto.id]|currency:$ $}
                             							</td>
-                            							<td>&nbsp;</td>
                             							<td>{$ data.totales_software.total|currency:$ $}</td>
                             						</tr>                                                                                    			
                                         		</tbody>
@@ -1395,8 +1413,8 @@
                             							<th>UCC</th>
                             							<th>CONADI</th>
                             							<th ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">{$ entidad_presupuesto.nombre $}</th>
-                            							<th>Fecha de ejecución</th>
                             							<th>Total</th>
+                            							<th>Fecha de ejecución</th>
                             							<th>Remover</th>
                             						</tr>
                             					</thead>
@@ -1409,58 +1427,58 @@
                             							<td>
                             								<input type="text" name="gasto_salida_justificacion_{$ $index $}" 
                             								ng-model="gasto_salida.justificacion" ng-change="validar_justificacion_gasto_salida(gasto_salida)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_salida.justificacion_invalido}"
+                            								class="form-control min-width-170" ng-class="{'invalid_control': gasto_salida.justificacion_invalido}"
                             								uib-tooltip="Longitud mínima de 5 caracteres y máxima de 150" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.justificacion_invalido"/>
                             							</td>
                             							<td>
                             								<input type="number" name="gasto_salida_cantidad_salidas_{$ $index $}" 
                             								ng-model="gasto_salida.cantidad_salidas" ng-change="validar_cantidad_salidas(gasto_salida)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_salida.cantidad_salidas_invalido}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_salida.cantidad_salidas_invalido}"
                             								uib-tooltip="Cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.cantidad_salidas_invalido"/>
                             							</td>                                   
                             							<td>
                             								<input type="number" name="gasto_salida_valor_unitario_{$ $index $}" 
                             								ng-model="gasto_salida.valor_unitario" ng-change="validar_valor_unitario(gasto_salida)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_salida.valor_unitario_invalido}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_salida.valor_unitario_invalido}"
                             								uib-tooltip="Cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.valor_unitario_invalido"/>
                             							</td>                  							
                             							<td>
                             								<input type="number" name="gasto_salida_presupuesto_ucc_{$ $index $}"
                             								ng-model="gasto_salida.presupuesto_ucc" ng-change="suma_totales_salidas(gasto_salida, 'ucc')"
-                            								class="form-control" ng-class="{'invalid_control': gasto_salida.presupuesto_ucc_invalido}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_salida.presupuesto_ucc_invalido}"
                             								uib-tooltip="Cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.presupuesto_ucc_invalido"/>
                             							</td>                                                                                       
                             							<td>
                             								<input type="number" name="gasto_salida_presupuesto_conadi_{$ $index $}"
                             								ng-model="gasto_salida.presupuesto_conadi" ng-change="suma_totales_salidas(gasto_salida, 'conadi')"
-                            								class="form-control" ng-class="{'invalid_control': gasto_salida.presupuesto_conadi_invalido}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_salida.presupuesto_conadi_invalido}"
                             								uib-tooltip="Cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.presupuesto_conadi_invalido"/>
                             							</td> 
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             								<input type="number" name="gasto_salida_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ $parent.$index $}"
                             								ng-model="gasto_salida.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_salidas(gasto_salida, 'otro', entidad_presupuesto.id)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_salida.presupuesto_externo_invalido[entidad_presupuesto.id]}" 
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_salida.presupuesto_externo_invalido[entidad_presupuesto.id]}" 
                             								uib-tooltip="Cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                             							</td>
+                            							<td class="number-fixed-width">
+                            							    {$ gasto_salida.total|currency:$:2 $}
+                            							</td>                            							
                                                         <td>
                                                             <div class="input-group">
                                                                 <input type="text" name="gasto_salida_fecha_ejecucion_{$ $index $}"
                                                                     ng-model="gasto_salida.fecha_ejecucion" ng-change="validar_fecha_ejecucion_gasto_salida(gasto_salida)"
                                                                     is-open="gasto_salida.show_datepicker_fecha_ejecucion"
                                                                     datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
-                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha ejecución"
+                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha actual"
                                                                     ng-click="gasto_salida.show_datepicker_fecha_ejecucion=true"
                                                                     ng-readonly="true"
-                                                                    class="form-control white-readonly" ng-class="{'invalid_control': gasto_salida.fecha_ejecucion_invalido}"
+                                                                    class="form-control white-readonly min-width-150" ng-class="{'invalid_control': gasto_salida.fecha_ejecucion_invalido}"
                                                                     uib-tooltip="Ingresar fecha" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.fecha_ejecucion_invalido"/>
                                                                     <span class="input-group-addon btn btn-default" ng-click="gasto_salida.show_datepicker_fecha_ejecucion=true">
                                                                         <i class="glyphicon glyphicon-calendar"></i>
                                                                     </span>
                                                             </div>                                                            
                                                         </td>                                                   			
-                            							<td class="number-fixed-width text-left">
-                            							    {$ gasto_salida.total|currency:$:2 $}
-                            							</td>
                             							<td>
                             								<button type="button" class="btn btn-default" ng-click="remover_gasto_salida(gasto_salida)"><i class="fa fa-times" aria-hidden="true"></i></button>
                             							</td>
@@ -1472,7 +1490,6 @@
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             							    {$ data.totales_salidas.otras_entidades_presupuesto[entidad_presupuesto.id]|currency:$ $}
                             							</td>
-                            							<td>&nbsp;</td>
                             							<td>{$ data.totales_salidas.total|currency:$ $}</td>
                             						</tr>                             						
                             					</tbody>
@@ -1509,8 +1526,8 @@
                             							<th>UCC</th>
                             							<th>CONADI</th>
                             							<th ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">{$ entidad_presupuesto.nombre $}</th>
-                            							<th>Fecha de ejecución</th>
                             							<th>Total</th>
+                            							<th>Fecha de ejecución</th>
                             							<th>Remover</th>
                             						</tr>
                             					</thead>
@@ -1523,52 +1540,52 @@
                             							<td>
                             								<input type="text" name="gasto_material_nombre_{$ $index $}"
                             								ng-model="gasto_material.material" ng-change="validar_nombre_material(gasto_material)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_material.nombre_material_invalido}"
+                            								class="form-control min-width-170" ng-class="{'invalid_control': gasto_material.nombre_material_invalido}"
                             								uib-tooltip="Longitud mínima de 5 caracteres y máxima de 150" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_material.nombre_material_invalido"/>
                             							</td>
                             							<td>
                             								<input type="text" name="gasto_material_justificacion_{$ $index $}"
                             								ng-model="gasto_material.justificacion" ng-change="validar_justificacion_gasto_material(gasto_material)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_material.justificacion_invalido}"
+                            								class="form-control min-width-170" ng-class="{'invalid_control': gasto_material.justificacion_invalido}"
                             								uib-tooltip="Longitud mínima de 5 caracteres y máxima de 150" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_material.justificacion_invalido"/>
                             							</td>                                   
                             							<td>
                             								<input type="number" name="gasto_material_presupuesto_ucc_{$ $index $}" 
                             								ng-model="gasto_material.presupuesto_ucc" ng-change="suma_totales_materiales(gasto_material, 'ucc')"
-                            								class="form-control" ng-class="{'invalid_control': gasto_material.presupuesto_ucc_invalido}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_material.presupuesto_ucc_invalido}"
                             								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_material.presupuesto_ucc_invalido"/>
                             							</td>                                                                                       
                             							<td>
                             								<input type="number" name="gasto_material_presupuesto_conadi_{$ $index $}" 
                             								ng-model="gasto_material.presupuesto_conadi" ng-change="suma_totales_materiales(gasto_material, 'conadi')"
-                            								class="form-control" ng-class="{'invalid_control': gasto_material.presupuesto_conadi_invalido}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_material.presupuesto_conadi_invalido}"
                             								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_material.presupuesto_conadi_invalido"/>
                             							</td> 
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             								<input type="number" name="gasto_material_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ $parent.$index $}" 
                             								ng-model="gasto_material.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_materiales(gasto_material, 'otro', entidad_presupuesto.id)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_material.presupuesto_externo_invalido[entidad_presupuesto.id]}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_material.presupuesto_externo_invalido[entidad_presupuesto.id]}"
                             								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_material.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                             							</td>
+                            							<td class="number-fixed-width">
+                            							    {$ gasto_material.total|currency:$:2 $}
+                            							</td>                            							
                                                         <td>
                                                             <div class="input-group">
                                                                 <input type="text" name="gasto_material_fecha_ejecucion_{$ $index $}"
                                                                     ng-model="gasto_material.fecha_ejecucion" ng-change="validar_fecha_ejecucion_gasto_material(gasto_material)"
                                                                     is-open="gasto_material.show_datepicker_fecha_ejecucion"
                                                                     datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
-                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha ejecución"
+                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha actual"
                                                                     ng-click="gasto_material.show_datepicker_fecha_ejecucion=true"
                                                                     ng-readonly="true"
-                                                                    class="form-control white-readonly" ng-class="{'invalid_control': gasto_material.fecha_ejecucion_invalido}"
+                                                                    class="form-control white-readonly min-width-150" ng-class="{'invalid_control': gasto_material.fecha_ejecucion_invalido}"
                                                                     uib-tooltip="Ingresar fecha" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_material.fecha_ejecucion_invalido"/>
                                                                     <span class="input-group-addon btn btn-default" ng-click="gasto_material.show_datepicker_fecha_ejecucion=true">
                                                                         <i class="glyphicon glyphicon-calendar"></i>
                                                                     </span>
                                                             </div>                                                            
                                                         </td>                                             							
-                            							<td class="number-fixed-width text-left">
-                            							    {$ gasto_material.total|currency:$:2 $}
-                            							</td>
                             							<td>
                             								<button type="button" class="btn btn-default" ng-click="remover_gasto_material(gasto_material)"><i class="fa fa-times" aria-hidden="true"></i></button>
                             							</td>
@@ -1580,7 +1597,6 @@
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             							    {$ data.totales_materiales.otras_entidades_presupuesto[entidad_presupuesto.id]|currency:$ $}
                             							</td>
-                            							<td>&nbsp;</td>
                             							<td>{$ data.totales_materiales.total|currency:$ $}</td>
                             						</tr>                          						
                             					</tbody>
@@ -1617,8 +1633,8 @@
                             							<th>UCC</th>
                             							<th>CONADI</th>
                             							<th ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">{$ entidad_presupuesto.nombre $}</th>
-                            							<th>Fecha de ejecución</th>
                             							<th>Total</th>
+                            							<th>Fecha de ejecución</th>
                             							<th>Remover</th>
                             						</tr>
                             					</thead>
@@ -1631,52 +1647,52 @@
                             							<td>
                             								<input type="text" name="gasto_servicio_nombre_{$ $index $}"
                             								ng-model="gasto_servicio.servicio" ng-change="validar_nombre_servicio(gasto_servicio)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_servicio.nombre_servicio_invalido}"
+                            								class="form-control min-width-170" ng-class="{'invalid_control': gasto_servicio.nombre_servicio_invalido}"
                             								uib-tooltip="Longitud mínima de 5 caracteres y máxima de 150" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_servicio.nombre_servicio_invalido"/>
                             							</td>
                             							<td>
                             								<input type="text" name="gasto_servicio_justificacion_{$ $index $}" 
                             								ng-model="gasto_servicio.justificacion" ng-change="validar_justificacion_gasto_servicio(gasto_servicio)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_servicio.justificacion_invalido}"
+                            								class="form-control min-width-170" ng-class="{'invalid_control': gasto_servicio.justificacion_invalido}"
                             								uib-tooltip="Longitud mínima de 5 caracteres y máxima de 150" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_servicio.justificacion_invalido"/>
                             							</td>                                   
                             							<td>
                             								<input type="number" name="gasto_servicio_presupuesto_ucc_{$ $index $}"
                             								ng-model="gasto_servicio.presupuesto_ucc" ng-change="suma_totales_servicios_tecnicos(gasto_servicio, 'ucc')"
-                            								class="form-control" ng-class="{'invalid_control': gasto_servicio.presupuesto_ucc_invalido}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_servicio.presupuesto_ucc_invalido}"
                             								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_servicio.presupuesto_ucc_invalido"/>
                             							</td>                                                                                       
                             							<td>
                             								<input type="number" name="gasto_servicio_presupuesto_conadi_{$ $index $}" 
                             								ng-model="gasto_servicio.presupuesto_conadi" ng-change="suma_totales_servicios_tecnicos(gasto_servicio, 'conadi')"
-                            								class="form-control" ng-class="{'invalid_control': gasto_servicio.presupuesto_conadi_invalido}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_servicio.presupuesto_conadi_invalido}"
                             								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_servicio.presupuesto_conadi_invalido"/>
                             							</td> 
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             								<input type="number" name="gasto_servicio_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ $parent.$index $}" 
                             								ng-model="gasto_servicio.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_servicios_tecnicos(gasto_servicio, 'otro', entidad_presupuesto.id)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_servicio.presupuesto_externo_invalido[entidad_presupuesto.id]}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_servicio.presupuesto_externo_invalido[entidad_presupuesto.id]}"
                             								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_servicio.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                             							</td>
+                            							<td class="number-fixed-width">
+                            							    {$ gasto_servicio.total|currency:$:2 $}
+                            							</td>                            							
                                                         <td>
                                                             <div class="input-group">
                                                                 <input type="text" name="gasto_servicio_fecha_ejecucion_{$ $index $}"
                                                                     ng-model="gasto_servicio.fecha_ejecucion" ng-change="validar_fecha_ejecucion_gasto_servicio(gasto_servicio)"
                                                                     is-open="gasto_servicio.show_datepicker_fecha_ejecucion"
                                                                     datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
-                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha ejecución"
+                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha actual"
                                                                     ng-click="gasto_servicio.show_datepicker_fecha_ejecucion=true"
                                                                     ng-readonly="true"
-                                                                    class="form-control white-readonly" ng-class="{'invalid_control': gasto_servicio.fecha_ejecucion_invalido}"
+                                                                    class="form-control white-readonly min-width-150" ng-class="{'invalid_control': gasto_servicio.fecha_ejecucion_invalido}"
                                                                     uib-tooltip="Ingresar fecha" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_material.fecha_ejecucion_invalido"/>
                                                                     <span class="input-group-addon btn btn-default" ng-click="gasto_servicio.show_datepicker_fecha_ejecucion=true">
                                                                         <i class="glyphicon glyphicon-calendar"></i>
                                                                     </span>
                                                             </div>                                                            
                                                         </td>                            							
-                            							<td class="number-fixed-width text-left">
-                            							    {$ gasto_servicio.total|currency:$:2 $}
-                            							</td>
                             							<td>
                             								<button type="button" class="btn btn-default" ng-click="remover_gasto_servicio(gasto_servicio)"><i class="fa fa-times" aria-hidden="true"></i></button>
                             							</td>
@@ -1688,7 +1704,6 @@
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             							    {$ data.totales_servicios_tecnicos.otras_entidades_presupuesto[entidad_presupuesto.id]|currency:$ $}
                             							</td>
-                            							<th>&nbsp;</th>
                             							<td>{$ data.totales_servicios_tecnicos.total|currency:$ $}</td>
                             						</tr>                          						
                             					</tbody>
@@ -1725,8 +1740,8 @@
                             							<th>UCC</th>
                             							<th>CONADI</th>
                             							<th ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">{$ entidad_presupuesto.nombre $}</th>
-                            							<th>Fecha de ejecución</th>
                             							<th>Total</th>
+                            							<th>Fecha de ejecución</th>
                             							<th>Remover</th>
                             						</tr>
                             					</thead>
@@ -1739,52 +1754,52 @@
                             							<td>
                             								<input type="text" name="gasto_bibliografico_nombre_{$ $index $}"
                             								ng-model="gasto_bibliografico.titulo" ng-change="validar_titulo_bibliografico(gasto_bibliografico)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_bibliografico.titulo_invalido}"
+                            								class="form-control min-width-170" ng-class="{'invalid_control': gasto_bibliografico.titulo_invalido}"
                             								uib-tooltip="Longitud mínima de 5 caracteres y máxima de 150" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_bibliografico.titulo_invalido"/>
                             							</td>
                             							<td>
                             								<input type="text" name="gasto_bibliografico_justificacion_{$ $index $}" 
                             								ng-model="gasto_bibliografico.justificacion" ng-change="validar_justificacion_gasto_bibliografico(gasto_bibliografico)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_bibliografico.justificacion_invalido}"
+                            								class="form-control min-width-170" ng-class="{'invalid_control': gasto_bibliografico.justificacion_invalido}"
                             								uib-tooltip="Longitud mínima de 5 caracteres y máxima de 150" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_bibliografico.justificacion_invalido"/>
                             							</td>                                   
                             							<td>
                             								<input type="number" name="gasto_bibliografico_presupuesto_ucc_{$ $index $}"
                             								ng-model="gasto_bibliografico.presupuesto_ucc" ng-change="suma_totales_bibliograficos(gasto_bibliografico, 'ucc')"
-                            								class="form-control" ng-class="{'invalid_control': gasto_bibliografico.presupuesto_ucc_invalido}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_bibliografico.presupuesto_ucc_invalido}"
                             								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_bibliografico.presupuesto_ucc_invalido"/>
                             							</td>                                                                                       
                             							<td>
                             								<input type="number" name="gasto_bibliografico_presupuesto_conadi_{$ $index $}"
                             								ng-model="gasto_bibliografico.presupuesto_conadi" ng-change="suma_totales_bibliograficos(gasto_bibliografico, 'conadi')"
-                            								class="form-control" ng-class="{'invalid_control': gasto_bibliografico.presupuesto_conadi_invalido}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_bibliografico.presupuesto_conadi_invalido}"
                             								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_bibliografico.presupuesto_conadi_invalido"/>
                             							</td> 
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             								<input type="number" name="gasto_bibliografico_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ $parent.$index $}"
                             								ng-model="gasto_bibliografico.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_bibliograficos(gasto_bibliografico, 'otro', entidad_presupuesto.id)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_bibliografico.presupuesto_externo_invalido[entidad_presupuesto.id]}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_bibliografico.presupuesto_externo_invalido[entidad_presupuesto.id]}"
                             								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_bibliografico.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                             							</td>
+                            							<td class="number-fixed-width">
+                            							    {$ gasto_bibliografico.total | currency:$:2 $}
+                            							</td>                            							
                                                         <td>
                                                             <div class="input-group">
                                                                 <input type="text" name="gasto_bibliografico_fecha_ejecucion_{$ $index $}"
                                                                     ng-model="gasto_bibliografico.fecha_ejecucion" ng-change="validar_fecha_ejecucion_gasto_bibliografico(gasto_bibliografico)"
                                                                     is-open="gasto_bibliografico.show_datepicker_fecha_ejecucion"
                                                                     datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
-                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha ejecución"
+                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha actual"
                                                                     ng-click="gasto_bibliografico.show_datepicker_fecha_ejecucion=true"
                                                                     ng-readonly="true"
-                                                                    class="form-control white-readonly" ng-class="{'invalid_control': gasto_bibliografico.fecha_ejecucion_invalido}"
+                                                                    class="form-control white-readonly min-width-150" ng-class="{'invalid_control': gasto_bibliografico.fecha_ejecucion_invalido}"
                                                                     uib-tooltip="Ingresar fecha" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_bibliografico.fecha_ejecucion_invalido"/>
                                                                     <span class="input-group-addon btn btn-default" ng-click="gasto_bibliografico.show_datepicker_fecha_ejecucion=true">
                                                                         <i class="glyphicon glyphicon-calendar"></i>
                                                                     </span>
                                                             </div>                                                            
                                                         </td>                                     							
-                            							<td class="number-fixed-width text-left">
-                            							    {$ gasto_bibliografico.total | currency:$:2 $}
-                            							</td>
                             							<td>
                             								<button type="button" class="btn btn-default" ng-click="remover_gasto_bibliografico(gasto_bibliografico)"><i class="fa fa-times" aria-hidden="true"></i></button>
                             							</td>
@@ -1832,8 +1847,8 @@
                             							<th>UCC</th>
                             							<th>CONADI</th>
                             							<th ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">{$ entidad_presupuesto.nombre $}</th>
-                            							<th>Fecha de ejecución</th>
                             							<th>Total</th>
+                            							<th>Fecha de ejecución</th>
                             							<th>Remover</th>
                             						</tr>
                             					</thead>
@@ -1846,52 +1861,52 @@
                             							<td>
                             								<input type="text" name="gasto_digital_nombre_{$ $index $}" 
                             								ng-model="gasto_digital.titulo" ng-change="validar_titulo_gasto_digital(gasto_digital)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_digital.titulo_invalido}"
+                            								class="form-control min-width-170" ng-class="{'invalid_control': gasto_digital.titulo_invalido}"
                             								uib-tooltip="Longitud mínima de 5 caracteres y máxima de 150" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_digital.titulo_invalido"/>
                             							</td>
                             							<td>
                             								<input type="text" name="gasto_digital_justificacion_{$ $index $}" 
                             								ng-model="gasto_digital.justificacion" ng-change="validar_justificacion_gasto_digital(gasto_digital)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_digital.justificacion_invalido}"
+                            								class="form-control min-width-170" ng-class="{'invalid_control': gasto_digital.justificacion_invalido}"
                             								uib-tooltip="Longitud mínima de 5 caracteres y máxima de 150" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_digital.justificacion_invalido"/>
                             							</td>                                   
                             							<td>
                             								<input type="number" name="gasto_digital_presupuesto_ucc_{$ $index $}" 
                             								ng-model="gasto_digital.presupuesto_ucc" ng-change="suma_totales_digitales(gasto_digital, 'ucc')"
-                            								class="form-control" ng-class="{'invalid_control': gasto_digital.presupuesto_ucc_invalido}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_digital.presupuesto_ucc_invalido}"
                             								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_digital.presupuesto_ucc_invalido"/>
                             							</td>                                                                                       
                             							<td>
                             								<input type="number" name="gasto_digital_presupuesto_conadi_{$ $index $}" 
                             								ng-model="gasto_digital.presupuesto_conadi" ng-change="suma_totales_digitales(gasto_digital, 'conadi')"
-                            								class="form-control" ng-class="{'invalid_control': gasto_digital.presupuesto_conadi_invalido}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_digital.presupuesto_conadi_invalido}"
                             								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_digital.presupuesto_conadi_invalido"/>
                             							</td> 
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             								<input type="number" name="gasto_digital_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ $parent.$index $}" 
                             								ng-model="gasto_digital.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_digitales(gasto_digital, 'otro', entidad_presupuesto.id)"
-                            								class="form-control" ng-class="{'invalid_control': gasto_digital.presupuesto_externo_invalido[entidad_presupuesto.id]}"
+                            								class="form-control min-width-150" ng-class="{'invalid_control': gasto_digital.presupuesto_externo_invalido[entidad_presupuesto.id]}"
                             								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_digital.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                             							</td>
+                            							<td class="number-fixed-width">
+                            							    {$ gasto_digital.total|currency:$:2 $}
+                            							</td>                            							
                                                         <td>
                                                             <div class="input-group">
                                                                 <input type="text" name="gasto_digital_fecha_ejecucion_{$ $index $}"
                                                                     ng-model="gasto_digital.fecha_ejecucion" ng-change="validar_fecha_ejecucion_gasto_digital(gasto_digital)"
                                                                     is-open="gasto_digital.show_datepicker_fecha_ejecucion"
                                                                     datepicker-options="dateOptions" uib-datepicker-popup="yyyy-MM-dd" datepicker-append-to-body="true"
-                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha ejecución"
+                                                                    clear-text="Borrar" close-text="Seleccionar" current-text="Fecha actual"
                                                                     ng-click="gasto_digital.show_datepicker_fecha_ejecucion=true"
                                                                     ng-readonly="true"
-                                                                    class="form-control white-readonly" ng-class="{'invalid_control': gasto_digital.fecha_ejecucion_invalido}"
+                                                                    class="form-control white-readonly min-width-150" ng-class="{'invalid_control': gasto_digital.fecha_ejecucion_invalido}"
                                                                     uib-tooltip="Ingresar fecha" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_digital.fecha_ejecucion_invalido"/>
                                                                     <span class="input-group-addon btn btn-default" ng-click="gasto_digital.show_datepicker_fecha_ejecucion=true">
                                                                         <i class="glyphicon glyphicon-calendar"></i>
                                                                     </span>
                                                             </div>                                                            
                                                         </td>                              							
-                            							<td class="number-fixed-width text-left">
-                            							    {$ gasto_digital.total|currency:$:2 $}
-                            							</td>
                             							<td>
                             								<button type="button" class="btn btn-default" ng-click="remover_gasto_digital(gasto_digital)"><i class="fa fa-times" aria-hidden="true"></i></button>
                             							</td>
@@ -1903,7 +1918,6 @@
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             							    {$ data.totales_digitales.otras_entidades_presupuesto[entidad_presupuesto.id]|currency:$ $}
                             							</td>
-                            							<td>&nbsp;</td>
                             							<td>{$ data.totales_digitales.total|currency:$ $}</td>
                             						</tr>
                             					</tbody>
