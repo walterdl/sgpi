@@ -595,7 +595,7 @@
                         'id_detalle_gasto' => $detalle_gasto_investigador_principal->id,
                         'valor' => $presupuesto_nueva_entidad
                         ));
-                }     
+                } 
             }
             
             // registra los gastos presupuestados por la entidades existentes

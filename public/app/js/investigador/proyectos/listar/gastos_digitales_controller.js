@@ -65,7 +65,7 @@ sgpi_app.controller('gastos_digitales_controller', function ($scope, $uibModal){
         modalInstance.result.then(function(resultado){
             // El modal retorno una respuesta close. Se evalúa el éxito de la operacion de carga
             if(resultado.exito){
-                alertify.success('Documento cargado');
+                alertify.success('Desembolso cargado');
             }
             else{
                 alertify.error('Error al cargar documento. Código de error: ' + resultado.codigo + ', ' + resultado.mensaje);
