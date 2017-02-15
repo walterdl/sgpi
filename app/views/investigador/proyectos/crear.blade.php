@@ -1107,34 +1107,34 @@
                                                         <td class="min-width-170">{$ participante.formacion $}</td>
                                                         <td class="min-width-170">{$ participante.rol $}</td>
                                                         <td>
-                                                            <input type="number" name="gasto_personal_dedicacion_semanal_{$ participante.identificacion $}" min="0" 
+                                                            <input type="number" name="gasto_personal_dedicacion_semanal_{$ participante.identificacion $}"
                                                             ng-model="participante.dedicacion_semanal" ng-change="validar_dedicacion_semanal(participante)"
                                                             class="form-control min-width-150" ng-class="{'invalid_control': participante.dedicacion_semanal_invalido}"
-                                                            uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.dedicacion_semanal_invalido"/>
+                                                            uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.dedicacion_semanal_invalido"/>
                                                         </td>
                                                         <td>
                                                             <input type="number" name="gasto_personal_total_semanas_{$ participante.identificacion $}" 
                                                             ng-model="participante.total_semanas" ng-change="validar_total_semanas(participante)"
                                                             class="form-control min-width-150" ng-class="{'invalid_control': participante.total_semanas_invalido}"
-                                                            uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.total_semanas_invalido"/>
+                                                            uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.total_semanas_invalido"/>
                                                         </td>
                                                         <td>
                                                             <input type="number" name="gasto_personal_valor_hora_{$ participante.identificacion $}" 
                                                             ng-model="participante.valor_hora" ng-change="validar_valor_hora(participante)"
                                                             class="form-control min-width-150" ng-class="{'invalid_control': participante.valor_hora_invalido}"
-                                                            uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.valor_hora_invalido"/>
+                                                            uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.valor_hora_invalido"/>
                                                         </td>                                                                                                        
                                                         <td>
                                                             <input type="number" name="gasto_personal_presupuesto_ucc_{$ participante.identificacion $}" min="0"
                                                             ng-model="participante.presupuesto_ucc" ng-change="suma_totales_personal(participante, 'ucc')"
                                                             class="form-control min-width-150" ng-class="{'invalid_control': participante.presupuesto_ucc_invalido}"
-                                                            uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.presupuesto_ucc_invalido"/>
+                                                            uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.presupuesto_ucc_invalido"/>
                                                         </td>                                                                                                                                                            
                                                         <td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                                                             <input type="number" name="gasto_personal_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ participante.identificacion $}" 
                                                             ng-model="participante.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_personal(participante, 'otro', entidad_presupuesto.id)"
                                                             class="form-control min-width-150" ng-class="{'invalid_control': participante.presupuesto_externo_invalido[entidad_presupuesto.id]}"
-                                                            uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
+                                                            uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="participante.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                                                         </td>
                                                         <td class="number-fixed-width">
                                                             {$ participante.presupuesto_total|currency:$:2 $}
@@ -1225,19 +1225,19 @@
                                                             <input type="number" name="gasto_equipo_presupuesto_ucc_{$ $index $}"
                                                             ng-model="gasto_equipo.presupuesto_ucc" ng-change="suma_totales_equipos(gasto_equipo, 'ucc')"
                                                             class="form-control min-width-150" ng-class="{'invalid_control': gasto_equipo.presupuesto_ucc_invalido}"
-                                                            uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_equipo.presupuesto_ucc_invalido"/>
+                                                            uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_equipo.presupuesto_ucc_invalido"/>
                                                         </td>                                                                                       
                                                         <td>
                                                             <input type="number" name="gasto_equipo_presupuesto_conadi_{$ $index $}"
                                                             ng-model="gasto_equipo.presupuesto_conadi" ng-change="suma_totales_equipos(gasto_equipo, 'conadi')"
                                                             class="form-control min-width-150" ng-class="{'invalid_control': gasto_equipo.presupuesto_conadi_invalido}"
-                                                            uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_equipo.presupuesto_conadi_invalido"/>
+                                                            uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_equipo.presupuesto_conadi_invalido"/>
                                                         </td> 
                                                         <td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                                                             <input type="number" name="gasto_equipo_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ $parent.$index $}"
                                                             ng-model="gasto_equipo.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_equipos(gasto_equipo, 'otro', entidad_presupuesto.id)"
                                                             class="form-control min-width-150" ng-class="{'invalid_control': gasto_equipo.presupuesto_externo_invalido[entidad_presupuesto.id]}"
-                                                            uib-tooltip="La cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_equipo.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
+                                                            uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_equipo.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                                                         </td>
                                                         <td class="number-fixed-width">
                                                             {$ gasto_equipo.total|currency:$:2 $}
@@ -1332,19 +1332,19 @@
                                         					<input type="number" name="gasto_software_presupuesto_ucc_{$ $index $}" 
                                         					ng-model="gasto_software.presupuesto_ucc" ng-change="suma_totales_software(gasto_software, 'ucc')"
                                         					class="form-control min-width-150" ng-class="{'invalid_control': gasto_software.presupuesto_ucc_invalido}"
-                                        					uib-tooltip="La cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_software.presupuesto_ucc_invalido"/>
+                                        					uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_software.presupuesto_ucc_invalido"/>
                                         				</td>                                                                                       
                                         				<td>
                                         					<input type="number" name="gasto_software_presupuesto_conadi_{$ $index $}"
                                         					ng-model="gasto_software.presupuesto_conadi" ng-change="suma_totales_software(gasto_software, 'conadi')"
                                         					class="form-control min-width-150" ng-class="{'invalid_control': gasto_software.presupuesto_conadi_invalido}"
-                                        					uib-tooltip="La cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_software.presupuesto_conadi_invalido"/>
+                                        					uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_software.presupuesto_conadi_invalido"/>
                                         				</td> 
                                         				<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                                         					<input type="number" name="gasto_software_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ $parent.$index $}"
                                         					ng-model="gasto_software.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_software(gasto_software, 'otro', entidad_presupuesto.id)"
                                         					class="form-control min-width-150" ng-class="{'invalid_control': gasto_software.presupuesto_externo_invalido[entidad_presupuesto.id]}"
-                                        					uib-tooltip="La cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_software.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
+                                        					uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_software.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                                         				</td>
                                         				<td class="number-fixed-width">
                                         				    {$ gasto_software.total|currency:$:2 $}
@@ -1434,31 +1434,31 @@
                             								<input type="number" name="gasto_salida_cantidad_salidas_{$ $index $}" 
                             								ng-model="gasto_salida.cantidad_salidas" ng-change="validar_cantidad_salidas(gasto_salida)"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_salida.cantidad_salidas_invalido}"
-                            								uib-tooltip="Cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.cantidad_salidas_invalido"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.cantidad_salidas_invalido"/>
                             							</td>                                   
                             							<td>
                             								<input type="number" name="gasto_salida_valor_unitario_{$ $index $}" 
                             								ng-model="gasto_salida.valor_unitario" ng-change="validar_valor_unitario(gasto_salida)"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_salida.valor_unitario_invalido}"
-                            								uib-tooltip="Cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.valor_unitario_invalido"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.valor_unitario_invalido"/>
                             							</td>                  							
                             							<td>
                             								<input type="number" name="gasto_salida_presupuesto_ucc_{$ $index $}"
                             								ng-model="gasto_salida.presupuesto_ucc" ng-change="suma_totales_salidas(gasto_salida, 'ucc')"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_salida.presupuesto_ucc_invalido}"
-                            								uib-tooltip="Cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.presupuesto_ucc_invalido"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.presupuesto_ucc_invalido"/>
                             							</td>                                                                                       
                             							<td>
                             								<input type="number" name="gasto_salida_presupuesto_conadi_{$ $index $}"
                             								ng-model="gasto_salida.presupuesto_conadi" ng-change="suma_totales_salidas(gasto_salida, 'conadi')"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_salida.presupuesto_conadi_invalido}"
-                            								uib-tooltip="Cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.presupuesto_conadi_invalido"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.presupuesto_conadi_invalido"/>
                             							</td> 
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             								<input type="number" name="gasto_salida_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ $parent.$index $}"
                             								ng-model="gasto_salida.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_salidas(gasto_salida, 'otro', entidad_presupuesto.id)"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_salida.presupuesto_externo_invalido[entidad_presupuesto.id]}" 
-                            								uib-tooltip="Cantidad debe ser mayor a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_salida.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                             							</td>
                             							<td class="number-fixed-width">
                             							    {$ gasto_salida.total|currency:$:2 $}
@@ -1553,19 +1553,19 @@
                             								<input type="number" name="gasto_material_presupuesto_ucc_{$ $index $}" 
                             								ng-model="gasto_material.presupuesto_ucc" ng-change="suma_totales_materiales(gasto_material, 'ucc')"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_material.presupuesto_ucc_invalido}"
-                            								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_material.presupuesto_ucc_invalido"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_material.presupuesto_ucc_invalido"/>
                             							</td>                                                                                       
                             							<td>
                             								<input type="number" name="gasto_material_presupuesto_conadi_{$ $index $}" 
                             								ng-model="gasto_material.presupuesto_conadi" ng-change="suma_totales_materiales(gasto_material, 'conadi')"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_material.presupuesto_conadi_invalido}"
-                            								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_material.presupuesto_conadi_invalido"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_material.presupuesto_conadi_invalido"/>
                             							</td> 
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             								<input type="number" name="gasto_material_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ $parent.$index $}" 
                             								ng-model="gasto_material.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_materiales(gasto_material, 'otro', entidad_presupuesto.id)"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_material.presupuesto_externo_invalido[entidad_presupuesto.id]}"
-                            								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_material.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_material.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                             							</td>
                             							<td class="number-fixed-width">
                             							    {$ gasto_material.total|currency:$:2 $}
@@ -1660,19 +1660,19 @@
                             								<input type="number" name="gasto_servicio_presupuesto_ucc_{$ $index $}"
                             								ng-model="gasto_servicio.presupuesto_ucc" ng-change="suma_totales_servicios_tecnicos(gasto_servicio, 'ucc')"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_servicio.presupuesto_ucc_invalido}"
-                            								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_servicio.presupuesto_ucc_invalido"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_servicio.presupuesto_ucc_invalido"/>
                             							</td>                                                                                       
                             							<td>
                             								<input type="number" name="gasto_servicio_presupuesto_conadi_{$ $index $}" 
                             								ng-model="gasto_servicio.presupuesto_conadi" ng-change="suma_totales_servicios_tecnicos(gasto_servicio, 'conadi')"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_servicio.presupuesto_conadi_invalido}"
-                            								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_servicio.presupuesto_conadi_invalido"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_servicio.presupuesto_conadi_invalido"/>
                             							</td> 
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             								<input type="number" name="gasto_servicio_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ $parent.$index $}" 
                             								ng-model="gasto_servicio.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_servicios_tecnicos(gasto_servicio, 'otro', entidad_presupuesto.id)"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_servicio.presupuesto_externo_invalido[entidad_presupuesto.id]}"
-                            								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_servicio.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_servicio.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                             							</td>
                             							<td class="number-fixed-width">
                             							    {$ gasto_servicio.total|currency:$:2 $}
@@ -1767,19 +1767,19 @@
                             								<input type="number" name="gasto_bibliografico_presupuesto_ucc_{$ $index $}"
                             								ng-model="gasto_bibliografico.presupuesto_ucc" ng-change="suma_totales_bibliograficos(gasto_bibliografico, 'ucc')"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_bibliografico.presupuesto_ucc_invalido}"
-                            								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_bibliografico.presupuesto_ucc_invalido"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_bibliografico.presupuesto_ucc_invalido"/>
                             							</td>                                                                                       
                             							<td>
                             								<input type="number" name="gasto_bibliografico_presupuesto_conadi_{$ $index $}"
                             								ng-model="gasto_bibliografico.presupuesto_conadi" ng-change="suma_totales_bibliograficos(gasto_bibliografico, 'conadi')"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_bibliografico.presupuesto_conadi_invalido}"
-                            								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_bibliografico.presupuesto_conadi_invalido"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_bibliografico.presupuesto_conadi_invalido"/>
                             							</td> 
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             								<input type="number" name="gasto_bibliografico_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ $parent.$index $}"
                             								ng-model="gasto_bibliografico.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_bibliograficos(gasto_bibliografico, 'otro', entidad_presupuesto.id)"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_bibliografico.presupuesto_externo_invalido[entidad_presupuesto.id]}"
-                            								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_bibliografico.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_bibliografico.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                             							</td>
                             							<td class="number-fixed-width">
                             							    {$ gasto_bibliografico.total | currency:$:2 $}
@@ -1874,19 +1874,19 @@
                             								<input type="number" name="gasto_digital_presupuesto_ucc_{$ $index $}" 
                             								ng-model="gasto_digital.presupuesto_ucc" ng-change="suma_totales_digitales(gasto_digital, 'ucc')"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_digital.presupuesto_ucc_invalido}"
-                            								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_digital.presupuesto_ucc_invalido"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_digital.presupuesto_ucc_invalido"/>
                             							</td>                                                                                       
                             							<td>
                             								<input type="number" name="gasto_digital_presupuesto_conadi_{$ $index $}" 
                             								ng-model="gasto_digital.presupuesto_conadi" ng-change="suma_totales_digitales(gasto_digital, 'conadi')"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_digital.presupuesto_conadi_invalido}"
-                            								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_digital.presupuesto_conadi_invalido"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_digital.presupuesto_conadi_invalido"/>
                             							</td> 
                             							<td ng-repeat="entidad_presupuesto in data.entidades_presupuesto_seleccionadas">
                             								<input type="number" name="gasto_digital_presupuesto_externo_{$ entidad_presupuesto.id $}_{$ $parent.$index $}" 
                             								ng-model="gasto_digital.otras_entidades_presupuesto[entidad_presupuesto.id]" ng-change="suma_totales_digitales(gasto_digital, 'otro', entidad_presupuesto.id)"
                             								class="form-control min-width-150" ng-class="{'invalid_control': gasto_digital.presupuesto_externo_invalido[entidad_presupuesto.id]}"
-                            								uib-tooltip="Cantidad mínima debe ser cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_digital.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
+                            								uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-trigger="'mouseenter'" tooltip-enable="gasto_digital.presupuesto_externo_invalido[entidad_presupuesto.id]"/>
                             							</td>
                             							<td class="number-fixed-width">
                             							    {$ gasto_digital.total|currency:$:2 $}

@@ -1,4 +1,13 @@
-sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http) {
+sgpi_app.factory('numero_valido', function () {
+    return function (numero) {
+        if(numero != null && numero != undefined && !isNaN(numero) && numero >= 0)
+            return false;
+        else
+            return true;
+    };
+});
+
+sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http, numero_valido) {
     
     $('#input_text_nueva_entidad').on('keydown', function(e) {
         if (e.which == 13) {
@@ -1029,70 +1038,33 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
 	|--------------------------------------------------------------------------
 	*/
     $scope.validar_dedicacion_semanal = function(participante) {
-        if(participante.dedicacion_semanal && participante.dedicacion_semanal >= 0){
-            participante.dedicacion_semanal_invalido = false;
-            return false;
-        }
-        else{
-            participante.dedicacion_semanal_invalido = true;
-            return true;            
-        }
+        var es_numero_invalido = numero_valido(participante.dedicacion_semanal);
+        participante.dedicacion_semanal_invalido = es_numero_invalido;
+        return es_numero_invalido;
     };
     
     $scope.validar_total_semanas = function(participante) {
-        if(participante.total_semanas && participante.total_semanas >= 0){
-            participante.total_semanas_invalido = false;
-            return false;
-        }
-        else{
-            participante.total_semanas_invalido = true;
-            return true;            
-        }
+        var es_numero_invalido = numero_valido(participante.total_semanas);
+        participante.total_semanas_invalido = es_numero_invalido;
+        return es_numero_invalido;        
     };
     
     $scope.validar_valor_hora = function(participante) {
-        if(participante.valor_hora && participante.valor_hora >= 0){
-            participante.valor_hora_invalido = false;
-            return false;
-        }
-        else{
-            participante.valor_hora_invalido = true;
-            return true;            
-        }
+        var es_numero_invalido = numero_valido(participante.valor_hora);
+        participante.valor_hora_invalido = es_numero_invalido;
+        return es_numero_invalido;      
     };
     
     $scope.validar_presupuesto_ucc_participante = function(participante) {
-        if(participante.presupuesto_ucc){
-            if(participante.presupuesto_ucc >= 0){
-                participante.presupuesto_ucc_invalido = false;
-                return false;
-            }
-            else{
-                participante.presupuesto_ucc_invalido = true;
-                return true;
-            }
-        }
-        else{
-            participante.presupuesto_ucc_invalido = false;
-            return false;            
-        }
+        var es_numero_invalido = numero_valido(participante.presupuesto_ucc);
+        participante.presupuesto_ucc_invalido = es_numero_invalido;
+        return es_numero_invalido;              
     };
     
     $scope.validar_presupuesto_externo_participante = function(participante, id_entidad_presupuesto) {
-        if(participante.otras_entidades_presupuesto[id_entidad_presupuesto]){
-            if(participante.otras_entidades_presupuesto[id_entidad_presupuesto] >= 0){
-                participante.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-                return false;                
-            }
-            else{
-                participante.presupuesto_externo_invalido[id_entidad_presupuesto] = true;
-                return true;
-            }
-        }
-        else{
-            participante.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-            return false;                            
-        }
+        var es_numero_invalido = numero_valido(participante.otras_entidades_presupuesto[id_entidad_presupuesto]);
+        participante.presupuesto_externo_invalido[id_entidad_presupuesto] = es_numero_invalido;
+        return es_numero_invalido;                      
     };
     
     $scope.validar_fecha_ejecucion_participante = function(participante) {
@@ -1118,7 +1090,7 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
             $scope.data.entidades_presupuesto_seleccionadas.forEach(function(entidad_presupuesto) {
                 alguna_validacion_invalida |= $scope.validar_presupuesto_externo_participante(participante_proyecto, entidad_presupuesto.id);
             });
-            alguna_validacion_invalida |= $scope.validar_fecha_ejecucion_participante(participante_proyecto)
+            alguna_validacion_invalida |= $scope.validar_fecha_ejecucion_participante(participante_proyecto);
         });        
         return alguna_validacion_invalida;
     };
@@ -1151,54 +1123,21 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
     };
     
     $scope.validar_presupuesto_ucc_gasto_equipo = function(gasto_equipo) {
-        if(gasto_equipo.presupuesto_ucc){
-            if(gasto_equipo.presupuesto_ucc >= 0){
-                gasto_equipo.presupuesto_ucc_invalido = false;
-                return false;
-            }
-            else{
-                gasto_equipo.presupuesto_ucc_invalido = true;
-                return true;
-            }
-        }
-        else{
-            gasto_equipo.presupuesto_ucc_invalido = false;
-            return false;            
-        }        
+        var es_numero_invalido = numero_valido(gasto_equipo.presupuesto_ucc);
+        gasto_equipo.presupuesto_ucc_invalido = es_numero_invalido;
+        return es_numero_invalido;                      
     };
     
     $scope.validar_presupuesto_conadi_gasto_equipo = function(gasto_equipo) {
-        if(gasto_equipo.presupuesto_conadi){
-            if(gasto_equipo.presupuesto_conadi >= 0){
-                gasto_equipo.presupuesto_conadi_invalido = false;
-                return false;
-            }
-            else{
-                gasto_equipo.presupuesto_conadi_invalido = true;
-                return true;
-            }
-        }
-        else{
-            gasto_equipo.presupuesto_conadi_invalido = false;
-            return false;            
-        }                
+        var es_numero_invalido = numero_valido(gasto_equipo.presupuesto_conadi);
+        gasto_equipo.presupuesto_conadi_invalido = es_numero_invalido;
+        return es_numero_invalido;                      
     };
     
     $scope.validar_presupuesto_externo_gasto_equipo = function(gasto_equipo, id_entidad_presupuesto) {
-        if(gasto_equipo.otras_entidades_presupuesto[id_entidad_presupuesto]){
-            if(gasto_equipo.otras_entidades_presupuesto[id_entidad_presupuesto] >= 0){
-                gasto_equipo.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-                return false;                
-            }
-            else{
-                gasto_equipo.presupuesto_externo_invalido[id_entidad_presupuesto] = true;
-                return true;
-            }
-        }
-        else{
-            gasto_equipo.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-            return false;                            
-        }
+        var es_numero_invalido = numero_valido(gasto_equipo.otras_entidades_presupuesto[id_entidad_presupuesto]);
+        gasto_equipo.presupuesto_externo_invalido[id_entidad_presupuesto] = es_numero_invalido;
+        return es_numero_invalido;                      
     };    
     
     $scope.validar_fecha_ejecucion_gasto_equipo = function(gasto_equipo) {
@@ -1257,54 +1196,21 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
     };
     
     $scope.validar_presupuesto_ucc_software = function(gasto_software) {
-        if(gasto_software.presupuesto_ucc){
-            if(gasto_software.presupuesto_ucc >= 0){
-                gasto_software.presupuesto_ucc_invalido = false;
-                return false;
-            }
-            else{
-                gasto_software.presupuesto_ucc_invalido = true;
-                return true;
-            }
-        }
-        else{
-            gasto_software.presupuesto_ucc_invalido = false;
-            return false;            
-        }        
+        var es_numero_invalido = numero_valido(gasto_software.presupuesto_ucc);
+        gasto_software.presupuesto_ucc_invalido = es_numero_invalido;
+        return es_numero_invalido;                              
     };    
     
     $scope.validar_presupuesto_conadi_software = function(gasto_software) {
-        if(gasto_software.presupuesto_conadi){
-            if(gasto_software.presupuesto_conadi >= 0){
-                gasto_software.presupuesto_conadi_invalido = false;
-                return false;
-            }
-            else{
-                gasto_software.presupuesto_conadi_invalido = true;
-                return true;
-            }
-        }
-        else{
-            gasto_software.presupuesto_conadi_invalido = false;
-            return false;            
-        }                
+        var es_numero_invalido = numero_valido(gasto_software.presupuesto_conadi);
+        gasto_software.presupuesto_conadi_invalido = es_numero_invalido;
+        return es_numero_invalido;                                      
     };    
     
     $scope.validar_presupuesto_externo_software = function(gasto_software, id_entidad_presupuesto) {
-        if(gasto_software.otras_entidades_presupuesto[id_entidad_presupuesto]){
-            if(gasto_software.otras_entidades_presupuesto[id_entidad_presupuesto] >= 0){
-                gasto_software.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-                return false;                
-            }
-            else{
-                gasto_software.presupuesto_externo_invalido[id_entidad_presupuesto] = true;
-                return true;
-            }
-        }
-        else{
-            gasto_software.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-            return false;                            
-        }
+        var es_numero_invalido = numero_valido(gasto_software.otras_entidades_presupuesto[id_entidad_presupuesto]);
+        gasto_software.presupuesto_externo_invalido[id_entidad_presupuesto] = es_numero_invalido;
+        return es_numero_invalido;                                              
     };        
     
     $scope.validar_fecha_ejecucion_gasto_software = function(gasto_software) {
@@ -1352,76 +1258,33 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
     };
     
     $scope.validar_cantidad_salidas = function(gasto_salida) {
-        if(gasto_salida.cantidad_salidas && gasto_salida.cantidad_salidas >= 0){
-            gasto_salida.cantidad_salidas_invalido = false;
-            return false;
-        }
-        else{
-            gasto_salida.cantidad_salidas_invalido = true;
-            return true;            
-        }
+        var es_numero_invalido = numero_valido(gasto_salida.cantidad_salidas);
+        gasto_salida.cantidad_salidas_invalido = es_numero_invalido;
+        return es_numero_invalido;                                                      
     };
     
     $scope.validar_valor_unitario = function(gasto_salida) {
-        if(gasto_salida.valor_unitario && gasto_salida.valor_unitario >= 0){
-            gasto_salida.valor_unitario_invalido = false;
-            return false;
-        }
-        else{
-            gasto_salida.valor_unitario_invalido = true;
-            return true;            
-        }        
+        var es_numero_invalido = numero_valido(gasto_salida.valor_unitario);
+        gasto_salida.valor_unitario_invalido = es_numero_invalido;
+        return es_numero_invalido;                                                              
     };
     
     $scope.validar_presupuesto_ucc_gasto_salida = function(gasto_salida) {
-        if(gasto_salida.presupuesto_ucc){
-            if(gasto_salida.presupuesto_ucc >= 0){
-                gasto_salida.presupuesto_ucc_invalido = false;
-                return false;
-            }
-            else{
-                gasto_salida.presupuesto_ucc_invalido = true;
-                return true;
-            }
-        }
-        else{
-            gasto_salida.presupuesto_ucc_invalido = false;
-            return false;            
-        }        
+        var es_numero_invalido = numero_valido(gasto_salida.presupuesto_ucc);
+        gasto_salida.presupuesto_ucc_invalido = es_numero_invalido;
+        return es_numero_invalido;                                                  
     };    
     
     $scope.validar_presupuesto_conadi_gasto_salida = function(gasto_salida) {
-        if(gasto_salida.presupuesto_conadi){
-            if(gasto_salida.presupuesto_conadi >= 0){
-                gasto_salida.presupuesto_conadi_invalido = false;
-                return false;
-            }
-            else{
-                gasto_salida.presupuesto_conadi_invalido = true;
-                return true;
-            }
-        }
-        else{
-            gasto_salida.presupuesto_conadi_invalido = false;
-            return false;            
-        }                
+        var es_numero_invalido = numero_valido(gasto_salida.presupuesto_conadi);
+        gasto_salida.presupuesto_conadi_invalido = es_numero_invalido;
+        return es_numero_invalido;
     };    
     
     $scope.validar_presupuesto_externo_gasto_salida = function(gasto_salida, id_entidad_presupuesto) {
-        if(gasto_salida.otras_entidades_presupuesto[id_entidad_presupuesto]){
-            if(gasto_salida.otras_entidades_presupuesto[id_entidad_presupuesto] >= 0){
-                gasto_salida.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-                return false;                
-            }
-            else{
-                gasto_salida.presupuesto_externo_invalido[id_entidad_presupuesto] = true;
-                return true;
-            }
-        }
-        else{
-            gasto_salida.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-            return false;                            
-        }
+        var es_numero_invalido = numero_valido(gasto_salida.otras_entidades_presupuesto[id_entidad_presupuesto]);
+        gasto_salida.presupuesto_externo_invalido[id_entidad_presupuesto] = es_numero_invalido;
+        return es_numero_invalido;
     };
     
     $scope.validar_fecha_ejecucion_gasto_salida = function(gasto_salida) {
@@ -1481,54 +1344,21 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
     };
     
     $scope.validar_presupuesto_ucc_gasto_material = function(gasto_material) {
-        if(gasto_material.presupuesto_ucc){
-            if(gasto_material.presupuesto_ucc >= 0){
-                gasto_material.presupuesto_ucc_invalido = false;
-                return false;
-            }
-            else{
-                gasto_material.presupuesto_ucc_invalido = true;
-                return true;
-            }
-        }
-        else{
-            gasto_material.presupuesto_ucc_invalido = false;
-            return false;            
-        }        
+        var es_numero_invalido = numero_valido(gasto_material.presupuesto_ucc);
+        gasto_material.presupuesto_ucc_invalido = es_numero_invalido;
+        return es_numero_invalido;        
     };    
     
     $scope.validar_presupuesto_conadi_gasto_material = function(gasto_material) {
-        if(gasto_material.presupuesto_conadi){
-            if(gasto_material.presupuesto_conadi >= 0){
-                gasto_material.presupuesto_conadi_invalido = false;
-                return false;
-            }
-            else{
-                gasto_material.presupuesto_conadi_invalido = true;
-                return true;
-            }
-        }
-        else{
-            gasto_material.presupuesto_conadi_invalido = false;
-            return false;            
-        }                
+        var es_numero_invalido = numero_valido(gasto_material.presupuesto_conadi);
+        gasto_material.presupuesto_conadi_invalido = es_numero_invalido;
+        return es_numero_invalido;          
     };    
     
     $scope.validar_presupuesto_externo_gasto_material = function(gasto_material, id_entidad_presupuesto) {
-        if(gasto_material.otras_entidades_presupuesto[id_entidad_presupuesto]){
-            if(gasto_material.otras_entidades_presupuesto[id_entidad_presupuesto] >= 0){
-                gasto_material.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-                return false;                
-            }
-            else{
-                gasto_material.presupuesto_externo_invalido[id_entidad_presupuesto] = true;
-                return true;
-            }
-        }
-        else{
-            gasto_material.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-            return false;                            
-        }
+        var es_numero_invalido = numero_valido(gasto_material.otras_entidades_presupuesto[id_entidad_presupuesto]);
+        gasto_material.presupuesto_externo_invalido[id_entidad_presupuesto] = es_numero_invalido;
+        return es_numero_invalido;        
     };                
     
     $scope.validar_fecha_ejecucion_gasto_material = function(gasto_material){
@@ -1587,54 +1417,21 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
     };
     
     $scope.validar_presupuesto_ucc_gasto_servicio = function(gasto_servicio) {
-        if(gasto_servicio.presupuesto_ucc){
-            if(gasto_servicio.presupuesto_ucc >= 0){
-                gasto_servicio.presupuesto_ucc_invalido = false;
-                return false;
-            }
-            else{
-                gasto_servicio.presupuesto_ucc_invalido = true;
-                return true;
-            }
-        }
-        else{
-            gasto_servicio.presupuesto_ucc_invalido = false;
-            return false;            
-        }        
+        var es_numero_invalido = numero_valido(gasto_servicio.presupuesto_ucc);
+        gasto_servicio.presupuesto_ucc_invalido = es_numero_invalido;
+        return es_numero_invalido;    
     };    
     
     $scope.validar_presupuesto_conadi_gasto_servicio = function(gasto_servicio) {
-        if(gasto_servicio.presupuesto_conadi){
-            if(gasto_servicio.presupuesto_conadi >= 0){
-                gasto_servicio.presupuesto_conadi_invalido = false;
-                return false;
-            }
-            else{
-                gasto_servicio.presupuesto_conadi_invalido = true;
-                return true;
-            }
-        }
-        else{
-            gasto_servicio.presupuesto_conadi_invalido = false;
-            return false;            
-        }                
+        var es_numero_invalido = numero_valido(gasto_servicio.presupuesto_conadi);
+        gasto_servicio.presupuesto_conadi_invalido = es_numero_invalido;
+        return es_numero_invalido;              
     };    
     
     $scope.validar_presupuesto_externo_gasto_servicio = function(gasto_servicio, id_entidad_presupuesto) {
-        if(gasto_servicio.otras_entidades_presupuesto[id_entidad_presupuesto]){
-            if(gasto_servicio.otras_entidades_presupuesto[id_entidad_presupuesto] >= 0){
-                gasto_servicio.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-                return false;                
-            }
-            else{
-                gasto_servicio.presupuesto_externo_invalido[id_entidad_presupuesto] = true;
-                return true;
-            }
-        }
-        else{
-            gasto_servicio.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-            return false;                            
-        }
+        var es_numero_invalido = numero_valido(gasto_servicio.otras_entidades_presupuesto[id_entidad_presupuesto]);
+        gasto_servicio.presupuesto_externo_invalido[id_entidad_presupuesto] = es_numero_invalido;
+        return es_numero_invalido; 
     };                    
     
     $scope.validar_fecha_ejecucion_gasto_servicio = function(gasto_servicio){
@@ -1693,54 +1490,21 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
     };
     
     $scope.validar_presupuesto_ucc_gasto_bibliografico = function(gasto_bibliografico) {
-        if(gasto_bibliografico.presupuesto_ucc){
-            if(gasto_bibliografico.presupuesto_ucc >= 0){
-                gasto_bibliografico.presupuesto_ucc_invalido = false;
-                return false;
-            }
-            else{
-                gasto_bibliografico.presupuesto_ucc_invalido = true;
-                return true;
-            }
-        }
-        else{
-            gasto_bibliografico.presupuesto_ucc_invalido = false;
-            return false;            
-        }        
+        var es_numero_invalido = numero_valido(gasto_bibliografico.presupuesto_ucc);
+        gasto_bibliografico.presupuesto_ucc_invalido = es_numero_invalido;
+        return es_numero_invalido;         
     };    
     
     $scope.validar_presupuesto_conadi_gasto_bibliografico = function(gasto_bibliografico) {
-        if(gasto_bibliografico.presupuesto_conadi){
-            if(gasto_bibliografico.presupuesto_conadi >= 0){
-                gasto_bibliografico.presupuesto_conadi_invalido = false;
-                return false;
-            }
-            else{
-                gasto_bibliografico.presupuesto_conadi_invalido = true;
-                return true;
-            }
-        }
-        else{
-            gasto_bibliografico.presupuesto_conadi_invalido = false;
-            return false;            
-        }                
+        var es_numero_invalido = numero_valido(gasto_bibliografico.presupuesto_conadi);
+        gasto_bibliografico.presupuesto_conadi_invalido = es_numero_invalido;
+        return es_numero_invalido;                        
     };    
     
     $scope.validar_presupuesto_externo_gasto_bibliografico = function(gasto_bibliografico, id_entidad_presupuesto) {
-        if(gasto_bibliografico.otras_entidades_presupuesto[id_entidad_presupuesto]){
-            if(gasto_bibliografico.otras_entidades_presupuesto[id_entidad_presupuesto] >= 0){
-                gasto_bibliografico.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-                return false;                
-            }
-            else{
-                gasto_bibliografico.presupuesto_externo_invalido[id_entidad_presupuesto] = true;
-                return true;
-            }
-        }
-        else{
-            gasto_bibliografico.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-            return false;                            
-        }
+        var es_numero_invalido = numero_valido(gasto_bibliografico.otras_entidades_presupuesto[id_entidad_presupuesto]);
+        gasto_bibliografico.presupuesto_externo_invalido[id_entidad_presupuesto] = es_numero_invalido;
+        return es_numero_invalido;                 
     };                        
     
     $scope.validar_fecha_ejecucion_gasto_bibliografico = function(gasto_bibliografico){
@@ -1799,55 +1563,21 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
     };
     
     $scope.validar_presupuesto_ucc_gasto_digital = function(gasto_digital) {
-        if(gasto_digital.presupuesto_ucc){
-            if(gasto_digital.presupuesto_ucc >= 0){
-                gasto_digital.presupuesto_ucc_invalido = false;
-                return false;
-            }
-            else{
-                gasto_digital.presupuesto_ucc_invalido = true;
-                return true;
-            }
-        }
-        else{
-            gasto_digital.presupuesto_ucc_invalido = false;
-            return false;            
-        }        
+        var es_numero_invalido = numero_valido(gasto_digital.presupuesto_ucc);
+        gasto_digital.presupuesto_ucc_invalido = es_numero_invalido;
+        return es_numero_invalido;    
     };    
     
     $scope.validar_presupuesto_conadi_gasto_digital = function(gasto_digital) {
-        if(gasto_digital.presupuesto_conadi){
-            if(gasto_digital.presupuesto_conadi >= 0){
-                gasto_digital.presupuesto_conadi_invalido = false;
-                return false;
-            }
-            else{
-                gasto_digital.presupuesto_conadi_invalido = true;
-                return true;
-            }
-        }
-        else{
-            gasto_digital.presupuesto_conadi_invalido = false;
-            return false;            
-        }                
+        var es_numero_invalido = numero_valido(gasto_digital.presupuesto_conadi);
+        gasto_digital.presupuesto_conadi_invalido = es_numero_invalido;
+        return es_numero_invalido;               
     };    
     
     $scope.validar_presupuesto_externo_gasto_digital = function(gasto_digital, id_entidad_presupuesto) {
-
-        if(gasto_digital.otras_entidades_presupuesto[id_entidad_presupuesto]){
-            if(gasto_digital.otras_entidades_presupuesto[id_entidad_presupuesto] >= 0){
-                gasto_digital.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-                return false;                
-            }
-            else{
-                gasto_digital.presupuesto_externo_invalido[id_entidad_presupuesto] = true;
-                return true;
-            }
-        }
-        else{
-            gasto_digital.presupuesto_externo_invalido[id_entidad_presupuesto] = false;
-            return false;                            
-        }
+        var es_numero_invalido = numero_valido(gasto_digital.otras_entidades_presupuesto[id_entidad_presupuesto]);
+        gasto_digital.presupuesto_externo_invalido[id_entidad_presupuesto] = es_numero_invalido;
+        return es_numero_invalido;
     };                            
     
     $scope.validar_fecha_ejecucion_gasto_digital = function(gasto_digital){
