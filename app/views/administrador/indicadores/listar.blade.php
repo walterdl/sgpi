@@ -7,6 +7,16 @@
         @endforeach
     @endif
     <style>
+        li.current a{
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+        }
+        li.current a:hover{
+            color: #fff;
+            background-color: #286090;
+            border-color: #204d74;
+        }    
         .overlay-2{
             z-index: 50;
             background: rgba(255, 255, 255, 0.7);

@@ -39,6 +39,7 @@ sgpi_app.controller('final_proyecto_controller', function ($scope, $http, Upload
 	| justo cuando se selecciona la opción de final de proyecto desde la pestaña de proyectos
 	*/            
 	$scope.$on('final_proyecto_seleccionado', function (event) {
+	    $scope.data.pestania_actual = 'final_proyecto';
         $scope.consultar_final_proyecto('primera_consulta');
 	});	
 	
@@ -149,21 +150,25 @@ sgpi_app.controller('final_proyecto_controller', function ($scope, $http, Upload
         $scope.cargando_archivos = true;
         
         // Hace uso del servicio Upload que ngFile proporciona
+        var data_upload = {
+            archivo_acta_finalizacion: $scope.documento_acta_finalizacion,
+            archivo_memoria_academica: $scope.documento_memoria_academica,
+            id_proyecto: $scope.data.id_proyecto
+        };
+        if($scope.comentario_investigador != null)
+            data_upload['comentario'] = $scope.comentario_investigador;
+        
         $scope.upload_service = Upload.upload({
             url: '/proyectos/cargar_final_proyecto',
             method: 'POST',
-            data: {
-                archivo_acta_finalizacion: $scope.documento_acta_finalizacion,
-                archivo_memoria_academica: $scope.documento_memoria_academica,
-                id_proyecto: $scope.data.id_proyecto,
-                comentario: $scope.comentario_investigador
-            }
+            data: data_upload
         });
 
         // realiza seguimiento de envío a travez del objeto promise
         $scope.upload_service.then(function (response) {
             console.log(response); // impirme respuesta de servidor para propósitos debug
             if(response.data.consultado == 1){
+                alertify.success('Final de proyecto cargado');
                 $scope.resetear_modelos();
                 $scope.consultar_final_proyecto('recarga');
             }
@@ -195,6 +200,7 @@ sgpi_app.controller('final_proyecto_controller', function ($scope, $http, Upload
 	*/             
     $scope.volver_a_proyectos = function() {
         $scope.resetear_modelos();
+        $scope.data.pestania_actual = null;
         $('a[href="#contenido_tab_proyectos"]').tab('show');
     };
 });

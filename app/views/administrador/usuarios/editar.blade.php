@@ -38,7 +38,7 @@
 
     <section class="content-header">
         <ol class="breadcrumb">
-            <li><a href="/"><i class="fa fa-home" style="font-size:18px;"></i><b></b></a></li> <i class="fa fa-chevron-right" aria-hidden="true"></i> <li><a href="/usuarios"><b>Usuarios</b></a></li>
+            <li><a href="/"><i class="fa fa-home" style="font-size:18px;"></i><b></b></a></li> <i class="fa fa-chevron-right" aria-hidden="true"></i> <li><a href="/usuarios/listar"><b>Usuarios</b></a></li>
             <i class="fa fa-chevron-right" aria-hidden="true"></i> Editar
         </ol>
         <br />

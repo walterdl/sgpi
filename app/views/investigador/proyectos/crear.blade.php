@@ -81,7 +81,7 @@
     <!--contenido |-->
     <section class="content" ng-cloak ng-controller="crear_proyecto_controller">
         
-        <form action="/proyectos/registrar_nuevo_proyecto" method="POST" enctype='multipart/form-data'>
+        <form id="_form_" action="/proyectos/registrar_nuevo_proyecto" method="POST" enctype="multipart/form-data">
         
             <div class="box">
                 <div class="box-header with-border">
@@ -202,8 +202,8 @@
                                         {{--Año de la convocatoria--}}
                                         <div class="col-xs-12 col-sm-6 col-md-4">
                                             <div class="form-group">
-                                                <label for="anio_convocatoria">Año de la convocatoria</label>
-                                                <input type="number" min="2000" name="anio_convocatoria" id="anio_convocatoria" ng-model="data.anio_convocatoria" class="form-control"/>
+                                                <label for="anio_convocatoria">Año de la convocatoria <span class="error-text" ng-show="data.validacion_anio_convocatoria != null">Valor debe ser entero y positivo</span></label>
+                                                <input type="number" name="anio_convocatoria" id="anio_convocatoria" ng-model="data.anio_convocatoria" ng-change="validar_anio_convocatoria()" class="form-control" ng-class="{'invalid_control': data.validacion_anio_convocatoria != null}"/>
                                             </div>
                                         </div> 
                                     </div>
@@ -493,7 +493,7 @@
                                     		    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-show="visibilidad.entidad_grupo_inv_externo_nuevo_participante">
                                     		        <div class="form-group">
                                     		            <label for="entidad_grupo_inv_externo_nuevo_participante">
-                                    		                Entidad / grupo de investigación co-ejecutor <span style="color:#B22222;" ng-show="visibilidad.entidad_externa_nuevo_participante_invalido">Entidad/grupo inv. inválido</span>
+                                    		                Entidad / grupo de investigación co-ejecutor <span style="color:#B22222;" ng-show="visibilidad.entidad_externa_nuevo_participante_invalido">Longitud mínima de 5 caractéres y máximo de 150</span>
                                     		            </label>
                                     					<input type="text" id="entidad_grupo_inv_externo_nuevo_participante" ng-model="data.entidad_externa_nuevo_participante" ng-change="validar_entidad_externa_nuevo_participante()"
                                     					class="form-control"
@@ -503,7 +503,7 @@
                                     		    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-show="visibilidad.programa_academico_nuevo_participante">
                                     		        <div class="form-group">
                                     		            <label for="programa_academico_nuevo_participante">
-                                    		                Programa académico <span style="color:#B22222;" ng-show="visibilidad.programa_academico_participante_invalido">Programa académico inválido</span>
+                                    		                Programa académico <span style="color:#B22222;" ng-show="visibilidad.programa_academico_participante_invalido">Longitud mínima de 5 caractéres y máximo de 150</span>
                                     		            </label>
                                     					<input type="text" ng-model="data.programa_academico_nuevo_participante" ng-change="validar_programa_acad_nuevo_participante()"
                                     					class="form-control"
@@ -1628,7 +1628,7 @@
                             					<thead>
                             						<tr>
                             							<th>N°</th>
-                            							<th>Materiales</th>
+                            							<th>Servicio técnico</th>
                             							<th>Justificación</th>
                             							<th>UCC</th>
                             							<th>CONADI</th>

@@ -30,6 +30,7 @@ sgpi_app.controller('final_proyecto_controller', function ($scope, $http, Upload
 	| justo cuando se selecciona la opción de final de proyecto desde la pestaña de proyectos
 	*/            
 	$scope.$on('final_proyecto_seleccionado', function (event) {
+	    $scope.data.pestania_actual = 'final_proyecto';
         $scope.consultar_final_proyecto('primera_consulta');
 	});	
 	
@@ -239,6 +240,7 @@ sgpi_app.controller('final_proyecto_controller', function ($scope, $http, Upload
     $scope.volver_a_proyectos = function() {
         $scope.resetear_modelos();
         $scope.final_proyecto = null;
+        $scope.data.pestania_actual = null;
         $('a[href="#contenido_tab_proyectos"]').tab('show');
     };
 });

@@ -573,4 +573,20 @@
             }
         }
         
+    	/*
+    	|--------------------------------------------------------------------------
+    	| post_editar_gastos_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Punto de llegada de envío de formulario de ediciones de gastos de un proyecto de investigación
+    	| Reliza las ediciones de los registros de los gastos de un determinado proyecto
+    	*/          
+        public function post_editar_gastos_proyecto(){
+            file_put_contents
+            (
+                app_path().'/logs.log', 
+                "\r\n".print_r(Input::all(), true)
+                ,FILE_APPEND
+            );
+            return 'recibido';
+        }
     }

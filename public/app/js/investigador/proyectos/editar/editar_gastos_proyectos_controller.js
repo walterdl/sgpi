@@ -509,12 +509,14 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
         // inicializa los gastos del tipo de gasto equipo con las entidades UCC y CONADI por defecto
         var gastos = [
             {
+                id_gasto: 'nuevo',
                 id_entidad_fuente_presupuesto: $scope.id_entidad_fuente_presupuesto_ucc,
                 nombre_entidad_fuente_presupuesto: 'UCC',
                 valor: 0,
                 gasto_invalido: false
             },
             {
+                id_gasto: 'nuevo',
                 id_entidad_fuente_presupuesto: $scope.id_entidad_fuente_presupuesto_conadi,
                 nombre_entidad_fuente_presupuesto: 'CONADI',
                 valor: 0,
@@ -753,13 +755,19 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
         return resultado_validacion;
     };    
     $scope.validar_dedicacion_semanal = function(gasto_personal) {
-        gasto_personal.dedicacion_semanal_invalido = numero_invalido(gasto_personal.dedicacion_horas_semanales);
+        var resultado_validacion = numero_invalido(gasto_personal.dedicacion_horas_semanales);
+        gasto_personal.dedicacion_semanal_invalido = resultado_validacion;
+        return resultado_validacion;
     };
     $scope.validar_total_semanas = function(gasto_personal) {
-        gasto_personal.total_semanas_invalido = numero_invalido(gasto_personal.total_semanas);
+        var resultado_validacion = numero_invalido(gasto_personal.total_semanas);
+        gasto_personal.total_semanas_invalido = resultado_validacion;
+        return resultado_validacion;
     };
     $scope.validar_valor_hora = function(gasto_personal) {
-        gasto_personal.valor_hora_invalido = numero_invalido(gasto_personal.valor_hora);
+        var resultado_validacion = numero_invalido(gasto_personal.valor_hora);
+        gasto_personal.valor_hora_invalido = resultado_validacion;
+        return resultado_validacion;
     };    
     $scope.validar_concepto = function(tipo_gasto) {
         
@@ -777,7 +785,7 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
         
         var resultado_validacion = tipo_gasto.fecha_ejecucion instanceof Date;
         tipo_gasto.fecha_ejecucion_invalido = !resultado_validacion;
-        return resultado_validacion;
+        return !resultado_validacion;
     };
     $scope.validar_cantidad_salidas = function(gasto_salida) {
         var resultado_validacion = numero_invalido(gasto_salida.cantidad_salidas);
@@ -786,7 +794,7 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
 
     };
     $scope.validar_valor_unitario = function(gasto_salida) {
-        var resultado_validacion = numero_invalido(gasto_salida.cantidad_salidas);
+        var resultado_validacion = numero_invalido(gasto_salida.valor_unitario);
         gasto_salida.valor_unitario_invalido = resultado_validacion;
         return resultado_validacion;        
     };
@@ -833,5 +841,53 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
 	*/         
     $scope.guardar = function() {
         
+        var datos_no_validos = false;
+        var tipos_gastos = [
+            'gastos_personal',
+            'gastos_equipos',
+            'gastos_software',
+            'gastos_salidas_campo',
+            'gastos_materiales',
+            'gastos_servicios',
+            'gastos_bibliograficos',
+            'gastos_digitales'
+            ];
+        tipos_gastos.forEach(function(tipo_gasto) {
+            $scope[tipo_gasto].forEach(function(tp) {
+                if(tipo_gasto == 'gastos_personal')
+                {
+                    datos_no_validos |= $scope.validar_dedicacion_semanal(tp);
+                    datos_no_validos |= $scope.validar_total_semanas(tp);
+                    datos_no_validos |= $scope.validar_valor_hora(tp);                    
+                }
+                else
+                {
+                    if(tipo_gasto == 'gastos_salidas_campo')
+                    {
+                        datos_no_validos |= $scope.validar_justificacion(tp);
+                        datos_no_validos |= $scope.validar_cantidad_salidas(tp);
+                        datos_no_validos |= $scope.validar_valor_unitario(tp);
+                    }
+                    else
+                    {
+                        datos_no_validos |= $scope.validar_justificacion(tp);
+                        datos_no_validos |= $scope.validar_concepto(tp);
+                    }
+                }
+                datos_no_validos |= $scope.validar_fecha_ejecucion(tp);
+                tp.gastos.forEach(function(gasto) {
+                    datos_no_validos |= $scope.validar_presupuesto_gasto(gasto);                    
+                });
+            });
+        });
+        
+        if(datos_no_validos)
+            alertify.error('Validación de datos incorrecta. Revisar los datos ingresados');
+        else
+        {
+            $scope.data.msj_operacion_general = '<h3 class="text-center">Guardando ediciones de gastos...<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i></h3>';
+            $scope.visibilidad.show_velo_general = true;
+            $('#submit_editar_proyecto').trigger('click');
+        }
     };
 });

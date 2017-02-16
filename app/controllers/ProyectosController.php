@@ -3,6 +3,16 @@
     use Illuminate\Database\Eloquent\ModelNotFoundException;
     
     class ProyectosController extends BaseController {
+
+    	/*
+    	|--------------------------------------------------------------------------
+    	| registra_sgpi()
+    	|--------------------------------------------------------------------------
+    	| Presenta un formulario que permite enviar un formulario POST para la creacion de un proyecto
+    	*/          
+        public function registra_sgpi(){
+            return View::make('general.proyectos.formulario_simulacion_creacion_proyecto');
+        }
         
     	/*
     	|--------------------------------------------------------------------------
@@ -102,6 +112,13 @@
             
             // return '<pre>'.print_r(Input::all(), true).'</pre>';
             
+            file_put_contents
+            (
+                app_path().'/logs.log', 
+                "\r\n".print_r(Input::all(), true)
+                ,FILE_APPEND
+            );            
+            
             try{
                 DB::transaction(function()
                 {
@@ -141,7 +158,7 @@
             }
             catch (\Exception $e){
                 // aquí redirigir a listar proyectos con mensaje flash de error
-                // throw $e;
+                throw $e;
                 Log::error($e);
                 Session::flash('notify_operacion_previa', 'error');
                 Session::flash('mensaje_operacion_previa', 'Error en el registro de nuevo proyecto. Detalles: '.$e->getMessage());
@@ -343,7 +360,7 @@
                 $reglas_de_validacion
             );              
             if($validacion->fails()){
-                throw new Exception('Datos del participante '.$data['identificacion_'.$i].' inválidos');
+                throw new Exception('Datos del participante '.$data['identificacion_'.$i].' inválidos. Detálles: '.$validacion->messages());
             }
             
             // Se obtiene los campos genéricos para todo tipo de coinveestigador, si no se encuentra, se establece como 1 su valor
@@ -740,6 +757,10 @@
                         $nueva_entidad_fuente_presupuesto = new EntidadFuentePresupuesto();
                         $nueva_entidad_fuente_presupuesto->nombre = $nueva_entidad;
                         $nueva_entidad_fuente_presupuesto->save();
+                    }
+                    else
+                    {
+                        throw new Exception('No de pueden crear duplicados de nombres de entidades fuente de presupuesto. Nombre duplicado a crear: '.$nueva_entidad);
                     }
                 }
             }

@@ -7,6 +7,7 @@ sgpi_app.controller('informe_avance_controller', function ($scope, Upload, $http
 	| Realiza una consulta ajax por los gastos del proyecto identificado en data.id_proyecto
 	*/            
 	$scope.$on('informe_avance_seleccionado', function (event) {
+	    $scope.data.pestania_actual = 'informe_avance';
         $scope.consultar_informe_avance('primera_consulta');
 	});
 	
@@ -20,7 +21,6 @@ sgpi_app.controller('informe_avance_controller', function ($scope, Upload, $http
 	*/    	
 	$scope.consultar_informe_avance = function(tipo_operacion) {
 	    
-        
 	    if(tipo_operacion == 'primera_consulta')
             $scope.msj_operacion = '<h3 class="text-center">Cargando estado de revisión de informe de avance...<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i></h3>';	    
         else if(tipo_operacion == 'recarga')
@@ -110,6 +110,7 @@ sgpi_app.controller('informe_avance_controller', function ($scope, Upload, $http
 	*/             
     $scope.volver_a_proyectos = function() {
         $scope.informe_avance = null;
+        $scope.data.pestania_actual = null;
         $('a[href="#contenido_tab_proyectos"]').tab('show');
     };
 });

@@ -1,0 +1,74 @@
+
+Array
+(
+    [codigo_fmi] => rere
+    [subcentro_costo] => rerer
+    [nombre_proyecto] => ererer
+    [fecha_inicio] => 2017-03-03
+    [duracion_meses] => 12
+    [fecha_final] => 2018-03-03
+    [convocatoria] => rerer
+    [anio_convocatoria] => 2354
+    [objetivo_general] => rererer
+    [objetivo_especifico_0] => fdfdfd
+    [cantidad_objetivos_especificos] => 1
+    [cantidad_participantes] => 1
+    [identificacion_investigador_principal] => 7
+    [cantidad_productos] => 1
+    [id_tipo_producto_general_0] => 2
+    [id_tipo_producto_especifico_0] => 5
+    [nombre_producto_0] => dfdfdf
+    [encargado_producto_0] => 7
+    [fecha_proyectada_radicar_0] => 2017-02-08
+    [fecha_remision_0] => 2017-02-08
+    [fecha_confirmacion_editorial_0] => 2017-02-15
+    [fecha_recepcion_evaluacion_0] => 2017-02-10
+    [fecha_respuesta_evaluacion_0] => 2017-02-26
+    [fecha_aprobacion_publicacion_0] => 2017-03-02
+    [fecha_publicacion_0] => 2017-03-12
+    [cantidad_gastos_equipos] => 0
+    [cantidad_gastos_software] => 0
+    [cantidad_gastos_salidas] => 0
+    [cantidad_gastos_materiales] => 0
+    [cantidad_gastos_servicios_tecnicos] => 0
+    [cantidad_gastos_bibliograficos] => 0
+    [cantidad_gastos_digitales] => 0
+    [gasto_personal_dedicacion_semanal_7] => 34.98
+    [gasto_personal_total_semanas_7] => 43.435
+    [gasto_personal_valor_hora_7] => 4343
+    [gasto_personal_presupuesto_ucc_7] => 3434
+    [gasto_personal_fecha_ejecucion_7] => 2017-02-09
+    [presupuesto] => Symfony\Component\HttpFoundation\File\UploadedFile Object
+        (
+            [test:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 
+            [originalName:Symfony\Component\HttpFoundation\File\UploadedFile:private] => mer v1.mwb.bak
+            [mimeType:Symfony\Component\HttpFoundation\File\UploadedFile:private] => application/octet-stream
+            [size:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 58875
+            [error:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 0
+            [pathName:SplFileInfo:private] => /tmp/phpedMiKE
+            [fileName:SplFileInfo:private] => phpedMiKE
+        )
+
+    [presentacion_proyecto] => Symfony\Component\HttpFoundation\File\UploadedFile Object
+        (
+            [test:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 
+            [originalName:Symfony\Component\HttpFoundation\File\UploadedFile:private] => mer v1.mwb.bak
+            [mimeType:Symfony\Component\HttpFoundation\File\UploadedFile:private] => application/octet-stream
+            [size:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 58875
+            [error:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 0
+            [pathName:SplFileInfo:private] => /tmp/phpKBzo30
+            [fileName:SplFileInfo:private] => phpKBzo30
+        )
+
+    [acta_inicio] => Symfony\Component\HttpFoundation\File\UploadedFile Object
+        (
+            [test:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 
+            [originalName:Symfony\Component\HttpFoundation\File\UploadedFile:private] => mer v1.mwb.bak
+            [mimeType:Symfony\Component\HttpFoundation\File\UploadedFile:private] => application/octet-stream
+            [size:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 58875
+            [error:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 0
+            [pathName:SplFileInfo:private] => /tmp/phpc6Aimo
+            [fileName:SplFileInfo:private] => phpc6Aimo
+        )
+
+)

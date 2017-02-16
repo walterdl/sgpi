@@ -60,7 +60,7 @@
                 if($entidad->nombre_entidad_fuente_presupuesto == 'CONADI')
                     $indice_entidad_conadi = $i;
             }       
-            if($indice_entidad_conadi!=1) // Si CONADI no está de segunda
+            if($indice_entidad_conadi != null && $indice_entidad_conadi != 1) // Si CONADI no está de segunda
             {
                 $entidad_conadi = $entidades_fuente_presupuesto[$indice_entidad_conadi];
                 array_splice($entidades_fuente_presupuesto, $indice_entidad_conadi, 1); // quita la entidad CONADI de la posición donde se encuentra

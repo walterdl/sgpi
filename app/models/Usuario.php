@@ -64,6 +64,7 @@
             $query .= 'FROM usuarios u, roles r, estados e, personas p, tipos_identificacion ti ';
             $query .= 'WHERE  ';
             $query .= ' 	u.id_persona = p.id  ';
+            $query .= 'AND u.id not in('.Auth::user()->id.')' ;
             $query .= 'AND	u.id_rol = r.id ';
             $query .= 'AND  r.id in (1, 2, 3) ';
             $query .= 'AND	u.id_estado = e.id ';

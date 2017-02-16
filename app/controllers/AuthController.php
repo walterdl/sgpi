@@ -6,7 +6,8 @@ class AuthController extends BaseController {
 
         $userdata = array(
             'username' => Input::get('username'),
-            'password' => Input::get('password')
+            'password' => Input::get('password'),
+            'id_estado' => 1
         ); 
 
         if(Auth::attempt($userdata))

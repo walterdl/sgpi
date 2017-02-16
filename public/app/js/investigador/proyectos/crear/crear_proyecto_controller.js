@@ -10,6 +10,8 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
     $scope.data.validacion_fecha_inicio = null;
     $scope.data.validacion_duracion_meses = null;
     $scope.data.validacion_objetivo_general = null;
+    $scope.data.validacion_anio_convocatoria = null;
+    $scope.data.anio_convocatoria = null;
     
     $scope.data.objetivos_especificos = [{
             nombre: null,
@@ -162,6 +164,7 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
             $scope.validar_nombre_proyecto(),
             $scope.validar_fecha_inicio(),
             $scope.validar_duracion_meses(),
+            $scope.validar_anio_convocatoria(),
             $scope.validar_objetivo_general(),
             $scope.validar_objetivos_especificos()
             ];
@@ -254,6 +257,38 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
         }
         $scope.data.validacion_duracion_meses = 'Minimo debe ser 12 meses';
         return true;                               
+    };
+    
+    /*
+	|--------------------------------------------------------------------------
+	| validar_anio_convocatoria() 
+	|--------------------------------------------------------------------------
+	| valida año de convocatora que sea un entero válido o que esté vacio
+	*/                         
+    $scope.validar_anio_convocatoria = function() {
+        
+        if($scope.data.anio_convocatoria === undefined)
+        {
+            $scope.data.validacion_anio_convocatoria = true;
+            return true;            
+        }
+        else if($scope.data.anio_convocatoria === null)
+        {
+            $scope.data.validacion_anio_convocatoria = null;
+            return false;
+        }
+        else
+        {
+            var regex = /^\d+$/;
+            if(regex.test($scope.data.anio_convocatoria)){
+                $scope.data.validacion_anio_convocatoria = null;
+                return false;                
+            }  
+            else{
+                $scope.data.validacion_anio_convocatoria = true;
+                return true;
+            }
+        }
     };
     
     /*

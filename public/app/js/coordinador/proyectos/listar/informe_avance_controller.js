@@ -7,6 +7,7 @@ sgpi_app.controller('informe_avance_controller', function ($scope, $http) {
 	| Realiza una consulta ajax por los gastos del proyecto identificado en data.id_proyecto
 	*/            
 	$scope.$on('informe_avance_seleccionado', function (event) {
+	    $scope.data.pestania_actual = 'informe_avance';
         $scope.consultar_informe_avance('primera_consulta');
 	});
 	
@@ -70,6 +71,7 @@ sgpi_app.controller('informe_avance_controller', function ($scope, $http) {
 	*/             
     $scope.volver_a_proyectos = function() {
         $scope.informe_avance = null;
+        $scope.data.pestania_actual = null;
         $('a[href="#contenido_tab_proyectos"]').tab('show');
     };
 });

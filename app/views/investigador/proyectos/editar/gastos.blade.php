@@ -1059,7 +1059,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-md-4">
                             <button type="button" class="btn btn-primary btn-block" ng-click="guardar()" >Guardar cambios&nbsp;<i class="fa fa-floppy-o" aria-hidden="true"></i></button>
-                            <input type="submit" id="input_editar_proyecto" ng-hide="true"/>
+                            <input type="submit" id="submit_editar_proyecto" ng-hide="true"/>
                         </div>
                         <div class="col-xs-12 hidden-md hidden-lg">&nbsp;</div>
                         <div class="col-xs-12 col-md-4">

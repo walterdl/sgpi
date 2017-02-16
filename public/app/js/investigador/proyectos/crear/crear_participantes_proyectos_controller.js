@@ -22,11 +22,18 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
 	*/          
     $scope.buscar_datos_x_id = function(){
         
-        if($scope.data.identificacion_a_buscar == null){
+        if($scope.data.identificacion_a_buscar === null || $scope.data.identificacion_a_buscar === undefined){
             $scope.data.msj_label_busqueda_id = 'Error: ingrese una identificacion válida';
             return;
         }
-            
+        else
+        {
+            var regex = /^\d+$/;
+            if(!regex.test($scope.data.identificacion_a_buscar)){
+                $scope.data.msj_label_busqueda_id = 'Error: ingrese una identificacion válida';
+                return;
+            }
+        }        
             
         if($scope.data.identificacion_a_buscar == $scope.data.info_investigador_principal.identificacion){
             $scope.data.msj_label_busqueda_id = 'Error: ingrese una identificacion diferente al investigador principal';
@@ -594,7 +601,7 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
 	| Valida valor del modelo de entidad / grupo de inv de nuevo participante
 	*/      
     $scope.validar_entidad_externa_nuevo_participante = function(mostrar_campo_invalido=true) {
-        if($scope.data.entidad_externa_nuevo_participante){
+        if($scope.data.entidad_externa_nuevo_participante && $scope.data.entidad_externa_nuevo_participante.length >= 5 && $scope.data.entidad_externa_nuevo_participante.length < 150){
             $scope.visibilidad.entidad_externa_nuevo_participante_invalido = false;
             return false;
         }
@@ -612,7 +619,7 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
 	| Valida valor del modelo de entidad / grupo de inv de nuevo participante
 	*/          
     $scope.validar_programa_acad_nuevo_participante = function(mostrar_campo_invalido=true) {
-        if($scope.data.programa_academico_nuevo_participante){
+        if($scope.data.programa_academico_nuevo_participante && $scope.data.programa_academico_nuevo_participante.length >= 5 && $scope.data.programa_academico_nuevo_participante.length < 150){
             $scope.visibilidad.programa_academico_participante_invalido = false;
             return false;
         }

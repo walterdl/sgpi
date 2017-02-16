@@ -1,6 +1,7 @@
 *********************************
 Enlace y login host público
 ********************************
+http://sgpiucc.ezyro.com/
 http://cpanel.ezyro.com/index.php
 user: ezyro_19417136
 pass: sgpi123

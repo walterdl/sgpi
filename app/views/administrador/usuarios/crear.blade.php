@@ -55,10 +55,10 @@
                         <div class="alert alert-info borde-rectangular" role="alert">
                             <p class="text-left"><i class="fa fa-id-card fa-2x" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<strong>Buscar primero identificación del la persona </strong> en la base de datos para recuperar posibles datos básicos.</p>
                         </div>
-                        <label for="nombre">Buscar datos básicos por identificación</label>
+                        <label for="nombre">Buscar datos básicos por identificación <span ng-show="id_a_buscar_invalida" class="error-text">Identificación inválida</span></label>
                         <span ng-show="visibilidad.show_msj_operacion_busqueda" ng-bind-html="data.msj_operacion_busqueda"></span>
                         <div class="input-group">
-                            <input id="input_buscar_id" type="number" name="identificacion" ng-model="data.buscar_identificacion" class="form-control">
+                            <input id="input_buscar_id" type="number" name="identificacion" ng-model="data.buscar_identificacion" ng-change="cambia_id_a_buscar()" class="form-control" ng-class="{'invalid_control': id_a_buscar_invalida}">
                             <span class="input-group-addon btn btn-default" ng-click="buscar_id()"><i class="fa fa-search"></i></span>
                         </div>
                     </div>

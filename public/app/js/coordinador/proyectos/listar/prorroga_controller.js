@@ -30,6 +30,7 @@ sgpi_app.controller('prorroga_controller', function ($scope, $http, Upload) {
 	| justo cuando se selecciona la opción de final de proyecto desde la pestaña de proyectos
 	*/            
 	$scope.$on('prorroga_seleccionado', function (event) {
+	    $scope.data.pestania_actual = 'prorroga_proyecto';
         $scope.consultar_prorroga('primera_consulta');
 	});	
 	
@@ -93,6 +94,7 @@ sgpi_app.controller('prorroga_controller', function ($scope, $http, Upload) {
     $scope.volver_a_proyectos = function() {
         $scope.resetear_modelos();
         $scope.prorroga = null;
+        $scope.data.pestania_actual = null;
         $('a[href="#contenido_tab_proyectos"]').tab('show');
     };
 });

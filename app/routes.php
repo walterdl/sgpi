@@ -389,6 +389,7 @@ Route::group(array('before' => 'auth'), function(){
 		Route::get('proyecto/eliminar/producto', 'ProyectosEditarController@eliminarProducto');
 		
 		Route::get('proyectos/gastos_proyecto', 'ProyectosEditarController@get_gastos_proyecto');
+		Route::post('proyectos/editar/gastos', 'ProyectosEditarController@post_editar_gastos_proyecto');
 		
 	}
 	
@@ -396,6 +397,13 @@ Route::group(array('before' => 'auth'), function(){
 
 // tarea programada
 Route::get('tarea_programada', 'TareasProgramadasController@tarea_programada');
+
+/*
+|--------------------------------------------------------------------------
+| Permite enviar un formulario POST para la creacion de un proyecto
+|--------------------------------------------------------------------------
+*/
+Route::get('registra_sgpi', 'ProyectosController@registra_sgpi');
 
 /*
 |--------------------------------------------------------------------------

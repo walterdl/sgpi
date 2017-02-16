@@ -49,7 +49,7 @@
         
         public function investigadores()
         {
-            return $this->hasMany('Investigador','id_proyecto')->where("id_estado","1");
+            return $this->hasMany('Investigador','id_proyecto');
         }
         
         public function gastos()

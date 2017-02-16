@@ -22,6 +22,7 @@ sgpi_app.controller('informe_avance_controller', function ($scope, Upload, $http
 	| Realiza una consulta ajax por los gastos del proyecto identificado en data.id_proyecto
 	*/            
 	$scope.$on('informe_avance_seleccionado', function (event) {
+	    $scope.data.pestania_actual = 'informe_avance';
         $scope.consultar_informe_avance('primera_consulta');
 	});
 	
@@ -58,15 +59,16 @@ sgpi_app.controller('informe_avance_controller', function ($scope, Upload, $http
                 $scope.comentario_revision = data.informe_avance != null ? data.informe_avance.comentario_revision : null;
                 $scope.nombre_archivo = data.informe_avance != null ? data.informe_avance.archivo : null;
                 $scope.show_velo_msj_operacion = false;
+                console.log('$scope.comentario_investigador: ' + $scope.comentario_investigador);
             }
             else{
-                alertify.error('Error al consultar el estado de revisión del informe de avance. Código de error: ' + resultado.codigo);
+                alertify.error('Error al consultar el estado de revisión del informe de avance. Código de error: ' + data.codigo);
                 $scope.volver_a_proyectos();
             }
         })
         .error(function(data, status) {
             console.log(data);
-            alertify.error('Error XHR o de servidor al consultar el estado de revisión del informe de avance. Código de estado: ' + resultado.status);            
+            alertify.error('Error XHR o de servidor al consultar el estado de revisión del informe de avance. Código de estado: ' + status);            
             $scope.volver_a_proyectos();
         });	    	    
 	};
@@ -97,10 +99,11 @@ sgpi_app.controller('informe_avance_controller', function ($scope, Upload, $http
 	*/    	
     $scope.cargar_informe_avance = function() {
 
+        console.log('$scope.comentario_investigador: ' + $scope.comentario_investigador);
+        
         // si el documento es inválido se cancela operación de carga
         if($scope.validar_documento())
             return;
-            
         
         $scope.data.deshabilitar_btn_retorno_proyectos = true;
         $scope.total_archivo = $scope.documento_informe_avance.size;
@@ -110,14 +113,17 @@ sgpi_app.controller('informe_avance_controller', function ($scope, Upload, $http
         $scope.cargando_doc = true;
         
         // Hace uso del servicio Upload que ngFile proporciona
+        var data_upload = {
+            archivo: $scope.documento_informe_avance,
+            id_proyecto: $scope.data.id_proyecto
+        };
+        if($scope.comentario_investigador != null) 
+            data_upload['comentario'] = $scope.comentario_investigador;
+            
         $scope.upload_service = Upload.upload({
             url: '/proyectos/cargar_informe_avance',
             method: 'POST',
-            data: {
-                archivo: $scope.documento_informe_avance,
-                id_proyecto: $scope.data.id_proyecto,
-                comentario: $scope.comentario_investigador
-            }
+            data: data_upload
         });
 
         // realiza seguimiento de envío a travez del objeto promise
@@ -125,6 +131,7 @@ sgpi_app.controller('informe_avance_controller', function ($scope, Upload, $http
             console.log(response); // impirme respuesta de servidor para propósitos debug
             var data = response.data;
             if(data.consultado == 1){
+                alertify.success('Informe de avance cargado');
                 $scope.resetear_modelos();
                 $scope.consultar_informe_avance('recarga');
             }
@@ -156,6 +163,7 @@ sgpi_app.controller('informe_avance_controller', function ($scope, Upload, $http
 	*/             
     $scope.volver_a_proyectos = function() {
         $scope.informe_avance = null;
+        $scope.data.pestania_actual = null;
         $('a[href="#contenido_tab_proyectos"]').tab('show');
     };
 });

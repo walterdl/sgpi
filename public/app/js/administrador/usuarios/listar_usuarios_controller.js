@@ -95,7 +95,7 @@ sgpi_app.controller('listar_usuarios_controller', function($scope, $http, Alerti
                 else{
                     $scope.visibilidad.show_tabla_usuario=false;
                     Alertify.error('Error al cargar los usurios, código de error: ' + data.codigo);
-                    console.log('Error en inhabilitar usurio, código de error: ' + data.codigo);
+                    console.log('Error al cargar los usurios, código de error: ' + data.codigo);
                 }
             })
             .error(function(data, status) {
@@ -116,16 +116,18 @@ sgpi_app.controller('listar_usuarios_controller', function($scope, $http, Alerti
         
         var cambio = usuario.id_estado == 1 ? 2 : 1;
         var estado = null;
+        var bandera = null;
+        var datos = null;
         if(cambio == 1)
         {
             estado = "habilitar";
         }
         else
         {
-            estado = "inhabilitar";
+            estado = "deshabilitar";
         }
 
-        alertify.confirm('Habilitar / deshabilitar usuario', 'Desea '+estado+' el usuario?', 
+        alertify.confirm('Habilitar / deshabilitar usuario', '¿Desea '+estado+' el usuario?', 
         function()
         { 
             // cuando acepta cambiar el esatdo del usuario
@@ -142,35 +144,32 @@ sgpi_app.controller('listar_usuarios_controller', function($scope, $http, Alerti
                 })
                 .success(function(data){
                     console.log(data);
-                    bandera=0;
-                    datos=data;
-                    
-                    if(data.consultado == 1){
-                        // $scope.data.info_usuario = data.info_usuario[0];
-                        console.log("si consulto");
-                    }
-                    else{
-                        //$scope.visibilidad.show_operacion_mas_info_usuario = false;
-                        console.log('Error en inhabilitar usurio, código de error: ' + data.codigo + ', mensaje: ' + data.mensaje);
-                        Alertify.error('Error en inhabilitar usurio, código de error: ' + data.codigo);
-                        bandera=1;
+                    bandera = 0;
+                    datos = data;
+                    if(data.consultado != 1){
+                        console.log('Error al habilitar/deshabilitar el usuario, código de error: ' + data.codigo + ', mensaje: ' + data.mensaje);
+                        Alertify.error('Error al habilitar/deshabilitar el usuario, código de error: ' + data.codigo);
+                        bandera = 1;
                     }
                 })
                 .error(function(data, status){
                     
                     //$scope.visibilidad.show_operacion_mas_info_usuario = false;
-                    Alertify.error('Error en inhabilitar usurio, código de error: ' + status);
-                    console.log('Error en inhabilitar usurio, código de error: ' + status);
+                    Alertify.error('Error al habilitar/deshabilitar el usuario, código de error: ' + status);
+                    console.log('Error al habilitar/deshabilitar el usuario, código de error: ' + status);
                     bandera=1;
                     
                 })
                 .finally(function() {
                     
-                    $scope.visibilidad.btn_cambiarEstado=true;
-                    $scope.visibilidad.show_cargando_cambiarEstado=false;
+                    $scope.visibilidad.btn_cambiarEstado = true;
+                    $scope.visibilidad.show_cargando_cambiarEstado = false;
                 
                     if(bandera == 0){
-                        alertify.success('Se a '+datos.cambio+' el Usuario');
+                        if(estado == "habilitar")
+                            alertify.success('Usuario habilitado');
+                        else
+                            alertify.success('Usuario deshabilitado');
                     
                         if(usuario.id_estado ==  2){
                             usuario.id_estado =1;

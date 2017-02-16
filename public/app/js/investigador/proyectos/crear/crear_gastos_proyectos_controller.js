@@ -104,14 +104,28 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
 	| Añade otra entidad fuente presupuesto a la colección de entidades_fuente_presupuesto.
 	| Añade un input hidden para crear la nueva entidad en la BD
 	| Llama al metodo que agrega la entidad a la coleccion de otras_entidades_presupuesto de cada tipo de gasto
+	| Evita que se agreguen entidades con mismo nombre y evita que se agregue entidad UCC y CONADI
 	*/        
     $scope.agregar_nueva_entidadPresupuesto = function() {
         if($scope.data.nueva_entidad_entidad_presupuesto != null && $scope.data.nueva_entidad_entidad_presupuesto.length > 0){
+            if($scope.data.nueva_entidad_entidad_presupuesto.toLowerCase() == 'ucc')
+            {
+                $scope.data.msj_nueva_entidadPresupuesto_incorrecto = 'La entidad UCC ya se encuentra agregada por defecto';
+                $scope.visibilidad.nueva_entidadPresupuesto_incorrecto = true;                            
+                return;                
+            }
+            if($scope.data.nueva_entidad_entidad_presupuesto.toLowerCase() == 'conadi')
+            {
+                $scope.data.msj_nueva_entidadPresupuesto_incorrecto = 'La entidad CONADI ya se encuentra agregada por defecto';
+                $scope.visibilidad.nueva_entidadPresupuesto_incorrecto = true;                            
+                return;                
+            }            
+            
             var existe_entidadPresupuesto = false;
             $scope.data.entidades_fuente_presupuesto.forEach(function(item) {
                 if(item.nombre == $scope.data.nueva_entidad_entidad_presupuesto)
                     existe_entidadPresupuesto = true;
-            })
+            });
             if(existe_entidadPresupuesto){
                 $scope.data.msj_nueva_entidadPresupuesto_incorrecto = 'Entidad de fuente de presupuesto ya agregada';
                 $scope.visibilidad.nueva_entidadPresupuesto_incorrecto = true;                            
@@ -121,7 +135,7 @@ sgpi_app.controller('crear_gastos_proyectos_controller', function ($scope, $http
             var nueva_entidad_presupuesto = {
                 id: $scope.data.contador_nuevas_entidades_presupuesto + 'x', // la 'x' significa que se trata de una entidad añadida por el usuario y no se trata de una ya existente en la BD
                 nombre: $scope.data.nueva_entidad_entidad_presupuesto
-            }
+            };
             $scope.data.entidades_fuente_presupuesto.push(nueva_entidad_presupuesto);
             $scope.data.entidades_presupuesto_seleccionadas.push(nueva_entidad_presupuesto);
             $scope.agregar_entidad_presupuesto_a_gastos(nueva_entidad_presupuesto);

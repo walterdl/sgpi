@@ -11,6 +11,7 @@ sgpi_app.controller('productos_controller', function ($scope, $http, $uibModal) 
 	| Realiza una consulta ajax por los productos del proyecto identificado en data.id_proyecto
 	*/        
     $scope.$on('productos_seleccionado', function (event) {
+        $scope.data.pestania_actual = 'productos';
         $scope.show_velo_msj_operacion = true;
         $scope.msj_operacion = '<h3 class="text-center">Cargando productos del proyecto...<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i></h3>';
         $http({
@@ -27,14 +28,14 @@ sgpi_app.controller('productos_controller', function ($scope, $http, $uibModal) 
             }
             else if(data.consultado == 2){
                 // devolver aquí a pestaña de proyectos con mensaje de error
-                $('a[href="#contenido_tab_proyectos"]').tab('show');
                 alertify.error('Error al consultar los productos del proyecto. Código de error: ' + data.codigo);
+                $scope.volver_a_proyectos();
             }
         })
         .error(function(data, status) {
             console.log(data);
-            $('a[href="#contenido_tab_proyectos"]').tab('show');
             alertify.error('Error XHR o de servidor al consultar los productos del proyecto. Cósigo de estado: ' + status);            
+            $scope.volver_a_proyectos();
         });
     });    
     
@@ -63,6 +64,7 @@ sgpi_app.controller('productos_controller', function ($scope, $http, $uibModal) 
 	*/             
     $scope.volver_a_proyectos = function() {
         $scope.productos = [];
+        $scope.data.pestania_actual = null;
         $('a[href="#contenido_tab_proyectos"]').tab('show');
     };    
     

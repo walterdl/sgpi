@@ -7,8 +7,19 @@
         @endforeach
     @endif
     <style type="text/css">
+        li.current a{
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+        }
+        li.current a:hover{
+            color: #fff;
+            background-color: #286090;
+            border-color: #204d74;
+        }        
         .overlay-2{
             z-index: 50;
+            background: rgb(255, 255, 255);
             background: rgba(255, 255, 255, 0.7);
             border-radius: 3px;
             position: absolute;
@@ -99,23 +110,23 @@
                     <li id="tab_proyectos" role="presentation" class="active">
                         <a href="#contenido_tab_proyectos" disabled>Proyectos</a>
                     </li>
-                    <li id="tab_productos" role="presentation" 
+                    <li id="tab_productos" role="presentation" ng-show="data.pestania_actual=='productos'"
                     uib-tooltip="Navegar entre pestañas por los botones que presenta la pestaña Proyectos" tooltip-enable="true">
                         <a href="#contenido_tab_productos" disabled>Productos del proyecto</a>
                     </li>
-                    <li id="tab_gastos" role="presentation" 
+                    <li id="tab_gastos" role="presentation" ng-show="data.pestania_actual=='gastos'"
                     uib-tooltip="Navegar entre pestañas por los botones que presenta la pestaña Proyectos" tooltip-enable="true">
                         <a href="#contenido_tab_gastos" disabled>Ejecución presupuestal</a>
                     </li>
-                    <li id="tab_informe_avance" role="presentation" 
+                    <li id="tab_informe_avance" role="presentation" ng-show="data.pestania_actual=='informe_avance'"
                     uib-tooltip="Navegar entre pestañas por los botones que presenta la pestaña Proyectos" tooltip-enable="true">
                         <a href="#contenido_tab_informe_avance" disabled>Informe de avance</a>
                     </li>                
-                    <li id="tab_final_proyecto" role="presentation" 
+                    <li id="tab_final_proyecto" role="presentation" ng-show="data.pestania_actual=='final_proyecto'"
                     uib-tooltip="Navegar entre pestañas por los botones que presenta la pestaña Proyectos" tooltip-enable="true">
                         <a href="#contenido_tab_final_proyecto" disabled>Final de proyecto</a>
                     </li>                          
-                    <li id="tab_prorroga" role="presentation" 
+                    <li id="tab_prorroga" role="presentation" ng-show="data.pestania_actual=='prorroga_proyecto'"
                     uib-tooltip="Navegar entre pestañas por los botones que presenta la pestaña Proyectos" tooltip-enable="true">
                         <a href="#contenido_tab_prorroga" disabled>Prórroga de final de proyecto</a>
                     </li>                                              

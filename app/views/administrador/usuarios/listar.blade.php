@@ -7,6 +7,16 @@
         @endforeach
     @endif
     <style type="text/css">
+        li.current a{
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+        }
+        li.current a:hover{
+            color: #fff;
+            background-color: #286090;
+            border-color: #204d74;
+        }        
         .white-background{
             background-color: rgba(255,255,255,1) !important;
         }
@@ -38,7 +48,9 @@
 
     <section class="content-header">
         <ol class="breadcrumb">
-            <li><a href="/"><i class="fa fa-home" style="font-size:18px;"></i><b></b></a></li> <i class="fa fa-chevron-right" aria-hidden="true"></i> <li><a href="/usuarios"><b>Usuarios</b></a></li>
+            <li><a href="/"><i class="fa fa-home" style="font-size:18px;"></i></a></li> 
+            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+            <li>Usuarios</li>
         </ol><br>
     </section>
     
@@ -47,11 +59,6 @@
         <div class="box">
             <div class="box-header with-border">
                 <section class="content-header">
-                    <!--<ul class="nav pull-right navbar-nav">-->
-                    <!--    <li style="margin-right: 5px;">-->
-                    <!--        <a href="/usuarios/registrar" class="btn btn-primary" role="button">Registrar nuevo usuario</a>-->
-                    <!--    </li>-->
-                    <!--</ul>-->
                     <h1>Usuarios</h1>
                 </section>
             </div>
@@ -72,7 +79,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!--ng-show="visibilidad.mostrar_usuarios"-->
                             <tr ng-repeat="usuario in data.usuarios">
                                 <td>{$ usuario.nombres $}</td>
                                 <td>{$ usuario.identificacion $}</td>
@@ -82,8 +88,6 @@
                                     <button ng-show="visibilidad.btn_cambiarEstado" type="button" class="btn btn-default" ng-click="btn_cambiar_estado(usuario)">
                                         <a ng-show="usuario.id_estado==1" ><i class="fa fa-ban" aria-hidden="true"></i></a>
                                         <a ng-show="usuario.id_estado==2"><i class="fa fa-check" aria-hidden="true"></i></a>
-                                        <!--ng-click="btn_cambiar_estado(usuario,2)"-->
-                                        <!--ng-click="btn_cambiar_estado(usuario,1)"-->
                                     </button>
                                     <div class="overlay" ng-show="visibilidad.show_cargando_cambiarEstado">
                                         <i class="fa fa-circle-o-notch fa-spin"></i>
@@ -92,8 +96,6 @@
                                 <td><button type="button" class="btn btn-default" ng-click="btn_mas_info_usuario_click(usuario.id_usuario)"><i class="fa fa-info-circle" aria-hidden="true"></i></button></td>
                                 <td><a href="/usuarios/editar/{$ usuario.id_usuario $}" type="button" class="btn btn-default"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
                             </tr>
-                            
- 
                         </tbody>
                     </table>
                 </div>

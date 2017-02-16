@@ -10,6 +10,7 @@ sgpi_app.controller('gastos_controller', function ($scope, $http) {
 	| Realiza una consulta ajax por los gastos del proyecto identificado en data.id_proyecto
 	*/            
 	$scope.$on('gastos_seleccionado', function (event) {
+	    $scope.data.pestania_actual = 'gastos';
         $scope.show_velo_msj_operacion = true;
         $scope.msj_operacion = '<h3 class="text-center">Cargando gastos del proyecto...<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i></h3>';
         $http({
@@ -26,14 +27,14 @@ sgpi_app.controller('gastos_controller', function ($scope, $http) {
             }
             else if(data.consultado == 2){
                 // devolver aquí a pestaña de proyectos con mensaje de error
-                $('a[href="#contenido_tab_proyectos"]').tab('show');
                 alertify.error('Error al consultar los gastos del proyecto. Código de error: ' + data.codigo);
+                $scope.volver_a_proyectos();
             }
         })
         .error(function(data, status) {
             console.log(data);
-            $('a[href="#contenido_tab_proyectos"]').tab('show');
             alertify.error('Error al consultar los gastos del proyecto. Código de estado: ' + status);            
+            $scope.volver_a_proyectos();
         });	    
 	});
 	
@@ -47,6 +48,7 @@ sgpi_app.controller('gastos_controller', function ($scope, $http) {
 	*/             
     $scope.volver_a_proyectos = function() {
         $scope.data.gastos = [];
+        $scope.data.pestania_actual = null;
         $('a[href="#contenido_tab_proyectos"]').tab('show');
     };
     

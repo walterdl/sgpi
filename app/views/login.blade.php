@@ -79,8 +79,7 @@
 							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 							<span aria-hidden="true">×</span>
 							</button>
-							<strong>Credenciales incorrectos</strong>
-							<br>Por favor ingresa tus credenciales de acceso nuevamente.
+							<strong>Credenciales incorrectos o usuario deshabilitado</strong>
 						</div>
 						@endif
 						<p class="login-box-msg">Autenticarse para iniciar la sesión</p>

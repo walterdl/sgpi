@@ -33,6 +33,7 @@ sgpi_app.controller('prorroga_controller', function($scope, $http, Upload) {
 	| justo cuando se selecciona la opción de prórroga desde la pestaña de proyectos
 	*/            
 	$scope.$on('prorroga_seleccionado', function (event) {
+	    $scope.data.pestania_actual = 'prorroga_proyecto';
         $scope.consultar_prorroga('primera_consulta');
 	});
 	
@@ -120,21 +121,25 @@ sgpi_app.controller('prorroga_controller', function($scope, $http, Upload) {
         $scope.show_barra_progreso = true;
         $scope.cargando_archivos = true;
         
+        var data_upload = {
+            archivo: $scope.archivo_prorroga,
+            id_proyecto: $scope.data.id_proyecto
+        };
+        if($scope.comentario_investigador != null)
+            data_upload['comentario'] = $scope.comentario_investigador;
+        
         // Hace uso del servicio Upload que ngFile proporciona
         $scope.upload_service = Upload.upload({
             url: '/proyectos/cargar_prorroga',
             method: 'POST',
-            data: {
-                archivo: $scope.archivo_prorroga,
-                id_proyecto: $scope.data.id_proyecto,
-                comentario: $scope.comentario_investigador
-            }
+            data: data_upload
         });
 
         // realiza seguimiento de envío a travez del objeto promise
         $scope.upload_service.then(function (response) {
             console.log(response); // impirme respuesta de servidor para propósitos debug
             if(response.data.consultado == 1){
+                alertify.success('Prorroga de final de proyecto cargada');
                 $scope.resetear_modelos();
                 $scope.consultar_prorroga('recarga');
             }
@@ -166,6 +171,7 @@ sgpi_app.controller('prorroga_controller', function($scope, $http, Upload) {
 	*/             
     $scope.volver_a_proyectos = function() {
         $scope.resetear_modelos();
+        $scope.data.pestania_actual = null;
         $('a[href="#contenido_tab_proyectos"]').tab('show');
     };
 });

@@ -742,7 +742,7 @@
                             if($archivo_copiado){
                                 // actualiza campo archivo, guarda cambios y retorna respuesta
                                 $doc_informe_avance->archivo = $archivo_copiado->getFilename();
-                                if(!empty(Input::get('comentario')))
+                                if(!is_null(Input::get('comentario', null)))
                                     $doc_informe_avance->comentario_investigador = Input::get('comentario');
                                 $doc_informe_avance->save();                            
                             }
@@ -758,7 +758,7 @@
                         $doc_informe_avance->id_proyecto = Input::get('id_proyecto');
                         
                         
-                        if(!empty(Input::get('comentario')))
+                        if(!is_null(Input::get('comentario', null)))
                             $doc_informe_avance->comentario_investigador = Input::get('comentario');
                         $doc_informe_avance->save();                            
                         
@@ -940,7 +940,7 @@
                         $acta_finalizacion = new DocumentoProyecto();
                         $acta_finalizacion->id_proyecto = Input::get('id_proyecto');
                         $acta_finalizacion->id_formato_tipo_documento = FormatoTipoDocumento::where('nombre', '=', 'Acta finalizacion')->first()->id;
-                        if(!empty(Input::get('comentario', null))){
+                        if(!is_null(Input::get('comentario', null))){
                             $acta_finalizacion->comentario_investigador = Input::get('comentario');
                         }
                         $acta_finalizacion->save();
@@ -957,7 +957,7 @@
                         $memoria_academica = new DocumentoProyecto();
                         $memoria_academica->id_proyecto = Input::get('id_proyecto');
                         $memoria_academica->id_formato_tipo_documento = FormatoTipoDocumento::where('nombre', '=', 'Memoria academica')->first()->id;                    
-                        if(!empty(Input::get('comentario', null))){
+                        if(!is_null(Input::get('comentario', null))){
                             $memoria_academica->comentario_investigador = Input::get('comentario');
                         }
                         $memoria_academica->save();
@@ -999,13 +999,13 @@
                         if($archivo_acta_finalizacion_copiado && $archivo_memoria_academica_copiado){ // si ambos archivos se han copiado
                         
                             // actualiza registros, copaindo el comentario del investigador si existe
-                            if(!empty(Input::get('comentario', null))){
+                            if(!is_null(Input::get('comentario', null))){
                                 $acta_finalizacion->comentario_investigador = Input::get('comentario');
                                 $memoria_academica->comentario_investigador = Input::get('comentario');
                             }
                             
-                            $acta_finalizacion->archivo = $archivo_copiado->getFilename();
-                            $memoria_academica->archivo = $archivo_copiado->getFilename();
+                            $acta_finalizacion->archivo = $archivo_acta_finalizacion_copiado->getFilename();
+                            $memoria_academica->archivo = $archivo_memoria_academica_copiado->getFilename();
                             $acta_finalizacion->save();
                             $memoria_academica->save();
                         }
@@ -1019,7 +1019,7 @@
                     ]);                      
             }
             catch(\Exception $e){
-                // throw $e;
+                throw $e;
                 return json_encode([
                     'consultado' => 2,
                     'mensaje' => $e->getMessage(),
@@ -1138,7 +1138,7 @@
                         if($archivo_copiado){
                             $prorroga->archivo = $archivo_copiado->getFilename();
                             // copia comentario si esta establecido
-                            if(!empty(Input::get('comentario', null)))
+                            if(!is_null(Input::get('comentario', null)))
                                 $prorroga->comentario_investigador = Input::get('comentario');
                             $prorroga->save(); // actualiza registro
                         }
@@ -1150,7 +1150,7 @@
                         $prorroga = new DocumentoProyecto();
                         $prorroga->id_formato_tipo_documento = FormatoTipoDocumento::where('nombre', '=', 'Prorroga')->first()->id;
                         $prorroga->id_proyecto = Input::get('id_proyecto');
-                        if(!empty(Input::get('comentario', null)))
+                        if(!is_null(Input::get('comentario', null)))
                             $prorroga->comentario_investigador = Input::get('comentario');
                             
                         $prorroga->save();

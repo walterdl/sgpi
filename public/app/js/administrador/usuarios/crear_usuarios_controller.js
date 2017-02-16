@@ -477,7 +477,20 @@ sgpi_app.controller('crear_usuarios_controller', function($scope, $http, Alertif
         $scope.visibilidad.show_password_invalido = true;
         return false;
     };
-
+    
+    $scope.cambia_id_a_buscar = function() {
+        if($scope.data.buscar_identificacion === undefined || $scope.data.buscar_identificacion === null || $scope.data.buscar_identificacion == 0)
+            $scope.id_a_buscar_invalida = true;
+        else
+        {
+            var regex = /^\d+$/;
+            if(regex.test($scope.data.buscar_identificacion))
+                $scope.id_a_buscar_invalida = false;
+            else
+                $scope.id_a_buscar_invalida = true;
+        }
+    };
+    
     /*
     |--------------------------------------------------------------------------
     | buscar_id()
@@ -486,7 +499,10 @@ sgpi_app.controller('crear_usuarios_controller', function($scope, $http, Alertif
     */       
     $scope.buscar_id = function(){
         
-        if($scope.data.buscar_identificacion == undefined || $scope.data.buscar_identificacion == 0)
+        if($scope.data.buscar_identificacion === undefined || $scope.data.buscar_identificacion === null || $scope.data.buscar_identificacion == 0)
+            return;
+        var regex = /^\d+$/;
+        if(!regex.test($scope.data.buscar_identificacion))
             return;
         
         $scope.data.msj_operacion_busqueda = 'Buscando...<i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i>';
