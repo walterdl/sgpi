@@ -158,7 +158,7 @@
             }
             catch (\Exception $e){
                 // aquí redirigir a listar proyectos con mensaje flash de error
-                throw $e;
+                // throw $e;
                 Log::error($e);
                 Session::flash('notify_operacion_previa', 'error');
                 Session::flash('mensaje_operacion_previa', 'Error en el registro de nuevo proyecto. Detalles: '.$e->getMessage());
@@ -185,7 +185,7 @@
                     'fecha_fin' => $data['fecha_final'],
                     'duracion_meses' => $data['duracion_meses'],
                     'convocatoria' => $data['convocatoria'],
-                    'anio_convocatoria' => !is_null($data['convocatoria']) && !is_null($data['anio_convocatoria']) ? $data['anio_convocatoria'] : null,
+                    'anio_convocatoria' => $data['anio_convocatoria'],
                     'objetivo_general' => $data['objetivo_general'],
                     'cantidad_objetivos_especificos' => $data['cantidad_objetivos_especificos']
                     ),
@@ -196,7 +196,7 @@
                     'fecha_inicio' => array('date_format:Y-m-d'),
                     'fecha_fin' => array('date_format:Y-m-d'),
                     'duracion_meses' => array('integer', 'min:12'),
-                    'convocatoria' => array('max:250'),
+                    'convocatoria' => array('min:5','max:200'),
                     'anio_convocatoria' => array('integer'),
                     'objetivo_general' => array('required', 'min:5', 'max:200'),
                     'cantidad_objetivos_especificos' => array('required', 'min:1')
@@ -207,7 +207,6 @@
                 throw new Exception('Información general del proyecto inválida. Detalles: '.$validacion->messages());
             }
             
-            // echo $usuario_investigador_principal->id_grupo_investigacion_ucc;
             $proyecto = Proyecto::create(array(
                 'id_grupo_investigacion_ucc' => $usuario_investigador_principal->id_grupo_investigacion_ucc,
                 'id_estado' => 1,
@@ -218,7 +217,7 @@
                 'fecha_fin' => $data['fecha_final'],
                 'duracion_meses' => $data['duracion_meses'],
                 'convocatoria' => $data['convocatoria'],
-                'anio_convocatoria' => !is_null($data['convocatoria']) && !is_null($data['anio_convocatoria']) ? $data['anio_convocatoria'] : null,
+                'anio_convocatoria' => $data['anio_convocatoria'],
                 'objetivo_general' => $data['objetivo_general']
                 ));
                 
@@ -228,7 +227,7 @@
             // se registran los objetivos específicos del proyecto
             for($i = 0; $i < $data['cantidad_objetivos_especificos']; $i++)
             {
-                if(!isset($data['objetivo_especifico_'.$i]) || strlen($data['objetivo_especifico_'.$i]) < 5)
+                if(!isset($data['objetivo_especifico_'.$i]) || strlen($data['objetivo_especifico_'.$i]) < 5 || strlen($data['objetivo_especifico_'.$i]) > 200)
                     throw new Exception('Nombre de objetivo específico "'.$data['objetivo_especifico_'.$i].'" inválido');
                     
                 ObjetivoEspecifico::create(array(
@@ -1908,103 +1907,89 @@
     	|--------------------------------------------------------------------------
     	| Presenta la vista de registro de nuevo proyecto para un investigador principal dado
     	*/        
-        public function editarVer($pagina,$id){
+        public function editarVer($pagina, $id_proyecto){
             
-            // provee estilos personalizados para la vista a cargar
+            // valida el identificador de proyecto enviado
+            if(is_null($id_proyecto))
+            {
+                Session::flash('notify_operacion_previa', 'error');
+                Session::flash('mensaje_operacion_previa', 'Identificador de proyecto inválido. No se ha enviado tal dado');
+                return Redirect::to('/proyectos/listar');
+            }
+            $validacion = Validator::make(
+                ['id_proyecto' => $id_proyecto],
+                ['id_proyecto' => 'required|exists:proyectos,id']);
+            if($validacion->fails())
+            {
+                Session::flash('notify_operacion_previa', 'error');
+                Session::flash('mensaje_operacion_previa', 'Identificador de proyecto inválido. No se encuentra registros con tal identificador');
+                return Redirect::to('/proyectos/listar');
+            }
+            
+            // prepara depedencias, estilos y scripts que utiliza todas las vistas
             $styles = [
                 'vendor/ngAnimate/ngAnimate.css',
-                'vendor/mCustomScrollbar/jquery.mCustomScrollbar.css',
                 'vendor/angular-ui/ui-select.css', 
                 'vendor/angular-ui/overflow-ui-select.css',
-                'vendor/perfect-scrollbar/css/perfect-scrollbar.min.css'
-                ]; 
-            
-            // provee scripts extras o personalizados para la vista a cargar
+                ];   
             $pre_scripts = [
                 'vendor/angular/sanitize/angular-sanitize.js',
-                'vendor/ng-file-upload/ng-file-upload-shim.js',
-                'vendor/ng-file-upload/ng-file-upload.min.js',                
                 'vendor/angular-ui/ui-select.js',
                 'vendor/angular-ui/ui-bootstrap-tpls-2.2.0.min.js',
-                'vendor/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js',
-                'vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js'
-                ];
+                ];      
+            $angular_sgpi_app_extra_dependencies = ['ngAnimate', 'ngTouch', 'ngSanitize', 'ui.bootstrap', 'ui.select'];            
             
-            $angular_sgpi_app_extra_dependencies = ['ngAnimate', 'ngTouch', 'ngSanitize', 'ngFileUpload', 'ui.bootstrap', 'ui.select'];
-            
-            // echo "pagina No: ".$pagina;
-            // die();
-            
-        
             switch ($pagina) {
                 case '1':
-                    
                     //inf. general
                     
-                    $post_scripts = [
-                    'investigador/proyectos/editar/editar_document_ready_externo.js',
-                    'investigador/proyectos/editar/editar_datos_basicos_controller.js',
-                    ];
+                    $post_scripts = ['investigador/proyectos/editar/editar_datos_basicos_controller.js'];
 
                     return View::make('investigador.proyectos.editar.general', array(
-                    'styles' => $styles,
-                    'pagina'=>$pagina,
-                    'proyecto_id' => $id,
-                    'pre_scripts' => $pre_scripts,
-                    'post_scripts' => $post_scripts,
-                    'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies
+                        'styles' => $styles,
+                        'pre_scripts' => $pre_scripts,
+                        'post_scripts' => $post_scripts,
+                        'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies,
+                        'id_proyecto' => $id_proyecto,
                     ));
                     
-                    
                     break;
+                    
                 case '2':
+                    // participantes
                     
-                    //participantes
-                    
+                    array_push($styles, 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.css');
+                    array_push($pre_scripts, 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js');
+
+                    // 'investigador/proyectos/editar/editar_document_ready_externo.js',
+                    // 'investigador/proyectos/editar/(copia) editar_datos_basicos_controller.js',                    
                     $post_scripts = [
-                    'investigador/proyectos/editar/editar_document_ready_externo.js',
-                    'investigador/proyectos/editar/editar_datos_basicos_controller.js',
-                    'investigador/proyectos/editar/editar_participantes_proyectos_controller.js'
+                        'investigador/proyectos/editar/editar_participantes_controller.js'
                     ];
                     
                     return View::make('investigador.proyectos.editar.participantes', array(
-                    'styles' => $styles,
-                    'pagina'=>$pagina,
-                    'proyecto_id' => $id,
-                    'pre_scripts' => $pre_scripts,
-                    'post_scripts' => $post_scripts,
-                    'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies
+                        'styles' => $styles,
+                        'pre_scripts' => $pre_scripts,
+                        'post_scripts' => $post_scripts,
+                        'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies,
+                        'id_proyecto' => $id_proyecto
                     ));
                     
                     break;
-                case '3':
                     
+                case '3':
                     // productos
+                    
+                    array_push($styles, 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.css');
+                    array_push($pre_scripts, 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js');                    
+                    
                     $post_scripts = [
-                    'investigador/proyectos/editar/editar_document_ready_externo.js',
-                    'investigador/proyectos/editar/editar_datos_basicos_controller.js',
-                    'investigador/proyectos/editar/editar_productos_proyectos_controller.js',
+                        'investigador/proyectos/editar/editar_document_ready_externo.js',
+                        'investigador/proyectos/editar/editar_datos_basicos_controller.js',
+                        'investigador/proyectos/editar/editar_productos_proyectos_controller.js',
                     ];
                     
                     return View::make('investigador.proyectos.editar.productos', array(
-                    'styles' => $styles,
-                    'pagina'=>$pagina,
-                    'proyecto_id' => $id,
-                    'pre_scripts' => $pre_scripts,
-                    'post_scripts' => $post_scripts,
-                    'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies
-                    ));
-                    
-                    break;
-                case '4':
-                    
-                    // gastos
-                    $post_scripts = [
-                        'investigador/proyectos/editar/document_ready_gastos.js',
-                        'investigador/proyectos/editar/editar_gastos_proyectos_controller.js',
-                    ];
-                    
-                    return View::make('investigador.proyectos.editar.gastos', array(
                         'styles' => $styles,
                         'pagina'=>$pagina,
                         'proyecto_id' => $id,
@@ -2013,10 +1998,30 @@
                         'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies
                     ));
                     
+                    break;
+                    
+                case '4':
+                    // gastos
+                    array_push($styles, 'vendor/perfect-scrollbar/css/perfect-scrollbar.min.css');
+                    array_push($pre_scripts, 'vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js');                                        
+                    
+                    $post_scripts = [
+                        'investigador/proyectos/editar/document_ready_gastos.js',
+                        'investigador/proyectos/editar/editar_gastos_proyectos_controller.js',
+                    ];
+                    
+                    return View::make('investigador.proyectos.editar.gastos', array(
+                        'styles' => $styles,
+                        'pagina'=>$pagina,
+                        'proyecto_id' => $id_proyecto,
+                        'pre_scripts' => $pre_scripts,
+                        'post_scripts' => $post_scripts,
+                        'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies
+                    ));
                     
                     break;
-                case '5':
                     
+                case '5':
                     // adjuntos
                     $post_scripts = [
                         'investigador/proyectos/editar/editar_document_ready_externo.js',
@@ -2034,11 +2039,9 @@
                     ));
                     
                     break;
-                default:
-                    // code...
                     
-                     return "<h1 style='font-size:40px;'>Error 404.</h1><p><a href='/'><b>Ir a Home</b></a></p>";
-                      
+                default:
+                    return View::make('general.404');
                     break;
             }
             

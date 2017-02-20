@@ -32,20 +32,17 @@
             return $this->belongsTo('GrupoInvestigacionUCC', 'id_grupo_investigacion_ucc'); 
         }
         
-        
         // Relaciones indirectas
         
         public function objetivosEspecificos()
         {
-            return $this->hasMany('ObjetivoEspecifico','id_proyecto')->where("id_estado","1");
+            return $this->hasMany('ObjetivoEspecifico','id_proyecto');
         }
-        
 
         public function documentosProyectos()
         {
             return $this->hasMany('DocumentoProyecto','id_proyecto');
         }
-        
         
         public function investigadores()
         {

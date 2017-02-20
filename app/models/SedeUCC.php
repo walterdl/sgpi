@@ -21,7 +21,5 @@
             return $this->hasMany('FacultadDependenciaUCC', 'id_sede_ucc')->join('grupos_investigacion_ucc', 'facultades_dependencias_ucc.id', '=', 'grupos_investigacion_ucc.id_facultad_dependencia_ucc'); 
         }
     }
-    
-     
 
 ?>

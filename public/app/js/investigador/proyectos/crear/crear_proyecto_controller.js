@@ -164,6 +164,7 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
             $scope.validar_nombre_proyecto(),
             $scope.validar_fecha_inicio(),
             $scope.validar_duracion_meses(),
+            $scope.validar_convocatoria(),
             $scope.validar_anio_convocatoria(),
             $scope.validar_objetivo_general(),
             $scope.validar_objetivos_especificos()
@@ -258,6 +259,29 @@ sgpi_app.controller('crear_proyecto_controller', function($scope, $http, $log, $
         $scope.data.validacion_duracion_meses = 'Minimo debe ser 12 meses';
         return true;                               
     };
+    
+    /*
+	|--------------------------------------------------------------------------
+	| validar_convocatoria() 
+	|--------------------------------------------------------------------------
+	| valida convocatoria permitiendo una cadena de texto con longitud mayor o igual a 5 y menor a 150 caractéres
+	| este valor es opcional por lo que se permite valores null
+	*/               
+    $scope.validar_convocatoria = function() {
+
+        if($scope.data.convocatoria == null || $scope.data.convocatoria == undefined || $scope.data.convocatoria.length == 0)
+        {
+            $scope.data.convocatoria_invalido = null;
+            return false;
+        }
+        if($scope.data.convocatoria.length >= 5 && $scope.data.convocatoria.length <= 150)
+        {
+            $scope.data.convocatoria_invalido = null;
+            return false;            
+        }
+        $scope.data.convocatoria_invalido = true;
+        return true;                    
+    };    
     
     /*
 	|--------------------------------------------------------------------------

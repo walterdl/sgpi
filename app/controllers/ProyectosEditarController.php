@@ -6,79 +6,9 @@
         
     	/*
     	|--------------------------------------------------------------------------
-    	| editarGeneral()
+    	| Brandon
     	|--------------------------------------------------------------------------
-    	| edita los cambios del proyecto  lso datos generales
-    	*/        
-        public function editarGeneral(){   
-            
-            try
-            {
-                $data = Input::all();
-                
-                DB::transaction(function () use($data)
-                {
-                    $proyecto = Proyecto::find($data['id_proyecto_general']);
-                    
-                    if($proyecto){
-                        
-                        $proyecto->codigo_fmi=$data['codigo_fmi'];
-                        $proyecto->subcentro_costo=$data['subcentro_costo'];
-                        $proyecto->nombre=$data['nombre_proyecto'];
-                        $proyecto->fecha_inicio=$data['fecha_inicio'];
-                        $proyecto->duracion_meses=$data['duracion_meses'];
-                        $proyecto->fecha_fin=$data['fecha_final'];
-                        $proyecto->convocatoria=$data['convocatoria'];
-                        $proyecto->anio_convocatoria=$data['anio_convocatoria'];
-                        $proyecto->objetivo_general=$data['objetivo_general'];
-                        
-                        $proyecto->save();
-                        
-                        if(isset($data['objetivo_especifico_viejo'])){
-                            $cont=0;
-                            foreach($data['objetivo_especifico_viejo'] as $value){
-                                $obj_especifico = ObjetivoEspecifico::find($data['obj_especifico_viejo'][$cont]);
-                                $obj_especifico->nombre=$value;
-                                $obj_especifico->save();
-                                $cont++;
-                            }   
-                        }
-                        if(isset($data['objetivo_especifico_nuevo'])){
-                        
-                            foreach($data['objetivo_especifico_nuevo'] as $value){
-                                
-                                $obj_especifico=array(
-                                    'id_proyecto' => $data['id_proyecto_general'],
-                                    'id_estado' => 1,
-                                    'nombre' => $value);
-                                
-                                ObjetivoEspecifico::create($obj_especifico);
-                            }
-                        }
-                        if(isset($data['objetivos_especificos_existentes_a_eliminar'])){
-                            foreach($data['objetivos_especificos_existentes_a_eliminar'] as $obj_especifico_a_eliminar){
-                                $obj_especifico_a_eliminar = ObjetivoEspecifico::find($obj_especifico_a_eliminar);
-                                $obj_especifico_a_eliminar->id_estado = 2;
-                                $obj_especifico_a_eliminar-> save();
-                            }
-                        }
-                        
-                        Session::flash('notify_operacion_previa', 'success');
-                        Session::flash('mensaje_operacion_previa', 'Información general del proyecto editada');
-                    }
-                    else
-                    {
-                        throw new Exception('identificador de proyecto no recibido');
-                    }
-                });
-            }
-            catch(Exception $e)
-            {                
-                Session::flash('notify_operacion_previa', 'error');
-                Session::flash('mensaje_operacion_previa', 'Error en la edición del proyecto , código de error: '.$e->getCode().', detalle: '.$e->getMessage());
-            }   
-            return Redirect::to('/proyectos/listar');   
-        }
+    	*/ 
         
         public function eliminarObjEspecifico(){
             
@@ -429,7 +359,6 @@
            
         }
         
-        
         public function editarProductos(){
             //   print_r(Input::all());
             //   die();
@@ -531,6 +460,154 @@
         
     	/*
     	|--------------------------------------------------------------------------
+    	| Walter
+    	|--------------------------------------------------------------------------
+    	*/       
+    	
+    	/*
+    	|--------------------------------------------------------------------------
+    	| get_datos_basicos()
+    	|--------------------------------------------------------------------------
+    	| Consulta los datos básicos del proyecto
+    	*/                 
+        public function get_datos_basicos(){
+            
+            try
+            {
+                // valida identificador de proyecto enviado
+                if(is_null(Input::get('id_proyecto', null)))
+                    throw new Exception('Identificador de proyecto inválido. No se ha enviado tal dato');
+                    
+                $validacion = Validator::make(
+                    ['id_proyecto' => Input::get('id_proyecto')],
+                    ['id_proyecto' => 'required|exists:proyectos,id']);
+                    
+                if($validacion->fails())
+                    throw new Exception('Identificador de proyecto inválido. No se encuentra registros con tal identificador');
+                    
+                $proyecto = Proyecto::find(Input::get('id_proyecto'));
+                $objetivos_especificos = ObjetivoEspecifico::where('id_proyecto', '=', Input::get('id_proyecto'))->select('id', 'nombre')->get();
+                
+                return json_encode([
+                    'consultado' => 1,
+                    'proyecto' => $proyecto,
+                    'objetivos_especificos' => $objetivos_especificos
+                    ]);
+            }
+            catch(\Exception $e)
+            {
+                return json_encode([
+                    'consultado' => 2,
+                    'codigo' => $e->getCode(),
+                    'mensaje' => $e->getMessage(),
+                    ]);
+            }
+        }    	
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| post_datos_basicos()
+    	|--------------------------------------------------------------------------
+    	| Punto de recepción de formulario de edición de datos básicos o información general del proyecto
+    	*/          
+        public function post_datos_basicos(){
+            
+            try
+            {
+                // valida identificador de proyecto enviado
+                if(is_null(Input::get('id_proyecto', null)))
+                    throw new Exception('Identificador de proyecto inválido. No se ha enviado tal dato');
+                    
+                $validacion = Validator::make(['id_proyecto' => Input::get('id_proyecto')], ['id_proyecto' => 'required|exists:proyectos,id']);
+                if($validacion->fails())
+                    throw new Exception('Identificador de proyecto inválido. No se encuentra proyecto con tal identificador');                
+                
+                $data = Input::all();
+                
+                // valida datos enviados
+                $validacion = Validator::make(
+                    array(
+                        'codigo_fmi' => $data['codigo_fmi'],
+                        'subcentro_costo' => $data['subcentro_costo'],
+                        'nombre' => $data['nombre_proyecto'],
+                        'fecha_inicio' => $data['fecha_inicio'],
+                        'fecha_fin' => $data['fecha_final'],
+                        'duracion_meses' => $data['duracion_meses'],
+                        'convocatoria' => $data['convocatoria'],
+                        'anio_convocatoria' => $data['anio_convocatoria'],
+                        'objetivo_general' => $data['objetivo_general'],
+                        ),
+                    array(
+                        'codigo_fmi' => array('required', 'min:2', 'max:50'),
+                        'subcentro_costo' => array('required', 'min:2', 'max:50'),
+                        'nombre' => array('required', 'min:5', 'max:200'),
+                        'fecha_inicio' => array('date_format:Y-m-d'),
+                        'fecha_fin' => array('date_format:Y-m-d'),
+                        'duracion_meses' => array('integer', 'min:12'),
+                        'convocatoria' => array('min:5','max:200'),
+                        'anio_convocatoria' => array('integer'),
+                        'objetivo_general' => array('required', 'min:5', 'max:200'),
+                        )
+                );
+                
+                if($validacion->fails()){
+                    throw new Exception('Información general del proyecto inválida. Detalles: '.$validacion->messages());
+                }                
+                
+                DB::transaction(function () use($data)
+                {
+                    $proyecto = Proyecto::find($data['id_proyecto']);
+                    $proyecto->codigo_fmi = $data['codigo_fmi'];
+                    $proyecto->subcentro_costo = $data['subcentro_costo'];
+                    $proyecto->nombre = $data['nombre_proyecto'];
+                    $proyecto->fecha_inicio = $data['fecha_inicio'];
+                    $proyecto->duracion_meses = $data['duracion_meses'];
+                    $proyecto->fecha_fin = $data['fecha_final'];
+                    $proyecto->convocatoria = $data['convocatoria'];
+                    $proyecto->anio_convocatoria = $data['anio_convocatoria'];
+                    $proyecto->objetivo_general = $data['objetivo_general'];
+                    $proyecto->save();
+                    
+                    if(isset($data['objetivo_especifico_viejo'])){
+                        $cont = 0;
+                        foreach($data['objetivo_especifico_viejo'] as $value){
+                            $obj_especifico = ObjetivoEspecifico::find($data['id_especifico_viejo'][$cont]);
+                            $obj_especifico->nombre=$value;
+                            $obj_especifico->save();
+                            $cont++;
+                        }   
+                    }
+                    if(isset($data['objetivo_especifico_nuevo'])){
+                        foreach($data['objetivo_especifico_nuevo'] as $value){
+                            $obj_especifico=array(
+                                'id_proyecto' => $data['id_proyecto'],
+                                'id_estado' => 1,
+                                'nombre' => $value);
+                            ObjetivoEspecifico::create($obj_especifico);
+                        }
+                    }
+                    if(isset($data['objetivos_especificos_existentes_a_eliminar'])){
+                        foreach($data['objetivos_especificos_existentes_a_eliminar'] as $obj_especifico_a_eliminar){
+                            $obj_especifico_a_eliminar = ObjetivoEspecifico::find($obj_especifico_a_eliminar);
+                            $obj_especifico_a_eliminar->delete();
+                        }
+                    }
+                    
+                    Session::flash('notify_operacion_previa', 'success');
+                    Session::flash('mensaje_operacion_previa', 'Información general del proyecto editada');                    
+                    
+                });
+            }
+            catch(\Exception $e){
+                Session::flash('notify_operacion_previa', 'error');
+                Session::flash('mensaje_operacion_previa', 'Error en la edición del proyecto , código de error: '.$e->getCode().', detalle: '.$e->getMessage());                
+            }
+            
+            return Redirect::to('/proyectos/listar');
+        }
+    	
+    	/*
+    	|--------------------------------------------------------------------------
     	| get_gastos_proyecto()
     	|--------------------------------------------------------------------------
     	| Consulta los gastos de un determinado proyecto de investigación
@@ -575,12 +652,12 @@
         
     	/*
     	|--------------------------------------------------------------------------
-    	| post_editar_gastos_proyecto()
+    	| post_gastos_proyecto()
     	|--------------------------------------------------------------------------
     	| Punto de llegada de envío de formulario de ediciones de gastos de un proyecto de investigación
     	| Reliza las ediciones de los registros de los gastos de un determinado proyecto
     	*/          
-        public function post_editar_gastos_proyecto(){
+        public function post_gastos_proyecto(){
             file_put_contents
             (
                 app_path().'/logs.log', 
@@ -589,4 +666,504 @@
             );
             return 'recibido';
         }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| get_participantes_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Consulta los participantes de un determinado proyecto de investigación
+    	*/          
+        public function get_participantes_proyecto(){
+            try
+            {
+                // valida identificador de proyecto enviado
+                if(is_null(Input::get('id_proyecto', null)))
+                    throw new Exception('Identificador de proyecto inválido. No se ha enviado tal dato');
+                    
+                $validacion = Validator::make(['id_proyecto' => Input::get('id_proyecto')], ['id_proyecto' => 'required|exists:proyectos,id']);
+                if($validacion->fails())
+                    throw new Exception('Identificador de proyecto inválido. No se encuentra proyecto con tal identificador');                                            
+                    
+                $investigadores = [];
+                $source_investigadores = Investigador::where('id_proyecto' ,'=', Input::get('id_proyecto'))->orderBy('id_usuario_investigador_principal', 'desc')->get(); 
+                
+                /*
+                No se puede eliminar participante existente si:
+                    1.Su gasto tiene desembolso
+                    2.Está encargado de un producto
+                No se pueden editar sus datos básicos si:
+                    1.La persona tiene usuario
+                */                
+                foreach($source_investigadores as $investigador)
+                {
+                    if($investigador->id_usuario_investigador_principal != null) // se trata del investigador ppal
+                    {
+                        $usuario_inv_ppal = Usuario::find($investigador->id_usuario_investigador_principal);
+                        $persona = Persona::find($usuario_inv_ppal->id_persona);
+                        $detalle_gasto_personal = DetalleGasto::where('id_investigador', '=', $investigador->id)->first();
+                        $tiene_desembolso = Desembolso::where('id_detalle_gasto', '=', $detalle_gasto_personal->id)->first() != null ? 1 : 0;
+                        $es_encargado_de_algun_producto = Producto::where('id_investigador', '=', $investigador->id)->first() != null ? 1 : 0;
+                        array_push($investigadores, [
+                            'id_persona' => $persona->id,
+                            'id_investigador' => $investigador->id,
+                            'es_investigador_principal' => 1,
+                            'tiene_desembolso' => $tiene_desembolso,
+                            'es_encargado_de_algun_producto' => $es_encargado_de_algun_producto,
+                            'id_usuario_investigador_principal' => $usuario_inv_ppal->id,
+                            'id_rol' => $investigador->id_rol,
+                            'nombre_rol' => Rol::find($investigador->id_rol)->nombre,
+                            'nombres' => $persona->nombres,
+                            'apellidos' => $persona->apellidos,
+                            'identificacion' => $persona->identificacion,
+                            'id_tipo_identificacion' => $persona->id_tipo_identificacion,
+                            'edad' => $persona->edad,
+                            'sexo' => $persona->sexo,
+                            'formacion' => $persona->formacion,
+                            'email' => $usuario_inv_ppal->email,
+                            'id_grupo_investigacion_ucc' => $usuario_inv_ppal->id_grupo_investigacion_ucc,
+                            'dedicacion_horas_semanales' => $investigador->dedicacion_horas_semanales,
+                            'total_semanas' => $investigador->total_semanas,
+                            'valor_hora' => $investigador->valor_hora,
+                            'fecha_ejecucion' => $detalle_gasto_personal->fecha_ejecucion
+                            ]);
+                    }
+                    else
+                    {
+                        // se trata de un coinvestigador
+                        // averigua si el coinvestigador tiene usuarios
+                        $persona = Persona::find($investigador->id_persona_coinvestigador);
+                        
+                        $tiene_usuario = 0;
+                        if(count(Usuario::buscarUsuario($investigador->id_persona_coinvestigador)) > 0)
+                            $tiene_usuario = 1;
+                        $detalle_gasto_personal = DetalleGasto::where('id_investigador', '=', $investigador->id)->first();
+                        $tiene_desembolso = Desembolso::where('id_detalle_gasto', '=', $detalle_gasto_personal->id)->first() != null ? 1 : 0;
+                        $es_encargado_de_algun_producto = Producto::where('id_investigador', '=', $investigador->id)->first() != null ? 1 : 0;
+                        
+                        $nuevo_investigador = [
+                            'id_persona' => $persona->id,
+                            'id_investigador' => $investigador->id,
+                            'es_investigador_principal' => 0,
+                            'tiene_desembolso' => $tiene_desembolso,
+                            'es_encargado_de_algun_producto' => $es_encargado_de_algun_producto,                            
+                            'id_rol' => $investigador->id_rol,
+                            'nombre_rol' => Rol::find($investigador->id_rol)->nombre,
+                            'tiene_usuario' => $tiene_usuario,
+                            'nombres' => $persona->nombres,
+                            'apellidos' => $persona->apellidos,
+                            'identificacion' => $persona->identificacion,
+                            'id_tipo_identificacion' => $persona->id_tipo_identificacion,
+                            'edad' => $persona->edad,
+                            'sexo' => $persona->sexo,
+                            'formacion' => $persona->formacion,
+                            'email' => $investigador->email,
+                            'dedicacion_horas_semanales' => $investigador->dedicacion_horas_semanales,
+                            'total_semanas' => $investigador->total_semanas,
+                            'valor_hora' => $investigador->valor_hora,
+                            'fecha_ejecucion' => $detalle_gasto_personal->fecha_ejecucion
+                            ];
+                            
+                        if($investigador->id_rol == 4)
+                            $nuevo_investigador['id_grupo_investigacion_ucc'] = $investigador->id_grupo_investigacion_ucc;
+                        else if($investigador->id_rol == 5)
+                        {
+                            $nuevo_investigador['entidad_o_grupo_investigacion'] = $investigador->entidad_o_grupo_investigacion;
+                        }
+                        else if($investigador->id_rol == 6)
+                        {
+                            $nuevo_investigador['entidad_o_grupo_investigacion'] = $investigador->entidad_o_grupo_investigacion;
+                            $nuevo_investigador['programa_academico'] = $investigador->programa_academico;
+                        }
+                        
+                        array_push($investigadores, $nuevo_investigador);                        
+                    }
+                }
+                
+                $tipos_identificacion = [];
+                foreach(TipoIdentificacion::all() as $ti)
+                    $tipos_identificacion[$ti->id] = ['id' => $ti->id, 'nombre' => $ti->nombre, 'acronimo' => $ti->acronimo];
+                
+                return json_encode([
+                    'consultado' => 1,
+                    'investigadores' => $investigadores,
+                    'tipos_identificacion' => TipoIdentificacion::all(),
+                    'grupos_investigacion_x_sedes' => GrupoInvestigacionUCC::get_grupos_investigacion_con_sedes(),
+                    'grupos_investigacion_ucc' => GrupoInvestigacionUCC::all(),
+                    'facultades_ucc' => FacultadDependenciaUCC::all(),
+                    'sedes_ucc' => SedeUCC::all(),
+                    ]);
+            }
+            catch(\Exception $e){
+                throw $e;
+                return json_encode([
+                    'consultado' => 2,
+                    'mensaje' => $e->getCode(),
+                    'codigo' => $e->getCode()
+                    ]);
+            }
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| post_participantes_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Punto de llegada de envío de formulario de ediciones de los participantes de un proyecto de investigación
+    	| Utiliza las siguientes funciones de soporte:
+    	| -validar_identificaciones_repetidas()
+    	| -eliminar_participantes()
+    	| -editar_participantes_existentes()
+    	| -crear_participantes_nuevos()
+    	| -obtener_datos_persona()
+    	*/          
+        public function post_participantes_proyecto(){
+            
+            // file_put_contents
+            // (
+            //     app_path().'/logs.log', 
+            //     "\r\n".print_r(Input::all(), true)
+            //     ,FILE_APPEND
+            // );            
+            try
+            {
+                $data = Input::all();
+                
+                DB::transaction(function() use($data)
+                {
+                    // valida que no se halla enviado identificaciones repetidas
+                    $this->validar_identificaciones_repetidas($data);
+                    
+                    // elimina participantes / investigadores
+                    $this->eliminar_participantes($data);
+                    
+                    // editar, actualizar o modificar participantes existentes
+                    $this->editar_participantes_existentes($data);
+                    
+                    // crea los participantes nuevos y los asocia al proyecto de investigacion
+                    $this->crear_participantes_nuevos($data);
+                });
+                
+                // return 'Participantes editados';
+                Session::flash('notify_operacion_previa', 'success');
+                Session::flash('mensaje_operacion_previa', 'Participantes de proyecto editados');                
+            }
+            catch(\Exception $e)
+            {
+                throw $e;
+                Session::flash('notify_operacion_previa', 'error');
+                Session::flash('mensaje_operacion_previa', 'Error al editar los datos de los participantes del proyecto. Detalles: '.$e->getMessage());
+            }
+            return Redirect::to('/proyectos/listar');
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| validar_identificaciones_repetidas()
+    	|--------------------------------------------------------------------------
+    	| valida las identificaciones de los participantes enviados
+        | valida que no hallan identificaciones repetidas
+    	*/            
+        private function validar_identificaciones_repetidas($data){
+        	$llaves_data = array_keys($data);
+        	$llaves_identificaciones_nuevos_participantes = preg_grep('/identificacion_nuevo_\d+/', $llaves_data);
+        	$llaves_identificaciones_participantes_existentes = preg_grep('/identificacion_\d+_\d+/', $llaves_data);
+        	$identificaciones = [];
+        	$identificaciones[] = $data['identificacion_investigador_principal'];
+        	foreach($llaves_identificaciones_nuevos_participantes as $llave)
+                $identificaciones[] = $data[$llave];
+        	foreach($llaves_identificaciones_participantes_existentes as $llave)
+                $identificaciones[] = $data[$llave];                 
+            for ($i = 0; $i < count($identificaciones); $i++) {
+                for ($ii = 0; $ii < count($identificaciones); $ii++) {
+                    if($ii == $i) continue;
+                    if($identificaciones[$i] == $identificaciones[$ii])
+                        throw new Exception('Error al guardar modificaciones de los datos de participantes de proyecto. La identificacion '.$identificaciones[$i].' está repetida');
+                }
+            }
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| eliminar_participantes()
+    	|--------------------------------------------------------------------------
+    	| Elimina los investigadores que se hallan eliminado
+    	| estableciendo el campo deleted_at (softdeleted o eliminacion lógica)
+    	*/                    
+        private function eliminar_participantes($data){
+            if(!isset($data['participantes_a_eliminar']))
+                return;
+            foreach($data['participantes_a_eliminar'] as $investigador_a_eliminar)
+            {
+                $investigador = Investigador::find($investigador_a_eliminar);
+                if($investigador)
+                {
+                    // valida que el investigador no tenga productos a cargo y que su gasto de personal no cuente con desembolso ya cargado
+                    $es_encargado_de_algun_producto = Producto::where('id_investigador', '=', $investigador->id)->first() != null ? true : false;                    
+                    $detalle_gasto_personal = DetalleGasto::where('id_investigador', '=', $investigador->id)->first();
+                    $tiene_desembolso = Desembolso::where('id_detalle_gasto', '=', $detalle_gasto_personal->id)->first() != null ? true : false;
+                    if(!$es_encargado_de_algun_producto && !$tiene_desembolso)
+                        $investigador->delete();
+                }
+            }
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| editar_participantes_existentes()
+    	|--------------------------------------------------------------------------
+    	| Edita los datos de los participantes existentes del proyecto
+    	*/                       
+        private function editar_participantes_existentes($data){
+        	$llaves_data = array_keys($data);
+            $llaves_identificaciones = preg_grep('/identificacion_\d+_\d+/', $llaves_data);
+            foreach($llaves_identificaciones as $llave_identificacion)
+            {
+                // abstrae el id_investigador teniendo en cuenta que la llave de la identificacion se conforma como:
+                // identificacion_<id_investigador>_<index coleccion investigadores>
+                $explode_result = explode('_', $llave_identificacion);
+                // el segundo elemento del resultado de explode contendrá el id_investigador
+                $id_investigador = $explode_result[1];
+                $index = $explode_result[2];
+                
+                // consulta el registro investigador
+                $investigador = Investigador::find($id_investigador);
+                
+                // si la identificacion que desea cambiar no existe se crea la persona. 
+                // Si existe se consulta si hay usuario asociado a esa identificacion, en cuyo caso no se editan los datos simplememtne se asocia el id_persona al investigador
+                $identificacion = $data[$llave_identificacion];
+                $persona = Persona::where('identificacion', '=', $identificacion)->first();
+                if($persona)
+                {
+                    // hay persona
+                    // consulta que halla usuario asociado a dicha persona
+                    $hay_usuario = Usuario::where('id_persona', '=', $persona->id)->first() == null ? false : true;
+                    if($hay_usuario)
+                    {
+                        // simplemente se asocia el id de la persona con el registro del investigador, actualizando solo los campos correspondientes del investigador
+                        $investigador->id_persona_coinvestigador = $persona->id;
+                        if($datos_participante['rol'] == 4)
+                            $investigador->id_grupo_investigacion_ucc = $datos_participante['grupo_inv'];
+                        if($datos_participante['rol'] == 5)
+                            $investigador->entidad_o_grupo_investigacion = $datos_participante['entidad_externa'];
+                        else if($datos_participante['rol'] == 6)
+                        {
+                            $investigador->entidad_o_grupo_investigacion = $datos_participante['entidad_externa'];
+                            $investigador->programa_academico = $datos_participante['programa_academico'];
+                        }
+                        $investigador->email = $datos_participante['email'];
+                        $investigador->id_rol = $datos_participante['rol'];
+                        $investigador->save();
+                    }
+                    else
+                    {
+                        // no hay usuario, se editan los datos de la persona
+                        // se obtiene los datos de la persona
+                        $datos_participante = $this->obtener_datos_persona($data, true, $id_investigador, $index);
+                        $persona = Persona::find($persona->id);
+                        $persona->nombres = $datos_participante['nombres'];
+                        $persona->apellidos = $datos_participante['apellidos'];
+                        $persona->formacion = $datos_participante['formacion'];
+                        $persona->sexo = $datos_participante['sexo'];
+                        $persona->edad = $datos_participante['edad'];
+                        $persona->id_tipo_identificacion = $datos_participante['tipo_id'];
+                        $persona->save();
+                        
+                        $investigador->id_persona_coinvestigador = $persona->id;
+                        if($datos_participante['rol'] == 4)
+                            $investigador->id_grupo_investigacion_ucc = $datos_participante['grupo_inv'];
+                        if($datos_participante['rol'] == 5)
+                            $investigador->entidad_o_grupo_investigacion = $datos_participante['entidad_externa'];
+                        else if($datos_participante['rol'] == 6)
+                        {
+                            $investigador->entidad_o_grupo_investigacion = $datos_participante['entidad_externa'];
+                            $investigador->programa_academico = $datos_participante['programa_academico'];
+                        }
+                        $investigador->email = $datos_participante['email'];
+                        $investigador->id_rol = $datos_participante['rol'];
+                        $investigador->save();
+                    }
+                }
+                else
+                {
+                    // crea la persona y se la asocia al registro del investigador
+                    $persona = new Persona();
+                    $persona->identificacion = $datos_participante['identificacion'];
+                    $persona->nombres = $datos_participante['nombres'];
+                    $persona->apellidos = $datos_participante['apellidos'];
+                    $persona->formacion = $datos_participante['formacion'];
+                    $persona->sexo = $datos_participante['sexo'];
+                    $persona->edad = $datos_participante['edad'];
+                    $persona->id_tipo_identificacion = $datos_participante['tipo_id'];
+                    $persona->save();
+                    
+                    $investigador->id_persona_coinvestigador = $persona->id;
+                    if($datos_participante['rol'] == 4)
+                        $investigador->id_grupo_investigacion_ucc = $datos_participante['grupo_inv'];
+                    if($datos_participante['rol'] == 5)
+                        $investigador->entidad_o_grupo_investigacion = $datos_participante['entidad_externa'];
+                    else if($datos_participante['rol'] == 6)
+                    {
+                        $investigador->entidad_o_grupo_investigacion = $datos_participante['entidad_externa'];
+                        $investigador->programa_academico = $datos_participante['programa_academico'];
+                    }
+                    $investigador->email = $datos_participante['email'];
+                    $investigador->id_rol = $datos_participante['rol'];
+                    $investigador->save();                    
+                }
+            }
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| crear_participantes_nuevos()
+    	|--------------------------------------------------------------------------
+    	| Crea participantes nuevos y los asocia al proyecto de investigacion
+    	*/          
+        private function crear_participantes_nuevos($data){
+        	$llaves_data = array_keys($data);
+            $llaves_identificaciones = preg_grep('/identificacion_nuevo_\d+/', $llaves_data);
+            foreach($llaves_identificaciones as $llave_identificacion)
+            {
+                
+                // abstrae el id_investigador teniendo en cuenta que la llave de la identificacion se conforma como:
+                // identificacion_nuevo_<index coleccion investigadores>
+                $explode_result = explode('_', $llave_identificacion);
+                $index = $explode_result[2];
+                $identificacion = $data[$llave_identificacion];
+                $datos_participante = $this->obtener_datos_persona($data, false, 'nuevo', $index);
+                
+                // consulta si existe persona con la identificacion
+                $investigador = null; // se usará mas adelante para asociale el detalle gasto
+                $persona = Persona::where('identificacion', '=', $identificacion)->first();
+                if($persona)
+                {
+                    // se asocia la persona con el nuevo registro de investigador a crear
+                    $investigador = new Investigador();
+                    $investigador->id_persona_coinvestigador = $persona->id;
+                    if($datos_participante['rol'] == 4)
+                        $investigador->id_grupo_investigacion_ucc = $datos_participante['grupo_inv'];
+                    else if($datos_participante['rol'] == 5)
+                        $investigador->entidad_o_grupo_investigacion = $datos_participante['entidad_externa'];
+                    else if($datos_participante['rol'] == 6)
+                    {
+                        $investigador->entidad_o_grupo_investigacion = $datos_participante['entidad_externa'];
+                        $investigador->programa_academico = $datos_participante['programa_academico'];
+                    }
+                    $investigador->email = $datos_participante['email'];
+                    $investigador->id_rol = $datos_participante['rol'];
+                    $investigador->id_proyecto = $data['id_proyecto'];
+                    $investigador->dedicacion_horas_semanales = 0;
+                    $investigador->total_semanas = 0;
+                    $investigador->valor_hora = 0;
+                    $investigador->save();
+                }
+                else
+                {
+                    // crea la persona
+                    $persona = new Persona();
+                    $persona->identificacion = $datos_participante['identificacion'];
+                    $persona->nombres = $datos_participante['nombres'];
+                    $persona->apellidos = $datos_participante['apellidos'];
+                    $persona->formacion = $datos_participante['formacion'];
+                    $persona->sexo = $datos_participante['sexo'];
+                    $persona->edad = $datos_participante['edad'];
+                    $persona->id_tipo_identificacion = $datos_participante['tipo_id'];
+                    $persona->save();
+                    
+                    $investigador = new Investigador();
+                    $investigador->id_persona_coinvestigador = $persona->id;                    
+                    if($datos_participante['rol'] == 4)
+                        $investigador->id_grupo_investigacion_ucc = $datos_participante['grupo_inv'];
+                    if($datos_participante['rol'] == 5)
+                        $investigador->entidad_o_grupo_investigacion = $datos_participante['entidad_externa'];
+                    else if($datos_participante['rol'] == 6)
+                    {
+                        $investigador->entidad_o_grupo_investigacion = $datos_participante['entidad_externa'];
+                        $investigador->programa_academico = $datos_participante['programa_academico'];
+                    }
+                    $investigador->email = $datos_participante['email'];
+                    $investigador->id_rol = $datos_participante['rol'];
+                    $investigador->id_proyecto = $data['id_proyecto'];
+                    $investigador->dedicacion_horas_semanales = 0;
+                    $investigador->total_semanas = 0;
+                    $investigador->valor_hora = 0;
+                    $investigador->save();    
+                }
+                
+                // se crea detalle gasto personal del nuevo participante
+                $detalle_gasto = new DetalleGasto();
+                $detalle_gasto->id_tipo_gasto = TipoGasto::where('nombre', '=', 'Personal')->first()->id;
+                $detalle_gasto->id_investigador = $investigador->id;      
+                $detalle_gasto->fecha_ejecucion = substr($datos_participante['fecha_ejecucion'], 1, 10);
+                $detalle_gasto->save();
+                
+                $entidades_fuente_presupuesto_proyecto = EntidadFuentePresupuesto::entidades_fuente_presupuesto_proyecto($data['id_proyecto']);
+                foreach($entidades_fuente_presupuesto_proyecto['entidades'] as $entidad){
+                    if($entidad->nombre_entidad_fuente_presupuesto != 'CONADI')
+                    {
+                        $gasto = new Gasto();
+                        $gasto->id_proyecto = $data['id_proyecto'];
+                        $gasto->id_entidad_fuente_presupuesto = $entidad->id_entidad_fuente_presupuesto;
+                        $gasto->id_detalle_gasto = $detalle_gasto->id;
+                        $gasto->valor = 0;
+                        $gasto->save();
+                    }
+                }
+            }            
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| obtener_datos_persona()
+    	|--------------------------------------------------------------------------
+    	| Abstrae de los datos enviados desde el formulario de edición de participantes
+    	| los datos concenrnientes a un determinado participante
+    	*/            
+        private function obtener_datos_persona($data, $es_participante_existente, $id_investigador, $index){
+            $datos_participante = []; // contendra los datos recuperados
+            if($es_participante_existente)
+            {
+                $datos_participante['identificacion'] = $data['identificacion_'.$id_investigador.'_'.$index];
+                $datos_participante['nombres'] = $data['nombres_'.$id_investigador.'_'.$index];
+                $datos_participante['apellidos'] = $data['apellidos_'.$id_investigador.'_'.$index];
+                $datos_participante['formacion'] = $data['formacion_'.$id_investigador.'_'.$index];
+                $datos_participante['rol'] = $data['rol_'.$id_investigador.'_'.$index];
+                $datos_participante['sexo'] = $data['sexo_'.$id_investigador.'_'.$index];
+                $datos_participante['edad'] = $data['edad_'.$id_investigador.'_'.$index];
+                $datos_participante['email'] = $data['email_'.$id_investigador.'_'.$index];
+                $datos_participante['tipo_id'] = $data['tipo_id_'.$id_investigador.'_'.$index];
+                if($datos_participante['rol'] == 4)
+                    $datos_participante['grupo_inv'] = $data['grupo_inv_'.$id_investigador.'_'.$index];
+                else if($datos_participante['rol'] == 5)
+                    $datos_participante['entidad_externa'] = $data['entidad_externa_'.$id_investigador.'_'.$index];
+                else if($datos_participante['rol'] == 6)
+                {
+                    $datos_participante['entidad_externa'] = $data['entidad_externa_'.$id_investigador.'_'.$index];
+                    $datos_participante['programa_academico'] = $data['programa_academico_'.$id_investigador.'_'.$index];
+                }
+            }
+            else
+            {
+                $datos_participante['identificacion'] = $data['identificacion_nuevo_'.$index];
+                $datos_participante['nombres'] = $data['nombres_nuevo_'.$index];
+                $datos_participante['apellidos'] = $data['apellidos_nuevo_'.$index];
+                $datos_participante['formacion'] = $data['formacion_nuevo_'.$index];
+                $datos_participante['rol'] = $data['rol_nuevo_'.$index];
+                $datos_participante['sexo'] = $data['sexo_nuevo_'.$index];
+                $datos_participante['edad'] = $data['edad_nuevo_'.$index];
+                $datos_participante['email'] = $data['email_nuevo_'.$index];
+                $datos_participante['tipo_id'] = $data['tipo_id_nuevo_'.$index];
+                if($datos_participante['rol'] == 4)
+                    $datos_participante['grupo_inv'] = $data['grupo_inv_nuevo_'.$index];
+                else if($datos_participante['rol'] == 5)
+                    $datos_participante['entidad_externa'] = $data['entidad_externa_nuevo_'.$index];
+                else if($datos_participante['rol'] == 6)
+                {
+                    $datos_participante['entidad_externa'] = $data['entidad_externa_nuevo_'.$index];
+                    $datos_participante['programa_academico'] = $data['programa_academico_nuevo_'.$index];
+                }           
+                $datos_participante['fecha_ejecucion'] = $data['fecha_ejecucion_nuevo_'.$index];
+            }
+            return $datos_participante;
+        }
+        
     }

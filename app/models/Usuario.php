@@ -40,8 +40,8 @@
             return $this->belongsTo('Estado', 'id_estado'); 
         }
         
-        public static function buscarUsuario($persona_id){
-             $query = 'SELECT * FROM usuarios where id_persona='.$persona_id;
+        public static function buscarUsuario($id_persona){
+             $query = 'SELECT * FROM usuarios where id_persona='.$id_persona;
             
             return DB::select(DB::raw($query));
         }

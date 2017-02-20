@@ -2,10 +2,11 @@ var contador_mouseover_contenedor_gastos_personal = 0;
 $(document).ready(function() {
 	
 	$(window).keydown(function(event) {
-		if (event.keyCode == 13) {
-			event.preventDefault();
-			return false;
-		}
+		if(event.target.id != 'input_text_nueva_entidad')	
+			if (event.keyCode == 13) {
+				event.preventDefault();
+				return false;
+			}
 	});
     
     $('[data-toggle="tooltip"]').tooltip();

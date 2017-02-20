@@ -372,24 +372,33 @@ Route::group(array('before' => 'auth'), function(){
 		Route::post('proyectos/cargar_prorroga', 'GestionProyectosController@guardar_prorroga');
 		Route::get('proyectos/mas_info_proyecto', 'GestionProyectosController@mas_info_proyecto');
 		
+		// Edicion de proyecto
+		Route::get('proyectos/editar/{pagina}/{id}', 'ProyectosController@editarVer');
+		Route::get('proyectos/info_editar_datos_basicos', 'ProyectosEditarController@get_datos_basicos');
+		Route::post('proyectos/post_edicion_datos_basicos', 'ProyectosEditarController@post_datos_basicos');
+		Route::get('proyectos/info_editar_participantes', 'ProyectosEditarController@get_participantes_proyecto');
+		Route::post('proyectos/editar/post_participantes', 'ProyectosEditarController@post_participantes_proyecto');
+		Route::post('proyectos/editar/validar_identificaciones', 'ProyectosEditarController@validar_identificaciones');
+		
+		
 		/*
 		---------------------------------------------------------------------------
-		RUTAS EDITAR PROYECTO
+		RUTAS EDITAR PROYECTO BRANDON
 		*/
-		Route::get('proyectos/editar/{pagina}/{id}', 'ProyectosController@editarVer');
+		// Route::get('proyectos/editar/{pagina}/{id}', 'ProyectosController@editarVer');
 		Route::get('proyectos/datos_iniciales_editar_proyecto', 'ProyectosController@datos_iniciales_editar_proyecto');
 	
-		Route::post('proyectos/editar/general', 'ProyectosEditarController@editarGeneral');
-		Route::get('proyecto/eliminar/objespecifico', 'ProyectosEditarController@eliminarObjEspecifico');
+		// Route::post('proyectos/editar/general', 'ProyectosEditarController@editarGeneral');
+		// Route::get('proyecto/eliminar/objespecifico', 'ProyectosEditarController@eliminarObjEspecifico');
 		
-		Route::post('proyectos/editar/partiicpantes', 'ProyectosEditarController@editarPartcipantes');
-		Route::get('proyecto/eliminar/participante', 'ProyectosEditarController@eliminarPartcipantes');
+		// Route::post('proyectos/editar/partiicpantes', 'ProyectosEditarController@editarPartcipantes');
+		// Route::get('proyecto/eliminar/participante', 'ProyectosEditarController@eliminarPartcipantes');
 	
-		Route::post('proyectos/editar/productos', 'ProyectosEditarController@editarProductos');
-		Route::get('proyecto/eliminar/producto', 'ProyectosEditarController@eliminarProducto');
+		// Route::post('proyectos/editar/productos', 'ProyectosEditarController@editarProductos');
+		// Route::get('proyecto/eliminar/producto', 'ProyectosEditarController@eliminarProducto');
 		
-		Route::get('proyectos/gastos_proyecto', 'ProyectosEditarController@get_gastos_proyecto');
-		Route::post('proyectos/editar/gastos', 'ProyectosEditarController@post_editar_gastos_proyecto');
+		// Route::get('proyectos/gastos_proyecto', 'ProyectosEditarController@get_gastos_proyecto');
+		// Route::post('proyectos/editar/gastos', 'ProyectosEditarController@post_gastos_proyecto');
 		
 	}
 	
@@ -410,6 +419,7 @@ Route::get('registra_sgpi', 'ProyectosController@registra_sgpi');
 | Rutas de usuarios temporalmente afuera para pruebas
 |--------------------------------------------------------------------------
 */
+Route::get('proyectos/editar/post_participantes', 'ProyectosEditarController@post_participantes_proyecto');
 Route::post('proyectos/registrar_nuevo_proyecto', 'ProyectosController@registrar_nuevo_proyecto');
 
 
@@ -488,21 +498,61 @@ Route::get('show_alter_collation', 'BaseController@show_alter_collation');
 |--------------------------------------------------------------------------
 | Prueba impresiones
 */
-Route::get('test', function(){
-	$miArray = [];
-	$miArray[] = 'hello';
-	$miArray[] = 'world';
-	$miArray[] = 'Walter';
-	for($i = 0; $i < count($miArray); $i++)
-	{
-		$item = $miArray[$i];
-		echo $item.'<hr/>'.$i;
-		if($item === 'WalterX');
-		{
-			echo 'se rompera';
-			break;
-		}		
-	}
-	
+Route::get('test', function ()
+{
+	echo substr ( "2017-02-25T05:00:00.000Z" , 0 ,  10);
 });
 
+Route::get('test2', function(){
+	// $resultado = preg_match('/identificacion_nuevo_\d+/', 'identificacion_nuevo_3432');
+	// $resultado = preg_match('/identificacion_\d+_\d+/', 'identificacion_2_1');
+	// echo $resultado;
+	
+	$data = array
+	(
+	    'identificacion_investigador_principal' => '7',
+	    'fecha_ejecucion_2_1' => '"2017-02-22T05:00:00.000Z"',
+	    'nombres_2_1' => 'jose brandon',
+	    'apellidos_2_1' => 'henao tunjo',
+	    'identificacion_2_1' => '1144057871',
+	    'formacion_2_1' => 'Pregado',
+	    'rol_2_1' => '4',
+	    'tipo_id_2_1' => '1',
+	    'sexo_2_1' => 'm',
+	    'edad_2_1' => '24',
+	    'email_2_1' => 'jose.henaot@hotmail.es',
+	    'grupo_inv_2_1' => '1',
+	    'fecha_ejecucion_nuevo_2' => '"2017-03-04T05:00:00.000Z"',
+	    'nombres_nuevo_2' => 'Golaso',
+	    'apellidos_nuevo_2' => 'de quien sabe',
+	    'identificacion_nuevo_2' => '23534',
+	    'formacion_nuevo_2' => 'Maestría',
+	    'rol_nuevo_2' => '5',
+	    'tipo_id_nuevo_2' => '1',
+	    'sexo_nuevo_2' => 'm',
+	    'edad_nuevo_2' => '34',
+	    'email_nuevo_2' => 'quiensabe@gmail.com',
+	    'entidad_externa_nuevo_2' => 'MI entidad',
+	    'fecha_ejecucion_nuevo_3' => '"2017-06-30T05:00:00.000Z"',
+	    'nombres_nuevo_3' => 'Curly Jack',
+	    'apellidos_nuevo_3' => 'Henao Hollo',
+	    'identificacion_nuevo_3' => '1547897711',
+	    'formacion_nuevo_3' => 'Maestría',
+	    'rol_nuevo_3' => '4',
+	    'tipo_id_nuevo_3' => '1',
+	    'sexo_nuevo_3' => 'm',
+	    'edad_nuevo_3' => '23',
+	    'email_nuevo_3' => 'Curlyjack@gmail.com',
+	    'grupo_inv_nuevo_3' => '3',
+	);
+	$keys = array_keys($data);
+	$array1 = preg_grep('/identificacion_nuevo_\d+/', $keys);
+	$array2 = preg_grep('/identificacion_\d+_\d+/', $keys);
+	
+	echo '<pre>'.print_r($array1, true).'</pre>';
+	echo '<br />';
+	echo '<pre>'.print_r($array2, true).'</pre>';
+	
+	echo '<br />';
+	
+});

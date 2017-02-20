@@ -194,8 +194,9 @@
                                         {{--Convocatoria--}}
                                         <div class="col-xs-12 col-sm-6 col-md-4">
                                             <div class="form-group">
-                                                <label for="convocatoria">Convocatoria</label>
-                                                <input type="text" name="convocatoria" id="convocatoria" ng-model="data.convocatoria" class="form-control"/>
+                                                <label for="convocatoria">Convocatoria <span class="error-text" ng-show="data.convocatoria_invalido != null">Longitud mínima de 5 caracteres y máxima de 200</span></label>
+                                                <input type="text" name="convocatoria" id="convocatoria" ng-model="data.convocatoria" ng-change="validar_convocatoria()" 
+                                                class="form-control" ng-class="{'invalid_control': data.convocatoria_invalido != null}"/>
                                             </div>
                                         </div> 
                                         
