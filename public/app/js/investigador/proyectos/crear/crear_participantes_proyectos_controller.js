@@ -39,8 +39,10 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
             $scope.data.msj_label_busqueda_id = 'Error: ingrese una identificacion diferente al investigador principal';
             return;
         }
-        else
-            $scope.data.msj_label_busqueda_id = '';
+        
+        $scope.data.msj_label_busqueda_id = '';
+        
+        $('#input_buscar_id').trigger('blur');
         
         $scope.data.msj_busqueda_id = '<h4 class="text-center">Buscando datos...<i class="fa fa-circle-o-notch fa-spin fa-fw"></i></h4>';
         $scope.visibilidad.velo_busqueda_id = true;
@@ -107,6 +109,7 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
         $scope.data.identificacion_a_buscar = null;
         $scope.visibilidad.velo_busqueda_id = false;
         $scope.visibilidad.velo_edicion_datos_participante = true;
+        $('#input_buscar_id').trigger('focus');
         $scope.data.datos_basicos_persona_recuperados = false;
         $scope.borrar_modelos_nuevo_participante();
     };
@@ -419,12 +422,12 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
 	*/          
     $scope.validar_nombres_nuevo_participante = function(mostrar_campo_invalido=true) {
         if($scope.data.nombres_nuevo_participante == null || 
-            $scope.data.nombres_nuevo_participante.length < 5 || 
+            $scope.data.nombres_nuevo_participante.length < 3 || 
             $scope.data.nombres_nuevo_participante.length > 200)
         {
             if(mostrar_campo_invalido)
                 $scope.visibilidad.nombres_nuevo_participante_invalido = true;
-            $scope.data.msj_validacion_nombres_nuevo_participante = 'Logitud mínima de 5 caractéres y máximo de 200';
+            $scope.data.msj_validacion_nombres_nuevo_participante = 'Logitud mínima de 3 caractéres y máximo de 200';
             return true; 
         }
         else
@@ -444,12 +447,12 @@ sgpi_app.controller('crear_participantes_proyectos_controller', function($scope,
 	*/              
     $scope.validar_apellidos_nuevo_participante = function(mostrar_campo_invalido=true) {
         if($scope.data.apellidos_nuevo_participante == null || 
-            $scope.data.apellidos_nuevo_participante.length < 5 || 
+            $scope.data.apellidos_nuevo_participante.length < 3 || 
             $scope.data.apellidos_nuevo_participante.length > 200)
         {
             if(mostrar_campo_invalido)
                 $scope.visibilidad.apellidos_nuevo_participante_invalido = true;
-            $scope.data.msj_validacion_apellidos_nuevo_participante = 'Logitud mínima de 5 catacteres y máximo de 200';
+            $scope.data.msj_validacion_apellidos_nuevo_participante = 'Logitud mínima de 3 catacteres y máximo de 200';
             return true; 
         }
         else

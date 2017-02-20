@@ -158,7 +158,7 @@
             }
             catch (\Exception $e){
                 // aquí redirigir a listar proyectos con mensaje flash de error
-                // throw $e;
+                throw $e;
                 Log::error($e);
                 Session::flash('notify_operacion_previa', 'error');
                 Session::flash('mensaje_operacion_previa', 'Error en el registro de nuevo proyecto. Detalles: '.$e->getMessage());
@@ -405,8 +405,8 @@
                         'sexo' => $sexo
                         );
                 $reglas_de_validacion = array(
-                        'nombres' => array('required', 'min:5', 'max:200'),
-                        'apellidos' => array('required', 'min:5', 'max:200'),
+                        'nombres' => array('required', 'min:3', 'max:200'),
+                        'apellidos' => array('required', 'min:3', 'max:200'),
                         'formacion' => array('required', 'in:Ph. D,Doctorado,Maestría,Especialización,Pregado'),
                         'tipo_identificacion' => array('required', 'integer', 'exists:tipos_identificacion,id'),
                         'edad' => array('required', 'integer', 'min:10', 'max:120'),
