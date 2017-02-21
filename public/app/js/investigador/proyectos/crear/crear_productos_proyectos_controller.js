@@ -1,6 +1,11 @@
 
 sgpi_app.controller('crear_productos_proyecto_controller', function ($scope, $http) {
     
+    $scope.$watch('data.productos', function(){
+        console.log('watcher for data.productos');
+        setTimeout(function(){ $('#contenedor_productos').perfectScrollbar('update'); }, 200);
+    }, true);
+    
     // inicialización de variables
     $scope.data.productos = [];
     $scope.dateOptions = {
@@ -115,7 +120,7 @@ sgpi_app.controller('crear_productos_proyecto_controller', function ($scope, $ht
         }
         else{
             $scope.visibilidad.tipo_producto_especifico_invalido = false;        
-            return false
+            return false;
         }
     };
     

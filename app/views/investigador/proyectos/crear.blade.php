@@ -23,6 +23,9 @@
         #table_body_productos tr td{
             white-space: nowrap;
         }
+        .white-space-normal{
+            white-space: normal;
+        }
         .tooltip.tooltip-invalid_control .tooltip-inner {
             color: white;
             background-color: #8B0000;
@@ -37,6 +40,8 @@
         .min-width-170{
             min-width: 170px;
         }
+        
+        #contenedor_productos,
         #contenedor_gastos_personal,
         #contenedor_gastos_equipos,
         #contenedor_gastos_software,
@@ -271,8 +276,8 @@
                         		
                         		<hr />
                                 <div class="row">
-                                    <div class="col-xs-12 col-sm-6">
-                                        <button type="button" class="btn btn-primary" ng-click="validar_info_general()">Continuar a participantes&nbsp;<i class="fa fa-chevron-circle-right" aria-hidden="true"></i></button>
+                                    <div class="col-xs-12 col-sm-6 col-md-4">
+                                        <button type="button" class="btn btn-primary btn-block" ng-click="validar_info_general()">Continuar a participantes&nbsp;<i class="fa fa-chevron-circle-right" aria-hidden="true"></i></button>
                                     </div>
                                 </div>                    		
                         		
@@ -778,10 +783,10 @@
                                 		</table>
                                 	</div>
                                 </fieldset> {{--Participantes agregados--}}
-                                
+                                <br />
                                 <div class="row">
                         	        <div class="col-xs-12 col-sm-6">
-                        	            <button type="button" class="btn btn-primary btn-block" ng-click="mostrar_modal_grupos_investigacion()">
+                        	            <button type="button" class="btn btn-primary btn-block white-space-normal" ng-click="mostrar_modal_grupos_investigacion()">
                         	                Ver entidades / grupos de investigación participantes
                         	            </button>
                         	        </div>                                    
@@ -790,11 +795,11 @@
                         		<hr />
                         	    <div class="row">
                         	        <div class="col-xs-12 col-sm-6 col-md-4">
-                        	            <button type="button" class="btn btn-default btn-block" ng-click="regresar_info_general()">
+                        	            <button type="button" class="btn btn-default btn-block white-space-normal" ng-click="regresar_info_general()">
                         	                <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;Regresar a información general
                         	            </button>
                         	        </div>                        	        
-                        	        <div class="col-xs-12">&nbsp;</div>
+                        	        <div class="col-xs-12 visible-xs-block">&nbsp;</div>
                         	        <div class="col-xs-12 col-sm-6 col-md-4">
                         	            <button type="button" class="btn btn-primary btn-block" ng-click="continuar_a_productos()">
                         	                Ingresar productos&nbsp;<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
@@ -845,8 +850,7 @@
                         		</div>
                         		<hr />
                         		<div class="table-responsive" id="contenedor_productos">
-                        		    <!--id="contenedor_productos"-->
-                        		    <table class="table table-hover">
+                        		    <table class="table table-hover table-bordered">
                         		        <thead id="table_head_productos">
                         		            <tr>
                         		                <th>Categoría de producto</th>
@@ -869,13 +873,13 @@
                         		                <td>
                         		                    <input type="text" ng-readonly="true"
                         		                    ng-model="producto.tipo_producto_general.nombre"
-                        		                    class="white-readonly form-control"/>
+                        		                    class="white-readonly form-control" uib-tooltip="{$ producto.tipo_producto_general.nombre $}" tooltip-append-to-body="true"/>
                         		                    <input type="hidden" name="id_tipo_producto_general_{$ $index $}" value="{$ producto.tipo_producto_general.id $}"/>
                         		                </td>
                         		                <td>
                         		                    <input type="text" ng-readonly="true"
                         		                    ng-model="producto.tipo_producto_especifico.nombre"
-                        		                    class="white-readonly form-control"/>
+                        		                    class="white-readonly form-control" uib-tooltip="{$ producto.tipo_producto_especifico.nombre $}" tooltip-append-to-body="true"/>
                         		                    <input type="hidden" name="id_tipo_producto_especifico_{$ $index $}" value="{$ producto.tipo_producto_especifico.id $}"/>
                         		                </td>
                         		                <td>
@@ -1015,15 +1019,16 @@
                         		            </tr>
                         		        </tbody>
                         		    </table>
+                        		    <br />
                         		</div>
                     		    <hr />
                     		    <div class="row">
                         	        <div class="col-xs-12 col-sm-6 col-md-4">
-                        	            <button type="button" class="btn btn-default btn-block" ng-click="regresar_participantes()">
+                        	            <button type="button" class="btn btn-default btn-block white-space-normal" ng-click="regresar_participantes()">
                         	                <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;Regresar a participantes
                         	            </button>
                         	        </div>                        	        
-                        	        <div class="col-xs-12">&nbsp;</div>                    		        
+                        	        <div class="col-xs-12 visible-xs-block">&nbsp;</div>
                     		        <div class="col-xs-12 col-sm-6 col-md-4">
                     		            <button type="button" class="btn btn-primary btn-block" ng-click="continuar_a_gastos()">Ingresar gastos&nbsp;<i class="fa fa-chevron-circle-right" aria-hidden="true"></i></button>
                     		        </div>
@@ -1935,13 +1940,13 @@
                             <hr />
                             <div class="row">
                     	        <div class="col-xs-12 col-sm-6 col-md-4">
-                    	            <button type="button" class="btn btn-default btn-block" ng-click="regresar_productos()">
+                    	            <button type="button" class="btn btn-default btn-block white-space-normal" ng-click="regresar_productos()">
                     	                <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;Regresar a productos
                     	            </button>
                     	        </div>                        	        
-                    	        <div class="col-xs-12">&nbsp;</div>                    		                                        
+                    	        <div class="col-xs-12 visible-xs-block">&nbsp;</div>                    		                                        
                                 <div class="col-xs-12 col-sm-6 col-md-4">
-                                    <button type="button" class="btn btn-primary btn-block" ng-click="continuar_a_cargar_documentos()">
+                                    <button type="button" class="btn btn-primary btn-block white-space-normal" ng-click="continuar_a_cargar_documentos()">
                                         Cargar documentos del proyecto&nbsp;<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
                                     </button>
                                 </div>
@@ -2049,13 +2054,15 @@
                             <hr />
                             <div class="row">
                     	        <div class="col-xs-12 col-sm-6 col-md-4">
-                    	            <button type="button" class="btn btn-default btn-block" ng-click="regresar_gastos()">
+                    	            <button type="button" class="btn btn-default btn-block white-space-normal" ng-click="regresar_gastos()">
                     	                <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>&nbsp;Regresar a gastos
                     	            </button>
                     	        </div>                        	        
-                    	        <div class="col-xs-12">&nbsp;</div>                    		                                                                        
+                    	        <div class="col-xs-12 visible-xs-block">&nbsp;</div>                    		                                                                        
                                 <div class="col-xs-12 col-sm-6 col-md-4">
-                                    <button type="button" class="btn btn-primary btn-block" ng-click="registrar_proyecto()" ng-disabled="deshabilitar_btn_registrar_proy">Registrar proyecto&nbsp;<i class="fa fa-check" aria-hidden="true"></i></button>
+                                    <button type="button" class="btn btn-primary btn-block white-space-normal" ng-click="registrar_proyecto()" ng-disabled="deshabilitar_btn_registrar_proy">
+                                        Registrar proyecto&nbsp;<i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                    </button>
                                     <input type="submit" id="input_registrar_proyecto" ng-hide="true"/>
                                 </div>
                             </div>

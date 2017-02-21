@@ -13,15 +13,8 @@ $(document).ready(function() {
 		}
 	});
 	
-	// previene que se ingrese números decimales
-	// $('input[type="number"]').keydown(function(event) {
-	// 	if (event.keyCode == 190 || event.keyCode == 188 || event.keyCode == 69 || event.keyCode == 107 || event.keyCode ==  109) { // no permite "enter", ".", "+", "-" y ","
-	// 		event.preventDefault();
-	// 		return false;
-	// 	}
-	// });	
-	
 	function actualizar_perfect_scrollbars(){
+		$('#contenedor_productos').perfectScrollbar('update');
         $('#contenedor_gastos_personal').perfectScrollbar('update');
         $("#contenedor_gastos_equipos").perfectScrollbar('update');
     	$('#contenedor_gastos_software').perfectScrollbar('update');
@@ -43,15 +36,8 @@ $(document).ready(function() {
 		axis:"y",
 		theme: 'dark'
     });
-	$("#contenedor_productos").mCustomScrollbar({
-		axis:"x",
-		theme: 'dark',
-		advanced:{
-			autoExpandHorizontalScroll: true
-		},
-		autoHideScrollbar: true
-	}); 
-	
+    
+	$('#contenedor_productos').perfectScrollbar();
 	$('#contenedor_gastos_personal').perfectScrollbar();
 	$('#contenedor_gastos_equipos').perfectScrollbar();
 	$('#contenedor_gastos_software').perfectScrollbar();
