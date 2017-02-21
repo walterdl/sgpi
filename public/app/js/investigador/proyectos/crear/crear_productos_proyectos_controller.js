@@ -1,3 +1,4 @@
+
 sgpi_app.controller('crear_productos_proyecto_controller', function ($scope, $http) {
     
     // inicialización de variables

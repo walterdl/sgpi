@@ -379,6 +379,8 @@ Route::group(array('before' => 'auth'), function(){
 		Route::get('proyectos/info_editar_participantes', 'ProyectosEditarController@get_participantes_proyecto');
 		Route::post('proyectos/editar/post_participantes', 'ProyectosEditarController@post_participantes_proyecto');
 		Route::post('proyectos/editar/validar_identificaciones', 'ProyectosEditarController@validar_identificaciones');
+		Route::get('proyectos/info_editar_productos', 'ProyectosEditarController@get_productos_proyecto');
+		Route::post('proyectos/editar/productos', 'ProyectosEditarController@post_productos_proyecto');
 		
 		
 		/*
@@ -419,6 +421,7 @@ Route::get('registra_sgpi', 'ProyectosController@registra_sgpi');
 | Rutas de usuarios temporalmente afuera para pruebas
 |--------------------------------------------------------------------------
 */
+Route::post('proyectos/editar/productos', 'ProyectosEditarController@post_productos_proyecto');
 Route::get('proyectos/editar/post_participantes', 'ProyectosEditarController@post_participantes_proyecto');
 Route::post('proyectos/registrar_nuevo_proyecto', 'ProyectosController@registrar_nuevo_proyecto');
 
@@ -500,7 +503,8 @@ Route::get('show_alter_collation', 'BaseController@show_alter_collation');
 */
 Route::get('test', function ()
 {
-	echo substr ( "2017-02-25T05:00:00.000Z" , 0 ,  10);
+	$miArray = ['hello' => 'there', 'say' => 'Walter!'];
+	return '<pre>'.print_r((object)$miArray, true).'</pre>';
 });
 
 Route::get('test2', function(){

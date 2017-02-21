@@ -825,6 +825,14 @@
             // );            
             try
             {
+                // valida identificador de proyecto enviado
+                if(is_null(Input::get('id_proyecto', null)))
+                    throw new Exception('Identificador de proyecto inválido. No se ha enviado tal dato');
+                    
+                $validacion = Validator::make(['id_proyecto' => Input::get('id_proyecto')], ['id_proyecto' => 'required|exists:proyectos,id']);
+                if($validacion->fails())
+                    throw new Exception('Identificador de proyecto inválido. No se encuentra proyecto con tal identificador');                                                            
+                
                 $data = Input::all();
                 
                 DB::transaction(function() use($data)
@@ -1164,6 +1172,332 @@
                 $datos_participante['fecha_ejecucion'] = $data['fecha_ejecucion_nuevo_'.$index];
             }
             return $datos_participante;
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| get_productos_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Retorno json con los datos necesarios para la vista de edición de productos de un determinado proyecto
+    	*/           
+        public function get_productos_proyecto(){
+            
+            // obtiene los productos del proyecto
+            try{
+                // valida identificador de proyecto enviado
+                if(is_null(Input::get('id_proyecto', null)))
+                    throw new Exception('Identificador de proyecto inválido. No se ha enviado tal dato');
+                    
+                $validacion = Validator::make(
+                    ['id_proyecto' => Input::get('id_proyecto')],
+                    ['id_proyecto' => 'required|exists:proyectos,id']);
+                    
+                if($validacion->fails())
+                    throw new Exception('Identificador de proyecto inválido. No se encuentra registros con tal identificador');                
+                    
+                $productos = Producto::where('id_proyecto', '=', Input::get('id_proyecto'))->get();
+                
+                // consulta si el producto tiene algun tipo de postulacion cargada
+                for($i = 0; $i < count($productos); $i++)
+                {
+                    $producto = $productos[$i];
+                    $tiene_postulacion_publicacion = PostulacionPublicacion::where('id_producto', '=', $producto->id)->first() == null ? 0 : 1;
+                    $producto = $producto->toArray();
+                    $producto['tiene_postulacion_publicacion'] = $tiene_postulacion_publicacion;
+                    $producto = (object)$producto;
+                    $productos[$i] = $producto;
+                }
+                
+                // envía los participantes del proyecto ya que los productos tienen participantes como encargados
+                $investigadores = Investigador::investigadores_proyecto(Input::get('id_proyecto'));
+                
+                return json_encode([
+                    'consultado' => 1,
+                    'investigadores' => $investigadores,
+                    'productos' => $productos,
+                    'tipos_productos_generales' => TipoProductoGeneral::all(),
+                    'productos_especificos_x_prod_general' => TipoProductoEspecifico::productos_especificos_x_prod_general(),                
+                    ]);
+            }
+            catch(\Exception $e){
+                return json_encode([
+                    'consultado' => 2,
+                    'codigo' => $e->getCode(),
+                    'mensaje' => $e->getMessage(),
+                    ]);
+            }
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| post_productos_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Punto de recepción del formulario de edicion de productos del proyecto
+    	*/                   
+        public function post_productos_proyecto(){
+            
+            /*
+            -Se eliminaran productos verificando su no tienen postulaciones/publicaciones cargadas
+            -Se editaran productos existentes
+            -Se crearan productos existentes
+            */
+            // aplica validacion al identificador del proyecto enviado
+            try{
+                if(is_null(Input::get('id_proyecto', null)))
+                    throw new Exception('Identificador de proyecto inválido. No se ha enviado tal dato');
+                    
+                $validacion = Validator::make(['id_proyecto' => Input::get('id_proyecto')], ['id_proyecto' => 'required|exists:proyectos,id']);
+                if($validacion->fails())
+                    throw new Exception('Identificador de proyecto inválido. No se encuentra proyecto con tal identificador');                                            
+                    
+                $data = Input::all();
+                
+                DB::transaction(function () use($data)
+                {
+                    $this->eliminar_productos_proyecto($data);
+                    
+                    $this->editar_productos_existentes($data);
+                    
+                    $this->creacion_nuevos_productos($data);
+                });
+                
+                //  return 'Productos editados!';
+                Session::flash('notify_operacion_previa', 'success');
+                Session::flash('mensaje_operacion_previa', 'Productos de proyecto editados');                
+            }
+            catch(\Exception $e){
+                throw $e;
+                Session::flash('notify_operacion_previa', 'error');
+                Session::flash('mensaje_operacion_previa', 'Error al editar los productos del proyecto. Detalles: '.$e->getMessage());
+            }
+            return Redirect::to('/proyectos/listar');
+        }
+        
+        /*
+    	|--------------------------------------------------------------------------
+    	| eliminar_productos_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Función de soporte para la edición de productos
+    	| Elimina los productos del proyecto
+    	*/           
+        private function eliminar_productos_proyecto($data){
+            
+            if(!isset($data['productos_a_eliminar'])) return; // si no hay productos que eliminar cancelar operacion
+            
+            foreach($data['productos_a_eliminar'] as $producto_a_eliminar){
+                
+                // valida que el identificador del producto enviado exista y que pertenezca al proyecto 
+                $producto = Producto::where('id', '=', $producto_a_eliminar)->where('id_proyecto', '=', $data['id_proyecto'])->first();
+                
+                if(!$producto) // si no hay producto, se cancela operación
+                    throw new Exception('Identificador de producto ('.$producto_a_eliminar.') 
+                        a eliminar inválido. No se encuentra tal identificador o no está relacionado con el proyecto '.$data['id_proyecto']);
+                        
+                // existe el producto
+                // valida si se puede eliminar el producto verificado que no tenga postulacion/publicacion cargada
+                $postulacion_publicacion = PostulacionPublicacion::where('id_producto', '=', $producto->id)->first();
+                
+                if($postulacion_publicacion) // tiene postulación/publicacion. Se cancela operación
+                    throw new Exception('El producto "'.$producto->nombre.'" no se puede eliminar ya que cuenta con postulación/publicacion cargada');
+                
+                // no tiene postulación/publicación. Se procede a eliminar producto
+                $producto = Producto::find($producto->id);
+                $producto->delete();
+            }
+        }    	
+        
+        /*
+    	|--------------------------------------------------------------------------
+    	| editar_productos_existentes()
+    	|--------------------------------------------------------------------------
+    	| Función de soporte para la edición de productos
+    	| Edita los productos existentes de un proyecto
+    	*/                   
+        private function editar_productos_existentes($data){
+            
+            /*
+            A un producto se le puede editar todos sus campos
+            Lo que debe tener validación es su campo encargado; que el encargado no esté eliminado y que esté asociado al proyecto en cuestión
+            De resto todos sus campos deben ser obligatorios
+            */
+            
+            // se identifica la cantidad de productos existentes enviados
+            // contando la cantidad de uno de los campos que le pertenecen a los productos existentes
+        	$llaves_data = array_keys($data);
+            $llaves_tipos_productos_generales = preg_grep('/tipo_producto_general_\d+_\d+/', $llaves_data);
+            foreach($llaves_tipos_productos_generales as $llave_tipo_producto_general)
+            {
+                // abstrae el identificador del producto teniendo en cuenta que la llave del campo del tipo de producto general contiene:
+                // tipo_producto_general_<id_producto>_<index coleccion productos>
+                $explode_result = explode('_', $llave_tipo_producto_general);
+                // el cuarto elemento (indice 3) del resultado de explode contendrá el id_producto
+                $id_producto = $explode_result[3];
+                $index = $explode_result[4];
+                
+                // valida que el producto hace parte del proyecto en cuestión
+                $producto = Producto::find($id_producto);
+                if(!$producto) // el producto no existe o está eliminado. Se cancela operacion
+                    throw new Exception('El producto que se intenta editar identificado con '.$id_producto.' no existe');
+                if($producto->id_proyecto != $data['id_proyecto'])
+                    throw new Exception('El producto "'.$producto->nombre.'" que se intenta editar no hace parte del proyecto '.$id_producto);
+                
+                // el producto hace parte del proyecto y no está eliminado
+                // se abstrae los datos correspondientes con el producto de los datos enviados desde el forumalrio
+                $datos_producto = $this->abstraer_datos_productos($data, $id_producto, $index); 
+                
+                // valida participante encargado enviado
+                $investigador = Investigador::where('id', '=', $datos_producto->id_investigador)->where('id_proyecto', '=', $data['id_proyecto'])->first();
+                if(!$investigador) // el investigador que se pretende establecer como encargado no existe o no hace parte del proyecto. Se cancela operación
+                    throw new Exception('El participante identificado con '.$datos_producto->id_investigador.' no existe o no hace parte del proyecto');
+                
+                // el investigador hace parte del proyecto. Se prosigue con validacion de demás campos
+                $validacion = Validator::make(
+                    [
+                        'id_tipo_producto_especifico' => $datos_producto->id_tipo_producto_especifico,
+                        'fecha_proyectada_radicacion' => $datos_producto->fecha_proyectada_radicacion,
+                        'fecha_remision' => $datos_producto->fecha_remision,
+                        'fecha_confirmacion_editorial' => $datos_producto->fecha_confirmacion_editorial,
+                        'fecha_recepcion_evaluacion' => $datos_producto->fecha_recepcion_evaluacion,
+                        'fecha_respuesta_evaluacion' => $datos_producto->fecha_respuesta_evaluacion,
+                        'fecha_aprobacion_publicacion' => $datos_producto->fecha_aprobacion_publicacion,
+                        'fecha_publicacion' => $datos_producto->fecha_publicacion
+                    ],
+                    [
+                        'id_tipo_producto_especifico' => 'required|exists:tipos_productos_especificos,id',
+                        'fecha_proyectada_radicacion' => 'required|date_format:Y-m-d',
+                        'fecha_remision' => 'required|date_format:Y-m-d',
+                        'fecha_confirmacion_editorial' => 'required|date_format:Y-m-d',
+                        'fecha_recepcion_evaluacion' => 'required|date_format:Y-m-d',
+                        'fecha_respuesta_evaluacion' => 'required|date_format:Y-m-d',
+                        'fecha_aprobacion_publicacion' => 'required|date_format:Y-m-d',
+                        'fecha_publicacion' => 'required|date_format:Y-m-d'
+                    ]);
+                if($validacion->fails())
+                    throw new Exception('Validaciones de datos para el producto "'.$producto->nombre.'" ('.$producto->id.') incorrectas. Causa: '.$validacion->messages());
+                    
+                $producto->nombre = $datos_producto->nombre_producto;
+                $producto->id_investigador = $datos_producto->id_investigador;
+                $producto->id_tipo_producto_especifico = $datos_producto->id_tipo_producto_especifico;
+                $producto->fecha_proyectada_radicacion = $datos_producto->fecha_proyectada_radicacion;
+                $producto->fecha_remision = $datos_producto->fecha_remision;
+                $producto->fecha_confirmacion_editorial = $datos_producto->fecha_confirmacion_editorial;
+                $producto->fecha_recepcion_evaluacion = $datos_producto->fecha_recepcion_evaluacion;
+                $producto->fecha_respuesta_evaluacion = $datos_producto->fecha_respuesta_evaluacion;
+                $producto->fecha_aprobacion_publicacion = $datos_producto->fecha_aprobacion_publicacion;
+                $producto->fecha_publicacion = $datos_producto->fecha_publicacion;
+                $producto->save();
+            }
+        }
+        
+        /*
+    	|--------------------------------------------------------------------------
+    	| creacion_nuevos_productos()
+    	|--------------------------------------------------------------------------
+    	| Función de soporte para la edición de productos
+    	| Crea nuevos proyectos
+    	*/                
+        private function creacion_nuevos_productos($data){
+            
+            // se identifica la cantidad de productos nuevos enviados
+            // contando la cantidad de uno de los campos que le pertenecen a los productos nuevos
+        	$llaves_data = array_keys($data);
+            $llaves_tipos_productos_generales = preg_grep('/tipo_producto_general_nuevo_\d+/', $llaves_data);
+            foreach($llaves_tipos_productos_generales as $llave_tipo_producto_general){
+                
+                // abstrae el index que identifica el producto nuevo teniendo en cuenta que la llave del campo del tipo de producto general contiene:
+                // tipo_producto_general_nuevo_<index coleccion productos>
+                $explode_result = explode('_', $llave_tipo_producto_general);
+                $index = $explode_result[4];                
+                
+                // se abstrae los datos correspondientes con el producto de los datos enviados desde el forumalrio
+                $datos_producto = $this->abstraer_datos_productos($data, 'nuevo', $index); 
+                
+                // valida participante encargado enviado
+                $investigador = Investigador::where('id', '=', $datos_producto->id_investigador)->where('id_proyecto', '=', $data['id_proyecto'])->first();
+                if(!$investigador) // el investigador que se pretende establecer como encargado no existe o no hace parte del proyecto. Se cancela operación
+                    throw new Exception('El participante identificado con '.$datos_producto->id_investigador.' no existe o no hace parte del proyecto');                
+                    
+                // el investigador hace parte del proyecto. Se prosigue con validacion de demás campos
+                $validacion = Validator::make(
+                    [
+                        'id_tipo_producto_especifico' => $datos_producto->id_tipo_producto_especifico,
+                        'fecha_proyectada_radicacion' => $datos_producto->fecha_proyectada_radicacion,
+                        'fecha_remision' => $datos_producto->fecha_remision,
+                        'fecha_confirmacion_editorial' => $datos_producto->fecha_confirmacion_editorial,
+                        'fecha_recepcion_evaluacion' => $datos_producto->fecha_recepcion_evaluacion,
+                        'fecha_respuesta_evaluacion' => $datos_producto->fecha_respuesta_evaluacion,
+                        'fecha_aprobacion_publicacion' => $datos_producto->fecha_aprobacion_publicacion,
+                        'fecha_publicacion' => $datos_producto->fecha_publicacion
+                    ],
+                    [
+                        'id_tipo_producto_especifico' => 'required|exists:tipos_productos_especificos,id',
+                        'fecha_proyectada_radicacion' => 'required|date_format:Y-m-d',
+                        'fecha_remision' => 'required|date_format:Y-m-d',
+                        'fecha_confirmacion_editorial' => 'required|date_format:Y-m-d',
+                        'fecha_recepcion_evaluacion' => 'required|date_format:Y-m-d',
+                        'fecha_respuesta_evaluacion' => 'required|date_format:Y-m-d',
+                        'fecha_aprobacion_publicacion' => 'required|date_format:Y-m-d',
+                        'fecha_publicacion' => 'required|date_format:Y-m-d'
+                    ]);
+                if($validacion->fails())
+                    throw new Exception('Validaciones de datos para el producto "'.$producto->nombre.'" ('.$producto->id.') incorrectas. Causa: '.$validacion->messages());                
+                    
+                // crea el producto
+                $producto = new Producto();
+                $producto->id_proyecto = $data['id_proyecto'];
+                $producto->id_estado = 1;
+                $producto->nombre = $datos_producto->nombre_producto;
+                $producto->id_investigador = $datos_producto->id_investigador;
+                $producto->id_tipo_producto_especifico = $datos_producto->id_tipo_producto_especifico;
+                $producto->fecha_proyectada_radicacion = $datos_producto->fecha_proyectada_radicacion;
+                $producto->fecha_remision = $datos_producto->fecha_remision;
+                $producto->fecha_confirmacion_editorial = $datos_producto->fecha_confirmacion_editorial;
+                $producto->fecha_recepcion_evaluacion = $datos_producto->fecha_recepcion_evaluacion;
+                $producto->fecha_respuesta_evaluacion = $datos_producto->fecha_respuesta_evaluacion;
+                $producto->fecha_aprobacion_publicacion = $datos_producto->fecha_aprobacion_publicacion;
+                $producto->fecha_publicacion = $datos_producto->fecha_publicacion;
+                $producto->save();                
+            }
+        }
+        
+        /*
+    	|--------------------------------------------------------------------------
+    	| abstraer_datos_productos()
+    	|--------------------------------------------------------------------------
+    	| Abstrae los datos de un producto de los datos enviados desde el formulario de edición de productos
+    	*/         
+        private function abstraer_datos_productos($data, $id_producto, $index){
+            
+            $datos_a_retornar = [];
+            if($id_producto != 'nuevo')
+            {
+                // tipo_producto_general_1_0
+                $datos_a_retornar['id_tipo_producto_especifico'] = $data['tipo_producto_especifico_'.$id_producto.'_'.$index]; // tipo_producto_especifico_1_0
+                $datos_a_retornar['nombre_producto'] = $data['nombre_producto_'.$id_producto.'_'.$index]; // nombre_producto_1_0
+                $datos_a_retornar['id_investigador'] = $data['participante_'.$id_producto.'_'.$index]; // participante_1_0
+                $datos_a_retornar['fecha_proyectada_radicacion'] = $data['fecha_proyectada_radicacion_'.$id_producto.'_'.$index]; // fecha_proyectada_radicacion_1_0
+                $datos_a_retornar['fecha_remision'] = $data['fecha_remision_'.$id_producto.'_'.$index]; // fecha_remision_1_0
+                $datos_a_retornar['fecha_confirmacion_editorial'] = $data['fecha_confirmacion_editorial_'.$id_producto.'_'.$index]; // fecha_confirmacion_editorial_1_0
+                $datos_a_retornar['fecha_recepcion_evaluacion'] = $data['fecha_recepcion_evaluacion_'.$id_producto.'_'.$index]; // fecha_recepcion_evaluacion_1_0
+                $datos_a_retornar['fecha_respuesta_evaluacion'] = $data['fecha_respuesta_evaluacion_'.$id_producto.'_'.$index]; // fecha_respuesta_evaluacion_1_0
+                $datos_a_retornar['fecha_aprobacion_publicacion'] = $data['fecha_aprobacion_publicacion_'.$id_producto.'_'.$index]; // fecha_aprobacion_publicacion_1_0
+                $datos_a_retornar['fecha_publicacion'] = $data['fecha_publicacion_'.$id_producto.'_'.$index]; // fecha_publicacion_1_0                
+            }
+            else 
+            {
+                // tipo_producto_general_nuevo_1
+                $datos_a_retornar['id_tipo_producto_especifico'] = $data['tipo_producto_especifico_nuevo_'.$index]; // tipo_producto_especifico_nuevo_1
+                $datos_a_retornar['nombre_producto'] = $data['nombre_producto_nuevo_'.$index]; // nombre_producto_nuevo_1
+                $datos_a_retornar['id_investigador'] = $data['participante_nuevo_'.$index]; // participante_nuevo_1
+                $datos_a_retornar['fecha_proyectada_radicacion'] = $data['fecha_proyectada_radicacion_nuevo_'.$index]; // fecha_proyectada_radicacion_nuevo_1
+                $datos_a_retornar['fecha_remision'] = $data['fecha_remision_nuevo_'.$index]; // fecha_remision_nuevo_1
+                $datos_a_retornar['fecha_confirmacion_editorial'] = $data['fecha_confirmacion_editorial_nuevo_'.$index]; // fecha_confirmacion_editorial_nuevo_1
+                $datos_a_retornar['fecha_recepcion_evaluacion'] = $data['fecha_recepcion_evaluacion_nuevo_'.$index]; // fecha_recepcion_evaluacion_nuevo_1
+                $datos_a_retornar['fecha_respuesta_evaluacion'] = $data['fecha_respuesta_evaluacion_nuevo_'.$index]; // fecha_respuesta_evaluacion_nuevo_1
+                $datos_a_retornar['fecha_aprobacion_publicacion'] = $data['fecha_aprobacion_publicacion_nuevo_'.$index]; // fecha_aprobacion_publicacion_nuevo_1
+                $datos_a_retornar['fecha_publicacion'] = $data['fecha_publicacion_nuevo_'.$index]; // fecha_publicacion_nuevo_1                
+            }
+            return (object)$datos_a_retornar;
         }
         
     }

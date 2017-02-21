@@ -1961,8 +1961,6 @@
                     array_push($styles, 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.css');
                     array_push($pre_scripts, 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js');
 
-                    // 'investigador/proyectos/editar/editar_document_ready_externo.js',
-                    // 'investigador/proyectos/editar/(copia) editar_datos_basicos_controller.js',                    
                     $post_scripts = [
                         'investigador/proyectos/editar/editar_participantes_controller.js'
                     ];
@@ -1980,22 +1978,22 @@
                 case '3':
                     // productos
                     
-                    array_push($styles, 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.css');
-                    array_push($pre_scripts, 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js');                    
+                    // array_push($styles, 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.css');
+                    // array_push($pre_scripts, 'vendor/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js');                    
+                    array_push($styles, 'vendor/perfect-scrollbar/css/perfect-scrollbar.min.css');
+                    array_push($pre_scripts, 'vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js');                     
                     
                     $post_scripts = [
-                        'investigador/proyectos/editar/editar_document_ready_externo.js',
-                        'investigador/proyectos/editar/editar_datos_basicos_controller.js',
-                        'investigador/proyectos/editar/editar_productos_proyectos_controller.js',
+                        'investigador/proyectos/editar/editar_productos_controller.js',
                     ];
                     
                     return View::make('investigador.proyectos.editar.productos', array(
                         'styles' => $styles,
                         'pagina'=>$pagina,
-                        'proyecto_id' => $id,
                         'pre_scripts' => $pre_scripts,
                         'post_scripts' => $post_scripts,
-                        'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies
+                        'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies,
+                        'id_proyecto' => $id_proyecto
                     ));
                     
                     break;
@@ -2012,11 +2010,10 @@
                     
                     return View::make('investigador.proyectos.editar.gastos', array(
                         'styles' => $styles,
-                        'pagina'=>$pagina,
-                        'proyecto_id' => $id_proyecto,
                         'pre_scripts' => $pre_scripts,
                         'post_scripts' => $post_scripts,
-                        'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies
+                        'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies,
+                        'proyecto_id' => $id_proyecto,
                     ));
                     
                     break;

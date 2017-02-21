@@ -41,8 +41,6 @@
                 return $this->belongsTo('Rol', 'id_rol'); 
             }
             
-            
-            
             //relaciones indirectas
             
             public function producto()
@@ -113,6 +111,7 @@
                     
                     // agrega campos de persona a la estructura de datos del investigador a añadir
                     $investigador = $investigador->toArray();
+                    $investigador['id_investigador'] = $investigador['id'];
                     foreach ($persona as $campo => $valor){
                         $investigador[$campo] = $valor;
                     }
@@ -142,6 +141,7 @@
                         
                         // agrega campos de persona a la estructura de datos del investigador a añadir
                         $investigador = $investigador->toArray();
+                        $investigador['id_investigador'] = $investigador['id'];
                         foreach ($persona as $campo => $valor){
                             $investigador[$campo] = $valor;
                         }                        
@@ -162,10 +162,10 @@
                         
                         // agrega campos de persona a la estructura de datos del investigador a añadir
                         $investigador = $investigador->toArray();
+                        $investigador['id_investigador'] = $investigador['id'];
                         foreach ($persona as $campo => $valor){
                             $investigador[$campo] = $valor;
                         }                                                
-                        
                         $respuesta_investigaodres[] = $investigador;
                     }
                 }
