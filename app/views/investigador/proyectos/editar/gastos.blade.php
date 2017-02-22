@@ -72,17 +72,19 @@
                 <i class="fa fa-chevron-right" aria-hidden="true"></i>
             </li>             
             <li>
-                <a><b>Editar gastos</b></a>
+                <a>Editar gastos</a>
             </li>
         </ol>
         <br />
     </section>
     
     <!--contenido |-->
-    <section class="content" ng-cloak ng-controller="editar_gastos_proyectos_controller">
+    <section class="content" ng-cloak ng-controller="editar_gastos_controller">
         
-        <form action="/proyectos/editar/gastos" method="POST" enctype='multipart/form-data'>
+        <form id="_form_" action="/proyectos/editar/gastos" method="POST">
             
+            <input type="hidden" name="id_proyecto" value="{{ $proyecto_id }}"/>
+
             <div class="box">
                 <div class="box-header with-border">
                     <h3>Editar proyecto</h3>
@@ -96,6 +98,10 @@
                     <div id="inputs_entidades_fuente_presupuesto_existentes">
                         {{--contenido generado desde controlador--}}
                         {{--son inputs hidden que identifican las entidades fuente de presupuesto existentes en la BD seleccionadas para financiar el proyecto--}}
+                    </div>
+                    <div id="inputs_entidades_fuente_presupuesto_existentes_a_eliminar">
+                        {{--contenido generado desde controlador--}}
+                        {{--son inputs hidden que identifican las entidades fuente de presupuesto existentes en la BD asociadas al proyecto que se removerán del mismo--}}                        
                     </div>
                     <div id="gastos_equipos_existentes_a_eliminar">
                         {{--contenido generado desde controlador--}}
@@ -128,6 +134,7 @@
                     
                     <br />
                     
+                    {{--Multiselect de entidades--}}
                     <p><strong>Agregar entidad fuente de presupuesto (por defecto se tiene UCC y CONADI)</strong></p>
                     <div class="row is-flex">
                         <div class="col-xs-12 col-md-6">
@@ -149,7 +156,7 @@
                         </div>
                         
                         <div class="col-xs-12 col-md-6">
-                            <p style="color: rgb(178, 34, 34);" ng-show="nueva_entidadPresupuesto_incorrecto">{$ msj_nueva_entidadPresupuesto_incorrecto $}</p>
+                            <p class="error-text" ng-show="nueva_entidadPresupuesto_incorrecto">{$ msj_nueva_entidadPresupuesto_incorrecto $}</p>
                             <div class="input-group">
                                 <input id="input_text_nueva_entidad" type="text" ng-model="nueva_entidad_presupuesto"
                                 ng-change="nueva_entidadPresupuesto_incorrecto=false"
@@ -218,12 +225,12 @@
                                                 </td>
                                                 <td ng-repeat="gasto in gasto_personal.gastos">
                                                     {{--El ng-if coloca el presupuesto de UCC de primero--}}
-                                                    <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='UCC'" type="number" string-to-number name="gasto_personal_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_personal.id_detalle_gasto $}_{$ $index $}"
+                                                    <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='UCC'" type="number" string-to-number name="gasto_personal_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_personal.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_personal', gasto_personal, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>
                                                     
-                                                    <input ng-if="gasto.nombre_entidad_fuente_presupuesto!='UCC'" type="number" string-to-number name="gasto_personal_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_personal.id_detalle_gasto $}_{$ $index $}"
+                                                    <input ng-if="gasto.nombre_entidad_fuente_presupuesto!='UCC'" type="number" string-to-number name="gasto_personal_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_personal.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_personal', gasto_personal, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>
@@ -316,19 +323,19 @@
                                                 <td ng-repeat="gasto in gasto_equipo.gastos">
                                                     {{--ucc--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='UCC'" type="number" string-to-number 
-                                                    name="gasto_equipo_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_equipo.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_equipo_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_equipo.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_equipos', gasto_equipo, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>                                                            
                                                     {{--conadi--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='CONADI'" type="number" string-to-number 
-                                                    name="gasto_equipo_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_equipo.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_equipo_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_equipo.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_equipos', gasto_equipo, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>
                                                     {{--otras entidades--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto!='UCC'&&gasto.nombre_entidad_fuente_presupuesto!='CONADI'" type="number" string-to-number 
-                                                    name="gasto_equipo_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_equipo.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_equipo_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_equipo.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_equipos', gasto_equipo, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>                                                            
@@ -428,19 +435,19 @@
                                                 <td ng-repeat="gasto in gasto_software.gastos">
                                                     {{--ucc--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='UCC'" type="number" string-to-number 
-                                                    name="gasto_software_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_software.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_software_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_software.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_software', gasto_software, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>
                                                     {{--conadi--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='CONADI'" type="number" string-to-number 
-                                                    name="gasto_software_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_software.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_software_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_software.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_software', gasto_software, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>
                                                     {{--otras entidades--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto!='UCC'&&gasto.nombre_entidad_fuente_presupuesto!='CONADI'" type="number" string-to-number 
-                                                    name="gasto_software_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_software.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_software_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_software.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_software', gasto_software, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>                                                            
@@ -547,19 +554,19 @@
                                                 <td ng-repeat="gasto in gasto_salida.gastos">
                                                     {{--ucc--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='UCC'" type="number" string-to-number 
-                                                    name="gasto_salida_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_salida.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_salida_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_salida.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_salidas_campo', gasto_salida, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>
                                                     {{--conadi--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='CONADI'" type="number" string-to-number 
-                                                    name="gasto_salida_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_salida.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_salida_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_salida.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_salidas_campo', gasto_salida, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>
                                                     {{--otras entidades--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto!='UCC'&&gasto.nombre_entidad_fuente_presupuesto!='CONADI'" type="number" string-to-number 
-                                                    name="gasto_salida_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_salida.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_salida_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_salida.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_salidas_campo', gasto_salida, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>                                                            
@@ -659,19 +666,19 @@
                                                 <td ng-repeat="gasto in gasto_material.gastos">
                                                     {{--ucc--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='UCC'" type="number" string-to-number 
-                                                    name="gasto_material_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_material.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_material_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_material.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_materiales', gasto_material, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>
                                                     {{--conadi--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='CONADI'" type="number" string-to-number 
-                                                    name="gasto_material_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_material.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_material_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_material.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_materiales', gasto_material, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>
                                                     {{--otras entidades--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto!='UCC'&&gasto.nombre_entidad_fuente_presupuesto!='CONADI'" type="number" string-to-number 
-                                                    name="gasto_material_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_material.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_material_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_material.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_materiales', gasto_material, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>                                                            
@@ -771,19 +778,19 @@
                                                 <td ng-repeat="gasto in gasto_servicio.gastos">
                                                     {{--ucc--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='UCC'" type="number" string-to-number 
-                                                    name="gasto_servicio_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_servicio.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_servicio_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_servicio.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_servicios', gasto_servicio, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>
                                                     {{--conadi--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='CONADI'" type="number" string-to-number 
-                                                    name="gasto_servicio_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_servicio.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_servicio_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_servicio.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_servicios', gasto_servicio, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>
                                                     {{--otras entidades--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto!='UCC'&&gasto.nombre_entidad_fuente_presupuesto!='CONADI'" type="number" string-to-number 
-                                                    name="gasto_servicio_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_servicio.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_servicio_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_servicio.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_servicios', gasto_servicio, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>                                                            
@@ -883,19 +890,19 @@
                                                 <td ng-repeat="gasto in gasto_bibliografico.gastos">
                                                     {{--ucc--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='UCC'" type="number" string-to-number 
-                                                    name="gasto_bibliografico_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_bibliografico.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_bibliografico_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_bibliografico.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_bibliograficos', gasto_bibliografico, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>
                                                     {{--conadi--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='CONADI'" type="number" string-to-number 
-                                                    name="gasto_bibliografico_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_bibliografico.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_bibliografico_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_bibliografico.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_bibliograficos', gasto_bibliografico, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>
                                                     {{--otras entidades--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto!='UCC'&&gasto.nombre_entidad_fuente_presupuesto!='CONADI'" type="number" string-to-number 
-                                                    name="gasto_bibliografico_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_bibliografico.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_bibliografico_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_bibliografico.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_bibliograficos', gasto_bibliografico, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>                                                            
@@ -995,19 +1002,19 @@
                                                 <td ng-repeat="gasto in gasto_digital.gastos">
                                                     {{--ucc--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='UCC'" type="number" string-to-number 
-                                                    name="gasto_digital_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_digital.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_digital_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_digital.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_digitales', gasto_digital, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>
                                                     {{--conadi--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto=='CONADI'" type="number" string-to-number 
-                                                    name="gasto_digital_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_digital.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_digital_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_digital.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_digitales', gasto_digital, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>
                                                     {{--otras entidades--}}
                                                     <input ng-if="gasto.nombre_entidad_fuente_presupuesto!='UCC'&&gasto.nombre_entidad_fuente_presupuesto!='CONADI'" type="number" string-to-number 
-                                                    name="gasto_digital_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_digital.id_detalle_gasto $}_{$ $index $}"
+                                                    name="gasto_digital_presupuesto_{$ gasto.id_entidad_fuente_presupuesto $}_{$ gasto.id_gasto $}_{$ gasto_digital.id_detalle_gasto $}_{$ $index $}_{$ $parent.$parent.$index $}"
                                                     ng-model="gasto.valor" ng-change="cambia_presupuesto_tipo_gasto('gastos_digitales', gasto_digital, gasto)"
                                                     class="form-control min-width-150" ng-class="{'invalid_control': gasto.gasto_invalido}"
                                                     uib-tooltip="La cantidad debe ser mayor o igual a cero" tooltip-class="tooltip-invalid_control" tooltip-append-to-body="true" tooltip-enable="gasto.gasto_invalido"/>                                                            
@@ -1056,6 +1063,7 @@
                     
                     <hr />
                     
+                    {{--btn Guardar--}}
                     <div class="row">
                         <div class="col-xs-12 col-md-4">
                             <button type="button" class="btn btn-primary btn-block" ng-click="guardar()" >Guardar cambios&nbsp;<i class="fa fa-floppy-o" aria-hidden="true"></i></button>

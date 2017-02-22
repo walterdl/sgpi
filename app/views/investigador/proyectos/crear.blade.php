@@ -75,10 +75,12 @@
             <li>
                 <a href="/"><i class="fa fa-home" style="font-size:18px;"></i></a>
                 <i class="fa fa-chevron-right" aria-hidden="true"></i>
-            </li> 
-            <li>
-                <a href="#"><b>Registrar proyecto</b></a>
             </li>
+            <li>
+                <a href="/proyectos/listar"><b>Proyectos</b></a>
+                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+            </li>             
+            <li>Registrar proyecto</li>
         </ol>
         <br />
     </section>

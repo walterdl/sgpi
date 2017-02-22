@@ -605,67 +605,6 @@
             
             return Redirect::to('/proyectos/listar');
         }
-    	
-    	/*
-    	|--------------------------------------------------------------------------
-    	| get_gastos_proyecto()
-    	|--------------------------------------------------------------------------
-    	| Consulta los gastos de un determinado proyecto de investigación
-    	*/                
-        public function get_gastos_proyecto(){
-            
-            try{
-                
-                // valida identificador de proeycto enviado
-                if(is_null(Input::get('id_proyecto', null)))
-                    throw new Exception('Identificador de proyecto inválido. No se ha enviado tal dato');
-                $validacion = Validator::make(['id_proyecto' => Input::get('id_proyecto')], ['id_proyecto' => 'required|exists:proyectos,id']);
-                if($validacion->fails())
-                    throw new Exception('Identificador de proyecto inválido. No se encuentra proyecto con tal identificador');
-                    
-                // consulta los gasto del proyecto
-                $gastos_proyecto = Gasto::consultar_gastos_proyecto(Input::get('id_proyecto'));
-                
-                // consulta las entidades fuente de presupuesto que patrocinan los gastos del proyecto
-                $entidades_fuente_presupuesto_proyecto = EntidadFuentePresupuesto::entidades_fuente_presupuesto_proyecto(Input::get('id_proyecto'));
-                
-                // consulta todas las entidades para alimentar el multiselect de entidades
-                $todas_las_entidades_fuente_pres = EntidadFuentePresupuesto::whereNotIn('nombre', ['UCC', 'CONADI'])->select('id', 'nombre')->orderBy('id')->get();
-                
-                return json_encode([
-                    'consultado' => 1,
-                    'gastos' => $gastos_proyecto,
-                    'entidades_fuente_presupuesto_proyecto' => $entidades_fuente_presupuesto_proyecto,
-                    'todas_las_entidades_fuente_presupuesto' => $todas_las_entidades_fuente_pres,
-                    'id_entidad_fuente_presupuesto_ucc' => EntidadFuentePresupuesto::where('nombre', '=', 'UCC')->first()->id,
-                    'id_entidad_fuente_presupuesto_conadi' => EntidadFuentePresupuesto::where('nombre', '=', 'CONADI')->first()->id
-                    ]);
-            }
-            catch(\Exception $e){
-                return json_encode([
-                    'consultado' => 2,
-                    'mensaje' => $e->getCode(),
-                    'codigo' => $e->getCode()
-                    ]);
-            }
-        }
-        
-    	/*
-    	|--------------------------------------------------------------------------
-    	| post_gastos_proyecto()
-    	|--------------------------------------------------------------------------
-    	| Punto de llegada de envío de formulario de ediciones de gastos de un proyecto de investigación
-    	| Reliza las ediciones de los registros de los gastos de un determinado proyecto
-    	*/          
-        public function post_gastos_proyecto(){
-            file_put_contents
-            (
-                app_path().'/logs.log', 
-                "\r\n".print_r(Input::all(), true)
-                ,FILE_APPEND
-            );
-            return 'recibido';
-        }
         
     	/*
     	|--------------------------------------------------------------------------
@@ -909,7 +848,18 @@
                     $detalle_gasto_personal = DetalleGasto::where('id_investigador', '=', $investigador->id)->first();
                     $tiene_desembolso = Desembolso::where('id_detalle_gasto', '=', $detalle_gasto_personal->id)->first() != null ? true : false;
                     if(!$es_encargado_de_algun_producto && !$tiene_desembolso)
+                    {
+                        // elimina el investigador y con ello, el detalle gast personal y los gastos de dicho investigador
+                        $gastos = Gasto::where('id_detalle_gasto', '=', $detalle_gasto_personal->id)->get();
+                        foreach($gastos as $gasto)
+                        {
+                            $gasto = Gasto::find($gasto->id);
+                            $gasto->delete();
+                        }
+                        $detalle_gasto_personal = DetalleGasto::find($detalle_gasto_personal->id);
+                        $detalle_gasto_personal->delete();
                         $investigador->delete();
+                    }
                 }
             }
         }
@@ -921,6 +871,7 @@
     	| Edita los datos de los participantes existentes del proyecto
     	*/                       
         private function editar_participantes_existentes($data){
+            
         	$llaves_data = array_keys($data);
             $llaves_identificaciones = preg_grep('/identificacion_\d+_\d+/', $llaves_data);
             foreach($llaves_identificaciones as $llave_identificacion)
@@ -948,6 +899,7 @@
                     {
                         // simplemente se asocia el id de la persona con el registro del investigador, actualizando solo los campos correspondientes del investigador
                         $investigador->id_persona_coinvestigador = $persona->id;
+                        $datos_participante = $this->obtener_datos_persona($data, true, $id_investigador, $index);
                         if($datos_participante['rol'] == 4)
                             $investigador->id_grupo_investigacion_ucc = $datos_participante['grupo_inv'];
                         if($datos_participante['rol'] == 5)
@@ -1500,4 +1452,840 @@
             return (object)$datos_a_retornar;
         }
         
+    	/*
+    	|--------------------------------------------------------------------------
+    	| get_gastos_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Consulta los gastos de un determinado proyecto de investigación
+    	*/                
+        public function get_gastos_proyecto(){
+            
+            try{
+                
+                // valida identificador de proeycto enviado
+                if(is_null(Input::get('id_proyecto', null)))
+                    throw new Exception('Identificador de proyecto inválido. No se ha enviado tal dato');
+                $validacion = Validator::make(['id_proyecto' => Input::get('id_proyecto')], ['id_proyecto' => 'required|exists:proyectos,id']);
+                if($validacion->fails())
+                    throw new Exception('Identificador de proyecto inválido. No se encuentra proyecto con tal identificador');
+                    
+                // consulta los gasto del proyecto
+                $gastos_proyecto = Gasto::consultar_gastos_proyecto(Input::get('id_proyecto'));
+                
+                // consulta las entidades fuente de presupuesto que patrocinan los gastos del proyecto
+                $entidades_fuente_presupuesto_proyecto = EntidadFuentePresupuesto::entidades_fuente_presupuesto_proyecto(Input::get('id_proyecto'));
+                
+                // consulta todas las entidades para alimentar el multiselect de entidades
+                $todas_las_entidades_fuente_pres = EntidadFuentePresupuesto::whereNotIn('nombre', ['UCC', 'CONADI'])->select('id', 'nombre')->orderBy('id')->get();
+                
+                return json_encode([
+                    'consultado' => 1,
+                    'gastos' => $gastos_proyecto,
+                    'entidades_fuente_presupuesto_proyecto' => $entidades_fuente_presupuesto_proyecto,
+                    'todas_las_entidades_fuente_presupuesto' => $todas_las_entidades_fuente_pres,
+                    'id_entidad_fuente_presupuesto_ucc' => EntidadFuentePresupuesto::where('nombre', '=', 'UCC')->first()->id,
+                    'id_entidad_fuente_presupuesto_conadi' => EntidadFuentePresupuesto::where('nombre', '=', 'CONADI')->first()->id
+                    ]);
+            }
+            catch(\Exception $e){
+                return json_encode([
+                    'consultado' => 2,
+                    'mensaje' => $e->getCode(),
+                    'codigo' => $e->getCode()
+                    ]);
+            }
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| post_gastos_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Punto de llegada de envío de formulario de ediciones de gastos de un proyecto de investigación
+    	| Reliza las ediciones de los registros de los gastos de un determinado proyecto
+    	| Hace uso de las siguientes funciones de soporte:
+    	| -desasociar_entidades_fuente_presupuesto()
+    	*/          
+        public function post_gastos_proyecto(){
+            
+            // file_put_contents
+            // (
+            //     app_path().'/logs.log', 
+            //     "\r\n".print_r(Input::all(), true)
+            //     ,FILE_APPEND
+            // );
+            // return 'recibido';
+            
+            try{
+                if(is_null(Input::get('id_proyecto', null)))
+                    throw new Exception('Identificador de proyecto inválido. No se ha enviado tal dato');
+                    
+                $validacion = Validator::make(['id_proyecto' => Input::get('id_proyecto')], ['id_proyecto' => 'required|exists:proyectos,id']);
+                if($validacion->fails())
+                    throw new Exception('Identificador de proyecto inválido. No se encuentra proyecto con tal identificador');                                            
+                    
+                $data = Input::all();
+                
+                DB::transaction(function () use($data)
+                {
+                    // desasocia y elimina fuentes de presupuesto y gastos del proyecto 
+                    $this->desasociar_entidades_fuente_presupuesto($data);
+                    
+                    // elimina tipos de gastos
+                    $this->eliminar_tipos_gasto_existentes($data);
+                    
+                    // crea nuevas entidades fuente de presupuesto en la BD
+                    $this->crear_nuevas_entidades_fuente_presupuesto($data);
+                    
+                    // actualiza o edita los registros detalles gastos y gastos actuales
+                    $this->editar_tipos_gastos_existentes($data);
+                    
+                    // crea nuevos tipos de gastos
+                    $this->crear_nuevos_gastos($data);
+                });
+            }
+            catch(\Exception $e){
+                throw $e;
+                Session::flash('notify_operacion_previa', 'error');
+                Session::flash('mensaje_operacion_previa', 'Error al editar los productos del proyecto. Detalles: '.$e->getMessage());
+            }
+            
+            // return 'Gastos editados!';
+            return Redirect::to('/proyectos/listar');
+        }        
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| desasociar_entidades_fuente_presupuesto()
+    	|--------------------------------------------------------------------------
+    	| Elimina gastos relacionados con las entidades fuente de presupuesto a eliminar del proyecto enviadas por el formulario 
+    	*/           
+        private function desasociar_entidades_fuente_presupuesto($data){
+            
+            // si no hay entidades fuente de presupuesto a eliminar no se ejecuta resto de código
+            if(!isset($data['entidades_fuente_presupuesto_a_eliminar'])) return;
+            
+            foreach($data['entidades_fuente_presupuesto_a_eliminar'] as $entidad_a_eliminar)
+            {
+                // consulta si la entidad fuente de presupuesto existe y si hay gasto relacionado con tal entidad y si hace parte del proyecto
+                $gastos = Gasto::where('id_entidad_fuente_presupuesto', '=', $entidad_a_eliminar)->where('id_proyecto', '=', $data['id_proyecto'])->get();
+                if(count($gastos) > 0) // si hay gastos del proyecto relacionados con la entidad a eliminar
+                {
+                    foreach($gastos as $gasto)
+                    {
+                        $gasto = Gasto::find($gasto->id);
+                        $gasto->delete();
+                    }
+                }
+            }
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| eliminar_tipos_gasto_existentes()
+    	|--------------------------------------------------------------------------
+    	| Elimina tipos de gastos y sus respectivos gastos del proyecto
+    	*/              
+        private function eliminar_tipos_gasto_existentes($data){
+            
+            function ejecutar_eliminacion($id_detalle_gasto){
+                
+                // elimina los gastos del detalle gasto si existen
+                $gastos = Gasto::where('id_detalle_gasto', '=', $id_detalle_gasto)->get();
+                if(count($gastos) > 0)
+                {
+                    foreach($gastos as $gasto)
+                    {
+                        $gasto = Gasto::find($gasto->id);
+                        $gasto->delete();
+                    }
+                }                
+                
+                // elimina el tipo gasto si existe
+                $detalle_gasto = DetalleGasto::find($id_detalle_gasto);
+                if(!is_null($detalle_gasto))
+                    $detalle_gasto->delete();
+            }
+            
+            if(isset($data['gastos_equipos_a_eliminar'])) // gastos_equipos_a_eliminar
+            {
+                foreach($data['gastos_equipos_a_eliminar'] as $id_detalle_gasto_a_eliminar)
+                    ejecutar_eliminacion($id_detalle_gasto_a_eliminar);
+            }
+            if(isset($data['gastos_software_a_eliminar'])) // gastos_software_a_eliminar
+            {
+                foreach($data['gastos_software_a_eliminar'] as $id_detalle_gasto_a_eliminar)
+                    ejecutar_eliminacion($id_detalle_gasto_a_eliminar);
+            }
+            if(isset($data['gastos_salidas_campo_a_eliminar'])) // gastos_salidas_campo_a_eliminar
+            {
+                foreach($data['gastos_salidas_campo_a_eliminar'] as $id_detalle_gasto_a_eliminar)
+                    ejecutar_eliminacion($id_detalle_gasto_a_eliminar);
+            }
+            if(isset($data['gastos_materiales_a_eliminar'])) // gastos_materiales_a_eliminar
+            {
+                foreach($data['gastos_materiales_a_eliminar'] as $id_detalle_gasto_a_eliminar)
+                    ejecutar_eliminacion($id_detalle_gasto_a_eliminar);
+            }
+            if(isset($data['gastos_servicios_existentes_a_eliminar'])) // gastos_servicios_existentes_a_eliminar
+            {
+                foreach($data['gastos_servicios_existentes_a_eliminar'] as $id_detalle_gasto_a_eliminar)
+                    ejecutar_eliminacion($id_detalle_gasto_a_eliminar);
+            }
+            if(isset($data['gastos_bibliograficos_existentes_a_eliminar'])) // gastos_bibliograficos_existentes_a_eliminar
+            {
+                foreach($data['gastos_bibliograficos_existentes_a_eliminar'] as $id_detalle_gasto_a_eliminar)
+                    ejecutar_eliminacion($id_detalle_gasto_a_eliminar);
+            }            
+            if(isset($data['gastos_digitales_existentes_a_eliminar'])) // gastos_digitales_existentes_a_eliminar
+            {
+                foreach($data['gastos_digitales_existentes_a_eliminar'] as $id_detalle_gasto_a_eliminar)
+                    ejecutar_eliminacion($id_detalle_gasto_a_eliminar);
+            }            
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| crear_nuevas_entidades_fuente_presupuesto()
+    	|--------------------------------------------------------------------------
+    	| Crea las nuevas entidades fuente de presupuesto verificando que su nombre no sea repetido
+    	*/                   
+        private function crear_nuevas_entidades_fuente_presupuesto($data){
+            
+            if(!isset($data['nuevas_entidades_presupuesto'])) return; // si no hay nuevas entidades no se hace nada
+            
+            foreach($data['nuevas_entidades_presupuesto'] as $entidad_a_crear){
+                
+                // teniendo en cuenta que la nueva entidad viene como:
+                // <id_nueva_entidad>_<nombre nueva entidad>
+                // se abstrae solo el nombre de la nueva entidad
+            	$indice_inicio_nombre = strpos($entidad_a_crear, '_');
+            	$nombre_nueva_entidad = substr($entidad_a_crear, $indice_inicio_nombre + 1);
+            	
+            	// verifica que la entidad no exista en la BD
+            	
+            	if(EntidadFuentePresupuesto::where('nombre', '=', $nombre_nueva_entidad)->first() != null) // la entidad ya existe. Se cancela operación
+            	    throw new Exception('La entidad "'.$nombre_nueva_entidad.'" ya existe en la BD. No se permite crear duplicados');
+            	
+            	$nueva_entidad_bd = new EntidadFuentePresupuesto();
+            	$nueva_entidad_bd->nombre = $nombre_nueva_entidad;
+            	$nueva_entidad_bd->save();
+            }
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| editar_tipos_gastos_existentes()
+    	|--------------------------------------------------------------------------
+    	| Actualiza o edita los registros detalles gastos y gastos actuales
+    	*/                     
+        private function editar_tipos_gastos_existentes($data){
+            
+            // lo primero será editar los campos específicos de cada tipo de gasto. Los tipos de gastos personal y salida de campo tienen campos distintos
+            
+            $nombres_tipos_gastos = [
+                'gasto_personal',
+                'gasto_equipo',
+                'gasto_software',
+                'gasto_salida',
+                'gasto_material',
+                'gasto_servicio',
+                'gasto_bibliografico',
+                'gasto_digital',
+                ];
+            $llaves_data = array_keys($data);
+            
+            foreach($nombres_tipos_gastos as $nombre_tipo_gasto)
+            {
+                // se obtiene la cantidad del tipo de gasto existentes en BD contando las veces que aparece un determinado campo correspondiente
+                if($nombre_tipo_gasto == 'gasto_personal')
+                {
+                    $llaves_gasto_personal_dedicacion_semanal = preg_grep('/gasto_personal_dedicacion_semanal_\d+_\d+/', $llaves_data);
+                    foreach($llaves_gasto_personal_dedicacion_semanal as $llave_dedicacion_semanal)
+                    {
+                        // abstrae el id_detalle_gasto y el indice que lo identifica en la colección data enviada por el formulario
+                        // teniendo en cuenta que:
+                        // gasto_personal_dedicacion_semanal_<id detalle gasto>_<indice coleccion gastos personal>
+                        
+                        $explode_result = explode('_', $llave_dedicacion_semanal);
+                        $id_detalle_gasto = $explode_result[4];
+                        $index = $explode_result[5];
+                        $this->editar_gasto_personal_existente($data, $id_detalle_gasto, $index);
+                    }
+                }
+                else if($nombre_tipo_gasto == 'gasto_salida')
+                {
+                    $llaves_gasto_salida_justificacion = preg_grep('/gasto_salida_justificacion_\d+_\d+/', $llaves_data);
+                    foreach($llaves_gasto_salida_justificacion as $llave_justificacion)
+                    {
+                        // abstrae el id_detalle_gasto y el indice que lo identifica en la colección data enviada por el formulario
+                        // teniendo en cuenta que:                        
+                        // gasto_salida_justificacion_<id detalle gasto>_<indice coleccion gastos salidas>
+                        
+                        $explode_result = explode('_', $llave_justificacion);
+                        $id_detalle_gasto = $explode_result[3];
+                        $index = $explode_result[4];                        
+                        $this->editar_gasto_salida_campo_existente($data, $id_detalle_gasto, $index);
+                    }
+                }
+                else
+                {
+                    // lo siguiente aplica para los siguientes tipos de gastos ya que tienen los mismos campos en su registro detalle gasto:
+                    // 'gasto_equipo',
+                    // 'gasto_software',
+                    // 'gasto_material',
+                    // 'gasto_servicio',
+                    // 'gasto_bibliografico',
+                    // 'gasto_digital',                    
+                    
+                    // edicion de tipos de gastos genérico
+                    // abstrae el id_detalle_gasto y el indice que lo identifica en la colección data enviada por el formulario
+                    $id_detalle_gasto = null;
+                    $index = null;
+                    $llaves_tipo_gasto_concepto = preg_grep('/'.$nombre_tipo_gasto.'_concepto_\d+_\d+/', $llaves_data);
+                    foreach($llaves_tipo_gasto_concepto as $llave_concepto)
+                    {
+                        // abstrae el id_detalle_gasto y el indice que lo identifica en la colección data enviada por el formulario
+                        // teniendo en cuenta que:                        
+                        // gasto_equipo_concepto_<id detalle gasto>_<indice coleccion tipo gasto>
+                        $explode_result = explode('_', $llave_concepto);
+                        $id_detalle_gasto = $explode_result[3];
+                        $index = $explode_result[4];                        
+                        $this->editar_tipo_gasto_generico($data, $nombre_tipo_gasto, $id_detalle_gasto, $index);                            
+                    }
+                }
+            }
+            // <nombre tipo gasto>_<id entidad fuente de presupuesto>_<id gasto>_<id detalle gasto>_<indice coleccion gastos>_<indice coleccion tipo gasto>
+        }
+        
+        // edita los datos de un determinado tipo de gasto personal
+        private function editar_gasto_personal_existente($data, $id_detalle_gasto, $index){
+            
+            // recupera los datos del tipo de gasto basandose en el indice que lo identifica en la colección
+            $dedicacion_semanal = $data['gasto_personal_dedicacion_semanal_'.$id_detalle_gasto.'_'.$index]; // gasto_personal_dedicacion_semanal_2_0
+            $total_semanas = $data['gasto_personal_total_semanas_'.$id_detalle_gasto.'_'.$index]; // gasto_personal_total_semanas_2_0
+            $valor_hora = $data['gasto_personal_valor_hora_'.$id_detalle_gasto.'_'.$index]; // gasto_personal_valor_hora_2_0
+            $fecha_ejecucion = $data['gasto_personal_fecha_ejecucion_'.$id_detalle_gasto.'_'.$index]; // gasto_personal_fecha_ejecucion_2_0
+            
+            $validacion = Validator::make(
+                [
+                    'dedicacion_semanal' => (int)$dedicacion_semanal,
+                    'total_semanas' => (int)$total_semanas,
+                    'valor_hora' => (int)$valor_hora
+                ],
+                [
+                    'dedicacion_semanal' => 'required|min:0',
+                    'total_semanas' => 'required|min:0',
+                    'valor_hora' => 'required|min:0'
+                ]);
+            if($validacion->fails())
+                throw new Exception('Los datos del gasto de personal son incorrectos. '.$validacion->messages());
+            
+            // consulta el detalle gasto y el investigador
+            $detalle_gasto = DetalleGasto::find($id_detalle_gasto);
+            if(is_null($detalle_gasto))
+                throw new Exception('El gasto de personal identificado con '.$id_detalle_gasto.' no existe');
+                
+            $detalle_gasto->fecha_ejecucion = $fecha_ejecucion;
+            $detalle_gasto->save();
+            
+            $id_investigador = $detalle_gasto->id_investigador;
+            $investigador = Investigador::find($id_investigador);
+            if(is_null($investigador))
+                throw new Exception('El investigador identificado con '.$id_investigador.' no existe');
+            
+            $investigador->dedicacion_horas_semanales = (int)$dedicacion_semanal;
+            $investigador->total_semanas = (int)$total_semanas;
+            $investigador->valor_hora = (int)$valor_hora;
+            $investigador->save();
+            
+            // recupera todos los datos relacionados con el presupuesto del tipo de gasto teniendo en cuenta que:
+            // gasto_personal_presupuesto_<id entidad fuente presupuesto>_<id gasto>_<id detalle gasto>_<index gasto>_<index detalle gasto>
+            $llaves_data = array_keys($data); 
+            foreach($data as $key => $value) {
+                if(preg_match('/gasto_personal_presupuesto_\d+_\d+_'.$id_detalle_gasto.'_\d+_'.$index.'/', $key) == 1)
+                {
+                    // se trata de de un gasto existente en la BD,
+                    // se abstrae el id_gasto, se consulta el gasto y se edita su valor
+                    $explode_result = explode('_', $key);
+                    $id_gasto = $explode_result[4];
+                    $gasto = Gasto::find($id_gasto);
+                    if(is_null($gasto))
+                        throw new Exception('El gasto de gasto personal identificado con '.$id_gasto.' no existe');
+                    // verifica que sea un numero positivo. Si no se establece 0
+                    $value = (int)$value;
+                    if($value < 0) $value = 0;
+                    $gasto->valor = $value;
+                    
+                }
+                else if(preg_match('/gasto_personal_presupuesto_\d+_nuevo_'.$id_detalle_gasto.'_\d+_'.$index.'/',$key) == 1)
+                {
+                    // se trata de un gasto patrocinado por una entidad fuente de presupuesto existente en la BD pero la entidad es nueva para el proyecto
+                    // se valida que el id de la entidad fuente de presupuesto exista y se crea el gasto
+                    $explode_result = explode('_', $key);
+                    $id_entidad_fuente_presupuesto = $explode_result[3];
+                    if(is_null(EntidadFuentePresupuesto::find($id_entidad_fuente_presupuesto)))
+                        throw new Exception('La entidad fuente de presupuesto identificada con '.$id_entidad_fuente_presupuesto.' no existe');
+                    $gasto = new Gasto();
+                    $gasto->id_proyecto = $data['id_proyecto'];
+                    $gasto->id_entidad_fuente_presupuesto = $id_entidad_fuente_presupuesto;
+                    $gasto->id_detalle_gasto = $id_detalle_gasto;
+                    $value = (int)$value;
+                    $gasto->valor = $value < 0 ? 0 : $value;
+                    $gasto->save();
+                }
+                else if(preg_match('/gasto_personal_presupuesto_\d+x_nuevo_'.$id_detalle_gasto.'_\d+_'.$index.'/',$key))
+                {
+                    // se trata de un gasto patrocinado por una nueva entidad fuente de presupuesto. Se recupera el identificador de la entidad previamente creada
+                    // y se crea gasto
+                    $explode_result = explode('_', $key);
+                    $id_nueva_entidad_fuente_presupuesto = $explode_result[3];
+                    // busca el nombre de la nueva entidad fuente de presupuesto y recupera su id de la BD
+                    $nombre_nueva_entidad = $this->recuperar_nombre_nueva_entidad_fuente_presupuesto($data, $id_nueva_entidad_fuente_presupuesto);
+                    $entidad_bd = EntidadFuentePresupuesto::where('nombre', '=', $nombre_nueva_entidad)->first();
+                    
+                    // crea el gasto
+                    $gasto = new Gasto();
+                    $gasto->id_proyecto = $data['id_proyecto'];
+                    $gasto->id_entidad_fuente_presupuesto = $entidad_bd->id;
+                    $gasto->id_detalle_gasto = $id_detalle_gasto;
+                    $value = (int)$value;
+                    $gasto->valor = $value < 0 ? 0 : $value;
+                    $gasto->save();                    
+                }
+            }
+        }
+        
+        // edita los datos de un determinado tipo de gasto de salida de campo
+        private function editar_gasto_salida_campo_existente($data, $id_detalle_gasto, $index){
+            // recupera los datos del tipo de gasto basandose en el indice y el id detalle gasto que lo identifica en la colección
+            
+            $justificacion = $data['gasto_salida_justificacion_'.$id_detalle_gasto.'_'.$index]; //gasto_salida_justificacion_8_0
+            $cantidad_salidas = $data['gasto_salida_cantidad_salidas_'.$id_detalle_gasto.'_'.$index]; //gasto_salida_cantidad_salidas_8_0
+            $valor_unitario = $data['gasto_salida_valor_unitario_'.$id_detalle_gasto.'_'.$index]; //gasto_salida_valor_unitario_8_0
+            $fecha_ejecucion = $data['gasto_salida_fecha_ejecucion_'.$id_detalle_gasto.'_'.$index]; //gasto_salida_fecha_ejecucion_8_0            
+            
+            $validacion = Validator::make(
+                [
+                    'justificacion' => $justificacion,
+                    'cantidad_salidas' => (int)$cantidad_salidas,
+                    'valor_unitario' => (int)$valor_unitario
+                    
+                ],
+                [
+                    'justificacion' => 'required|min:5|max:150',
+                    'cantidad_salidas' => 'required|min:0',
+                    'valor_unitario' => 'required|min:0'
+                ]);
+            
+            if($validacion->fails())
+                throw new Exception('Validacion de datos de gasto de salida de campo incorrecta. Causa: '.$validacion->messages());
+            
+            $detalle_gasto = DetalleGasto::find($id_detalle_gasto);
+            if(is_null($detalle_gasto))
+                throw new Exception('El gasto de salida de campo identificado con '.$id_detalle_gasto.' no existe');
+                
+            $detalle_gasto->fecha_ejecucion = $fecha_ejecucion;
+            $detalle_gasto->justificacion = $justificacion;
+            $detalle_gasto->numero_salidas = $cantidad_salidas;
+            $detalle_gasto->valor_unitario = $valor_unitario;
+            $detalle_gasto->save();
+            
+            // recupera todos los datos relacionados con el presupuesto del tipo de gasto teniendo en cuenta que:
+            // gasto_salida_presupuesto_<id entidad fuente presupuesto>_<id gasto>_<id detalle gasto>_<indice coleccion gasto>_<indice coleccion tipo gasto>
+            $llaves_data = array_keys($data); 
+            foreach($data as $key => $value) {            
+                if(preg_match('/gasto_salida_presupuesto_\d+_\d+_'.$id_detalle_gasto.'_\d+_'.$index.'/', $key) == 1){
+                    // se trata de de un gasto existente en la BD,
+                    // se abstrae el id_gasto, se consulta el gasto y se edita su valor                    
+                    $explode_result = explode('_', $key);
+                    $id_gasto = $explode_result[4];
+                    $gasto = Gasto::find($id_gasto);
+                    if(is_null($gasto))
+                        throw new Exception('El gasto de salida de campo identificado con '.$id_gasto.' no existe');
+                    // verifica que sea un numero positivo. Si no se establece 0
+                    $value = (int)$value;
+                    if($value < 0) $value = 0;
+                    $gasto->valor = $value;                    
+                }
+                else if(preg_match('/gasto_salida_presupuesto_\d+_nuevo_'.$id_detalle_gasto.'_\d+_'.$index.'/',$key) == 1)
+                {
+                    // se trata de un gasto patrocinado por una entidad fuente de presupuesto existente en la BD pero la entidad es nueva para el proyecto
+                    // se valida que el id de la entidad fuente de presupuesto exista y se crea el gasto
+                    $explode_result = explode('_', $key);
+                    $id_entidad_fuente_presupuesto = $explode_result[3];
+                    if(is_null(EntidadFuentePresupuesto::find($id_entidad_fuente_presupuesto)))
+                        throw new Exception('La entidad fuente de presupuesto identificada con '.$id_entidad_fuente_presupuesto.' no existe');
+                    $gasto = new Gasto();
+                    $gasto->id_proyecto = $data['id_proyecto'];
+                    $gasto->id_entidad_fuente_presupuesto = $id_entidad_fuente_presupuesto;
+                    $gasto->id_detalle_gasto = $id_detalle_gasto;
+                    $value = (int)$value;
+                    $gasto->valor = $value < 0 ? 0 : $value;
+                    $gasto->save();
+                }    
+                else if(preg_match('/gasto_salida_presupuesto_\d+x_nuevo_'.$id_detalle_gasto.'_\d+_'.$index.'/',$key))
+                {
+                    // se trata de un gasto patrocinado por una nueva entidad fuente de presupuesto. Se recupera el identificador de la entidad previamente creada
+                    // y se crea gasto
+                    $explode_result = explode('_', $key);
+                    $id_nueva_entidad_fuente_presupuesto = $explode_result[3];
+                    // busca el nombre de la nueva entidad fuente de presupuesto y recupera su id de la BD
+                    $nombre_nueva_entidad = $this->recuperar_nombre_nueva_entidad_fuente_presupuesto($data, $id_nueva_entidad_fuente_presupuesto);
+                    $entidad_bd = EntidadFuentePresupuesto::where('nombre', '=', $nombre_nueva_entidad)->first();
+                    
+                    // crea el gasto
+                    $gasto = new Gasto();
+                    $gasto->id_proyecto = $data['id_proyecto'];
+                    $gasto->id_entidad_fuente_presupuesto = $entidad_bd->id;
+                    $gasto->id_detalle_gasto = $id_detalle_gasto;
+                    $value = (int)$value;
+                    $gasto->valor = $value < 0 ? 0 : $value;
+                    $gasto->save();                    
+                }                
+            }
+        }
+        
+        // edita los datos de un determinado tipo de gasto: gasto_equipo, gasto_software, gasto_material, gasto_servicio, gasto_bibliografico, gasto_digital
+        private function editar_tipo_gasto_generico($data, $nombre_tipo_gasto, $id_detalle_gasto, $index){
+            
+            $concepto = $data[$nombre_tipo_gasto.'_concepto_'.$id_detalle_gasto.'_'.$index];
+            $justificacion = $data[$nombre_tipo_gasto.'_justificacion_'.$id_detalle_gasto.'_'.$index];
+            $fecha_ejecucion = $data[$nombre_tipo_gasto.'_fecha_ejecucion_'.$id_detalle_gasto.'_'.$index];
+            
+            $validacion = Validator::make(
+                [
+                    'concepto' => $concepto,
+                    'justificacion' => $justificacion
+                ],
+                [
+                    'concepto' => 'required|min:5|max:150',
+                    'justificacion' => 'required|min:5|max:150'
+                ]);
+            if($validacion->fails())
+                throw new Exception('Validaciones para el gasto "'.$nombre_tipo_gasto.'" no son válidas. Causa: '.$validacion->messages());
+            
+            $detalle_gasto = DetalleGasto::find($id_detalle_gasto);
+            if(is_null($detalle_gasto))
+                throw new Exception('Tipo de gasto "'.$nombre_tipo_gasto.'" identificado con '.$id_detalle_gasto.' no existe');
+            
+            $detalle_gasto->concepto = $concepto;
+            $detalle_gasto->justificacion = $justificacion;
+            $detalle_gasto->fecha_ejecucion = $fecha_ejecucion;
+            $detalle_gasto->save();
+            
+            // recupera todos los datos relacionados con el presupuesto del tipo de gasto teniendo en cuenta que:
+            // <nombre_tipoGasto>_presupuesto_<id entidad fuente presupuesto>_<id gasto>_<id detalle gasto>_<indice coleccion gasto>_<indice coleccion tipo gasto>
+            $llaves_data = array_keys($data);             
+            foreach($data as $key => $value) {            
+                if(preg_match('/'.$nombre_tipo_gasto.'_presupuesto_\d+_\d+_'.$id_detalle_gasto.'_\d+_'.$index.'/', $key) == 1){
+                    // se trata de de un gasto existente en la BD,
+                    // se abstrae el id_gasto, se consulta el gasto y se edita su valor                    
+                    $explode_result = explode('_', $key);
+                    $id_gasto = $explode_result[4];
+                    $gasto = Gasto::find($id_gasto);
+                    if(is_null($gasto))
+                        throw new Exception('El gasto de "'.$nombre_tipo_gasto.'" identificado con '.$id_gasto.' no existe');
+                    // verifica que sea un numero positivo. Si no se establece 0
+                    $value = (int)$value;
+                    if($value < 0) $value = 0;
+                    $gasto->valor = $value;                    
+                }
+                else if(preg_match('/'.$nombre_tipo_gasto.'_presupuesto_\d+_nuevo_'.$id_detalle_gasto.'_\d+_'.$index.'/',$key) == 1)
+                {
+                    // se trata de un gasto patrocinado por una entidad fuente de presupuesto existente en la BD pero la entidad es nueva para el proyecto
+                    // se valida que el id de la entidad fuente de presupuesto exista y se crea el gasto
+                    $explode_result = explode('_', $key);
+                    $id_entidad_fuente_presupuesto = $explode_result[3];
+                    if(is_null(EntidadFuentePresupuesto::find($id_entidad_fuente_presupuesto)))
+                        throw new Exception('La entidad fuente de presupuesto identificada con '.$id_entidad_fuente_presupuesto.' no existe');
+                    $gasto = new Gasto();
+                    $gasto->id_proyecto = $data['id_proyecto'];
+                    $gasto->id_entidad_fuente_presupuesto = $id_entidad_fuente_presupuesto;
+                    $gasto->id_detalle_gasto = $id_detalle_gasto;
+                    $value = (int)$value;
+                    $gasto->valor = $value < 0 ? 0 : $value;
+                    $gasto->save();
+                }   
+                else if(preg_match('/'.$nombre_tipo_gasto.'_presupuesto_\d+x_nuevo_'.$id_detalle_gasto.'_\d+_'.$index.'/',$key))
+                {
+                    // se trata de un gasto patrocinado por una nueva entidad fuente de presupuesto. Se recupera el identificador de la entidad previamente creada
+                    // y se crea gasto
+                    $explode_result = explode('_', $key);
+                    $id_nueva_entidad_fuente_presupuesto = $explode_result[3];
+                    // busca el nombre de la nueva entidad fuente de presupuesto y recupera su id de la BD
+                    $nombre_nueva_entidad = $this->recuperar_nombre_nueva_entidad_fuente_presupuesto($data, $id_nueva_entidad_fuente_presupuesto);
+                    $entidad_bd = EntidadFuentePresupuesto::where('nombre', '=', $nombre_nueva_entidad)->first();
+                    
+                    // crea el gasto
+                    $gasto = new Gasto();
+                    $gasto->id_proyecto = $data['id_proyecto'];
+                    $gasto->id_entidad_fuente_presupuesto = $entidad_bd->id;
+                    $gasto->id_detalle_gasto = $id_detalle_gasto;
+                    $value = (int)$value;
+                    $gasto->valor = $value < 0 ? 0 : $value;
+                    $gasto->save();                    
+                }                     
+            }
+        }
+        
+        // recupera el nombre de una nueva entidad fuente de presupuesto de los datos enviados por el formulario de edicion de gastos
+        private function recuperar_nombre_nueva_entidad_fuente_presupuesto($data, $id){
+            // retorna el nombre de la entidad teniendo en cuenta que cada entidad se recibe como:
+            // <id>_<nombre entidad>
+            for($i = 0; $i < count($data['nuevas_entidades_presupuesto']); $i++)
+            {
+                $entidad = $data['nuevas_entidades_presupuesto'][$i];
+                $explode_result = explode('_', $entidad);
+                if($explode_result[0] == $id)
+                {
+                    return substr($data['nuevas_entidades_presupuesto'][$i], strpos($data['nuevas_entidades_presupuesto'][$i], '_') + 1);
+                }
+            }
+        }
+        
+        // consulta el id del tipo de gasto correspondiente a los nombres: gasto_equipo, gasto_software, gasto_material, gasto_servicio, gasto_bibliografico, gasto_digital
+        private function get_id_tipo_gasto($nombre_tipo_gasto){
+            
+            $id_tipo_gasto = null;
+            switch($nombre_tipo_gasto)
+            {
+                case 'gasto_salida':
+                    $id_tipo_gasto = TipoGasto::where('nombre', '=', 'Salidas de campo')->first()->id;
+                    break;
+                case 'gasto_equipo': 
+                    $id_tipo_gasto = TipoGasto::where('nombre', '=', 'Equipos')->first()->id;
+                    break;
+                case 'gasto_software': 
+                    $id_tipo_gasto = TipoGasto::where('nombre', '=', 'Software')->first()->id;
+                    break;
+                case 'gasto_material': 
+                    $id_tipo_gasto = TipoGasto::where('nombre', '=', 'Materiales y suministros')->first()->id;
+                    break;
+                case 'gasto_servicio': 
+                    $id_tipo_gasto = TipoGasto::where('nombre', '=', 'Servicios técnicos')->first()->id;
+                    break;
+                case 'gasto_bibliografico': 
+                    $id_tipo_gasto = TipoGasto::where('nombre', '=', 'Recursos bibliográficos')->first()->id;
+                    break;
+                case 'gasto_digital': 
+                    $id_tipo_gasto = TipoGasto::where('nombre', '=', 'Recursos educativos digitales')->first()->id;
+                    break;
+            }
+            return $id_tipo_gasto;
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| crear_nuevos_gastos()
+    	|--------------------------------------------------------------------------
+    	| Crea nuevos gastos para el proyecto
+    	*/       
+        private function crear_nuevos_gastos($data){
+            $nombres_tipos_gastos = [
+                'gasto_equipo',
+                'gasto_software',
+                'gasto_salida',
+                'gasto_material',
+                'gasto_servicio',
+                'gasto_bibliografico',
+                'gasto_digital',
+                ];
+            $llaves_data = array_keys($data);
+            
+            foreach($nombres_tipos_gastos as $nombre_tipo_gasto)
+            {
+                // se obtiene la cantidad del tipo de gasto nuevos contando las veces que aparece un determinado campo correspondiente
+                if($nombre_tipo_gasto == 'gasto_salida')
+                {
+                    $llaves_gasto_salida_justificacion = preg_grep('/gasto_salida_justificacion_nuevo_\d+/', $llaves_data);
+                    foreach($llaves_gasto_salida_justificacion as $llave_justificacion)
+                    {
+                        // abstrae el index que identifica los datos del detalle gasto en la coleccion de datos enviada por el formulario
+                        // teniendo en cuenta que:
+                        // gasto_salida_justificacion_nuevo_<indice tipo gasto>
+                        
+                        $explode_result = explode('_', $llave_justificacion);
+                        $index = $explode_result[4];
+                        $this->crear_nuevos_tipos_gastos_salidas_campo($data, $index);
+                    }
+                }
+                else
+                {
+                    // lo siguiente aplica para los siguientes tipos de gastos ya que tienen los mismos campos en su registro detalle gasto:
+                    // 'gasto_equipo',
+                    // 'gasto_software',
+                    // 'gasto_material',
+                    // 'gasto_servicio',
+                    // 'gasto_bibliografico',
+                    // 'gasto_digital',                    
+                    
+                    // creación de tipos de gastos genérico
+                    // abstrae el indice que lo identifica en la colección data enviada por el formulario
+                    $index = null;
+                    $llaves_tipo_gasto_concepto = preg_grep('/'.$nombre_tipo_gasto.'_concepto_nuevo_\d+/', $llaves_data);
+                    foreach($llaves_tipo_gasto_concepto as $llave_concepto)
+                    {
+                        // abstrae el  indice que lo identifica en la colección data enviada por el formulario
+                        // teniendo en cuenta que:                        
+                        // <nombre tipoGasto>_concepto_nuevo_<indice coleccion tipo gasto>
+                        $explode_result = explode('_', $llave_concepto);
+                        $index = $explode_result[4];                        
+                        $this->crear_tipo_gasto_generico($data, $nombre_tipo_gasto, $index);
+                    }                    
+                }
+            }
+        }
+        
+        // crea nuevos tipos de gastos de salidas de campo
+        private function crear_nuevos_tipos_gastos_salidas_campo($data, $index){
+            
+            // recupera los datos del tipo de gasto basandose en el indice que lo identifica en la colección
+            $justificacion = $data['gasto_salida_justificacion_nuevo_'.$index]; //gasto_salida_justificacion_nuevo_0
+            $cantidad_salidas = $data['gasto_salida_cantidad_salidas_nuevo_'.$index]; //gasto_salida_cantidad_salidas_nuevo_0
+            $valor_unitario = $data['gasto_salida_valor_unitario_nuevo_'.$index]; //gasto_salida_valor_unitario_nuevo_0
+            $fecha_ejecucion = $data['gasto_salida_fecha_ejecucion_nuevo_'.$index]; //gasto_salida_fecha_ejecucion_nuevo_0                        
+            
+            $validacion = Validator::make(
+                [
+                    'justificacion' => $justificacion,
+                    'cantidad_salidas' => (int)$cantidad_salidas,
+                    'valor_unitario' => (int)$valor_unitario
+                ],
+                [
+                    'justificacion' => 'required|min:5|max:150',
+                    'cantidad_salidas' => 'required|min:0',
+                    'valor_unitario' => 'required|min:0'
+                ]);
+            
+            if($validacion->fails())
+                throw new Exception('Validacion de datos de nuevo gasto de salida de campo incorrecta. Causa: '.$validacion->messages());            
+                
+            // validacion correcta. Crea el detalle gasto
+            $detalle_gasto = new DetalleGasto();
+            $detalle_gasto->id_tipo_gasto = $this->get_id_tipo_gasto('gasto_salida');
+            $detalle_gasto->fecha_ejecucion = $fecha_ejecucion;
+            $detalle_gasto->justificacion = $justificacion;
+            $detalle_gasto->numero_salidas = $cantidad_salidas;
+            $detalle_gasto->valor_unitario = $valor_unitario;
+            $detalle_gasto->save();            
+            
+            $llaves_data = array_keys($data); 
+            foreach($data as $key => $value) {            
+                // gasto_salida_presupuesto_<id entidad fuente presupuesto>_nuevo(id gasto)_nuevo(id detalle gasto)_<index gasto>_<index detalle gasto>
+                if(preg_match('/gasto_salida_presupuesto_\d+_nuevo_nuevo_\d+_'.$index.'/', $key) == 1){
+                    
+                    // se trata de un nuevo gasto patrocinado por una entidad existente en la BD
+                    // se verifica la existencia de la entidad fuente de presupuesto y se crea el gasto           
+                    
+                    $explode_result = explode('_', $key);
+                    $id_entidad_fuente_presupuesto = $explode_result[3];
+                    
+                    if(is_null(EntidadFuentePresupuesto::find($id_entidad_fuente_presupuesto)))
+                        throw new Exception('La entidad fuente de presupuesto identificada con '.$id_entidad_fuente_presupuesto.' no existe. Ocurrido al crear nuevo tipo de gasto de salida de campo');
+                    
+                    // crea el gasto
+                    $gasto = new Gasto();
+                    $gasto->id_proyecto = $data['id_proyecto'];
+                    $gasto->id_entidad_fuente_presupuesto = $id_entidad_fuente_presupuesto;
+                    $gasto->id_detalle_gasto = $detalle_gasto->id;
+                    $value = (int)$value;
+                    $gasto->valor = $value < 0 ? 0 : $value;                    
+                    $gasto->save();
+                }
+                else if(preg_match('/gasto_salida_presupuesto_\d+x_nuevo_nuevo_\d+_'.$index.'/', $key) == 1){
+                    
+                    // se trata de un nuevo gasto patrocinado por una nueva entidad 
+                    // se consulta el id de la entidad previamente creada y se crea gasto
+                    
+                    $explode_result = explode('_', $key);
+                    $id_nueva_entidad_fuente_presupuesto = $explode_result[3];
+                    // busca el nombre de la nueva entidad fuente de presupuesto y recupera su id de la BD
+                    $nombre_nueva_entidad = $this->recuperar_nombre_nueva_entidad_fuente_presupuesto($data, $id_nueva_entidad_fuente_presupuesto);
+                    $entidad_bd = EntidadFuentePresupuesto::where('nombre', '=', $nombre_nueva_entidad)->first();                    
+                    
+                    // crea el gasto
+                    $gasto = new Gasto();
+                    $gasto->id_proyecto = $data['id_proyecto'];
+                    $gasto->id_entidad_fuente_presupuesto = $entidad_bd->id;
+                    $gasto->id_detalle_gasto = $detalle_gasto->id;
+                    $value = (int)$value;
+                    $gasto->valor = $value < 0 ? 0 : $value;                    
+                    $gasto->save();                    
+                }
+            }
+        }
+        
+        // crea nuevos tipos de gastos: gasto_equipo, gasto_software, gasto_material, gasto_servicio, gasto_bibliografico, gasto_digital
+        private function crear_tipo_gasto_generico($data, $nombre_tipo_gasto, $index){
+            
+            $concepto = $data[$nombre_tipo_gasto.'_concepto_nuevo_'.$index];
+            $justificacion = $data[$nombre_tipo_gasto.'_justificacion_nuevo_'.$index];
+            $fecha_ejecucion = $data[$nombre_tipo_gasto.'_fecha_ejecucion_nuevo_'.$index];            
+            
+            $validacion = Validator::make(
+                [
+                    'concepto' => $concepto,
+                    'justificacion' => $justificacion
+                ],
+                [
+                    'concepto' => 'required|min:5|max:150',
+                    'justificacion' => 'required|min:5|max:150'
+                ]);
+            if($validacion->fails())
+                throw new Exception('Validaciones para el gasto "'.$nombre_tipo_gasto.'" no son válidas. Causa: '.$validacion->messages());            
+                
+            // crea el tipo de gasto
+            $detalle_gasto = new DetalleGasto();
+            $detalle_gasto->id_tipo_gasto = $this->get_id_tipo_gasto($nombre_tipo_gasto);
+            $detalle_gasto->concepto = $concepto;
+            $detalle_gasto->justificacion = $justificacion;
+            $detalle_gasto->fecha_ejecucion = $fecha_ejecucion;
+            $detalle_gasto->save();                
+            
+            // recupera todos los datos relacionados con el presupuesto del tipo de gasto teniendo en cuenta que:
+            // <nombre_tipoGasto>_presupuesto_<id entidad fuente presupuesto>_nuevo(id gasto)_nuevo(id detalle gasto)_<indice coleccion gasto>_<indice coleccion tipo gasto>
+            $llaves_data = array_keys($data);             
+            foreach($data as $key => $value) {                        
+                if(preg_match('/'.$nombre_tipo_gasto.'_presupuesto_\d+_nuevo_nuevo_\d+_'.$index.'/', $key) == 1){
+                    
+                    // se trata de un nuevo gasto patrocinado por una entidad existente en la BD
+                    // se verifica la existencia de la entidad fuente de presupuesto y se crea el gasto           
+                    
+                    $explode_result = explode('_', $key);
+                    $id_entidad_fuente_presupuesto = $explode_result[3];
+                    
+                    if(is_null(EntidadFuentePresupuesto::find($id_entidad_fuente_presupuesto)))
+                        throw new Exception('La entidad fuente de presupuesto identificada con '.$id_entidad_fuente_presupuesto.' no existe. Ocurrido al crear nuevo tipo de gasto "'.$nombre_tipo_gasto.'"');
+                    
+                    // crea el gasto
+                    $gasto = new Gasto();
+                    $gasto->id_proyecto = $data['id_proyecto'];
+                    $gasto->id_entidad_fuente_presupuesto = $id_entidad_fuente_presupuesto;
+                    $gasto->id_detalle_gasto = $detalle_gasto->id;
+                    $value = (int)$value;
+                    $gasto->valor = $value < 0 ? 0 : $value;                    
+                    $gasto->save();
+                }
+                else if(preg_match('/'.$nombre_tipo_gasto.'_presupuesto_\d+x_nuevo_nuevo_\d+_'.$index.'/', $key) == 1){
+                    
+                    // se trata de un nuevo gasto patrocinado por una nueva entidad 
+                    // se consulta el id de la entidad previamente creada y se crea gasto
+                    
+                    $explode_result = explode('_', $key);
+                    $id_nueva_entidad_fuente_presupuesto = $explode_result[3];
+                    // busca el nombre de la nueva entidad fuente de presupuesto y recupera su id de la BD
+                    $nombre_nueva_entidad = $this->recuperar_nombre_nueva_entidad_fuente_presupuesto($data, $id_nueva_entidad_fuente_presupuesto);
+                    $entidad_bd = EntidadFuentePresupuesto::where('nombre', '=', $nombre_nueva_entidad)->first();                    
+                    
+                    // crea el gasto
+                    $gasto = new Gasto();
+                    $gasto->id_proyecto = $data['id_proyecto'];
+                    $gasto->id_entidad_fuente_presupuesto = $entidad_bd->id;
+                    $gasto->id_detalle_gasto = $detalle_gasto->id;
+                    $value = (int)$value;
+                    $gasto->valor = $value < 0 ? 0 : $value;                    
+                    $gasto->save();                    
+                }
+            }
+        }
     }

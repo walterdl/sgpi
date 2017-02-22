@@ -381,6 +381,8 @@ Route::group(array('before' => 'auth'), function(){
 		Route::post('proyectos/editar/validar_identificaciones', 'ProyectosEditarController@validar_identificaciones');
 		Route::get('proyectos/info_editar_productos', 'ProyectosEditarController@get_productos_proyecto');
 		Route::post('proyectos/editar/productos', 'ProyectosEditarController@post_productos_proyecto');
+		Route::get('proyectos/gastos_proyecto', 'ProyectosEditarController@get_gastos_proyecto');
+		Route::post('proyectos/editar/gastos', 'ProyectosEditarController@post_gastos_proyecto');		
 		
 		
 		/*
@@ -398,9 +400,6 @@ Route::group(array('before' => 'auth'), function(){
 	
 		// Route::post('proyectos/editar/productos', 'ProyectosEditarController@editarProductos');
 		// Route::get('proyecto/eliminar/producto', 'ProyectosEditarController@eliminarProducto');
-		
-		// Route::get('proyectos/gastos_proyecto', 'ProyectosEditarController@get_gastos_proyecto');
-		// Route::post('proyectos/editar/gastos', 'ProyectosEditarController@post_gastos_proyecto');
 		
 	}
 	
@@ -421,6 +420,7 @@ Route::get('registra_sgpi', 'ProyectosController@registra_sgpi');
 | Rutas de usuarios temporalmente afuera para pruebas
 |--------------------------------------------------------------------------
 */
+Route::get('proyectos/editar/gastos', 'ProyectosEditarController@post_gastos_proyecto');		
 Route::post('proyectos/editar/productos', 'ProyectosEditarController@post_productos_proyecto');
 Route::get('proyectos/editar/post_participantes', 'ProyectosEditarController@post_participantes_proyecto');
 Route::post('proyectos/registrar_nuevo_proyecto', 'ProyectosController@registrar_nuevo_proyecto');
@@ -503,8 +503,15 @@ Route::get('show_alter_collation', 'BaseController@show_alter_collation');
 */
 Route::get('test', function ()
 {
-	$miArray = ['hello' => 'there', 'say' => 'Walter!'];
-	return '<pre>'.print_r((object)$miArray, true).'</pre>';
+	function funcion_interna($item){
+		echo 'desde funcion_interna(): '.$item;
+	}
+	$data = ['Walter', 'José'];
+	foreach($data as $item)
+	{
+		funcion_interna($item);
+		echo '<hr />';
+	}
 });
 
 Route::get('test2', function(){

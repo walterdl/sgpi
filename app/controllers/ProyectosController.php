@@ -2005,7 +2005,7 @@
                     
                     $post_scripts = [
                         'investigador/proyectos/editar/document_ready_gastos.js',
-                        'investigador/proyectos/editar/editar_gastos_proyectos_controller.js',
+                        'investigador/proyectos/editar/editar_gastos_controller.js',
                     ];
                     
                     return View::make('investigador.proyectos.editar.gastos', array(

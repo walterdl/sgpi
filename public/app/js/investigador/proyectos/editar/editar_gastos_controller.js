@@ -24,12 +24,14 @@ sgpi_app.factory('string_invalida', function(){
   };
 });
 
-sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $http, id_proyecto, numero_invalido, string_invalida) {
+sgpi_app.controller('editar_gastos_controller', function ($scope, $http, id_proyecto, numero_invalido, string_invalida) {
     
     $('#input_text_nueva_entidad').on('keydown', function(e) {
         if (e.which == 13) {
             $scope.agregar_nueva_entidad_presupuesto_a_multiselect();
             $scope.$apply();
+			event.preventDefault();
+			return false;            
         }
     });    
     
@@ -102,6 +104,7 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
         
         // alimenta las opciones del multiselect de las entidades fuente de presupuesto
         $scope.data.entidades_fuente_presupuesto = data.todas_las_entidades_fuente_presupuesto;
+        $scope.entidades_fuente_presupuesto_proyecto = data.entidades_fuente_presupuesto_proyecto.entidades;
         
         data.entidades_fuente_presupuesto_proyecto.entidades.forEach(function(entidad_proy) {
             if(entidad_proy.nombre_entidad_fuente_presupuesto != 'UCC' && entidad_proy.nombre_entidad_fuente_presupuesto != 'CONADI')
@@ -110,14 +113,9 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
                     if($scope.data.entidades_fuente_presupuesto[i].id == entidad_proy.id_entidad_fuente_presupuesto)
                     {
                         $scope.data.entidades_fuente_presupuesto_seleccionadas.push($scope.data.entidades_fuente_presupuesto[i]);
-                        $('#inputs_entidades_fuente_presupuesto_existentes')
-                            .append('<input type="hidden" indice_entidad_presupuesto="' + $scope.data.entidades_fuente_presupuesto[i].id + '" name="entidades_presupuesto_existentes[]" value="' + $scope.data.entidades_fuente_presupuesto[i].id + '"/>');
                         break;
                     }
                 }
-            else
-                $('#inputs_entidades_fuente_presupuesto_existentes')
-                    .append('<input type="hidden" indice_entidad_presupuesto="' + entidad_proy.id_entidad_fuente_presupuesto + '" name="entidades_presupuesto_existentes[]" value="' + entidad_proy.id_entidad_fuente_presupuesto + '"/>');
         });
     };
     /*
@@ -356,7 +354,7 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
             $scope.nueva_entidad_presupuesto = null; // limpia input text de nueva entidad
         }
         else{
-            $scope.msj_nuevo_financiador_incorrecto = 'Nombre de entidad incorrecto';
+            $scope.msj_nueva_entidadPresupuesto_incorrecto = 'Nombre de entidad incorrecto';
             $scope.nueva_entidadPresupuesto_incorrecto = true;            
         }
     };           
@@ -372,9 +370,6 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
         if(entidad_presupuesto.id.toString().indexOf("x") != -1)
             $('#inputs_nuevas_entidades_fuente_presupuesto')
                 .append('<input type="hidden" indice_entidad_presupuesto="' + entidad_presupuesto.id + '" name="nuevas_entidades_presupuesto[]" value="' + entidad_presupuesto.id + '_' + entidad_presupuesto.nombre + '"/>');
-        else
-            $('#inputs_entidades_fuente_presupuesto_existentes')
-                .append('<input type="hidden" indice_entidad_presupuesto="' + entidad_presupuesto.id + '" name="entidades_presupuesto_existentes[]" value="' + entidad_presupuesto.id + '"/>');
     };        
     
     /*
@@ -382,6 +377,8 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
     | elimina el input hidden que le corresponde a la entidad fuente de presupuesto removida.
     | llama las funciones que se encargan de remover el objeto gasto de la colección de gastos que corresponde con la entidad_presupuesto de cada tipo de gasto
     | También remueve la entidad_presupuesto de la coleccion de otras_entidades_presupuesto de los totales de cada gasto, restado sus respectivos valores de los totales.
+    | Si se trata de una entidad fuente presupuesto que registra en la BD como patrocinadora del proyecto, agrega un input hidden para indicar
+    | que la misma se removerá del proyecto.
 	*/                 
     $scope.remocion_entidad_presupuesto_multiselect = function(entidad_presupuesto) {
         
@@ -390,8 +387,28 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
         // $scope.remocion_entidad_presupuesto_gasto_equipo(entidad_presupuesto);
         $scope.remocion_entidad_presupuesto_tipo_gasto(entidad_presupuesto);
         
-        // remueve el input hidden de la entidad fuente de presupuesto 
+        // remueve el input hidden de la entidad fuente de presupuesto si se trata de una entidad nueva agregada desde UI
         $('input[indice_entidad_presupuesto="' + entidad_presupuesto.id + '"]').remove();
+        
+        // agrega un input hidden que indica que la entidad fuente presupuesto existente asociada al proyecto se desasociará del mismo
+        // verifica que la entidad a remover no sea una entidad nueva agregada desde UI
+        if(entidad_presupuesto.id != 'nueva')
+        {
+            // verifica que la entidad fuente de presupuesto sea parte origialmente del proyecto
+            // si lo es, verifica que no se halla agregado ya su input hidden. Si no se ha agregado se crea el mismo
+            for (var i = 0; i < $scope.entidades_fuente_presupuesto_proyecto.length; i++) {
+                if($scope.entidades_fuente_presupuesto_proyecto[i].id_entidad_fuente_presupuesto == entidad_presupuesto.id)
+                {
+                    var existe_input = $('#inputs_entidades_fuente_presupuesto_existentes_a_eliminar > input[value="' + entidad_presupuesto.id + '"]').length;
+                    if(!existe_input)
+                    {
+                        $('#inputs_entidades_fuente_presupuesto_existentes_a_eliminar')
+                            .append('<input type="hidden" value="' + entidad_presupuesto.id + '" name="entidades_fuente_presupuesto_a_eliminar[]"/>');
+                    }
+                    break;
+                }
+            }
+        }
     };        
     
     /*
@@ -402,6 +419,7 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
     $scope.agregar_nueva_entidad_presupuesto_a_gastos = function(nueva_entidad_presupuesto){
         
         var gasto_nueva_entidad = {
+                id_gasto: 'nuevo',
                 id_entidad_fuente_presupuesto: nueva_entidad_presupuesto.id,
                 nombre_entidad_fuente_presupuesto: nueva_entidad_presupuesto.nombre,
                 valor: 0,
@@ -885,6 +903,8 @@ sgpi_app.controller('editar_gastos_proyectos_controller', function ($scope, $htt
             alertify.error('Validación de datos incorrecta. Revisar los datos ingresados');
         else
         {
+            $('#_form_').attr('novalidate', 'novalidate');
+            alertify.success('Guardando ediciones de gastos');
             $scope.data.msj_operacion_general = '<h3 class="text-center">Guardando ediciones de gastos...<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i></h3>';
             $scope.visibilidad.show_velo_general = true;
             $('#submit_editar_proyecto').trigger('click');
