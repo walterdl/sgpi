@@ -24,12 +24,10 @@
             'fecha_publicacion'
             ];
             
-            
         public function proyecto() { 
             return $this->belongsTo('Proyecto', 'id_proyecto'); 
         }
-        
-       
+
         public function tipoProductoE() { 
             return $this->belongsTo('TipoProductoEspecifico', 'id_tipo_producto_especifico'); 
         }
@@ -37,8 +35,7 @@
         public function investigador() { 
             return $this->belongsTo('Investigador', 'id_investigador'); 
         }
-        
-        
+
         public function estado() { 
             return $this->belongsTo('Estado', 'id_estado'); 
         }
@@ -54,7 +51,7 @@
             $query = '
             SELECT tpe.id as id_tipo_producto_especifico, tpe.nombre as nombre_tipo_producto_especifico, COUNT(*) as cantidad_productos
             FROM tipos_productos_especificos tpe
-            INNER JOIN productos p ON p.id_proyecto = '.$id_proyecto.' AND p.id_tipo_producto_especifico = tpe.id
+            INNER JOIN productos p ON p.id_proyecto = '.$id_proyecto.' AND p.id_tipo_producto_especifico = tpe.id AND p.deleted_at IS NULL
 			GROUP BY tpe.id, tpe.nombre;
             ';
             

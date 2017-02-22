@@ -505,7 +505,7 @@
             }
             
             // verifica si hay investigador con el grupo de investigación a eliminar
-            $investigador = Investigador::where('id_grupo_investigacion_ucc', '=', $id_grupo_investigacion)->first();
+            $investigador = Investigador::withTrashed()->where('id_grupo_investigacion_ucc', '=', $id_grupo_investigacion)->first();
             if($investigador)
             {
                 return false;                                    

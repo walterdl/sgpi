@@ -26,7 +26,7 @@
             $query = '
             SELECT efp.id as id_entidad_fuente_presupuesto, efp.nombre as nombre_entidad_fuente_presupuesto, SUM(g.valor) as total
             FROM entidades_fuente_presupuesto efp
-            INNER JOIN gastos g ON g.id_proyecto = '.$id_proyecto.' AND g.id_entidad_fuente_presupuesto = efp.id
+            INNER JOIN gastos g ON g.id_proyecto = '.$id_proyecto.' AND g.id_entidad_fuente_presupuesto = efp.id AND g.deleted_at IS NULL 
             GROUP BY efp.id, efp.nombre
             ORDER BY efp.id;';
             

@@ -16,12 +16,12 @@
             try{
                 $proyectos = Proyecto::all();
                 
-                // prepara la fecha a comprar, sumando 20 días a la fecha actual
+                // prepara la fecha a comparar, sumando 20 días a la fecha actual
             	$fecha_actual_mas_20_dias = date_create_from_format('Y-m-d', date('Y-m-d'));
             	$fecha_actual_mas_20_dias->modify('+20 days');
             	$fecha_actual_mas_20_dias = $fecha_actual_mas_20_dias->format('Y-m-d');                                    
             	
-            	// consulta todos los administradores, será utilizado más adelante cada administrador enviarles a ellos las alertas tambn
+            	// consulta todos los administradores, será utilizado más adelante para que cada administrador reciban las alertas
             	$administradores = Usuario::administradores();
             	
             	foreach($proyectos as $proyecto){
@@ -192,8 +192,10 @@
                 FROM gastos g, detalles_gastos dg, tipos_gastos tg
                 WHERE
                 	g.id_proyecto = '.$proyecto->id.'
+                AND g.deleted_at IS NULL
                 AND	g.id_detalle_gasto = dg.id
-                AND dg.id_tipo_gasto = tg.id;';
+                AND dg.id_tipo_gasto = tg.id
+                AND dg.deleted_at IS NULL;';
             $detalles_gastos = DB::select(DB::raw($query));
             
             // itera por cada uno de los detalles gastos,

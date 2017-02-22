@@ -165,11 +165,11 @@
                                                     <span class="caret"></span>
                                                 </button>
                                                 <ul class="dropdown-menu" uib-dropdown-menu role="menu">
-                                                    <li role="menuitem"><a href="/proyectos/editar/1/{$ proyecto.id$}">Inf. general</a></li>
-                                                    <li role="menuitem"><a href="/proyectos/editar/2/{$ proyecto.id$}">Participantes</a></li>
-                                                    <li role="menuitem"><a href="/proyectos/editar/3/{$ proyecto.id$}">Productos</a></li>
-                                                    <li role="menuitem"><a href="/proyectos/editar/4/{$ proyecto.id$}">Gastos</a></li>
-                                                    <li role="menuitem"><a href="/proyectos/editar/5/{$ proyecto.id$}">Adjuntos</a></li>
+                                                    <li role="menuitem"><a href="/proyectos/editar/1/{$ proyecto.id$}"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Inf. general</a></li>
+                                                    <li role="menuitem"><a href="/proyectos/editar/2/{$ proyecto.id$}"><i class="fa fa-users" aria-hidden="true"></i> Participantes</a></li>
+                                                    <li role="menuitem"><a href="/proyectos/editar/3/{$ proyecto.id$}"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Productos</a></li>
+                                                    <li role="menuitem"><a href="/proyectos/editar/4/{$ proyecto.id$}"><i class="fa fa-money" aria-hidden="true"></i> Gastos</a></li>
+                                                    <li role="menuitem"><a href="/proyectos/editar/5/{$ proyecto.id$}"><i class="fa fa-file-text" aria-hidden="true"></i> Doc. iniciales</a></li>
                                                 </ul>
                                             </div>                                            
                                         </td>

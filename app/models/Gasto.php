@@ -44,6 +44,7 @@
                 SELECT * 
                 FROM  gastos
                 WHERE id_proyecto = '.$id_proyecto.'
+                AND deleted_at IS NULL
                 GROUP BY  id_detalle_gasto;';
                 
                 $gastos = DB::select(DB::raw($query));
@@ -56,6 +57,7 @@
                 SELECT * 
                 FROM  gastos
                 WHERE id_proyecto = '.$id_proyecto.'
+                AND deleted_at IS NULL
                 GROUP BY  id_entidad_fuente_presupuesto;';
                 
                 $gastos = DB::select(DB::raw($query));
@@ -241,6 +243,7 @@
             FROM detalles_gastos dg, gastos g, tipos_gastos tg
             WHERE
                 dg.id_tipo_gasto = tg.id
+            AND dg.deleted_at IS NULL
             AND tg.nombre = \''.$tipo_gasto.'\'
             AND dg.id = g.id_detalle_gasto
             AND g.id_proyecto = '.$id_proyecto.';';
@@ -285,8 +288,10 @@
                 FROM gastos g, entidades_fuente_presupuesto e, detalles_gastos dg, tipos_gastos tg
                 WHERE 
                 	g.id_proyecto = '.$id_proyecto.'
+                AND g.deleted_at IS NULL
                 AND	g.id_entidad_fuente_presupuesto = e.id
                 AND g.id_detalle_gasto = dg.id
+                AND dg.deleted_at IS NULL
                 AND dg.id_tipo_gasto = tg.id
 				AND tg.id = '.TipoGasto::where('nombre', '=', $tipo_gasto)->first()->id.'
                 GROUP BY e.id, e.nombre

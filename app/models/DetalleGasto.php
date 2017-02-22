@@ -28,22 +28,18 @@
         public function investigador() { 
             return $this->belongsTo('Investigador', 'id_investigador'); 
         }
-        
-        
-        
+
         // Relaciones indirectas
         public function desembolso()
         {
             return $this->hasMany('Desembolso','id_detalle_gasto');
         }
-        
 
         public function gasto()
         {
             return $this->hasMany('Gasto','id_detalle_gasto');
         }
-        
-            
+
     	/*
     	|--------------------------------------------------------------------------
     	| consultar_desembolso_gasto_personal()

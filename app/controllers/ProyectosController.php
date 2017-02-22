@@ -2020,19 +2020,19 @@
                     
                 case '5':
                     // adjuntos
+                    array_push($pre_scripts, 'vendor/ng-file-upload/ng-file-upload-shim.js');
+                    array_push($pre_scripts, 'vendor/ng-file-upload/ng-file-upload.min.js');
+                
                     $post_scripts = [
-                        'investigador/proyectos/editar/editar_document_ready_externo.js',
-                        'investigador/proyectos/editar/editar_datos_basicos_controller.js',
-                        'investigador/proyectos/editar/adjuntos_proyecto_controller.js'
+                        'investigador/proyectos/editar/editar_adjuntos_controller.js'
                     ];
                     
                     return View::make('investigador.proyectos.editar.adjuntos', array(
                         'styles' => $styles,
-                        'pagina'=>$pagina,
-                        'proyecto_id' => $id,
                         'pre_scripts' => $pre_scripts,
                         'post_scripts' => $post_scripts,
-                        'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies
+                        'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies,
+                        'id_proyecto' => $id
                     ));
                     
                     break;

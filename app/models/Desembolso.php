@@ -62,9 +62,9 @@
             
             $query = '
                 SELECT DISTINCT(g.id_detalle_gasto) as id_detalle_gasto
-                FROM gastos g
+                FROM gastos g 
                 WHERE
-                    g.id_proyecto = '.$id_proyecto.';';
+                    g.id_proyecto = '.$id_proyecto.' AND g.deleted_at IS NULL;';
             
             $gastod = DB::select(DB::raw($query));
             $no_aprobados = 0;
