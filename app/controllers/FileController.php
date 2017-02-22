@@ -22,7 +22,10 @@
         public function get_imagen_perfil($nombre_foto=null){
             
             if(isset($nombre_foto)){
-                return Response::download(storage_path('archivos/imagenes_perfil/'.$nombre_foto), null, [], null);
+                if(file_exists(storage_path('archivos/imagenes_perfil/'.$nombre_foto)))
+                    return Response::download(storage_path('archivos/imagenes_perfil/'.$nombre_foto), null, [], null);
+                else
+                    return Response::download(storage_path('archivos/imagenes_perfil/sin-imagen.jpg'), null, [], null);
             }
             else{
                 return Response::download(storage_path('archivos/imagenes_perfil/sin-imagen.jpg'), null, [], null);
@@ -99,7 +102,10 @@
     	| Retorna respuesta http para descargar presupuesto de proyecto
     	*/          
         public function get_presupuesto($nombre_archivo){
-            return Response::download(storage_path('archivos/presupuestos/'.$nombre_archivo), null, [], 'attachment');                
+            if(file_exists(storage_path('archivos/presupuestos/'.$nombre_archivo)))
+                return Response::download(storage_path('archivos/presupuestos/'.$nombre_archivo), null, [], 'attachment');
+            else
+                return Response::download(storage_path('archivos/archivo_no_existe.txt'), null, [], 'attachment');
         }
         
         /*
@@ -109,7 +115,10 @@
     	| Retorna respuesta http para descargar presentacion de proyecto
     	*/          
         public function get_presentacion_proyecto($nombre_archivo){
-            return Response::download(storage_path('archivos/presentaciones_proyectos/'.$nombre_archivo), null, [], 'attachment');                
+            if(file_exists(storage_path('archivos/presentaciones_proyectos/'.$nombre_archivo)))
+                return Response::download(storage_path('archivos/presentaciones_proyectos/'.$nombre_archivo), null, [], 'attachment');                
+            else
+                return Response::download(storage_path('archivos/archivo_no_existe.txt'), null, [], 'attachment');
         }        
         
         /*
@@ -119,7 +128,10 @@
     	| Retorna respuesta http para descargar acta de inicio de proyecto
     	*/          
         public function get_acta_inicio($nombre_archivo){
-            return Response::download(storage_path('archivos/actas_inicio/'.$nombre_archivo), null, [], 'attachment');                
+            if(file_exists(storage_path('archivos/actas_inicio/'.$nombre_archivo)))
+                return Response::download(storage_path('archivos/actas_inicio/'.$nombre_archivo), null, [], 'attachment');
+            else
+                return Response::download(storage_path('archivos/archivo_no_existe.txt'), null, [], 'attachment');
         }                
         
         /*
@@ -130,7 +142,10 @@
     	| la fecha proyectada de radicación
     	*/                    
         public function get_archivo_fecha_proyectada_radicacion($nombre_archivo){
-            return Response::download(storage_path('archivos/productos/'.$nombre_archivo), null, [], 'attachment');
+            if(file_exists(storage_path('archivos/productos/'.$nombre_archivo)))
+                return Response::download(storage_path('archivos/productos/'.$nombre_archivo), null, [], 'attachment');
+            else
+                return Response::download(storage_path('archivos/archivo_no_existe.txt'), null, [], 'attachment');                
         }
         
         /*
@@ -141,7 +156,10 @@
     	| la fecha de publicación
     	*/          
         public function get_archivo_fecha_publicacion($nombre_archivo){
-            return Response::download(storage_path('archivos/productos/'.$nombre_archivo), null, [], 'attachment');
+            if(file_exists(storage_path('archivos/productos/'.$nombre_archivo)))
+                return Response::download(storage_path('archivos/productos/'.$nombre_archivo), null, [], 'attachment');
+            else
+                return Response::download(storage_path('archivos/archivo_no_existe.txt'), null, [], 'attachment');                                
         }
         
         /*
@@ -151,7 +169,10 @@
     	| Retorna respuesta http para descargar archivo de desembolso
     	*/                  
         public function get_desembolso($nombre_archivo){
-            return Response::download(storage_path('archivos/desembolsos/'.$nombre_archivo), null, [], 'attachment');
+            if(file_exists(storage_path('archivos/desembolsos/'.$nombre_archivo)))
+                return Response::download(storage_path('archivos/desembolsos/'.$nombre_archivo), null, [], 'attachment');
+            else
+                return Response::download(storage_path('archivos/archivo_no_existe.txt'), null, [], 'attachment');                                                
         }
         
         /*
@@ -161,7 +182,10 @@
     	| Retorna respuesta http para descargar archivo de informe de avance
     	*/          
         public function get_informe_avance($nombre_archivo){
-            return Response::download(storage_path('archivos/informes_avance/'.$nombre_archivo), null, [], 'attachment');
+            if(file_exists(storage_path('archivos/informes_avance/'.$nombre_archivo)))
+                return Response::download(storage_path('archivos/informes_avance/'.$nombre_archivo), null, [], 'attachment');
+            else
+                return Response::download(storage_path('archivos/archivo_no_existe.txt'), null, [], 'attachment');
         }
         
         /*
@@ -171,7 +195,10 @@
     	| Retorna respuesta http para descargar archivo de acta de finalización
     	*/          
         public function get_acta_finalizacion($nombre_archivo){
-            return Response::download(storage_path('archivos/actas_finalizacion/'.$nombre_archivo), null, [], 'attachment');
+            if(file_exists(storage_path('archivos/actas_finalizacion/'.$nombre_archivo)))
+                return Response::download(storage_path('archivos/actas_finalizacion/'.$nombre_archivo), null, [], 'attachment');
+            else
+                return Response::download(storage_path('archivos/archivo_no_existe.txt'), null, [], 'attachment');
         }
         
         /*
@@ -181,7 +208,10 @@
     	| Retorna respuesta http para descargar archivo de memoria académica
     	*/                  
         public function get_memoria_academica($nombre_archivo){
-            return Response::download(storage_path('archivos/memorias_academicas/'.$nombre_archivo), null, [], 'attachment');
+            if(file_exists(storage_path('archivos/memorias_academicas/'.$nombre_archivo)))
+                return Response::download(storage_path('archivos/memorias_academicas/'.$nombre_archivo), null, [], 'attachment');
+            else
+                return Response::download(storage_path('archivos/archivo_no_existe.txt'), null, [], 'attachment');                
         }
 
         /*
@@ -191,7 +221,10 @@
     	| Retorna respuesta http para descargar archivo de prorroga
     	*/                          
         public function get_prorroga($nombre_archivo){
-            return Response::download(storage_path('archivos/prorrogas/'.$nombre_archivo), null, [], 'attachment');
+            if(file_exists(storage_path('archivos/prorrogas/'.$nombre_archivo)))
+                return Response::download(storage_path('archivos/prorrogas/'.$nombre_archivo), null, [], 'attachment');
+            else
+                return Response::download(storage_path('archivos/archivo_no_existe.txt'), null, [], 'attachment');                                
         }
         
         /*
@@ -201,7 +234,10 @@
     	| Retorna respuesta http para descargar archivo de aprobación de revisión de final de proyecto
     	*/                          
         public function get_aprobacion_final_proyecto($nombre_archivo){
-            return Response::download(storage_path('archivos/aprobaciones_final_proyecto/'.$nombre_archivo), null, [], 'attachment');
+            if(file_exists(storage_path('archivos/aprobaciones_final_proyecto/'.$nombre_archivo)))
+                return Response::download(storage_path('archivos/aprobaciones_final_proyecto/'.$nombre_archivo), null, [], 'attachment');
+            else
+                return Response::download(storage_path('archivos/archivo_no_existe.txt'), null, [], 'attachment');                                                
         }        
         
         /*
@@ -211,7 +247,10 @@
     	| Retorna respuesta http para descargar archivo de aprobación de prórorga de final de proyecto
     	*/                          
         public function get_aprobacion_prorroga($nombre_archivo){
-            return Response::download(storage_path('archivos/aprobaciones_prorrogas/'.$nombre_archivo), null, [], 'attachment');
+            if(file_exists(storage_path('archivos/aprobaciones_prorrogas/'.$nombre_archivo)))
+                return Response::download(storage_path('archivos/aprobaciones_prorrogas/'.$nombre_archivo), null, [], 'attachment');
+            else
+                return Response::download(storage_path('archivos/archivo_no_existe.txt'), null, [], 'attachment');                 
         }                
         
         

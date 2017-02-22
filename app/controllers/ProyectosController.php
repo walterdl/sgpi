@@ -2022,17 +2022,31 @@
                     // adjuntos
                     array_push($pre_scripts, 'vendor/ng-file-upload/ng-file-upload-shim.js');
                     array_push($pre_scripts, 'vendor/ng-file-upload/ng-file-upload.min.js');
+                    
+                    array_push($angular_sgpi_app_extra_dependencies, 'ngSanitize');
+                    array_push($angular_sgpi_app_extra_dependencies, 'ngFileUpload');
                 
                     $post_scripts = [
                         'investigador/proyectos/editar/editar_adjuntos_controller.js'
                     ];
+                    
+                    // envía adicional los nombres de los documentos iniciales del proyecto
+                    $acta_inicio = DocumentoProyecto::where('id_proyecto', '=', $id_proyecto)
+                        ->where('id_formato_tipo_documento', '=', FormatoTipoDocumento::where('nombre', '=', 'Acta inicio')->first()->id)->first();
+                    $presentacion_proyecto = DocumentoProyecto::where('id_proyecto', '=', $id_proyecto)
+                        ->where('id_formato_tipo_documento', '=', FormatoTipoDocumento::where('nombre', '=', 'Presentacion proyecto')->first()->id)->first();
+                    $presupuesto = DocumentoProyecto::where('id_proyecto', '=', $id_proyecto)
+                        ->where('id_formato_tipo_documento', '=', FormatoTipoDocumento::where('nombre', '=', 'Presupuesto')->first()->id)->first();                    
                     
                     return View::make('investigador.proyectos.editar.adjuntos', array(
                         'styles' => $styles,
                         'pre_scripts' => $pre_scripts,
                         'post_scripts' => $post_scripts,
                         'angular_sgpi_app_extra_dependencies' => $angular_sgpi_app_extra_dependencies,
-                        'id_proyecto' => $id
+                        'id_proyecto' => $id_proyecto,
+                        'acta_inicio' => $acta_inicio->archivo,
+                        'presentacion_proyecto' => $presentacion_proyecto->archivo,
+                        'presupuesto' => $presupuesto->archivo
                     ));
                     
                     break;

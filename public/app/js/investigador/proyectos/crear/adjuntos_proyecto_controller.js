@@ -27,7 +27,7 @@ sgpi_app.controller('adjuntos_proyecto_controller', function ($scope) {
         {
             $scope.data.documento_presupuesto_invalido = false;
         }
-    }
+    };
     
 	/*
 	|--------------------------------------------------------------------------

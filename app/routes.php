@@ -383,6 +383,7 @@ Route::group(array('before' => 'auth'), function(){
 		Route::post('proyectos/editar/productos', 'ProyectosEditarController@post_productos_proyecto');
 		Route::get('proyectos/gastos_proyecto', 'ProyectosEditarController@get_gastos_proyecto');
 		Route::post('proyectos/editar/gastos', 'ProyectosEditarController@post_gastos_proyecto');		
+		Route::post('proyectos/editar/adjuntos', 'ProyectosEditarController@post_adjuntos_proyecto');
 		
 		
 		/*

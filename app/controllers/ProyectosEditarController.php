@@ -2288,4 +2288,159 @@
                 }
             }
         }
+        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| post_adjuntos_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Punto de recepción del formulario de edición de documentos iniciales del proyecto
+    	*/          
+        public function post_adjuntos_proyecto(){
+            
+            // file_put_contents
+            // (
+            //     app_path().'/logs.log', 
+            //     "\r\n".print_r(Input::all(), true)
+            //     ,FILE_APPEND
+            // );            
+            
+            try{
+                // aplica validaciones al identificador del proyecto enviado
+                if(is_null(Input::get('id_proyecto', null)))
+                    throw new Exception('Identificador de proyecto inválido. No se ha enviado identificador.');
+                    
+                $validacion = Validator::make(
+                    ['id_proyecto' => Input::get('id_proyecto')],
+                    ['id_proyecto' => 'required|exists:proyectos,id']
+                    );
+                    
+                if($validacion->fails())                
+                    throw new Exception('Identificador de proyecto inválido. No se encuentra proyecto con el identificador');                
+                
+                DB::transaction(function ()
+                {
+                    $this->editar_documento_presupuesto_proyecto();
+                    $this->editar_documento_presentacion_proyecto();
+                    $this->editar_documento_acta_inicio_proyecto();
+                });
+                
+                Session::flash('notify_operacion_previa', 'success');
+                Session::flash('mensaje_operacion_previa', 'Documentos de proyecto editados');
+            }
+            catch(\Exception $e){
+                throw $e;
+                Session::flash('notify_operacion_previa', 'error');
+                Session::flash('mensaje_operacion_previa', 'Error al cargar documentos ininciales del proyecto. Detalles: '.$e->getMessage());
+            }
+            return Redirect::to('/proyectos/listar');
+        } 
+        
+        private function editar_documento_presupuesto_proyecto(){
+            if(Input::hasFile('presupuesto')){
+                
+                $validacion = Validator::make(
+                    array('archivo' => Input::file('presupuesto')),
+                    array('archivo' => 'max:20000') // unidad de medida predeterminada en Kylobytes. Aquí es 20MB
+                );                
+                
+                if($validacion->fails())
+                    throw new Exception('Archivo de presupuesto de proyecto inválido. Tamaño maximo 20 MB');
+
+                $documento_proyecto = DocumentoProyecto::where('id_formato_tipo_documento', '=', FormatoTipoDocumento::where('nombre', '=', 'Presupuesto')->first()->id)
+                ->where('id_proyecto', '=', Input::get('id_proyecto'))->first();
+                
+                if(is_null($documento_proyecto)) // nunca debería pasar
+                    throw new Exception('No se encuentra el registro de presupuesto relacionado con el proyecto '.Input::get('id_proyecto'));
+                
+                // elimina archivo de presupuesto actual
+                if(file_exists(storage_path('archivos/presupuestos/'.$documento_proyecto->archivo)))
+                    unlink(storage_path('archivos/presupuestos/'.$documento_proyecto->archivo)); // borra archivo                
+                    
+                // copia archivo
+                $archivo_copiado = Archivo::copiar_presupuesto(Input::file('presupuesto'), Input::get('id_proyecto'));
+                
+                if($archivo_copiado){
+                    // actualiza campo archivo y guarda cambios
+                    $documento_proyecto = DocumentoProyecto::find($documento_proyecto->id);
+                    $documento_proyecto->archivo = $archivo_copiado->getFilename();
+                    $documento_proyecto->save();                            
+                }
+                else{
+                    throw new Exception('Error al copiar el archivo de presupuesto');
+                }                   
+            }
+        }
+        
+        private function editar_documento_presentacion_proyecto(){
+            if(Input::hasFile('presentacion_proyecto')){
+                
+                $validacion = Validator::make(
+                    array('archivo' => Input::file('presentacion_proyecto')),
+                    array('archivo' => 'max:20000') // unidad de medida predeterminada en Kylobytes. Aquí es 20MB
+                );                
+                
+                if($validacion->fails())
+                    throw new Exception('Archivo de presentación de proyecto inválido. Tamaño maximo 20 MB');
+
+                $documento_proyecto = DocumentoProyecto::where('id_formato_tipo_documento', '=', FormatoTipoDocumento::where('nombre', '=', 'Presentacion proyecto')->first()->id)
+                ->where('id_proyecto', '=', Input::get('id_proyecto'))->first();
+                
+                if(is_null($documento_proyecto)) // nunca debería pasar
+                    throw new Exception('No se encuentra el registro de presentación de proyecto relacionado con el proyecto '.Input::get('id_proyecto'));
+                
+                // elimina archivo de presupuesto actual
+                if(file_exists(storage_path('archivos/presentaciones_proyectos/'.$documento_proyecto->archivo)))
+                    unlink(storage_path('archivos/presentaciones_proyectos/'.$documento_proyecto->archivo)); // borra archivo                
+                    
+                // copia archivo
+                $archivo_copiado = Archivo::copiar_presentacion_proyecto(Input::file('presentacion_proyecto'), Input::get('id_proyecto'));
+                
+                if($archivo_copiado){
+                    // actualiza campo archivo y guarda cambios
+                    $documento_proyecto = DocumentoProyecto::find($documento_proyecto->id);
+                    $documento_proyecto->archivo = $archivo_copiado->getFilename();
+                    $documento_proyecto->save();                            
+                }
+                else{
+                    throw new Exception('Error al copiar el archivo de presentación de proyecto');
+                }                   
+            }
+        }
+        
+        private function editar_documento_acta_inicio_proyecto(){
+            if(Input::hasFile('acta_inicio')){
+                
+                $validacion = Validator::make(
+                    array('archivo' => Input::file('acta_inicio')),
+                    array('archivo' => 'max:20000') // unidad de medida predeterminada en Kylobytes. Aquí es 20MB
+                );                
+                
+                if($validacion->fails())
+                    throw new Exception('Archivo de acta de inicio de proyecto inválido. Tamaño maximo 20 MB');
+
+                $documento_proyecto = DocumentoProyecto::where('id_formato_tipo_documento', '=', FormatoTipoDocumento::where('nombre', '=', 'Acta inicio')->first()->id)
+                ->where('id_proyecto', '=', Input::get('id_proyecto'))->first();
+                
+                if(is_null($documento_proyecto)) // nunca debería pasar
+                    throw new Exception('No se encuentra el registro de acta de inicio de proyecto relacionado con el proyecto '.Input::get('id_proyecto'));
+                
+                // elimina archivo de presupuesto actual
+                if(file_exists(storage_path('archivos/actas_inicio/'.$documento_proyecto->archivo)))
+                    unlink(storage_path('archivos/actas_inicio/'.$documento_proyecto->archivo)); // borra archivo                
+                    
+                // copia archivo
+                $archivo_copiado = Archivo::copiar_acta_inicio(Input::file('acta_inicio'), Input::get('id_proyecto'));
+                
+                if($archivo_copiado){
+                    // actualiza campo archivo y guarda cambios
+                    $documento_proyecto = DocumentoProyecto::find($documento_proyecto->id);
+                    $documento_proyecto->archivo = $archivo_copiado->getFilename();
+                    $documento_proyecto->save();                            
+                }
+                else{
+                    throw new Exception('Error al copiar el archivo de acta de inicio de proyecto');
+                }                   
+            }
+        }
     }
+    
