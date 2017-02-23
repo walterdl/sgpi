@@ -142,7 +142,7 @@ sgpi_app.controller('crear_usuarios_controller', function($scope, $http, Alertif
             else if($scope.data.rol.id == 3){ // investigador, se añade a la validación la sede, el grupo de inv y la categoria de inv
                 validaciones.push($scope.validar_sede());
                 validaciones.push($scope.validar_grupo_inv());
-                validaciones.push($scope.validar_categoria_inv());
+                // validaciones.push($scope.validar_categoria_inv());
             } 
         }
         else
@@ -259,7 +259,7 @@ sgpi_app.controller('crear_usuarios_controller', function($scope, $http, Alertif
     | Valida input nombres comprobrando longitud del texto
     */        
     $scope.validar_nombres = function(){
-        if($scope.data.nombres != undefined && $scope.data.nombres.length > 0){
+        if($scope.data.nombres != undefined && $scope.data.nombres != null && $scope.data.nombres.length >= 3 && $scope.data.nombres.length <= 200){
             $scope.visibilidad.show_nombres_invalido = false;
             return true;
         }
@@ -274,7 +274,7 @@ sgpi_app.controller('crear_usuarios_controller', function($scope, $http, Alertif
     | Valida input apellidos comprobrando longitud del texto
     */
     $scope.validar_apellidos = function(){
-        if($scope.data.apellidos != undefined && $scope.data.apellidos.length > 0){
+        if($scope.data.apellidos != undefined && $scope.data.apellidos != null && $scope.data.apellidos.length >= 3 && $scope.data.apellidos.length <= 200){
             $scope.visibilidad.show_apellidos_invalido = false;
             return true;
         }
@@ -343,6 +343,12 @@ sgpi_app.controller('crear_usuarios_controller', function($scope, $http, Alertif
     | Valida <select> de edad asegurandose de que el modelo tenga sea mayor a 10
     */            
     $scope.validar_edad = function(){
+        
+        var regex = /^\d+$/;
+        if(!regex.test($scope.data.edad)){
+            $scope.visibilidad.show_edad_invalido = true;
+            return false;                        
+        }        
         if($scope.data.edad){
             if($scope.data.edad >= 10){
                 $scope.visibilidad.show_edad_invalido = false;
@@ -504,6 +510,7 @@ sgpi_app.controller('crear_usuarios_controller', function($scope, $http, Alertif
         var regex = /^\d+$/;
         if(!regex.test($scope.data.buscar_identificacion))
             return;
+        $('#input_buscar_id').trigger('blur');
         
         $scope.data.msj_operacion_busqueda = 'Buscando...<i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i>';
         $scope.visibilidad.show_msj_operacion_busqueda = true;

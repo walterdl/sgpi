@@ -396,13 +396,13 @@
                             $persona = Persona::find($persona->id);
                             $persona->nombres = $data['nombres'];
                             $persona->apellidos = $data['apellidos'];
-                            $persona->identificacion = $data['identificacion'];
+                            $persona->identificacion = (int)$data['identificacion'];
                             $persona->sexo = $data['sexo'];
-                            $persona->edad = $data['edad'];
+                            $persona->edad = (int)$data['edad'];
                             $persona->formacion = $data['formacion'];
                             $persona->id_tipo_identificacion = $data['tipo_identificacion'];
-                            if($persona->id_categoria_investigador == null)
-                                $persona->id_categoria_investigador = $data['rol'] == 1 || $data['rol'] == 2 ? null : $data['categoria_investigador'];
+                            // if($persona->id_categoria_investigador == null)
+                            //     $persona->id_categoria_investigador = $data['rol'] == 1 || $data['rol'] == 2 ? null : $data['categoria_investigador'];
                             $persona->save();
                             
                             Usuario::create(array(
@@ -431,12 +431,12 @@
                     $persona = Persona::create(array(
                         'nombres' => $data['nombres'],
                         'apellidos' => $data['apellidos'],
-                        'identificacion' => $data['identificacion'],
+                        'identificacion' => (int)$data['identificacion'],
                         'sexo' => $data['sexo'],
-                        'edad' => $data['edad'],
+                        'edad' => (int)$data['edad'],
                         'formacion' => $data['formacion'],
-                        'id_tipo_identificacion' => $data['tipo_identificacion'],
-                        'id_categoria_investigador' => ($data['rol'] == 1 || $data['rol'] == 2 ? null : $data['categoria_investigador']),
+                        'id_tipo_identificacion' => $data['tipo_identificacion']
+                        // 'id_categoria_investigador' => ($data['rol'] == 1 || $data['rol'] == 2 ? null : $data['categoria_investigador']),
                         ));
                     Usuario::create(array(
                         'id_persona' => $persona->id,
@@ -485,12 +485,12 @@
                             $persona->apellidos = $data['apellidos'];
                             $persona->identificacion = $data['identificacion'];
                             $persona->sexo = $data['sexo'];
-                            $persona->edad = $data['edad'];
+                            $persona->edad = (int)$data['edad'];
                             $persona->formacion = $data['formacion'];
                             $persona->id_tipo_identificacion = $data['tipo_identificacion'];
                             
-                            if($persona->id_categoria_investigador == null)
-                                $persona->id_categoria_investigador = $data['rol'] == 1 || $data['rol'] == 2 ? null : $data['categoria_investigador'];
+                            // if($persona->id_categoria_investigador == null)
+                            //     $persona->id_categoria_investigador = $data['rol'] == 1 || $data['rol'] == 2 ? null : $data['categoria_investigador'];
                             $persona->save();
                             
                             $usuario=Usuario::find($usuario->id);
@@ -501,7 +501,7 @@
                             $usuario->save();
                             
                             Session::flash('notify_operacion_previa', 'success');
-                            Session::flash('mensaje_operacion_previa', 'Usuario  acrualizado');
+                            Session::flash('mensaje_operacion_previa', 'Usuario  actualizado');
                     
                 }else
                 {
@@ -643,7 +643,7 @@
                 // sobre la duplicación de identificación y nombre de usuario
                 
                 $resultado_duplicidad = $this->validar_username_identificacion(array(
-                        'identificacion' => $data['identificacion'],
+                        'identificacion' => (int)$data['identificacion'],
                         'username' => $data['username'],
                         'id_usuario' => $data['id_usuario']
                         ));
@@ -669,20 +669,20 @@
                 $datos_basicos = array(
                         'nombres' => $data['nombres'],
                         'apellidos' => $data['apellidos'],
-                        'identificacion' => $data['identificacion'],
+                        'identificacion' => (int)$data['identificacion'],
                         'tipo_identificacion' => $data['tipo_identificacion'],
                         'sexo' => $data['sexo'],
-                        'edad' => $data['edad'],
+                        'edad' => (int)$data['edad'],
                         'formacion' => $data['formacion'],
                         'email' => $data['email'],
                     );
                 $validaciones_datos_basicos = array(
-                        'nombres' => array('required', 'min:5', 'max:250'),
-                        'apellidos' => array('required', 'min:5', 'max:250'),
+                        'nombres' => array('required', 'min:3', 'max:250'),
+                        'apellidos' => array('required', 'min:3', 'max:250'),
                         'identificacion' => array('required', 'integer', 'min:0', 'max:99999999999', 'unique:personas,identificacion,'.$usuario->id_persona),
                         'tipo_identificacion' => array('required', 'integer', 'digits_between:1,5'),
                         'sexo' => array('required', 'in:m,f'),
-                        'edad' => array('required', 'integer', 'min:1', 'max:120'),
+                        'edad' => array('required', 'integer', 'min:10', 'max:120'),
                         'formacion' => array('required', 'in:Ph. D,Doctorado,Maestría,Especialización,Pregado'),
                         'email' => 'required|email'
                     );
@@ -700,14 +700,7 @@
                 {
                     // The given data did not pass validation
                     Session::flash('notify_operacion_previa', 'error');
-                    Session::flash('mensaje_operacion_previa', 'Error en la edición del perfil: los datos básicos provistos no son correctos');
-                    // se deja este código para pruebas
-                    // file_put_contents
-                    // (
-                    //     app_path().'/logs.log', 
-                    //     "\r\n".print_r($validator->messages(), true)
-                    //     ,FILE_APPEND
-                    // );
+                    Session::flash('mensaje_operacion_previa', 'Error en la edición del perfil: los datos básicos provistos no son correctos. Detalles: '.$validator->messages());
                     return Redirect::to('/usuarios/propio_perfil');
                 }
                 
@@ -720,7 +713,7 @@
                             'username' => $data['username']
                         ),
                         array(
-                            'username' => array('required', 'min:5', 'max:50')
+                            'username' => array('required', 'min:1', 'max:50')
                         )
                     );
                 }
@@ -732,7 +725,7 @@
                             'grupo_investigacion' => $data['grupo_investigacion']
                         ),
                         array(
-                            'username' => array('required', 'min:5', 'max:50'),
+                            'username' => array('required', 'min:1', 'max:50'),
                             'grupo_investigacion' => array('required', 'integer', 'min:1')
                         )
                     );                    
@@ -742,13 +735,11 @@
                     $validator = Validator::make(
                         array(
                             'username' => $data['username'],
-                            'grupo_investigacion' => $data['grupo_investigacion'],
-                            'categoria_investigador' => $data['categoria_investigador']
+                            'grupo_investigacion' => $data['grupo_investigacion']
                         ),
                         array(
-                            'username' => array('required', 'min:5', 'max:50'),
-                            'grupo_investigacion' => array('required', 'integer', 'min:1'),
-                            'categoria_investigador' => array('required', 'integer', 'min:1')
+                            'username' => array('required', 'min:1', 'max:50'),
+                            'grupo_investigacion' => array('required', 'integer', 'min:1')
                         )
                     );                                        
                 }
@@ -757,14 +748,7 @@
                 {
                     // The given data did not pass validation
                     Session::flash('notify_operacion_previa', 'error');
-                    Session::flash('mensaje_operacion_previa', 'Error en la edición del perfil: los datos del usuario provistos no son correctos');
-                    // se deja este código para pruebas
-                    // file_put_contents
-                    // (
-                    //     app_path().'/logs.log', 
-                    //     "\r\n".print_r($validator->messages(), true)
-                    //     ,FILE_APPEND
-                    // );
+                    Session::flash('mensaje_operacion_previa', 'Error en la edición del perfil: los datos del usuario provistos no son correctos. Detalles: '.$validator->messages);
                     return Redirect::to('/usuarios/propio_perfil');
                 }
                 
@@ -790,12 +774,8 @@
                 $persona->sexo = $data['sexo'];
                 $persona->edad = $data['edad'];
                 $persona->formacion = $data['formacion'];
-                if($usuario->id_rol == 2){
+                if($usuario->id_rol == 2 || $usuario->id_rol == 3){
                     $usuario->id_grupo_investigacion_ucc = $data['grupo_investigacion'];
-                }
-                else if($usuario->id_rol == 3){
-                    $usuario->id_grupo_investigacion_ucc = $data['grupo_investigacion'];
-                    $persona->id_categoria_investigador = $data['categoria_investigador'];
                 }
                 $usuario->save();
                 $persona->save();

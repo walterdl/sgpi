@@ -77,7 +77,8 @@ sgpi_app.controller('editar_productos_controller', function ($scope, $http, id_p
         $scope.tipos_productos_generales = data.tipos_productos_generales;
         $scope.productos_especificos_x_prod_general = data.productos_especificos_x_prod_general;
         $scope.tipos_productos_especificos = [];
-        $scope.participantes = data.investigadores ;
+        $scope.participantes = data.investigadores;
+        $scope.informacion_proyecto = data.informacion_proyecto;
         
         // inicializa los productos existentes
         $scope.init_productos_existentes(data);

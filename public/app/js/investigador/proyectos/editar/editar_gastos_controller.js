@@ -79,6 +79,8 @@ sgpi_app.controller('editar_gastos_controller', function ($scope, $http, id_proy
 	*/             
     $scope.init = function(data) {
         
+        $scope.informacion_proyecto = data.informacion_proyecto;
+        
         // inicializa los identificadores de las entidades ucc y conadi, útil cuando se agrega un nuevo tipo de gasto
         $scope.id_entidad_fuente_presupuesto_ucc = data.id_entidad_fuente_presupuesto_ucc;
         $scope.id_entidad_fuente_presupuesto_conadi = data.id_entidad_fuente_presupuesto_conadi;

@@ -24,17 +24,6 @@ class RemindersController extends Controller {
 		{
 		    $message->subject('Recuperación de contraseña');
 		});
-		
-		
-		// if( $response == Password::INVALID_USER){
-		// 	echo "hola mundo1";
-		// 	die();
-		// 	return Redirect::back()->with('error', Lang::get($response));
-		// }else{
-		// 	echo "hola mundo2";
-		// 	die();
-		// 	// return Redirect::back()->with('status', Lang::get($response));
-		// }
 
 		switch ($response)
 		{

@@ -71,6 +71,18 @@
                 <h3>Edición de participantes de proyecto</h3>
             </div>
             <div class="box-body">    
+            
+                {{--Información del proyecto--}}
+                <div class="callout callout-info">
+                	<h4>{$ informacion_proyecto.nombre_proyecto $}</h4>
+                	<p>
+                		Grupo de investigación: <strong>{$ informacion_proyecto.grupo_investigacion_ejecutor $} - {$ informacion_proyecto.facultad $} - Sede {$ informacion_proyecto.sede $}</strong>
+                	</p>
+                	<p>
+                	    Investigador principal: <strong>{$ informacion_proyecto.nombre_completo_investigador_principal $}</strong>
+                	</p>
+                </div>                    
+            
                 <form id="_form_" action="/proyectos/editar/post_participantes" method="POST">
                     <div ng-hide="true" id="contenedor_ids_participantes_a_eliminar"></div>                    
                     <input type="hidden" name="id_proyecto" value="{{ $id_proyecto }}"/>

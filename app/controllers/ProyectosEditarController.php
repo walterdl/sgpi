@@ -487,11 +487,13 @@
                     
                 $proyecto = Proyecto::find(Input::get('id_proyecto'));
                 $objetivos_especificos = ObjetivoEspecifico::where('id_proyecto', '=', Input::get('id_proyecto'))->select('id', 'nombre')->get();
+                $informacion_proyecto = Proyecto::datos_basicos_proyecto(Input::get('id_proyecto'));
                 
                 return json_encode([
                     'consultado' => 1,
                     'proyecto' => $proyecto,
-                    'objetivos_especificos' => $objetivos_especificos
+                    'objetivos_especificos' => $objetivos_especificos,
+                    'informacion_proyecto' => $informacion_proyecto
                     ]);
             }
             catch(\Exception $e)
@@ -721,6 +723,8 @@
                 $tipos_identificacion = [];
                 foreach(TipoIdentificacion::all() as $ti)
                     $tipos_identificacion[$ti->id] = ['id' => $ti->id, 'nombre' => $ti->nombre, 'acronimo' => $ti->acronimo];
+                    
+                $informacion_proyecto = Proyecto::datos_basicos_proyecto(Input::get('id_proyecto'));
                 
                 return json_encode([
                     'consultado' => 1,
@@ -730,6 +734,7 @@
                     'grupos_investigacion_ucc' => GrupoInvestigacionUCC::all(),
                     'facultades_ucc' => FacultadDependenciaUCC::all(),
                     'sedes_ucc' => SedeUCC::all(),
+                    'informacion_proyecto' => $informacion_proyecto
                     ]);
             }
             catch(\Exception $e){
@@ -1162,6 +1167,7 @@
                 
                 // envía los participantes del proyecto ya que los productos tienen participantes como encargados
                 $investigadores = Investigador::investigadores_proyecto(Input::get('id_proyecto'));
+                $informacion_proyecto = Proyecto::datos_basicos_proyecto(Input::get('id_proyecto'));
                 
                 return json_encode([
                     'consultado' => 1,
@@ -1169,6 +1175,7 @@
                     'productos' => $productos,
                     'tipos_productos_generales' => TipoProductoGeneral::all(),
                     'productos_especificos_x_prod_general' => TipoProductoEspecifico::productos_especificos_x_prod_general(),                
+                    'informacion_proyecto' => $informacion_proyecto
                     ]);
             }
             catch(\Exception $e){
@@ -1478,13 +1485,16 @@
                 // consulta todas las entidades para alimentar el multiselect de entidades
                 $todas_las_entidades_fuente_pres = EntidadFuentePresupuesto::whereNotIn('nombre', ['UCC', 'CONADI'])->select('id', 'nombre')->orderBy('id')->get();
                 
+                $informacion_proyecto = Proyecto::datos_basicos_proyecto(Input::get('id_proyecto'));
+                
                 return json_encode([
                     'consultado' => 1,
                     'gastos' => $gastos_proyecto,
                     'entidades_fuente_presupuesto_proyecto' => $entidades_fuente_presupuesto_proyecto,
                     'todas_las_entidades_fuente_presupuesto' => $todas_las_entidades_fuente_pres,
                     'id_entidad_fuente_presupuesto_ucc' => EntidadFuentePresupuesto::where('nombre', '=', 'UCC')->first()->id,
-                    'id_entidad_fuente_presupuesto_conadi' => EntidadFuentePresupuesto::where('nombre', '=', 'CONADI')->first()->id
+                    'id_entidad_fuente_presupuesto_conadi' => EntidadFuentePresupuesto::where('nombre', '=', 'CONADI')->first()->id,
+                    'informacion_proyecto' => $informacion_proyecto
                     ]);
             }
             catch(\Exception $e){

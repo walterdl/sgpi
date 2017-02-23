@@ -51,13 +51,24 @@
         
         <form action="/proyectos/editar/adjuntos" method="POST" enctype='multipart/form-data'>
             
-            <input type="hiddden" name="id_proyecto" value="{{ $id_proyecto }}">
+            <input type="hidden" name="id_proyecto" value="{{ $id_proyecto }}">
         
             <div class="box">
                 <div class="box-header with-border">
                     <h3>Edición de documentos iniciales de proyecto</h3>
                 </div>
-                <div class="box-body">    
+                <div class="box-body">
+                        
+                    {{--Información del proyecto--}}
+                    <div class="callout callout-info">
+                    	<h4>{$ info_proyecto.nombre_proyecto $}</h4>
+                    	<p>
+                    		Grupo de investigación: <strong>{$ info_proyecto.grupo_investigacion_ejecutor $} - {$ info_proyecto.facultad $} - Sede {$ info_proyecto.sede $}</strong> 
+                    	</p>
+                    	<p>
+                    	    Investigador principal: <strong>{$ info_proyecto.nombre_completo_investigador_principal $}</strong>
+                    	</p>
+                    </div>                
 
                     <div class="container-sgpi">
                         

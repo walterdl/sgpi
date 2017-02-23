@@ -125,6 +125,7 @@ sgpi_app.controller('editar_participantes_controller', function($scope, $http, $
         $scope.grupos_investigacion_ucc = data.grupos_investigacion_ucc;
         $scope.facultades_ucc = data.facultades_ucc;
         $scope.sedes_ucc = data.sedes_ucc;
+        $scope.informacion_proyecto = data.informacion_proyecto;
             
         var date = null;
         var userTimezoneOffset = null;

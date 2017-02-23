@@ -303,6 +303,31 @@
         
     	/*
     	|--------------------------------------------------------------------------
+    	| datos_basicos_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Consulta por datos básicos descriptivos del proyecto, esto es:
+    	| nombre de proyecto, investigador ppal, grupo de investigadocion ejecutor, facultad y sede
+    	*/           
+        public static function datos_basicos_proyecto($id_proyecto){
+            $proyecto = Proyecto::find($id_proyecto);
+            $investigador_ppal = Investigador::where('id_proyecto', '=', $id_proyecto)->where('id_rol', '=', 3)->first();
+            $usuario_inv_ppal = Usuario::find($investigador_ppal->id_usuario_investigador_principal);
+            $persona_inv_ppal = Persona::find($usuario_inv_ppal->id_persona);
+            $grupo_inv_proyecto = GrupoInvestigacionUCC::find($proyecto->id_grupo_investigacion_ucc);
+            $facultad = FacultadDependenciaUCC::find($grupo_inv_proyecto->id_facultad_dependencia_ucc);
+            $sede = SedeUCC::find($facultad->id_sede_ucc);
+            return [
+                'id_proyecto' => $id_proyecto,
+                'nombre_proyecto' => $proyecto->nombre,
+                'nombre_completo_investigador_principal' => ($persona_inv_ppal->nombres.' '.$persona_inv_ppal->apellidos),
+                'grupo_investigacion_ejecutor' => $grupo_inv_proyecto->nombre,
+                'facultad' => $facultad->nombre,
+                'sede' => $sede->nombre
+                ];
+        }
+        
+    	/*
+    	|--------------------------------------------------------------------------
     	| grupos_investigacion_proyecto()
     	|--------------------------------------------------------------------------
     	| Retorna las entidades / grupos de investigacion coejecutores juncot con el grupo de investigacion ejecutor

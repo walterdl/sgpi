@@ -94,6 +94,7 @@
         
         {{--Contenedor general de tabs--}}
         <div class="box">
+            
             <div class="box-header with-border">
                 <h3>Gestión de proyectos</h3>
             </div>

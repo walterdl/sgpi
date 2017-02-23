@@ -31,56 +31,12 @@ class HomeController extends BaseController {
 		
 		$cuser = Auth::user(); // cuser = current user
 		
-		if($cuser->id_rol == 1)
-			return $this->adminDashboard();
-			
-		else if($cuser->id_rol == 2)
-			return $this->coordinadorDashboard();
-			
-		else if($cuser->id_rol == 3)	
-			return $this->investigadorDashboard();
+		if($cuser->id_rol == 1 || $cuser->id_rol == 2 || $cuser->id_rol == 3)
+		{
+			$styles = ['app/css/dashboard/main.css'];
+			return View::make('dashboard', array(
+				'styles' => $styles
+				));
+		}
 	}
-	
-	/*
-	|--------------------------------------------------------------------------
-	| adminDashboard()
-	|--------------------------------------------------------------------------
-	| Presenta el dashboard del administrador
-	*/
-	private function adminDashboard(){
-		
-		$styles = ['app/css/dashboard/adminDashboard.css'];
-		return View::make('dashboard', array(
-			'styles' => $styles
-			));
-	}
-	
-	/*
-	|--------------------------------------------------------------------------
-	| coordinadorDashboard()
-	|--------------------------------------------------------------------------
-	| Presenta el dashboard del coordinador
-	*/
-	private function coordinadorDashboard(){
-		$styles = ['app/css/dashboard/adminDashboard.css'];
-		return View::make('dashboard', array(
-			'styles' => $styles
-			));
-		// return View::make('home');
-	}
-	
-	/*
-	|--------------------------------------------------------------------------
-	| investigadorDashboard()
-	|--------------------------------------------------------------------------
-	| Presenta el dashboard del investigador
-	*/
-	private function investigadorDashboard(){
-		$styles = ['app/css/dashboard/adminDashboard.css'];
-		return View::make('dashboard', array(
-			'styles' => $styles
-			));
-		// return View::make('home');
-	}
-
 }

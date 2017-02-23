@@ -72,14 +72,7 @@ sgpi_app.controller('editar_usuarios_controller', function($scope, $http, Alerti
             console.log('Error en la carga de datos iniciales: ');
             console.log(data);
         });
-        // .finally(function() {
-        //     $scope.visibilidad.show_velo_contenedor_datos_usuario = false;
-        // });
-    
-    
-    
-    
-    
+
     /*
     |--------------------------------------------------------------------------
     | visibilidad y data
@@ -229,12 +222,11 @@ sgpi_app.controller('editar_usuarios_controller', function($scope, $http, Alerti
             else if($scope.data.rol.id == 3){ // coordinador, se añade a la validación la sede, el grupo de inv y la categoria de inv
                 validaciones.push($scope.validar_sede());
                 validaciones.push($scope.validar_grupo_inv());
-                validaciones.push($scope.validar_categoria_inv());
+                // validaciones.push($scope.validar_categoria_inv());
             } 
         }
         else
             return;
-            
             
             console.log(validaciones);
         var alguna_validacion_incorrecta = validaciones.indexOf(false);
@@ -357,7 +349,7 @@ sgpi_app.controller('editar_usuarios_controller', function($scope, $http, Alerti
     | Valida input nombres comprobrando longitud del texto
     */        
     $scope.validar_nombres = function(){
-        if($scope.data.personaEditar.nombres != undefined && $scope.data.personaEditar.nombres.length > 0){
+        if($scope.data.personaEditar.nombres != undefined && $scope.data.personaEditar.nombres != null && $scope.data.personaEditar.nombres.length >= 3 && $scope.data.personaEditar.nombres.length <= 200){
             $scope.visibilidad.show_nombres_invalido = false;
             return true;
         }
@@ -372,7 +364,7 @@ sgpi_app.controller('editar_usuarios_controller', function($scope, $http, Alerti
     | Valida input apellidos comprobrando longitud del texto
     */
     $scope.validar_apellidos = function(){
-        if($scope.data.personaEditar.apellidos != undefined && $scope.data.personaEditar.apellidos.length > 0){
+        if($scope.data.personaEditar.apellidos != undefined && $scope.data.personaEditar.apellidos != null && $scope.data.personaEditar.apellidos.length >= 3 && $scope.data.personaEditar.apellidos.length <= 200){
             $scope.visibilidad.show_apellidos_invalido = false;
             return true;
         }
@@ -404,6 +396,7 @@ sgpi_app.controller('editar_usuarios_controller', function($scope, $http, Alerti
     | Valida <select> de sexo asegurandose de que el modelo tenga un obj sexo
     */            
     $scope.validar_sexo = function(){
+        
         if($scope.data.sexo){
             $scope.visibilidad.show_sexo_invalido = false;
             return true;
@@ -419,7 +412,13 @@ sgpi_app.controller('editar_usuarios_controller', function($scope, $http, Alerti
     | Valida <select> de edad asegurandose de que el modelo tenga sea mayor a 0
     */            
     $scope.validar_edad = function(){
-        if($scope.data.personaEditar.edad){
+        var regex = /^\d+$/;
+        if(!regex.test($scope.data.personaEditar.edad))                
+        {
+            $scope.visibilidad.show_edad_invalido = true;
+            return false;        
+        }
+        if($scope.data.personaEditar.edad >= 10){
             $scope.visibilidad.show_edad_invalido = false;
             return true;
         }

@@ -1,4 +1,7 @@
-sgpi_app.controller('editar_adjuntos_controller', function ($scope, $http, acta_inicio, presentacion_proyecto, presupuesto) {
+sgpi_app.controller('editar_adjuntos_controller', function ($scope, $http, id_proyecto, acta_inicio, presentacion_proyecto, presupuesto) {
+    
+    $scope.data.msj_operacion_general = '<h3 class="text-center">Cargando datos del proyecto...<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i></h3>'; 
+    $scope.visibilidad.show_velo_general = true;    
     
     $scope.acta_inicio = acta_inicio;
     $scope.presentacion_proyecto = presentacion_proyecto;
@@ -10,6 +13,27 @@ sgpi_app.controller('editar_adjuntos_controller', function ($scope, $http, acta_
     $scope.editar_presupuesto = false;
     $scope.editar_presentacion_proyecto = false;
     $scope.editar_acta_inicio = false;
+    
+    $http({
+        url: '/proyectos/info_basica_proyecto',
+        method: 'GET',
+        params: {
+            id_proyecto: id_proyecto
+        }
+    })
+    .success(function(data) {
+        console.log(data);
+        if(data.consultado == 1)
+        {
+            $scope.info_proyecto = data.informacion_proyecto;
+        }
+        else
+            $scope.data.msj_operacion_general = '<h3 class="text-center">Error al consultar los datos del proyecto. Código de error: ' + data.codigo + '</h3>'; 
+    })
+    .error(function(data, status) {
+        console.log(data);
+        $scope.data.msj_operacion_general = '<h3 class="text-center">Error al consultar los datos del proyecto. Código de estado: ' + status + '</h3>';         
+    });
     
 	/*
 	|--------------------------------------------------------------------------

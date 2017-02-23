@@ -89,7 +89,16 @@
                 
                 <div class="box-body">    
                    
-            		<br />
+                    {{--Información del proyecto--}}
+                    <div class="callout callout-info">
+                    	<h4>{$ informacion_proyecto.nombre_proyecto $}</h4>
+                    	<p>
+                    		Grupo de investigación: <strong>{$ informacion_proyecto.grupo_investigacion_ejecutor $} - {$ informacion_proyecto.facultad $} - Sede {$ informacion_proyecto.sede $}</strong>
+                    	</p>
+                    	<p>
+                    	    Investigador principal: <strong>{$ informacion_proyecto.nombre_completo_investigador_principal $}</strong>
+                    	</p>
+                    </div>    
             		
             		<div class="row">
             		    <div class="col-xs-12 col-sm-6 col-md-4">

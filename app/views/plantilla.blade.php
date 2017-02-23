@@ -24,23 +24,23 @@
 		</script>
 		
 		<!--AngularJS 1.5.x-->
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+		<script type="text/javascript" src="/vendor/angular/1.5.8-angular.min.js"></script>
 		<!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>-->
 		
 		<!--AngularJS animate-->
-		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
+		<script type="text/javascript" src="/vendor/angular/animate/angular-animate.js"></script>
 		
 		<!--AngularJS langguague-->
-		<script src="https://code.angularjs.org/1.5.8/i18n/angular-locale_es-co.js"></script>
+		<script src="/vendor/angular/i18n/angular-locale_es-co.js"></script>
 		
 		<!--AngularJS touch-->
-		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-touch.js"></script>
+		<script type="text/javascript" src="/vendor/angular/touch/angular-touch.js"></script>
 		
 		<!-- Font Awesome -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
 		
 		<!-- Ionicons -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+		<link rel="stylesheet" href="/vendor/ionicons/ionicons.min.css">
 		
 		<!-- Magnific popup -->
 		<link rel="stylesheet" href="/vendor/magnific-popup/magnific-popup.css">

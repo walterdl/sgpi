@@ -2052,7 +2052,7 @@
                     break;
                     
                 default:
-                    return View::make('general.404');
+                    return Redirect::to('/ruta_no_encontrada');
                     break;
             }
             
@@ -2361,5 +2361,36 @@
             }
     	}
     	
-        
+    	/*
+    	|--------------------------------------------------------------------------
+    	| get_detalles_proyecto()
+    	|--------------------------------------------------------------------------
+    	| Retorno json con datos descriptivos básicos de un determinado proyecto
+    	*/      	
+        public function get_detalles_proyecto(){
+            
+            try{
+                
+                if(is_null(Input::get('id_proyecto', null)))
+                    throw new Exception('Error al consultar los detalles del proyecto. No se ha enviado identificador de proyecto');
+                
+                $proyecto = Proyecto::find(Input::get('id_proyecto'));
+                if(is_null($proyecto))
+                    throw new Exception('Error al consultar los detalles del proyecto. No existen registros con el identificador de proyecto enviado');
+                
+                $informacion_proyecto = Proyecto::datos_basicos_proyecto(Input::get('id_proyecto'));
+
+                return json_encode([
+                    'consultado' => 1,
+                    'informacion_proyecto' => $informacion_proyecto
+                    ]);                
+            }
+            catch(\Exception $e){
+                return json_encode([
+                    'consultado' => 2,
+                    'mensaje' => $e->getMessage(),
+                    'codigo' => $e->getCode()
+                    ]);
+            }
+        }
     }

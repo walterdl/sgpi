@@ -47,6 +47,8 @@ sgpi_app.controller('editar_datos_basicos_controller', function($scope, $http, $
             
             $scope.proyecto = data.proyecto;
             $scope.objetivos_especificos = data.objetivos_especificos;
+            $scope.informacion_proyecto = data.informacion_proyecto;
+            
             $scope.visibilidad.show_velo_general = false;
         }
         else
