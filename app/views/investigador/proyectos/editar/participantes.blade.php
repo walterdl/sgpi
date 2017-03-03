@@ -81,7 +81,15 @@
                 	<p>
                 	    Investigador principal: <strong>{$ informacion_proyecto.nombre_completo_investigador_principal $}</strong>
                 	</p>
-                </div>                    
+                </div>
+                <br />
+                {{--Informacion de guardado--}}
+                <div class="callout callout-warning">
+                	<h4>Adevertencia</h4>
+                	<p>
+                		Para salvar cualquier edición efectuada se debe presionar el botón "Guardar" ubicado en la parte inferior
+                	</p>
+                </div>                                    
             
                 <form id="_form_" action="/proyectos/editar/post_participantes" method="POST">
                     <div ng-hide="true" id="contenedor_ids_participantes_a_eliminar"></div>                    
@@ -172,7 +180,7 @@
                             					<label for="formacion_nuevo_participante">
                             					    Formación <span class="error-text" ng-show="formacion_nuevo_participante_invalido">Campo requerido. Elegir una opción</span>
                             					</label>
-                            					<ui-select id="formacion_nuevo_participante" theme="bootstrap"
+                            					<ui-select id="formacion_nuevo_participante" theme="bootstrap" append-to-body="true" search-enabled="false"
                             					ng-model="data.formacion_nuevo_participante" ng-change="validar_formacion_nuevo_participante()"
                             					ng-required="true" ng-disabled="datos_basicos_persona_recuperados"
                             					ng-class="{'invalid_control': formacion_nuevo_participante_invalido}">
@@ -188,7 +196,7 @@
                             					<label for="rol">
                             					    Rol en el proyecto <span class="error-text" ng-show="rol_nuevo_participante_invalido">Campo requerido. Elegir una opción</span>
                             					</label>
-                            					<ui-select theme="bootstrap" 
+                            					<ui-select theme="bootstrap" append-to-body="true" search-enabled="false"
                             					ng-model="data.rol_nuevo_participante" ng-change="cambia_rol_proyecto_nuevo_participante()"
                             					ng-required="true"
                             					ng-class="{'invalid_control': rol_nuevo_participante_invalido}">
@@ -204,10 +212,11 @@
                             					<label for="tipo_identificacion_nuevo_participante">
                             					    Tipo de identificación <span class="error-text" ng-show="tipo_id_nuevo_participante_invalido">Campo requerido. Elegir una opción</span>
                             					</label>
-                            					<ui-select theme="bootstrap"
+                            					<ui-select theme="bootstrap" append-to-body="true" search-enabled="false"
                             					ng-model="data.tipo_identificacion_nuevo_participante" ng-change="validar_tipo_id_nuevo_participante()"
                             					ng-required="true" ng-disabled="datos_basicos_persona_recuperados"
-                            					ng-class="{'invalid_control': tipo_id_nuevo_participante_invalido}">
+                            					ng-class="{'invalid_control': tipo_id_nuevo_participante_invalido}"
+                            					uib-tooltip="{$ data.tipo_identificacion_nuevo_participante.nombre $}" tooltip-append-to-body="true" tooltip-enable="data.tipo_identificacion_nuevo_participante.nombre.length > 25">
                             						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
                             						<ui-select-choices repeat="item in tipos_identificacion | filter: $select.search">
                             							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
@@ -220,7 +229,7 @@
                             					<label for="sexo">
                             					    Sexo <span class="error-text" ng-show="sexo_nuevo_participante_invalido">Campo requerido. Elegir una opción</span>
                             					</label>
-                            					<ui-select theme="bootstrap"  
+                            					<ui-select theme="bootstrap" append-to-body="true" search-enabled="false"
                             					ng-model="data.sexo_nuevo_participante" ng-change="validar_sexo_nuevo_participante()"
                             					ng-require="true" ng-disabled="datos_basicos_persona_recuperados"
                             					ng-class="{'invalid_control': sexo_nuevo_participante_invalido}">
@@ -265,10 +274,11 @@
                             		            <label for="sede_nuevo_participante">
                             		                Sede <span class="error-text" ng-show="sede_nuevo_participante_invalido">Campo requerido. Elegir una sede</span>
                             		            </label>
-                            					<ui-select theme="bootstrap"  
+                            					<ui-select theme="bootstrap" append-to-body="true" search-enabled="false"
                             					ng-model="data.sede_nuevo_participante" ng-change="cambia_sede_nuevo_participante()"
                             					ng-require="true"
-                            					ng-class="{'invalid_control': sede_nuevo_participante_invalido}">
+                            					ng-class="{'invalid_control': sede_nuevo_participante_invalido}"
+                            					uib-tooltip="{$ data.sede_nuevo_participante.nombre $}" tooltip-append-to-body="true" tooltip-enable="data.sede_nuevo_participante.nombre.length > 25">
                             						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
                             						<ui-select-choices repeat="item in sedes_ucc | filter: $select.search">
                             							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
@@ -281,10 +291,11 @@
                             		            <label for="grupo_inv_nuevo_participante">
                             		                Grupo de investigación <span class="error-text" ng-show="grupo_inv_nuevo_participante_invalido">Campo requerido. ELegir una opción</span>
                             		            </label>
-                            					<ui-select theme="bootstrap"  
+                            					<ui-select theme="bootstrap" append-to-body="true" search-enabled="false"
                             					ng-model="data.grupo_inv_nuevo_participante" ng-change="cambia_grupo_inv_nuevo_participante()"
                             					ng-require="true"
-                            					ng-class="{'invalid_control': grupo_inv_nuevo_participante_invalido}">
+                            					ng-class="{'invalid_control': grupo_inv_nuevo_participante_invalido}"
+                            					uib-tooltip="{$ data.grupo_inv_nuevo_participante.nombre $}" tooltip-append-to-body="true" tooltip-enable="data.grupo_inv_nuevo_participante.nombre.length > 25">
                             						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
                             						<ui-select-choices repeat="item in grupos_inv_nuevo_participante | filter: $select.search">
                             							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
@@ -295,12 +306,13 @@
                             		    <div class="col-xs-12 col-sm-6 col-md-4" ng-show="data.rol_nuevo_participante.id==4">
                             		        <div class="form-group">
                             		            <label for="facultad_nuevo_participante">
-                            		                Facultad <span class="error-text" ng-show="facultad_nuevo_participante_invalido">Campo requerido. Elegir una facultad</span>
+                            		                Facultad <span class="error-text" ng-show="facultad_nuevo_participante_invalido">Campo requerido</span>
                             		            </label>
                             					<input type="text" id="facultad_nuevo_participante" ng-model="facultad_nuevo_participante.nombre" ng-change="validar_facultad_nuevo_participante()"
                             					class="form-control white-readonly"
                             					ng-readonly="true"
-                            					ng-class="{'invalid_control': facultad_nuevo_participante_invalido}"/>
+                            					ng-class="{'invalid_control': facultad_nuevo_participante_invalido}"
+                            					uib-tooltip="{$ facultad_nuevo_participante.nombre $}" tooltip-append-to-body="true" tooltip-enable="facultad_nuevo_participante.nombre.length > 25"/>
                             		        </div>
                             		     </div>
                             		    <div class="col-xs-12 col-sm-6 col-md-4" ng-show="data.rol_nuevo_participante.id==5||data.rol_nuevo_participante.id==6">
@@ -538,7 +550,7 @@
                         									</div>             		
                         									<div class="col-xs-12 col-sm-6 col-md-4">
                         										<label for="formacion_{$ investigador.id_investigador $}_{$ $index $}">Formación <span class="error-text" ng-show="investigador.formacion_invalido">Campo requerido. Elegir una opción</span></label>
-                                            					<ui-select id="formacion_{$ investigador.id_investigador $}_{$ $index $}" theme="bootstrap"
+                                            					<ui-select id="formacion_{$ investigador.id_investigador $}_{$ $index $}" theme="bootstrap" append-to-body="true" search-enabled="false"
                                             					ng-model="investigador.formacion" ng-change="validar_formacion_participante_agregado(investigador)"
                                             					ng-disabled="investigador.tiene_usuario || investigador.es_nuevo_participante"
                                             					ng-class="{'lightgray-bg': investigador.tiene_usuario || investigador.es_nuevo_participante, 'invalid_control': investigador.formacion_invalido}">
@@ -551,10 +563,10 @@
                         									</div> 		
                         									<div class="col-xs-12 col-sm-6 col-md-4">
                         										<label for="rol_{$ investigador.id_investigador $}_{$ $index $}">Rol en el proyecto <span class="error-text" ng-show="investigador.rol_invalido">Campo requerido. Elegir una opción</span></label>
-                                            					<ui-select id="rol_{$ investigador.id_investigador $}_{$ $index $}" theme="bootstrap"
+                                            					<ui-select id="rol_{$ investigador.id_investigador $}_{$ $index $}" theme="bootstrap" search-enabled="false"
                                             					ng-model="investigador.rol" ng-change="validar_rol_participante_agregado(investigador)"
-                                            					ng-disabled="investigador.tiene_usuario || investigador.es_nuevo_participante"
-                                            					ng-class="{'lightgray-bg': investigador.tiene_usuario || investigador.es_nuevo_participante, 'invalid_control': investigador.rol_invalido}">
+                                            					ng-disabled="investigador.es_nuevo_participante"
+                                            					ng-class="{'lightgray-bg': investigador.es_nuevo_participante, 'invalid_control': investigador.rol_invalido}">
                                             						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
                                             						<ui-select-choices repeat="item in roles | filter: $select.search">
                                             							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
@@ -586,10 +598,11 @@
                         									<div class="row is-flex">
                         										<div class="form-group col-xs-12 col-sm-6 col-md-4">
                         											<label for="tipo_id_{$ investigador.id_investigador $}_{$ $index $}">Tipo de identificación <span class="error-text" ng-show="investigador.tipo_id_invalido">Campo requerido. Elegir una opción</span></label>
-                                                					<ui-select id="tipo_id_{$ investigador.id_investigador $}_{$ $index $}" theme="bootstrap"
+                                                					<ui-select id="tipo_id_{$ investigador.id_investigador $}_{$ $index $}" theme="bootstrap" append-to-body="true" search-enabled="false"
                                                 					ng-model="investigador.tipo_identificacion" ng-change="validar_tipo_id_participante_agregado(investigador)"
                                                 					ng-disabled="investigador.tiene_usuario || investigador.es_nuevo_participante"
-                                                					ng-class="{'lightgray-bg': investigador.tiene_usuario || investigador.es_nuevo_participante, 'invalid_control': investigador.tipo_id_invalido}">
+                                                					ng-class="{'lightgray-bg': investigador.tiene_usuario || investigador.es_nuevo_participante, 'invalid_control': investigador.tipo_id_invalido}"
+                                                					uib-tooltip="{$ investigador.tipo_identificacion.nombre $}" tooltip-append-to-body="true" tooltip-enable="investigador.tipo_identificacion.nombre.length > 25">
                                                 						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
                                                 						<ui-select-choices repeat="item in tipos_identificacion | filter: $select.search">
                                                 							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
@@ -599,7 +612,7 @@
                         										</div>
                         										<div class="form-group col-xs-12 col-sm-6 col-md-4">
                         											<label for="sexo_{$ $index $}">Sexo <span class="error-text" ng-show="investigador.sexo_invalido">Campo requerido. Elegir una opción</span></label>
-                                                					<ui-select id="tipo_id_{$ investigador.id_investigador $}_{$ $index $}" theme="bootstrap"
+                                                					<ui-select id="tipo_id_{$ investigador.id_investigador $}_{$ $index $}" theme="bootstrap" append-to-body="true" search-enabled="false"
                                                 					ng-model="investigador.sexo" ng-change="validar_sexo_participante_agregado(investigador)"
                                                 					ng-disabled="investigador.tiene_usuario || investigador.es_nuevo_participante"
                                                 					ng-class="{'lightgray-bg': investigador.tiene_usuario || investigador.es_nuevo_participante, 'invalid_control': investigador.sexo_invalido}">
@@ -618,11 +631,11 @@
                         											ng-class="{'lightgray-bg': investigador.tiene_usuario, 'invalid_control': investigador.edad_invalido}"/>
                         										</div>                                										
                         										<div class="form-group col-xs-12 col-sm-6 col-md-4">
-                        											<label for="email_{$ investigador.id_investigador $}_{$ $index $}">Email <span class="error-text" ng-show="investigador.edad_invalido">Email inválido</span></label>
+                        											<label for="email_{$ investigador.id_investigador $}_{$ $index $}">Email <span class="error-text" ng-show="investigador.email_invalido">Email inválido</span></label>
                         											<input type="text" id="email_{$ investigador.id_investigador $}_{$ $index $}" name="email_{$ investigador.id_investigador $}_{$ $index $}" 
                         											ng-model="investigador.email" ng-change="validar_email_participante_agregado(investigador)"
-                        											ng-readonly="investigador.tiene_usuario || investigador.es_nuevo_participante" class="form-control"
-                        											ng-class="{'lightgray-bg': investigador.tiene_usuario, 'invalid_control': investigador.email_invalido}"/>
+                        											ng-readonly="investigador.es_nuevo_participante" class="form-control"
+                        											ng-class="{'lightgray-bg': investigador.es_nuevo_participante, 'invalid_control': investigador.email_invalido}"/>
                         										</div>			
                         										<div class="form-group col-xs-12 col-sm-6 col-md-4" ng-if="investigador.rol.id==4">
                         											<label for="ucc_{$ $index $}">Institución / entidad</label>
@@ -630,11 +643,12 @@
                         											ng-readonly="true" class="form-control lightgray-bg"/>
                         										</div>
                         										<div class="form-group col-xs-12 col-sm-6 col-md-4" ng-if="investigador.rol.id==4">
-                        											<label for="sede_{$ investigador.id_investigador $}_{$ $index $}">Sede</label>
-                                                					<ui-select id="sede_{$ investigador.id_investigador $}_{$ $index $}" theme="bootstrap"
-                                                					ng-model="investigador.sede" ng-change="validar_sede_participante_agregado(investigador)"
-                                                					ng-disabled="investigador.tiene_usuario || investigador.es_nuevo_participante"
-                                                					ng-class="{'lightgray-bg': investigador.tiene_usuario || investigador.es_nuevo_participante, 'invalid_control': investigador.sede_invalido}">
+                        											<label for="sede_{$ investigador.id_investigador $}_{$ $index $}">Sede <span class="error-text" ng-show="investigador.sede_invalido">Campo requerido. Elegir una opción</span></label>
+                                                					<ui-select id="sede_{$ investigador.id_investigador $}_{$ $index $}" theme="bootstrap" append-to-body="true" search-enabled="false"
+                                                					ng-model="investigador.sede" ng-change="cambia_sede_participante_agregado(investigador)"
+                                                					ng-disabled="investigador.es_nuevo_participante"
+                                                					ng-class="{'lightgray-bg': investigador.tiene_usuario || investigador.es_nuevo_participante, 'invalid_control': investigador.sede_invalido}"
+                                                					uib-tooltip="{$ investigador.sede.nombre $}" tooltip-append-to-body="true" tooltip-enable="investigador.sede.nombre.length > 25">
                                                 						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
                                                 						<ui-select-choices repeat="item in sedes_ucc | filter: $select.search">
                                                 							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
@@ -642,23 +656,25 @@
                                                 					</ui-select>
                         										</div>
                         										<div class="form-group col-xs-12 col-sm-6 col-md-4" ng-if="investigador.rol.id==4">
-                        											<label for="grupo_inv_{$ investigador.id_investigador $}_{$ $index $}">Grupo de investigación</label>
-                                                					<ui-select id="grupo_inv_{$ investigador.id_investigador $}_{$ $index $}" theme="bootstrap"
-                                                					ng-model="investigador.grupo_investigacion_ucc" ng-change="validar_grupo_inv_participante_agregado(investigador)"
-                                                					ng-disabled="investigador.tiene_usuario || investigador.es_nuevo_participante"
-                                                					ng-class="{'lightgray-bg': investigador.tiene_usuario || investigador.es_nuevo_participante, 'invalid_control': investigador.grupo_inv_invalido}">
+                        											<label for="grupo_inv_{$ investigador.id_investigador $}_{$ $index $}">Grupo de investigación <span class="error-text" ng-show="investigador.grupo_inv_invalido">Campo requerido. Elegir una opción.</span></label>
+                                                					<ui-select id="grupo_inv_{$ investigador.id_investigador $}_{$ $index $}" theme="bootstrap" append-to-body="true" search-enabled="false"
+                                                					ng-model="investigador.grupo_investigacion_ucc" ng-change="cambia_grupo_inv_participante_agregado(investigador)"
+                                                					ng-disabled="investigador.es_nuevo_participante"
+                                                					ng-class="{'lightgray-bg': investigador.es_nuevo_participante, 'invalid_control': investigador.grupo_inv_invalido}"
+                                                					uib-tooltip="{$ investigador.grupo_investigacion_ucc.nombre $}" tooltip-append-to-body="true" tooltip-enable="investigador.grupo_investigacion_ucc.nombre.length > 25">
                                                 						<ui-select-match placeholder="Seleccione...">{$ $select.selected.nombre $}</ui-select-match>
                                                 						<ui-select-choices repeat="item in investigador.grupos_investigacion_para_select | filter: $select.search">
-                                                							<div ng-bind-html="item | highlight: $select.search"></div>
+                                                							<div ng-bind-html="item.nombre | highlight: $select.search"></div>
                                                 						</ui-select-choices>
-                                                					</ui-select>                        											
+                                                					</ui-select>               
                                                 					<input type="hidden" name="grupo_inv_{$ investigador.id_investigador $}_{$ $index $}" value="{$ investigador.grupo_investigacion_ucc.id $}" />
                         										</div> 
                         										<div class="form-group col-xs-12 col-sm-6 col-md-4" ng-if="investigador.rol.id==4">
                         											<label for="facultad_{$ investigador.id_investigador $}_{$ $index $}">Facultad / dependencia</label>
                         											<input type="text" id="facultad_{$ investigador.id_investigador $}_{$ $index $}" 
                         											ng-model="investigador.facultad_ucc" 
-                        											ng-readonly="true" class="form-control lightgray-bg"/>
+                        											ng-readonly="true" class="form-control lightgray-bg"
+                        											uib-tooltip="{$ investigador.facultad_ucc $}" tooltip-append-to-body="true" tooltip-enable="investigador.facultad_ucc.length > 25"/>
                         										</div>
                         										<div class="form-group col-xs-12 col-sm-6 col-md-4" ng-if="investigador.rol.id==5 || investigador.rol.id==6">
                         											<label for="entidad_externa_{$ investigador.id_investigador $}_{$ $index $}">Entidad / grupo de investigación co-ejecutor</label>

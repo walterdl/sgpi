@@ -45,7 +45,21 @@
                 <h3>Líneas de investigación</h3>
             </div>
             <div class="box-body">
-                <br />
+                <div class="container-sgpi">
+                    <h4 class="text-center">Agregar línea de investigación</h4> 
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6">
+                            <input type="text" class="form-control" ng-model="data.nueva_linea_inv"/>
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            <button class="btn btn-primary btn-block" ng-click="agregar_nueva_linea()"
+                            ng-disabled="data.nueva_linea_inv.length==undefined || data.nueva_linea_inv.length==0">
+                                <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Agregar línea de investigación
+                            </button>
+                        </div>
+                    </div>
+                </div>   
+                <hr />
                 <div class="table-responsive custom-scrollbar">
                     <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-hover table-stripped table-bordered">
                         <thead>
@@ -64,21 +78,6 @@
                         </tbody>
                     </table>
                 </div>
-                <hr />
-                <div class="container-sgpi">
-                    <h4 class="text-center">Agregar línea de investigación</h4> 
-                    <div class="row">
-                        <div class="col-xs-12 col-md-6">
-                            <input type="text" class="form-control" ng-model="data.nueva_linea_inv"/>
-                        </div>
-                        <div class="col-xs-12 col-md-6">
-                            <button class="btn btn-primary btn-block" ng-click="agregar_nueva_linea()"
-                            ng-disabled="data.nueva_linea_inv.length==undefined || data.nueva_linea_inv.length==0">
-                                <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Agregar línea de investigación
-                            </button>
-                        </div>
-                    </div>
-                </div>    
             </div>
             <div class="overlay" ng-show="visibilidad.show_velo_msj_operacion">
                 <div style="display:table; width:100%; height:100%;">

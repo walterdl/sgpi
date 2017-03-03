@@ -425,6 +425,10 @@ Route::post('proyectos/registrar_nuevo_proyecto', 'ProyectosController@registrar
 |
 */
 Route::post('check', 'AuthController@check');
+Route::get('check', function ()
+{
+	return Redirect::to('404_check');
+});
 
 
 /*

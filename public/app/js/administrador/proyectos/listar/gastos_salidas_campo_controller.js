@@ -49,7 +49,7 @@ sgpi_app.controller('gastos_salidas_campo_controller', function ($scope, $uibMod
         var modalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'modal_revision_desembolso.html',
-            controller: 'modal_revision_desembolso_software_controller',
+            controller: 'modal_revision_desembolso_salida_controller',
             size: 'lg',
             scope: $scope,
             keyboard: false,
@@ -93,15 +93,16 @@ sgpi_app.controller('modal_mas_info_salida_campo_controller', function ($scope, 
 
 /*
 |--------------------------------------------------------------------------
-| modal_revision_desembolso_software_controller
+| modal_revision_desembolso_salida_controller
 |--------------------------------------------------------------------------
 | Controlador de modal para la carga de revisión de desembolso software
 */              
-sgpi_app.controller('modal_revision_desembolso_software_controller', function ($scope, $http, $uibModalInstance, gasto_salida){
+sgpi_app.controller('modal_revision_desembolso_salida_controller', function ($scope, $http, $uibModalInstance, gasto_salida){
     
+    console.log(gasto_salida);
     $scope.gasto_salida = gasto_salida;
     $scope.titulo_modal = 'Desembolso de salida de campo';
-    $scope.gasto_html = '<h4>Justificación de la salida de campo: <strong>{$ gasto_salida_campo.justificacion $}</strong></h4>';
+    $scope.gasto_html = '<h4>Justificación de la salida de campo: <strong>{$ gasto_salida.justificacion $}</strong></h4>';
     $scope.msj_operacion = '<h4 class="text-center">Cargado estado de revisión de desembolso...<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i></h4>';
     $scope.show_velo = true;
     $scope.desembolso = null;

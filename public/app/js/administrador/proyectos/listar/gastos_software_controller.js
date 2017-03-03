@@ -97,7 +97,7 @@ sgpi_app.controller('modal_mas_info_software_controller', function ($scope, $uib
 |--------------------------------------------------------------------------
 | Controlador de modal para la carga de revisión de desembolso software
 */              
-sgpi_app.controller('modal_revision_desembolso_software_controller', function ($scope, $http, $uibModalInstance, Upload, gasto_software){
+sgpi_app.controller('modal_revision_desembolso_software_controller', function ($scope, $http, $uibModalInstance, gasto_software){
     
     $scope.gasto_software = gasto_software;
     $scope.titulo_modal = 'Desembolso de gasto de software';

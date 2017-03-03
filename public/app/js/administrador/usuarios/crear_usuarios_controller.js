@@ -1,3 +1,12 @@
+$(document).ready(function() {
+	$(window).keydown(function(event) {
+		if (event.keyCode == 13) {
+			event.preventDefault();
+			return false;
+		}
+	});    
+});
+
 sgpi_app.controller('crear_usuarios_controller', function($scope, $http, Alertify, Upload){
     
     /*

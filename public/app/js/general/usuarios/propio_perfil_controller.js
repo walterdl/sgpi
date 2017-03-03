@@ -1,3 +1,11 @@
+$(document).ready(function() {
+	$(window).keydown(function(event) {
+		if (event.keyCode == 13) {
+			event.preventDefault();
+			return false;
+		}
+	});    
+});
 
 // idUsuario es un valor inicializado en el metodo value del módulo sgpi_app,
 // ver vista html en la parte inferior; contiene el id_usuario actual

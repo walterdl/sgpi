@@ -149,9 +149,10 @@
                     <p><strong>Agregar entidad fuente de presupuesto (por defecto se tiene UCC y CONADI)</strong></p>
                     <div class="row is-flex">
                         <div class="col-xs-12 col-md-6">
-                            <div class="alert alert-info">
-                                <strong>Tener en cuenta: </strong> al remover una entidad fuente de presupuesto se remueve en todos los tipos de gasto
-                            </div>
+                            <div class="callout callout-warning">
+                            	<h4>Tener en cuenta:</h4>
+                            	<p>Al remover una entidad fuente de presupuesto se remueve en todos los tipos de gasto</p>
+                            </div>                                 
                         </div>          
                         <div class="col-xs-12 col-md-6">&nbsp;</div>
                         <div class="col-xs-12 col-md-6">

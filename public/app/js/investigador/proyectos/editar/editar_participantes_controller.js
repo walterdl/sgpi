@@ -141,8 +141,8 @@ sgpi_app.controller('editar_participantes_controller', function($scope, $http, $
             {
                 $scope.identificacion_investigador_principal = data.investigadores[i].identificacion;
                 $scope.tipos_identificacion.forEach(function(item) {
-                    if(item.id == data.investigadores[i].id_tipo_identificacio)
-                        data.investigadores[i].nombre_tipo_identificacion = item.nombre;
+                    if(item.id == data.investigadores[i].id_tipo_identificacion)
+                        data.investigadores[i]['nombre_tipo_identificacion'] = item.nombre;
                 });
                 for (var ii = 0; ii < $scope.grupos_investigacion_ucc.length; ii++) {
                     if($scope.grupos_investigacion_ucc[ii].id == data.investigadores[i].id_grupo_investigacion_ucc)
@@ -753,7 +753,7 @@ sgpi_app.controller('editar_participantes_controller', function($scope, $http, $
     /*
 	|--------------------------------------------------------------------------
 	| ngChanges para selects de sede y grupo de investigacion de nuevo participante
-	| se encargan de poblar las opciones del secet de grupo de investigacion en funcion de la sede seleccionada
+	| se encargan de poblar las opciones del select de grupo de investigacion en funcion de la sede seleccionada
 	| y de establecer la facultad del grupo de inv seleccionado
 	|--------------------------------------------------------------------------
 	*/                      
@@ -776,6 +776,35 @@ sgpi_app.controller('editar_participantes_controller', function($scope, $http, $
         $scope.validar_grupo_inv_nuevo_participante();
     };
     
+    /*
+	|--------------------------------------------------------------------------
+	| ngChanges para selects de sede y grupo de investigacion de participante agregado
+	| se encargan de poblar las opciones del select de grupo de investigacion en funcion de la sede seleccionada
+	| y de establecer la facultad del grupo de inv seleccionado	
+	|--------------------------------------------------------------------------
+	*/       
+	$scope.cambia_sede_participante_agregado = function(investigador) {
+	    if($scope.validar_sede_participante_agregado(investigador)) return; // si no se selecciono una sede correcta se cancela operacion
+	    investigador.grupo_investigacion_ucc = null; // borra cualquier grupo de investigación seleccionado previamente
+	    investigador.facultad_ucc = null; // borra la facultad ya que no hay grupo de investigacion seleccionado
+	    investigador.grupos_investigacion_para_select = $scope.grupos_investigacion_x_sedes[investigador.sede.id].grupos_investigacion;
+	    // ejecuta validacion de grupo para dejar en claro que se solicita que ingrese nuevamente el grupo de investigación
+	    $scope.validar_grupo_inv_participante_agregado(investigador);
+	};
+	
+	$scope.cambia_grupo_inv_participante_agregado = function(investigador) {
+	    investigador.facultad_ucc = null;
+	    if($scope.validar_grupo_inv_participante_agregado(investigador)) return; // si no se selecciono grupo inv correcto
+        // 	id_facultad_dependencia_ucc
+        for (var i = 0; i < $scope.facultades_ucc.length; i++) {
+            if($scope.facultades_ucc[i].id == investigador.grupo_investigacion_ucc.id_facultad_dependencia_ucc)
+            {
+                investigador.facultad_ucc = $scope.facultades_ucc[i].nombre;
+                break;
+            }
+        }        
+	};
+	
     /*
 	|--------------------------------------------------------------------------
 	| ngCahnges y validaciones para campos de investigadores agregados 
@@ -832,10 +861,9 @@ sgpi_app.controller('editar_participantes_controller', function($scope, $http, $
     };
     $scope.validar_email_participante_agregado = function(investigador) {
         var validacion = false;
-        if(investigador.email == null || investigador.email == undefined)
+        if(investigador.email == null || investigador.email == undefined || !/^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$/.test(investigador.email))
             validacion = true;
-        validacion = !/^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$/.test(investigador.email);
-        $scope.email_invalido = validacion;
+        investigador.email_invalido = validacion;
         return validacion;
     };
     $scope.validar_sede_participante_agregado = function(investigador) {
@@ -872,16 +900,20 @@ sgpi_app.controller('editar_participantes_controller', function($scope, $http, $
         
         var validacion = false;
         $scope.investigadores.forEach(function(investigador) {
-            if(investigador.rol.id != 3 && !investigador.tiene_usuario)
+            if(investigador.rol.id != 3)
             {
-                validacion |= $scope.validar_nombres_participante_agregado(investigador);
-                validacion |= $scope.validar_apellidos_participante_agregado(investigador);
-                validacion |= $scope.validar_identificacion_participante_agregado(investigador);
-                validacion |= $scope.validar_formacion_participante_agregado(investigador);
+                if(!investigador.tiene_usuario)
+                {
+                    validacion |= $scope.validar_nombres_participante_agregado(investigador);
+                    validacion |= $scope.validar_apellidos_participante_agregado(investigador);
+                    validacion |= $scope.validar_identificacion_participante_agregado(investigador);
+                    validacion |= $scope.validar_formacion_participante_agregado(investigador);
+                    validacion |= $scope.validar_tipo_id_participante_agregado(investigador);
+                    validacion |= $scope.validar_sexo_participante_agregado(investigador);
+                    validacion |= $scope.validar_edad_participante_agregado(investigador);
+                }
+                
                 validacion |= $scope.validar_rol_participante_agregado(investigador);
-                validacion |= $scope.validar_tipo_id_participante_agregado(investigador);
-                validacion |= $scope.validar_sexo_participante_agregado(investigador);
-                validacion |= $scope.validar_edad_participante_agregado(investigador);
                 validacion |= $scope.validar_email_participante_agregado(investigador);
                 if(investigador.rol.id == 4)
                 {
@@ -896,12 +928,12 @@ sgpi_app.controller('editar_participantes_controller', function($scope, $http, $
                 {
                     validacion |= $scope.validar_entidad_externa_participante_agregado(investigador);
                     validacion |= $scope.validar_programa_academico_participante_agregado(investigador);
-                }
+                }                
             }
         });
         if (validacion)
         {
-            alertify.error('Validacion incorrecta');
+            alertify.error('Validacion incorrecta. Revisar los datos ingresados de los participantes');
             return;
         }
         

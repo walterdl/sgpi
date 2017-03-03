@@ -283,12 +283,12 @@
             try{
     
                 $data = Input::all();
-                $usuario = DB::table('usuarios')->where('username', '=', $data['username'])->get();
+                $usuario = DB::table('usuarios')->where('username', '=', strtolower($data['username']))->get();
 
                 if(isset($data['editar']))
                 {
                     if($usuario){
-                        if($data['username_verificar'] != $usuario[0]->username){
+                        if(strtolower($data['username_verificar']) != $usuario[0]->username){
                             return json_encode(array(
                                 'consultado' => 1,
                                 'datos_validos' => 0,
@@ -370,88 +370,142 @@
             try{
     
                 $data = Input::all();
-                $usuario = DB::table('usuarios')->where('username', '=', $data['username'])->first();
-                if($usuario)
-                {
-                    Session::flash('notify_operacion_previa', 'error');
-                    Session::flash('mensaje_operacion_previa', 'Error en la creación de usuario nuevo: el nombre de usuario usado ya existe');
-                    return Redirect::to('usuarios');
-                }
                 
-                // no existe nombre de usuario
-                $persona = DB::table('personas')->where('identificacion', '=', $data['identificacion'])->first();
-                if($persona)
+                DB::transaction(function () use($data)
                 {
-                    if(isset($data['token_integridad']) && $data['token_integridad'] == 1)
+                    $usuario = DB::table('usuarios')->where('username', '=', strtolower($data['username']))->first();
+                    if($usuario)
+                        throw new Exception('Error en la creación de usuario nuevo: el nombre de usuario usado ya existe');
+                    
+                    // no existe nombre de usuario
+                    $persona = DB::table('personas')->where('identificacion', '=', $data['identificacion'])->first();
+                    if($persona)
                     {
-                        $usuario = DB::table('usuarios')->where('id_persona', '=', $persona->id)->where('id_rol', '=', $data['rol'])->first();
-                        if($usuario)
+                        if(isset($data['token_integridad']) && $data['token_integridad'] == 1)
                         {
-                            Session::flash('notify_operacion_previa', 'error');
-                            Session::flash('mensaje_operacion_previa', 'Error en la creación de usuario nuevo: la persona ya tiene el tipo de usuario');
+                            $usuario = DB::table('usuarios')->where('id_persona', '=', $persona->id)->where('id_rol', '=', $data['rol'])->first();
+                            if($usuario)
+                                throw new Exception('Error en la creación de usuario nuevo: la persona ya tiene el tipo de usuario');
+                            else
+                            {
+                                // aquí crear usuario y asociarle el id de la persona con sus respetivas modificaciones
+                                $validacion = Validator::make(
+                                    [
+                                        'sexo' => $data['sexo'],
+                                        'edad' => $data['edad'],
+                                        'formacion' => $data['formacion'],
+                                        'id_tipo_identificacion' => $data['tipo_identificacion'],
+                                        'id_rol' => $data['rol'],
+                                    ],
+                                    [
+                                        'sexo' => 'required|in:m,f',
+                                        'edad' => 'required|integer|min:10',
+                                        'formacion' => 'required|in:Ph. D,Doctorado,Maestría,Especialización,Pregado',
+                                        'id_tipo_identificacion' => 'required|exists:tipos_identificacion,id',
+                                        'id_rol' => 'required|exists:roles,id',
+                                    ]);
+                                if($validacion->fails())
+                                    throw new Exception('Validación de datos incorrecta; '.$validacion->messages());
+                                if($data['rol'] != 1)
+                                {
+                                    if(isset($data['grupo_investigacion']))
+                                    {
+                                        $validacion = Validator::make(
+                                            ['id_grupo_investigacion_ucc' => $data['grupo_investigacion']],
+                                            ['id_grupo_investigacion_ucc' => 'required|exists:grupos_investigacion_ucc,id']);
+                                        if($validacion->fails())
+                                            throw new Exception('Validación de datos incorrecta. Identificador de grupo de investigación no válido');
+                                    }
+                                    else
+                                        throw new Exception('Validación de datos incorrecta. Identificador de grupo de investigación no enviado');
+                                }
+                                
+                                $persona = Persona::find($persona->id);
+                                $persona->nombres = $data['nombres'];
+                                $persona->apellidos = $data['apellidos'];
+                                $persona->identificacion = (int)$data['identificacion'];
+                                $persona->sexo = $data['sexo'];
+                                $persona->edad = (int)$data['edad'];
+                                $persona->formacion = $data['formacion'];
+                                $persona->id_tipo_identificacion = $data['tipo_identificacion'];
+                                $persona->save();
+                                
+                                Usuario::create(array(
+                                    'id_persona' => $persona->id,
+                                    'id_rol' => $data['rol'],
+                                    'id_estado' => 1,
+                                    'id_grupo_investigacion_ucc' => ($data['rol'] == 1 ? null : $data['grupo_investigacion']),
+                                    'username' => strtolower($data['username']),
+                                    'password' => Hash::make($data['password']),
+                                    'email' => $data['email']
+                                    ));
+                                
+                                Session::flash('notify_operacion_previa', 'success');
+                                Session::flash('mensaje_operacion_previa', 'Usuario creado');
+                            }
                         }
                         else
-                        {
-                            // aquí crear usuario y asociarle el id de la persona con sus respetivas modificaciones
-                            $persona = Persona::find($persona->id);
-                            $persona->nombres = $data['nombres'];
-                            $persona->apellidos = $data['apellidos'];
-                            $persona->identificacion = (int)$data['identificacion'];
-                            $persona->sexo = $data['sexo'];
-                            $persona->edad = (int)$data['edad'];
-                            $persona->formacion = $data['formacion'];
-                            $persona->id_tipo_identificacion = $data['tipo_identificacion'];
-                            // if($persona->id_categoria_investigador == null)
-                            //     $persona->id_categoria_investigador = $data['rol'] == 1 || $data['rol'] == 2 ? null : $data['categoria_investigador'];
-                            $persona->save();
-                            
-                            Usuario::create(array(
-                                'id_persona' => $persona->id,
+                            throw new Exception('Error en la creación de usuario nuevo: token_integridad');
+                    }
+                    else{
+                        
+                        // aquí crear tanto usuario como persona
+                        $validacion = Validator::make(
+                            [
+                                'sexo' => $data['sexo'],
+                                'edad' => $data['edad'],
+                                'formacion' => $data['formacion'],
+                                'id_tipo_identificacion' => $data['tipo_identificacion'],
                                 'id_rol' => $data['rol'],
-                                'id_estado' => 1,
-                                'id_grupo_investigacion_ucc' => ($data['rol'] == 1 ? null : $data['grupo_investigacion']),
-                                'username' => $data['username'],
-                                'password' => Hash::make($data['password']),
-                                'email' => $data['email']
-                                ));
+                            ],
+                            [
+                                'sexo' => 'required|in:m,f',
+                                'edad' => 'required|integer|min:10',
+                                'formacion' => 'required|in:Ph. D,Doctorado,Maestría,Especialización,Pregado',
+                                'id_tipo_identificacion' => 'required|exists:tipos_identificacion,id',
+                                'id_rol' => 'required|exists:roles,id',
+                            ]);
                             
-                            Session::flash('notify_operacion_previa', 'success');
-                            Session::flash('mensaje_operacion_previa', 'Usuario creado');
-                        }
+                        if($validacion->fails())
+                            throw new Exception('Validación de datos incorrecta; '.$validacion->messages());
+                            
+                        if($data['rol'] != 1)
+                        {
+                            if(isset($data['grupo_investigacion']))
+                            {
+                                $validacion = Validator::make(
+                                    ['id_grupo_investigacion_ucc' => $data['grupo_investigacion']],
+                                    ['id_grupo_investigacion_ucc' => 'required|exists:grupos_investigacion_ucc,id']);
+                                if($validacion->fails())
+                                    throw new Exception('Validación de datos incorrecta. Identificador de grupo de investigación no válido');
+                            }
+                            else
+                                throw new Exception('Validación de datos incorrecta. Identificador de grupo de investigación no enviado');
+                        }          
+                        
+                        $persona = Persona::create(array(
+                            'nombres' => $data['nombres'],
+                            'apellidos' => $data['apellidos'],
+                            'identificacion' => (int)$data['identificacion'],
+                            'sexo' => $data['sexo'],
+                            'edad' => (int)$data['edad'],
+                            'formacion' => $data['formacion'],
+                            'id_tipo_identificacion' => $data['tipo_identificacion']
+                            ));
+                        Usuario::create(array(
+                            'id_persona' => $persona->id,
+                            'id_rol' => $data['rol'],
+                            'id_estado' => 1,
+                            'id_grupo_investigacion_ucc' => ($data['rol'] == 1 ? null : $data['grupo_investigacion']),
+                            'username' => strtolower($data['username']),
+                            'password' => Hash::make($data['password']),
+                            'email' => $data['email']
+                            ));
+                        
+                        Session::flash('notify_operacion_previa', 'success');
+                        Session::flash('mensaje_operacion_previa', 'Usuario creado');
                     }
-                    else
-                    {
-                        Session::flash('notify_operacion_previa', 'error');
-                        Session::flash('mensaje_operacion_previa', 'Error en la creación de usuario nuevo: token_integridad');
-                    }
-                }
-                else{
-                    
-                    // aquí crear tanto usuario como persona
-                    $persona = Persona::create(array(
-                        'nombres' => $data['nombres'],
-                        'apellidos' => $data['apellidos'],
-                        'identificacion' => (int)$data['identificacion'],
-                        'sexo' => $data['sexo'],
-                        'edad' => (int)$data['edad'],
-                        'formacion' => $data['formacion'],
-                        'id_tipo_identificacion' => $data['tipo_identificacion']
-                        // 'id_categoria_investigador' => ($data['rol'] == 1 || $data['rol'] == 2 ? null : $data['categoria_investigador']),
-                        ));
-                    Usuario::create(array(
-                        'id_persona' => $persona->id,
-                        'id_rol' => $data['rol'],
-                        'id_estado' => 1,
-                        'id_grupo_investigacion_ucc' => ($data['rol'] == 1 ? null : $data['grupo_investigacion']),
-                        'username' => $data['username'],
-                        'password' => Hash::make($data['password']),
-                        'email' => $data['email']
-                        ));
-                    
-                    Session::flash('notify_operacion_previa', 'success');
-                    Session::flash('mensaje_operacion_previa', 'Usuario creado');
-                }
-                
+                });
             }
             catch(Exception $e){                
                 Session::flash('notify_operacion_previa', 'error');
@@ -469,49 +523,49 @@
         public function actualizar_usuario(){
             
             try{
-    
+                
                 $data = Input::all();
-                $usuario = DB::table('usuarios')->where('username', '=', $data['username'])->first();
-                $persona = DB::table('personas')->where('identificacion', '=', $data['identificacion'])->first();
                 
-                if($persona)
+                DB::transaction(function () use($data)
                 {
-
-                            //$usuario = DB::table('usuarios')->where('id_persona', '=', $persona->id)->where('id_rol', '=', $data['rol'])->first();
-      
-                            // aquí crear usuario y asociarle el id de la persona con sus respetivas modificaciones
-                            $persona = Persona::find($persona->id);
-                            $persona->nombres = $data['nombres'];
-                            $persona->apellidos = $data['apellidos'];
-                            $persona->identificacion = $data['identificacion'];
-                            $persona->sexo = $data['sexo'];
-                            $persona->edad = (int)$data['edad'];
-                            $persona->formacion = $data['formacion'];
-                            $persona->id_tipo_identificacion = $data['tipo_identificacion'];
-                            
-                            // if($persona->id_categoria_investigador == null)
-                            //     $persona->id_categoria_investigador = $data['rol'] == 1 || $data['rol'] == 2 ? null : $data['categoria_investigador'];
-                            $persona->save();
-                            
-                            $usuario=Usuario::find($usuario->id);
-                            $usuario->id_rol = $data['rol'];
-                            $usuario->id_grupo_investigacion_ucc = ($data['rol'] == 1 ? null : $data['grupo_investigacion']);
-                            $usuario->username = $data['username'];
-                            $usuario->email = $data['email'];
-                            $usuario->save();
-                            
-                            Session::flash('notify_operacion_previa', 'success');
-                            Session::flash('mensaje_operacion_previa', 'Usuario  actualizado');
-                    
-                }else
-                {
-                    Session::flash('notify_operacion_previa', 'error');
-                    Session::flash('mensaje_operacion_previa', 'Error en la Actualizacion del usuario : token_integridad');
-                }
-                
-                
+                    $persona = DB::table('personas')->where('identificacion', '=', $data['identificacion'])->first();
+                    if($persona)
+                    {
+                        //$usuario = DB::table('usuarios')->where('id_persona', '=', $persona->id)->where('id_rol', '=', $data['rol'])->first();
+    
+                        // aquí crear usuario y asociarle el id de la persona con sus respetivas modificaciones
+                        $persona = Persona::find($persona->id);
+                        $persona->nombres = $data['nombres'];
+                        $persona->apellidos = $data['apellidos'];
+                        $persona->identificacion = $data['identificacion'];
+                        $persona->sexo = $data['sexo'];
+                        $persona->edad = (int)$data['edad'];
+                        $persona->formacion = $data['formacion'];
+                        $persona->id_tipo_identificacion = $data['tipo_identificacion'];
+                        
+                        // if($persona->id_categoria_investigador == null)
+                        //     $persona->id_categoria_investigador = $data['rol'] == 1 || $data['rol'] == 2 ? null : $data['categoria_investigador'];
+                        $persona->save();
+                        
+                        $usuario = Usuario::find($data['id_usuario']); // aqui esta el supuesto error
+                        $usuario->id_rol = $data['rol'];
+                        $usuario->id_grupo_investigacion_ucc = ($data['rol'] == 1 ? null : $data['grupo_investigacion']);
+                        $usuario->username = strtolower($data['username']);
+                        $usuario->email = $data['email'];
+                        $usuario->save();
+                        
+                        Session::flash('notify_operacion_previa', 'success');
+                        Session::flash('mensaje_operacion_previa', 'Usuario  actualizado');
+                    }
+                    else
+                    {
+                        Session::flash('notify_operacion_previa', 'error');
+                        Session::flash('mensaje_operacion_previa', 'Error en la Actualizacion del usuario : token_integridad');
+                    }
+                });
             }
-            catch(Exception $e){                
+            catch(Exception $e){            
+                throw $e;
                 Session::flash('notify_operacion_previa', 'error');
                 Session::flash('mensaje_operacion_previa', 'Error en la Actualizacion del usuario , código de error: '.$e->getCode().', detalle: '.$e->getMessage());
             }   
@@ -764,7 +818,7 @@
                 
                 // se alcanzó este código, quiere decir que los datos de usuario son válidos, 
                 // se procede a actualizar los datos del usuario
-                $usuario->username = $data['username'];
+                $usuario->username = strtolower($data['username']);
                 $usuario->email = $data['email'];
                 $usuario->save();
                 $persona->nombres = $data['nombres'];

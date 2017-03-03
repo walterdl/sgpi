@@ -200,12 +200,12 @@
             if($id_usuario){
                 $query = 'SELECT COUNT(*) as cantidad_registros ';
                 $query .= 'FROM usuarios u ';
-                $query .= 'WHERE u.id <> '.$id_usuario.' AND u.username = \''.$username.'\';';
+                $query .= 'WHERE u.id <> '.$id_usuario.' AND u.username = \''.strtolower($username).'\';';
             }
             else{
                 $query = 'SELECT COUNT(*) as cantidad_registros ';
                 $query .= 'FROM usuarios u ';
-                $query .= 'WHERE u.username = \''.$username.'\';';
+                $query .= 'WHERE u.username = \''.strtolower($username).'\';';
             }
             return DB::select(DB::raw($query))[0];
         }

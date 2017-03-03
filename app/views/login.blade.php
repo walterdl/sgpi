@@ -9,9 +9,9 @@
 		<!-- Bootstrap 3.3.6 -->
 		<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
 		<!-- Font Awesome -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
 		<!-- Ionicons -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+		<link rel="stylesheet" href="/vendor/ionicons/ionicons.min.css">
 		<!-- Theme style -->
 		<link rel="stylesheet" href="adminlte/css/AdminLTE.min.css">
 		<!-- iCheck -->
@@ -31,10 +31,12 @@
 		        width: 270px;
 		    }
 		    #img_logo{
-                -webkit-transition: width 2s; /* Safari */
-                transition: width 2s;		    
-                -webkit-transition: height 2s; /* Safari */
-                transition: height 2s;		                    
+                -webkit-transition: all .2s ease-in-out; 
+                transition: all .2s ease-in-out; 
+		    }
+		    #img_logo:hover{
+		        -webkit-transform: scale(1.1);
+		        transform: scale(1.1);
 		    }
 		</style>
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -191,7 +193,7 @@
 	                if($('#img_logo').hasClass('img_logo_md'))
 	                    $('#img_logo').removeClass('img_logo_md');
 			    }
-			};		
+			};
 			$(document).ready(function() {
 			    $(window).bind('resize', function() {
 			        aplicar_estilos_responsivos();

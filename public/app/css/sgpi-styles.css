@@ -134,3 +134,11 @@ fieldset[disabled] .btn-sgpi.active {
 .wrap-text{
     white-space: normal;
 }
+
+.alert-info{
+    background-color: #30bbbb !important;
+}
+
+.callout.callout-info{
+    background-color: #357ca5 !important;
+}

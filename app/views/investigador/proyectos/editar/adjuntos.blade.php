@@ -107,7 +107,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="formato_documento_presupuesto">Descargue el formato del documento de presupuesto</label>
-                                            <a href="/file/formato/presupuesto" class="btn btn-primary btn-block text-center">Descargar formato&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
+                                            <a href="/file/formato?nombre_formato=presupuesto" class="btn btn-primary btn-block text-center">Descargar formato&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
                                         </div>
                                     </div>                                            
                                 </div>
@@ -148,7 +148,7 @@
                                         </div>                                        
                                         <div class="form-group">
                                             <label for="formato_documento_presentacion_proyecto">Descargue el formato del documento de presentación</label>
-                                            <a href="/file/formato/presentacion_proyecto" class="btn btn-primary btn-block text-center">Descargar formato&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
+                                            <a href="/file/formato?nombre_formato=presentacion_proyecto" class="btn btn-primary btn-block text-center">Descargar formato&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
                                         </div>
                                     </div>                                            
                                 </div>
@@ -190,7 +190,7 @@
                                         </div>                                                                                
                                         <div class="form-group">
                                             <label for="formato_documento_acta_inicio">Descargue el formato del acta de inicio</label>
-                                            <a href="/file/formato/acta_inicio" class="btn btn-primary btn-block text-center">Descargar formato&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
+                                            <a href="/file/formato?nombre_formato=acta_inicio" class="btn btn-primary btn-block text-center">Descargar formato&nbsp;<i class="fa fa-cloud-download" aria-hidden="true"></i></a>
                                         </div>
                                     </div>                                            
                                 </div>

@@ -112,7 +112,7 @@
                     				</div>
                     				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="tipo_identificacion">Tipo de identificación <span ng-show="data.btn_guardar_seleccionado && visibilidad.show_tipo_id_invalido" class="error-text">Campo requerido. Elegir una opción</span></label>
-                    					<ui-select theme="bootstrap"
+                    					<ui-select theme="bootstrap" search-enabled="false"
                     					ng-model="data.tipo_identificacion" ng-change="validar_tipo_id()"
                     					ng-class="{'invalid_control': data.btn_guardar_seleccionado && visibilidad.show_tipo_id_invalido}"
                     					ng-required="true">
@@ -125,7 +125,7 @@
                     				</div>    
                     				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="sexo">Sexo <span ng-show="data.btn_guardar_seleccionado && visibilidad.show_sexo_invalido" class="error-text">Campo requerido. Elegir una opción</span></label>
-                    					<ui-select theme="bootstrap"  
+                    					<ui-select theme="bootstrap" search-enabled="false"  
                     					ng-model="data.sexo" ng-change="validar_sexo()"
                     					ng-class="{'invalid_control': data.btn_guardar_seleccionado && visibilidad.show_sexo_invalido}"
                     					ng-require="true">
@@ -147,7 +147,7 @@
                     				</div>
                     				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="formacion">Formación <span ng-show="data.btn_guardar_seleccionado && visibilidad.show_formacion_invalido" class="error-text">Campo requerido. Elegir una opción</span></label>
-                    					<ui-select theme="bootstrap"  
+                    					<ui-select theme="bootstrap" search-enabled="false"
                     					ng-model="data.formacion" ng-change="validar_formacion()"
                     					ng-class="{'invalid_control': data.btn_guardar_seleccionado && visibilidad.show_formacion_invalido}">
                     						<ui-select-match placeholder="Seleccione...">{$ $select.selected $}</ui-select-match>
@@ -165,14 +165,14 @@
                     			<legend>Datos del usuario</legend>
                     			<div class="row is-flex sin-margen">
                     				<div class="form-group col-xs-12 col-sm-6 col-md-4">
-                    					<label for="username">Nombre de usuario <span ng-show="data.btn_guardar_seleccionado && visibilidad.show_username_invalido" class="error-text">Campo requerido</span></label>
+                    					<label for="username">Nombre de usuario <span ng-show="data.btn_guardar_seleccionado && visibilidad.show_username_invalido" class="error-text">Campo requerido. El nombre de usuario debe ser unico</span></label>
                     					<input type="text" name="username" class="form-control" 
                     					ng-model="data.username" ng-change="validar_username()"
                     					ng-class="{'invalid_control': data.btn_guardar_seleccionado && visibilidad.show_username_invalido}"
                     					ng-required="true"/>
                     				</div>
                     				<div class="form-group col-xs-12 col-sm-6 col-md-4">
-                    					<label for="password">Contraseña <span ng-show="data.btn_guardar_seleccionado && visibilidad.show_password_invalido" class="error-text">Campo requerido</span></label>
+                    					<label for="password">Contraseña <span ng-show="data.btn_guardar_seleccionado && visibilidad.show_password_invalido" class="error-text">Campo requerido. Las contraseñas deben coincidir</span></label>
                     					
                     					<input type="password" name="password" class="form-control" 
                     					ng-model="data.password" ng-change="validar_password()"
@@ -193,7 +193,7 @@
                     				</div>       
                     				<div class="form-group col-xs-12 col-sm-6 col-md-4">
                     					<label for="rol">Tipo de usuario <span ng-show="data.btn_guardar_seleccionado && visibilidad.show_rol_invalido" class="error-text">Campo requerido. Elegir una opción</span></label>
-                    					<ui-select theme="bootstrap" 
+                    					<ui-select theme="bootstrap" search-enabled="false"
                     					ng-model="data.rol" ng-change="cambia_tipo_usuario()"
                     					ng-class="{'invalid_control': data.btn_guardar_seleccionado && visibilidad.show_rol_invalido}"
                     					ng-required="true">
@@ -219,7 +219,7 @@
                     				<!--</div>                        -->
                     				<div class="form-group col-xs-12 col-sm-6 col-md-4" ng-show="visibilidad.show_sede">
                     					<label for="sede">Sede de origen <span ng-show="data.btn_guardar_seleccionado && visibilidad.show_sede_invalido" class="error-text">Campo requerido. Elegir una opción</span></label>
-                    					<ui-select theme="bootstrap" 
+                    					<ui-select theme="bootstrap" search-enabled="false"
                     					ng-model="data.sede" ng-change="cambia_sede()"
                     					ng-class="{'invalid_control': data.btn_guardar_seleccionado && visibilidad.show_sede_invalido}" 
                     					ng-required="true">
@@ -232,7 +232,7 @@
                     				</div>
                     				<div class="form-group col-xs-12 col-md-4" ng-show="visibilidad.show_grupo_inv">
                     					<label for="grupo_investigacion">Grupo de investigación <span ng-show="data.btn_guardar_seleccionado && visibilidad.show_grupo_inv_invalido" class="error-text">Campo requerido. Elegir una opción</span></label>
-                    					<ui-select theme="bootstrap" 
+                    					<ui-select theme="bootstrap" search-enabled="false"
                     					ng-model="data.grupo_investigacion" ng-change="validar_grupo_inv()"
                     					ng-class="{'invalid_control': data.btn_guardar_seleccionado && visibilidad.show_grupo_inv_invalido}"
                     					ng-required="true">

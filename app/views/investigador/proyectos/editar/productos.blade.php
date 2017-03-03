@@ -133,7 +133,7 @@
             		                {{--tipo_producto_general--}}
             		                <td class="max-width-300">
             		                    <span class="error-text" ng-show="producto.tipo_producto_general_invalido">Campo requerido. Elegir una opción</span>
-                    					<ui-select theme="bootstrap" append-to-body="true"
+                    					<ui-select theme="bootstrap" append-to-body="true" search-enabled="false"
                     					ng-model="producto.tipo_producto_general" ng-change="cambia_tipo_producto_general(producto)"
                     					ng-required="true"
                     					ng-class="{'invalid_control': producto.tipo_producto_general_invalido}"
@@ -149,7 +149,7 @@
             		                {{--tipo_producto_especifico--}}
             		                <td class="max-width-300">
             		                    <span class="error-text" ng-show="producto.tipo_producto_especifico_invalido">Campo requerido. Elegir una opción</span>
-                    					<ui-select theme="bootstrap" append-to-body="true"
+                    					<ui-select theme="bootstrap" append-to-body="true" search-enabled="false"
                     					ng-model="producto.tipo_producto_especifico" ng-change="validar_tipo_producto_especifico(producto)"
                     					ng-required="true"
                     					ng-class="{'invalid_control': producto.tipo_producto_especifico_invalido}"
@@ -173,7 +173,7 @@
             		                {{--participante encargado--}}
             		                <td>
             		                    <span class="error-text" ng-show="producto.participante_invalido">Campo requerido. Elegir un encargado</span>
-                    					<ui-select theme="bootstrap" append-to-body="true"
+                    					<ui-select theme="bootstrap" append-to-body="true" search-enabled="false"
                     					ng-model="producto.participante" ng-change="validar_participante_encargado(producto)"
                     					ng-required="true" 
                     					ng-class="{'invalid_control': producto.participante_invalido}">

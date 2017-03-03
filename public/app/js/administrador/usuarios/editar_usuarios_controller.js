@@ -1,3 +1,12 @@
+$(document).ready(function() {
+	$(window).keydown(function(event) {
+		if (event.keyCode == 13) {
+			event.preventDefault();
+			return false;
+		}
+	});    
+});
+
 sgpi_app.controller('editar_usuarios_controller', function($scope, $http, Alertify, Upload){
     
     $(document).ready(function(){
@@ -19,8 +28,8 @@ sgpi_app.controller('editar_usuarios_controller', function($scope, $http, Alerti
         $scope.data.personaEditar=jQuery.parseJSON(persona);
         
         $scope.data.usuarioEditar_username=$scope.data.usuarioEditar.username;
-        
-        console.log($scope.data.usuarioEditar);
+        console.log('$scope.data.usuarioEditar: ');
+        $scope.id_usuario = $scope.data.usuarioEditar.id;
         
         if($scope.data.usuarioEditar.id_rol == 1){ //ADMINISTRADOR
             $scope.visibilidad.show_sede = false;
@@ -56,6 +65,7 @@ sgpi_app.controller('editar_usuarios_controller', function($scope, $http, Alerti
         .success(function(data){
             
             if(data.consultado !== undefined || data.consultado !== null){
+                
                 $scope.init(data);
                 $scope.data.msj_operacion = '<h3 class="text-center">Buscar datos básicos por identificación</h3>';
                 $scope.data.datos_iniciales_consultados = true;

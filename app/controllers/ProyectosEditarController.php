@@ -800,7 +800,7 @@
             }
             catch(\Exception $e)
             {
-                throw $e;
+                // throw $e;
                 Session::flash('notify_operacion_previa', 'error');
                 Session::flash('mensaje_operacion_previa', 'Error al editar los datos de los participantes del proyecto. Detalles: '.$e->getMessage());
             }
@@ -950,6 +950,7 @@
                 else
                 {
                     // crea la persona y se la asocia al registro del investigador
+                    $datos_participante = $this->obtener_datos_persona($data, true, $id_investigador, $index);
                     $persona = new Persona();
                     $persona->identificacion = $datos_participante['identificacion'];
                     $persona->nombres = $datos_participante['nombres'];
@@ -1225,7 +1226,7 @@
                 Session::flash('mensaje_operacion_previa', 'Productos de proyecto editados');                
             }
             catch(\Exception $e){
-                throw $e;
+                // throw $e;
                 Session::flash('notify_operacion_previa', 'error');
                 Session::flash('mensaje_operacion_previa', 'Error al editar los productos del proyecto. Detalles: '.$e->getMessage());
             }
@@ -1552,9 +1553,11 @@
                     // crea nuevos tipos de gastos
                     $this->crear_nuevos_gastos($data);
                 });
+                Session::flash('notify_operacion_previa', 'success');
+                Session::flash('mensaje_operacion_previa', 'Gastos de proyecto editados');                
             }
             catch(\Exception $e){
-                throw $e;
+                // throw $e;
                 Session::flash('notify_operacion_previa', 'error');
                 Session::flash('mensaje_operacion_previa', 'Error al editar los productos del proyecto. Detalles: '.$e->getMessage());
             }
@@ -2338,7 +2341,7 @@
                 Session::flash('mensaje_operacion_previa', 'Documentos de proyecto editados');
             }
             catch(\Exception $e){
-                throw $e;
+                // throw $e;
                 Session::flash('notify_operacion_previa', 'error');
                 Session::flash('mensaje_operacion_previa', 'Error al cargar documentos ininciales del proyecto. Detalles: '.$e->getMessage());
             }
