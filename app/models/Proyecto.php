@@ -69,7 +69,7 @@
             $query = 'SELECT p.id, gi.nombre, p.codigo_fmi, p.subcentro_costo, p.nombre as nombre_proyecto, p.fecha_fin,  ';
             $query .= 'p.duracion_meses, gi.nombre as nombre_grupo_inv_principal ';
             $query .= 'FROM proyectos p, investigadores i, usuarios u, grupos_investigacion_ucc gi ';
-            $query .= 'WHERE u.id = '.$id_investigador_principal.' AND i.id_usuario_investigador_principal AND i.deleted_at IS NULL AND i.id_proyecto = p.id AND p.id_grupo_investigacion_ucc = gi.id; ';
+            $query .= 'WHERE u.id = '.$id_investigador_principal.' AND i.id_usuario_investigador_principal = u.id AND i.deleted_at IS NULL AND i.id_proyecto = p.id AND p.id_grupo_investigacion_ucc = gi.id; ';
             return DB::select(DB::raw($query));
         }
         
